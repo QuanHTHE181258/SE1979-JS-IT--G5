@@ -1,4 +1,4 @@
-package project.demo.warehousemanagement;
+package project.demo.coursemanagement;
 
 import java.io.*;
 
