@@ -1,0 +1,154 @@
+package project.demo.coursemanagement.entities;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import java.time.Instant;
+
+@Entity
+@Table(name = "ForumTopics")
+public class ForumTopic {
+    @Id
+    @Column(name = "topic_id", nullable = false)
+    private Integer id;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "course_id", nullable = false)
+    private Cours course;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "created_by", nullable = false)
+    private User createdBy;
+
+    @Size(max = 255)
+    @NotNull
+    @Nationalized
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Nationalized
+    @Lob
+    @Column(name = "content")
+    private String content;
+
+    @ColumnDefault("0")
+    @Column(name = "is_pinned")
+    private Boolean isPinned;
+
+    @ColumnDefault("0")
+    @Column(name = "is_locked")
+    private Boolean isLocked;
+
+    @ColumnDefault("0")
+    @Column(name = "view_count")
+    private Integer viewCount;
+
+    @ColumnDefault("0")
+    @Column(name = "reply_count")
+    private Integer replyCount;
+
+    @ColumnDefault("getdate()")
+    @Column(name = "created_at")
+    private Instant createdAt;
+
+    @ColumnDefault("getdate()")
+    @Column(name = "updated_at")
+    private Instant updatedAt;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Cours getCourse() {
+        return course;
+    }
+
+    public void setCourse(Cours course) {
+        this.course = course;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Boolean getIsPinned() {
+        return isPinned;
+    }
+
+    public void setIsPinned(Boolean isPinned) {
+        this.isPinned = isPinned;
+    }
+
+    public Boolean getIsLocked() {
+        return isLocked;
+    }
+
+    public void setIsLocked(Boolean isLocked) {
+        this.isLocked = isLocked;
+    }
+
+    public Integer getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(Integer viewCount) {
+        this.viewCount = viewCount;
+    }
+
+    public Integer getReplyCount() {
+        return replyCount;
+    }
+
+    public void setReplyCount(Integer replyCount) {
+        this.replyCount = replyCount;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+}
