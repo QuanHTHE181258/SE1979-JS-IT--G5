@@ -31,11 +31,17 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
-    @Size(max = 100)
+    @Size(max = 50)
     @NotNull
     @Nationalized
-    @Column(name = "full_name", nullable = false, length = 100)
-    private String fullName;
+    @Column(name = "first_name", nullable = false, length = 50)
+    private String firstName;
+
+    @Size(max = 50)
+    @NotNull
+    @Nationalized
+    @Column(name = "last_name", nullable = false, length = 50)
+    private String lastName;
 
     @Size(max = 20)
     @Column(name = "phone", length = 20)
@@ -110,12 +116,20 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getPhone() {
