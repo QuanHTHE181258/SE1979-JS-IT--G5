@@ -15,7 +15,7 @@
 <body>
     <%--  Header  --%>
     <div class="home-header">
-        <div class="home-header-logo"><a href="home.jsp" style="text-decoration: none; color: white">Courses Learning Web</a></div>
+        <div class="home-header-logo"><a href="home" style="text-decoration: none; color: white">Courses Learning Web</a></div>
         <div class="home-header-courses"><a href="courses" style="text-decoration: none; color: white">Courses</a></div>
         <div class="home-header-searchbar">
             <input type="text" placeholder="Search..." class="search-input">
