@@ -60,7 +60,7 @@
 <body>
 
 <nav>
-    <a href="home.jsp">Home</a>
+    <a href="WEB-INF/views/home.jsp">Home</a>
 </nav>
 
 <div class="container">
