@@ -84,6 +84,15 @@ public class User {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
+    private java.util.Date lastLoginDate;
+    private java.util.Date createdAtDate;
+
+    public java.util.Date getLastLoginDate() { return lastLoginDate; }
+    public void setLastLoginDate(java.util.Date lastLoginDate) { this.lastLoginDate = lastLoginDate; }
+
+    public java.util.Date getCreatedAtDate() { return createdAtDate; }
+    public void setCreatedAtDate(java.util.Date createdAtDate) { this.createdAtDate = createdAtDate; }
+
     public Integer getId() {
         return id;
     }
