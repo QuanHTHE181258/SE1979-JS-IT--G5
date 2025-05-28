@@ -1,0 +1,205 @@
+/* Admin Dashboard Styles - Tươi sáng, hiện đại */
+
+/* Wrapper */
+.wrapper {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    background: #f8f9fa;
+}
+
+/* Sidebar */
+#sidebar {
+    width: 250px;
+    min-height: 100vh;
+    background: #2c3e50;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: #34495e;
+    font-weight: bold;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+    list-style: none;
+}
+
+#sidebar ul li a {
+    padding: 12px 24px;
+    font-size: 1em;
+    display: block;
+    color: #ecf0f1;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+#sidebar ul li a:hover {
+    background: #2980b9;
+}
+
+#sidebar ul li.active > a {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: #fff;
+    font-weight: bold;
+}
+
+#sidebar ul li a i {
+    margin-right: 12px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Content */
+#content {
+    width: calc(100% - 250px);
+    margin-left: 250px;
+    min-height: 100vh;
+    background: #f8f9fa;
+    padding: 24px;
+}
+
+/* Navbar */
+.navbar {
+    padding: 15px 20px;
+    background: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #4facfe;
+    font-size: 1.25rem;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.5rem;
+    background: #ffffff;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-bottom: 1px solid transparent;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+/* Border highlights */
+.border-left-primary {
+    border-left: 0.35rem solid #4facfe !important;
+}
+
+.border-left-success {
+    border-left: 0.35rem solid #1abc9c !important;
+}
+
+.border-left-info {
+    border-left: 0.35rem solid #00f2fe !important;
+}
+
+.border-left-warning {
+    border-left: 0.35rem solid #f39c12 !important;
+}
+
+/* Gradient Text */
+.text-gradient {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Table */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    font-size: 0.95rem;
+}
+
+.table th,
+.table td {
+    padding: 0.85rem;
+    vertical-align: middle;
+    border-top: 1px solid #e0e0e0;
+}
+
+.table thead th {
+    background: #f1f5f9;
+    border-bottom: 2px solid #e0e0e0;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.table tbody tr:hover {
+    background-color: #eaf6ff;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    border-radius: 0.4rem;
+    transition: all 0.2s ease;
+}
+
+.btn-link {
+    color: #4facfe;
+    text-decoration: none;
+}
+
+.btn-link:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #sidebar {
+        width: 100%;
+        position: relative;
+        min-height: auto;
+    }
+
+    #content {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .wrapper {
+        flex-direction: column;
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4facfe;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #2980b9;
+}
