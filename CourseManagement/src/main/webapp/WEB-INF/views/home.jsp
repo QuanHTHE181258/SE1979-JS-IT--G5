@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <title>Course Learning Web</title>
@@ -13,7 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <%--  Header  --%>
+    <%-- Header --%>
     <div class="home-header">
         <div class="home-header-logo"><a href="home" style="text-decoration: none; color: white">Courses Learning Web</a></div>
         <div class="home-header-courses"><a href="course" style="text-decoration: none; color: white">Courses</a></div>
@@ -24,38 +25,69 @@
         <div class="home-header-login"><a href="login" style="text-decoration: none; color: white">Login</a></div>
         <div class="home-header-register"><a href="register" style="text-decoration: none; color: white">Register</a></div>
     </div>
-    <%--  Content container  --%>
+    <%-- Content container --%>
     <div class="home-content">
-        <%-- Most Viewed Courses --%>
+        <%-- Most Popular Courses --%>
         <div class="home-most-views">
-            <h2>Most Viewed Courses</h2>
+            <h2>Most Popular Courses</h2>
             <ul class="course-list">
-                <li><a href="#">Introduction to Python Programming</a></li>
-                <li><a href="#">Web Development with HTML & CSS</a></li>
-                <li><a href="#">Data Science Fundamentals</a></li>
+                <c:forEach var="course" items="${mostPopularCourses}">
+                    <li class="course-item">
+                        <span>Code:</span> ${course.courseCode}<br>
+                        <span>Title:</span> <a href="#">${course.title}</a><br>
+                        <span>Description:</span> ${course.shortDescription}<br>
+                        <span>Teacher:</span> ${course.teacherUsername}<br>
+                        <span>Price:</span> $${course.price}<br>
+                        <span>Duration:</span> ${course.durationHours} hours<br>
+                        <span>Max Students:</span> ${course.maxStudents}<br>
+                        <span>Start Date:</span> <fmt:formatDate value="${course.startDate}" pattern="yyyy-MM-dd"/><br>
+                        <span>End Date:</span> <fmt:formatDate value="${course.endDate}" pattern="yyyy-MM-dd"/>
+                    </li>
+                </c:forEach>
             </ul>
         </div>
         <%-- Paid Courses --%>
         <div class="home-paid-course">
             <h2>Paid Courses</h2>
             <ul class="course-list">
-                <li><a href="#">Advanced JavaScript Mastery - $49</a></li>
-                <li><a href="#">Full-Stack Development Bootcamp - $99</a></li>
-                <li><a href="#">Machine Learning Pro - $79</a></li>
+                <c:forEach var="course" items="${paidCourses}">
+                    <li class="course-item">
+                        <span>Code:</span> ${course.courseCode}<br>
+                        <span>Title:</span> <a href="#">${course.title}</a><br>
+                        <span>Description:</span> ${course.shortDescription}<br>
+                        <span>Teacher:</span> ${course.teacherUsername}<br>
+                        <span>Price:</span> $${course.price}<br>
+                        <span>Duration:</span> ${course.durationHours} hours<br>
+                        <span>Max Students:</span> ${course.maxStudents}<br>
+                        <span>Start Date:</span> <fmt:formatDate value="${course.startDate}" pattern="yyyy-MM-dd"/><br>
+                        <span>End Date:</span> <fmt:formatDate value="${course.endDate}" pattern="yyyy-MM-dd"/>
+                    </li>
+                </c:forEach>
             </ul>
         </div>
         <%-- Free Courses --%>
         <div class="home-free-course">
             <h2>Free Courses</h2>
             <ul class="course-list">
-                <li><a href="#">Basics of Graphic Design</a></li>
-                <li><a href="#">Introduction to SQL</a></li>
-                <li><a href="#">Beginner Guitar Lessons</a></li>
+                <c:forEach var="course" items="${freeCourses}">
+                    <li class="course-item">
+                        <span>Code:</span> ${course.courseCode}<br>
+                        <span>Title:</span> <a href="#">${course.title}</a><br>
+                        <span>Description:</span> ${course.shortDescription}<br>
+                        <span>Teacher:</span> ${course.teacherUsername}<br>
+                        <span>Price:</span> $${course.price}<br>
+                        <span>Duration:</span> ${course.durationHours} hours<br>
+                        <span>Max Students:</span> ${course.maxStudents}<br>
+                        <span>Start Date:</span> <fmt:formatDate value="${course.startDate}" pattern="yyyy-MM-dd"/><br>
+                        <span>End Date:</span> <fmt:formatDate value="${course.endDate}" pattern="yyyy-MM-dd"/>
+                    </li>
+                </c:forEach>
             </ul>
         </div>
     </div>
 
-    <%--  Footer  --%>
+
+    <%-- Footer --%>
     <div class="home-footer">
         <div class="footer-content">
             <h3>Courses Learning Web</h3>
@@ -67,9 +99,8 @@
                 <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
                 <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
             </div>
-            <p>&copy; 2025 Courses Learning Web. All rights reserved.</p>
+            <p>© 2025 Courses Learning Web. All rights reserved.</p>
         </div>
     </div>
-
 </body>
 </html>
