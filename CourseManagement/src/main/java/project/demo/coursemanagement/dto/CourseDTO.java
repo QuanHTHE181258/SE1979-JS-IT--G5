@@ -6,19 +6,107 @@ import java.time.Instant;
 public class CourseDTO {
     private String courseCode;
     private String title;
+    private String description;
     private String shortDescription;
-    private String teacherUsername;
+    private int teacherId;
+    private int categoryId;
+    private String imageUrl;
     private BigDecimal price;
     private int durationHours;
+    String teacherUsername;
+    private String level;
+    private boolean isPublished;
+    private boolean isActive;
     private int maxStudents;
+    private Instant enrollmentStartDate;
+    private Instant enrollmentEndDate;
     private Instant startDate;
     private Instant endDate;
+    private int lessonCount;
 
-    // Constructor
+
     public CourseDTO() {
     }
 
-    // Getters and Setters
+    public int getLessonCount() {
+        return lessonCount;
+    }
+
+    public void setLessonCount(int lessonCount) {
+        this.lessonCount = lessonCount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(int teacherId) {
+        this.teacherId = teacherId;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public boolean isPublished() {
+        return isPublished;
+    }
+
+    public void setPublished(boolean published) {
+        isPublished = published;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public Instant getEnrollmentStartDate() {
+        return enrollmentStartDate;
+    }
+
+    public void setEnrollmentStartDate(Instant enrollmentStartDate) {
+        this.enrollmentStartDate = enrollmentStartDate;
+    }
+
+    public Instant getEnrollmentEndDate() {
+        return enrollmentEndDate;
+    }
+
+    public void setEnrollmentEndDate(Instant enrollmentEndDate) {
+        this.enrollmentEndDate = enrollmentEndDate;
+    }
 
     public String getCourseCode() {
         return courseCode;
