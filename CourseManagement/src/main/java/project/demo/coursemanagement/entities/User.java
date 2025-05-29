@@ -8,6 +8,7 @@ import org.hibernate.annotations.Nationalized;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "Users")
@@ -84,8 +85,11 @@ public class User {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    private java.util.Date lastLoginDate;
-    private java.util.Date createdAtDate;
+    @Transient
+    private Date lastLoginDate;
+
+    @Transient
+    private Date createdAtDate;
 
     public java.util.Date getLastLoginDate() { return lastLoginDate; }
     public void setLastLoginDate(java.util.Date lastLoginDate) { this.lastLoginDate = lastLoginDate; }

@@ -7,6 +7,8 @@
     <meta charset="UTF-8">
     <title>User Management - Admin</title>
     <link href="${pageContext.request.contextPath}/css/admincss.css" rel="stylesheet">
+
+
 </head>
 <body>
 <div class="wrapper">
@@ -15,7 +17,7 @@
             <h3>Admin Panel</h3>
         </div>
         <ul class="list-unstyled components">
-            <li><a href="${pageContext.request.contextPath}/admin/dashboard">
+            <li><a href="${pageContext.request.contextPath}/admin">
                 <i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
             <li class="active"><a href="${pageContext.request.contextPath}/admin/users">
                 <i class="fas fa-users"></i> User Management</a></li>
@@ -48,11 +50,40 @@
         </nav>
 
         <div class="container-fluid py-4">
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">User List</h6>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">User Management</h3>
                 </div>
                 <div class="card-body">
+                    <% if (request.getParameter("message") != null) { %>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <%= request.getParameter("message") %>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    <% } %>
+                    <% if (request.getParameter("error") != null) { %>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <%= request.getParameter("error") %>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    <% } %>
+
+                    <!-- Search Form -->
+                    <form action="${pageContext.request.contextPath}/admin/users" method="get" class="form-inline mb-3">
+                        <div class="form-group mx-sm-3 mb-2">
+                            <label for="searchTerm" class="sr-only">Search by Name</label>
+                            <input type="text" class="form-control" id="searchTerm" name="searchTerm" placeholder="Search by Name" value="${searchTerm}">
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-2"><i class="fas fa-search"></i> Search</button>
+                         <c:if test="${not empty searchTerm}">
+                            <a href="${pageContext.request.contextPath}/admin/users" class="btn btn-secondary mb-2 ml-2">Clear Search</a>
+                        </c:if>
+                    </form>
+
                     <c:choose>
                         <c:when test="${not empty userList}">
                             <div class="table-responsive">
@@ -152,32 +183,32 @@
                                             </td>
                                             <td>
                                                 <div class="btn-group" role="group">
-                                                    <a href="${pageContext.request.contextPath}/admin/users/${user.id}"
-                                                       class="btn btn-info btn-sm" title="View Details">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    <a href="${pageContext.request.contextPath}/admin/users/${user.id}/edit"
-                                                       class="btn btn-warning btn-sm" title="Edit User">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
+<%--                                                    <a href="${pageContext.request.contextPath}/admin/users/${user.id}"--%>
+<%--                                                       class="btn btn-info btn-sm" title="View Details">--%>
+<%--                                                        <i class="fas fa-eye"></i>--%>
+<%--                                                    </a>--%>
+<%--                                                    <a href="${pageContext.request.contextPath}/admin/users/${user.id}/edit"--%>
+<%--                                                       class="btn btn-warning btn-sm" title="Edit User">--%>
+<%--                                                        <i class="fas fa-edit"></i>--%>
+<%--                                                    </a>--%>
                                                     <c:if test="${user.isActive}">
                                                         <a href="${pageContext.request.contextPath}/admin/users/${user.id}/deactivate"
-                                                           class="btn btn-secondary btn-sm" title="Deactivate User"
+                                                           class="btn btn-danger btn-sm" title="Deactivate User"
                                                            onclick="return confirm('Are you sure you want to deactivate this user?')">
-                                                            <i class="fas fa-ban"></i>
+                                                            <i class="fas fa-ban"></i> Deactivate
                                                         </a>
                                                     </c:if>
                                                     <c:if test="${not user.isActive}">
                                                         <a href="${pageContext.request.contextPath}/admin/users/${user.id}/activate"
                                                            class="btn btn-success btn-sm" title="Activate User">
-                                                            <i class="fas fa-check"></i>
+                                                            <i class="fas fa-check"></i> Activate
                                                         </a>
                                                     </c:if>
-                                                    <a href="${pageContext.request.contextPath}/admin/users/${user.id}/delete"
-                                                       class="btn btn-danger btn-sm" title="Delete User"
-                                                       onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
+<%--                                                    <a href="${pageContext.request.contextPath}/admin/users/${user.id}/delete"--%>
+<%--                                                       class="btn btn-danger btn-sm" title="Delete User"--%>
+<%--                                                       onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')">--%>
+<%--                                                        <i class="fas fa-trash"></i>--%>
+<%--                                                    </a>--%>
                                                 </div>
                                             </td>
                                         </tr>

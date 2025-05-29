@@ -6,6 +6,8 @@ public interface UserDAO {
 
     User findUserByUsernameOrEmail(String identifier);
     User findUserById(Integer id);
+    User findUserByIdIncludeInactive(Integer id);
     boolean UpdateLastLogin(Integer userId);
     List<User> getAllUsers();
+    List<User> searchUsersByName(String searchTerm);
 }
