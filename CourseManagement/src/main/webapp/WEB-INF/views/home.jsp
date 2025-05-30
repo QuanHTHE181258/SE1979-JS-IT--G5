@@ -34,19 +34,29 @@
             <h2>Most Popular Courses</h2>
             <ul class="course-list">
                 <c:forEach var="course" items="${mostPopularCourses}">
-                    <li class="course-item col-3">
-                        <span>Code:</span> ${course.courseCode}<br>
-                        <span>Title:</span> ${course.title}<br>
-                        <span>Description:</span> ${course.shortDescription}<br>
-                        <span>Teacher:</span> ${course.teacherUsername}<br>
-                        <span>Price:</span> $${course.price}<br>
-                        <span>Duration:</span> ${course.durationHours} hours<br>
-                        <span>Max Students:</span> ${course.maxStudents}<br>
-                        <span>Start Date:</span>
-                        <fmt:formatDate value="${course.startDateAsDate}" pattern="yyyy-MM-dd" type="date" /><br>
-                        <span>End Date:</span>
-                        <fmt:formatDate value="${course.endDateAsDate}" pattern="yyyy-MM-dd" type="date" />
-                    </li>
+                    <li class="course-card col-3">
+                        <div class="card-header">
+                            <span class="course-code">${course.courseCode}</span>
+                            <h3 class="course-title">${course.title}</h3>
+                            <p class="course-teacher">${course.teacherUsername}</p>
+                        </div>
+                        <div class="card-body">
+                            <p class="course-desc">${course.shortDescription}</p>
+                            <div class="course-detail">
+                                <p><strong>Price:</strong> $${course.price}</p>
+                                <p><strong>Duration:</strong> ${course.durationHours} hours</p>
+                                <p><strong>Max Students:</strong> ${course.maxStudents}</p>
+                                <p><strong>Start Date:</strong>
+                                    <fmt:formatDate value="${course.startDateAsDate}" pattern="yyyy-MM-dd" type="date" />
+                                </p>
+                                <p><strong>End Date:</strong>
+                                    <fmt:formatDate value="${course.endDateAsDate}" pattern="yyyy-MM-dd" type="date" />
+                                </p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="join-btn">JOIN</button>
+                        </div>
                     </li>
                 </c:forEach>
             </ul>
@@ -56,18 +66,29 @@
             <h2>Paid Courses</h2>
             <ul class="course-list">
                 <c:forEach var="course" items="${paidCourses}">
-                    <li class="course-item col-3">
-                        <span>Code:</span> ${course.courseCode}<br>
-                        <span>Title:</span> ${course.title}<br>
-                        <span>Description:</span> ${course.shortDescription}<br>
-                        <span>Teacher:</span> ${course.teacherUsername}<br>
-                        <span>Price:</span> $${course.price}<br>
-                        <span>Duration:</span> ${course.durationHours} hours<br>
-                        <span>Max Students:</span> ${course.maxStudents}<br>
-                        <span>Start Date:</span>
-                        <fmt:formatDate value="${course.startDateAsDate}" pattern="yyyy-MM-dd" type="date" /><br>
-                        <span>End Date:</span>
-                        <fmt:formatDate value="${course.endDateAsDate}" pattern="yyyy-MM-dd" type="date" />
+                    <li class="course-card col-3">
+                        <div class="card-header">
+                            <span class="course-code">${course.courseCode}</span>
+                            <h3 class="course-title">${course.title}</h3>
+                            <p class="course-teacher">${course.teacherUsername}</p>
+                        </div>
+                        <div class="card-body">
+                            <p class="course-desc">${course.shortDescription}</p>
+                            <div class="course-detail">
+                                <p><strong>Price:</strong> $${course.price}</p>
+                                <p><strong>Duration:</strong> ${course.durationHours} hours</p>
+                                <p><strong>Max Students:</strong> ${course.maxStudents}</p>
+                                <p><strong>Start Date:</strong>
+                                    <fmt:formatDate value="${course.startDateAsDate}" pattern="yyyy-MM-dd" type="date" />
+                                </p>
+                                <p><strong>End Date:</strong>
+                                    <fmt:formatDate value="${course.endDateAsDate}" pattern="yyyy-MM-dd" type="date" />
+                                </p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="join-btn">JOIN</button>
+                        </div>
                     </li>
                 </c:forEach>
             </ul>
@@ -77,25 +98,34 @@
             <h2>Free Courses</h2>
             <ul class="course-list">
                 <c:forEach var="course" items="${freeCourses}">
-                    <li class="course-item col-3">
-                        <span>Code:</span> ${course.courseCode}<br>
-                        <span>Title:</span> ${course.title}<br>
-                        <span>Description:</span> ${course.shortDescription}<br>
-                        <span>Teacher:</span> ${course.teacherUsername}<br>
-                        <span>Price:</span> $${course.price}<br>
-                        <span>Duration:</span> ${course.durationHours} hours<br>
-                        <span>Max Students:</span> ${course.maxStudents}<br>
-                        <span>Start Date:</span>
-                        <fmt:formatDate value="${course.startDateAsDate}" pattern="yyyy-MM-dd" type="date" /><br>
-                        <span>End Date:</span>
-                        <fmt:formatDate value="${course.endDateAsDate}" pattern="yyyy-MM-dd" type="date" />
+                    <li class="course-card col-3">
+                        <div class="card-header">
+                            <span class="course-code">${course.courseCode}</span>
+                            <h3 class="course-title">${course.title}</h3>
+                            <p class="course-teacher">${course.teacherUsername}</p>
+                        </div>
+                        <div class="card-body">
+                            <p class="course-desc">${course.shortDescription}</p>
+                            <div class="course-detail">
+                                <p><strong>Price:</strong> $${course.price}</p>
+                                <p><strong>Duration:</strong> ${course.durationHours} hours</p>
+                                <p><strong>Max Students:</strong> ${course.maxStudents}</p>
+                                <p><strong>Start Date:</strong>
+                                    <fmt:formatDate value="${course.startDateAsDate}" pattern="yyyy-MM-dd" type="date" />
+                                </p>
+                                <p><strong>End Date:</strong>
+                                    <fmt:formatDate value="${course.endDateAsDate}" pattern="yyyy-MM-dd" type="date" />
+                                </p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="join-btn">JOIN</button>
+                        </div>
                     </li>
                 </c:forEach>
             </ul>
         </div>
     </div>
-
-
     <%-- Footer --%>
     <div class="home-footer">
         <div class="footer-content">
