@@ -22,7 +22,7 @@ public class CourseViewDAOimp implements CourseViewDAO {
         try {
             conn = dbConn.getConnection();
             String sql = """
-            SELECT  c.course_code, c.title, c.short_description, u.username, c.price,
+            SELECT DISTINCT c.course_code, c.title, c.short_description, u.username, c.price,
                     c.duration_hours, c.max_students, c.start_date, c.end_date
             FROM Courses c
             JOIN Users u ON c.teacher_id = u.user_id 

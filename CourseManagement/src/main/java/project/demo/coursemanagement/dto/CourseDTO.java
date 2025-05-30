@@ -2,6 +2,7 @@ package project.demo.coursemanagement.dto;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Date;
 
 public class CourseDTO {
     private String courseCode;
@@ -90,5 +91,13 @@ public class CourseDTO {
 
     public void setEndDate(Instant endDate) {
         this.endDate = endDate;
+    }
+
+    public Date getStartDateAsDate() {
+        return startDate != null ? Date.from(startDate) : null;
+    }
+
+    public Date getEndDateAsDate() {
+        return endDate != null ? Date.from(endDate) : null;
     }
 }

@@ -7,6 +7,8 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <html>
 <head>
     <title>Course Learning Web</title>
@@ -32,16 +34,19 @@
             <h2>Most Popular Courses</h2>
             <ul class="course-list">
                 <c:forEach var="course" items="${mostPopularCourses}">
-                    <li class="course-item">
+                    <li class="course-item col-3">
                         <span>Code:</span> ${course.courseCode}<br>
-                        <span>Title:</span> <a href="#">${course.title}</a><br>
+                        <span>Title:</span> ${course.title}<br>
                         <span>Description:</span> ${course.shortDescription}<br>
                         <span>Teacher:</span> ${course.teacherUsername}<br>
                         <span>Price:</span> $${course.price}<br>
                         <span>Duration:</span> ${course.durationHours} hours<br>
                         <span>Max Students:</span> ${course.maxStudents}<br>
-                        <span>Start Date:</span> <fmt:formatDate value="${course.startDate}" pattern="yyyy-MM-dd"/><br>
-                        <span>End Date:</span> <fmt:formatDate value="${course.endDate}" pattern="yyyy-MM-dd"/>
+                        <span>Start Date:</span>
+                        <fmt:formatDate value="${course.startDateAsDate}" pattern="yyyy-MM-dd" type="date" /><br>
+                        <span>End Date:</span>
+                        <fmt:formatDate value="${course.endDateAsDate}" pattern="yyyy-MM-dd" type="date" />
+                    </li>
                     </li>
                 </c:forEach>
             </ul>
@@ -51,16 +56,18 @@
             <h2>Paid Courses</h2>
             <ul class="course-list">
                 <c:forEach var="course" items="${paidCourses}">
-                    <li class="course-item">
+                    <li class="course-item col-3">
                         <span>Code:</span> ${course.courseCode}<br>
-                        <span>Title:</span> <a href="#">${course.title}</a><br>
+                        <span>Title:</span> ${course.title}<br>
                         <span>Description:</span> ${course.shortDescription}<br>
                         <span>Teacher:</span> ${course.teacherUsername}<br>
                         <span>Price:</span> $${course.price}<br>
                         <span>Duration:</span> ${course.durationHours} hours<br>
                         <span>Max Students:</span> ${course.maxStudents}<br>
-                        <span>Start Date:</span> <fmt:formatDate value="${course.startDate}" pattern="yyyy-MM-dd"/><br>
-                        <span>End Date:</span> <fmt:formatDate value="${course.endDate}" pattern="yyyy-MM-dd"/>
+                        <span>Start Date:</span>
+                        <fmt:formatDate value="${course.startDateAsDate}" pattern="yyyy-MM-dd" type="date" /><br>
+                        <span>End Date:</span>
+                        <fmt:formatDate value="${course.endDateAsDate}" pattern="yyyy-MM-dd" type="date" />
                     </li>
                 </c:forEach>
             </ul>
@@ -70,16 +77,18 @@
             <h2>Free Courses</h2>
             <ul class="course-list">
                 <c:forEach var="course" items="${freeCourses}">
-                    <li class="course-item">
+                    <li class="course-item col-3">
                         <span>Code:</span> ${course.courseCode}<br>
-                        <span>Title:</span> <a href="#">${course.title}</a><br>
+                        <span>Title:</span> ${course.title}<br>
                         <span>Description:</span> ${course.shortDescription}<br>
                         <span>Teacher:</span> ${course.teacherUsername}<br>
                         <span>Price:</span> $${course.price}<br>
                         <span>Duration:</span> ${course.durationHours} hours<br>
                         <span>Max Students:</span> ${course.maxStudents}<br>
-                        <span>Start Date:</span> <fmt:formatDate value="${course.startDate}" pattern="yyyy-MM-dd"/><br>
-                        <span>End Date:</span> <fmt:formatDate value="${course.endDate}" pattern="yyyy-MM-dd"/>
+                        <span>Start Date:</span>
+                        <fmt:formatDate value="${course.startDateAsDate}" pattern="yyyy-MM-dd" type="date" /><br>
+                        <span>End Date:</span>
+                        <fmt:formatDate value="${course.endDateAsDate}" pattern="yyyy-MM-dd" type="date" />
                     </li>
                 </c:forEach>
             </ul>
