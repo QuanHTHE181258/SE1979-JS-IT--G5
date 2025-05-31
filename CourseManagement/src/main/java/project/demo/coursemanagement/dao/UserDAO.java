@@ -10,4 +10,5 @@ public interface UserDAO {
     boolean UpdateLastLogin(Integer userId);
     List<User> getAllUsers();
     List<User> searchUsersByName(String searchTerm);
+    List<User> getRecentLogins(int limit);
 }
