@@ -27,7 +27,7 @@
 
     <ul class="list-unstyled components">
       <li class="active">
-        <a href="${pageContext.request.contextPath}/admin/dashboard">
+        <a href="${pageContext.request.contextPath}/admin">
           <i class="fas fa-tachometer-alt"></i> Dashboard
         </a>
       </li>
@@ -37,23 +37,23 @@
         </a>
       </li>
       <li>
-        <a href="${pageContext.request.contextPath}/admin/teachers">
-          <i class="fas fa-chalkboard-teacher"></i> Teachers
-        </a>
-      </li>
-      <li>
-        <a href="${pageContext.request.contextPath}/admin/students">
-          <i class="fas fa-user-graduate"></i> Students
-        </a>
-      </li>
-      <li>
         <a href="${pageContext.request.contextPath}/admin/courses">
-          <i class="fas fa-book"></i> Courses
+          <i class="fas fa-book"></i> Course Management
         </a>
       </li>
       <li>
         <a href="${pageContext.request.contextPath}/admin/categories">
           <i class="fas fa-tags"></i> Categories
+        </a>
+      </li>
+      <li>
+        <a href="${pageContext.request.contextPath}/admin/enrollments">
+          <i class="fas fa-user-graduate"></i> Enrollments
+        </a>
+      </li>
+      <li>
+        <a href="${pageContext.request.contextPath}/admin/feedback">
+          <i class="fas fa-comments"></i> Feedback
         </a>
       </li>
       <li>
@@ -178,23 +178,23 @@
             <div class="card-body">
               <div class="row">
                 <div class="col-md-3 mb-3">
-                  <a href="${pageContext.request.contextPath}/admin/courses/new" class="btn btn-primary w-100">
+                  <a href="${pageContext.request.contextPath}/admin/users/new?role=USER_MANAGER" class="btn btn-primary w-100">
+                    <i class="fas fa-user-shield"></i> Add User Manager
+                  </a>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <a href="${pageContext.request.contextPath}/admin/users/new?role=COURSE_MANAGER" class="btn btn-success w-100">
+                    <i class="fas fa-book-reader"></i> Add Course Manager
+                  </a>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <a href="${pageContext.request.contextPath}/admin/courses/new" class="btn btn-info w-100">
                     <i class="fas fa-plus"></i> Add New Course
                   </a>
                 </div>
                 <div class="col-md-3 mb-3">
-                  <a href="${pageContext.request.contextPath}/admin/users/new" class="btn btn-success w-100">
-                    <i class="fas fa-user-plus"></i> Add New User
-                  </a>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <a href="${pageContext.request.contextPath}/admin/reports/export" class="btn btn-info w-100">
+                  <a href="${pageContext.request.contextPath}/admin/reports/export" class="btn btn-warning w-100">
                     <i class="fas fa-file-export"></i> Export Reports
-                  </a>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <a href="${pageContext.request.contextPath}/admin/settings" class="btn btn-warning w-100">
-                    <i class="fas fa-cog"></i> System Settings
                   </a>
                 </div>
               </div>
