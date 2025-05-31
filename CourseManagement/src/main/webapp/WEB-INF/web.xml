@@ -17,7 +17,7 @@
         <servlet-name>CourseViewServlet</servlet-name>
         <url-pattern>/course</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -40,4 +40,5 @@
         <servlet-class>project.demo.coursemanagement.controllers.CourseViewServlet</servlet-class>
         <load-on-startup>3</load-on-startup>
     </servlet>
+
 </web-app>
