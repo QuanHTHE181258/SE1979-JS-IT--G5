@@ -114,7 +114,7 @@ public class UserDAOImpl implements UserDAO {
         String sql = "SELECT u.user_id, u.username, u.email, u.password_hash, u.first_name, u.last_name, u.phone, u.date_of_birth, u.avatar_url, u.is_active, u.email_verified, u.last_login, u.created_at, u.updated_at, r.role_id, r.role_name, r.description as role_description FROM Users u INNER JOIN Roles r ON u.role_id = r.role_id WHERE u.first_name LIKE ? OR u.last_name LIKE ? OR u.username LIKE ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-             
+
             String searchPattern = "%" + searchTerm + "%";
             stmt.setString(1, searchPattern);
             stmt.setString(2, searchPattern);
@@ -127,6 +127,35 @@ public class UserDAOImpl implements UserDAO {
             }
         } catch (SQLException e) {
             System.err.println("Error searching users by name: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> getRecentLogins(int limit) {
+        List<User> users = new ArrayList<>();
+        String sql = """
+            SELECT TOP (?) u.user_id, u.username, u.email, u.password_hash, u.first_name, u.last_name,
+                   u.phone, u.date_of_birth, u.avatar_url, u.is_active, u.email_verified, u.last_login,
+                   u.created_at, u.updated_at, r.role_id, r.role_name, r.description as role_description
+            FROM Users u
+            INNER JOIN Roles r ON u.role_id = r.role_id
+            WHERE u.last_login IS NOT NULL
+            ORDER BY u.last_login DESC
+        """;
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, limit);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    users.add(mapResultSetToUser(rs));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting recent logins: " + e.getMessage());
             e.printStackTrace();
         }
         return users;

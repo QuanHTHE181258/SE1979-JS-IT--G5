@@ -217,26 +217,30 @@
                     <table class="table table-bordered">
                       <thead>
                       <tr>
-                        <th>Activity</th>
                         <th>User</th>
-                        <th>Time</th>
-                        <th>Action</th>
+                        <th>Last Login Time</th>
+                        <th>Registration Time</th>
+                        <th>Role</th>
                       </tr>
                       </thead>
                       <tbody>
-                      <c:forEach var="activity" items="${recentActivities}">
+                      <c:forEach var="user" items="${recentActivities}">
                         <tr>
-                          <td>${activity.description}</td>
-                          <td>${activity.userName}</td>
+                          <td>${user.firstName} ${user.lastName}</td>
                           <td>
-                            <fmt:formatDate value="${activity.createdAt}" pattern="MMM dd, yyyy HH:mm" />
+                            <c:choose>
+                              <c:when test="${not empty user.lastLoginDate}">
+                                <fmt:formatDate value="${user.lastLoginDate}" pattern="MMM dd, yyyy HH:mm" />
+                              </c:when>
+                              <c:otherwise>
+                                N/A
+                              </c:otherwise>
+                            </c:choose>
                           </td>
                           <td>
-                            <c:if test="${not empty activity.targetId}">
-                              <a href="${pageContext.request.contextPath}/admin/${activity.targetType}/${activity.targetId}"
-                                 class="btn btn-sm btn-info">View</a>
-                            </c:if>
+                            <fmt:formatDate value="${user.createdAtDate}" pattern="MMM dd, yyyy HH:mm" />
                           </td>
+                          <td>${user.role.roleName}</td>
                         </tr>
                       </c:forEach>
                       </tbody>
@@ -298,13 +302,13 @@
                       <img src="${pageContext.request.contextPath}/assets/images/avatars/default.jpg"
                            class="rounded-circle me-3" width="40" height="40">
                       <div>
-                        <h6 class="mb-1">${user.fullName}</h6>
+                        <h6 class="mb-1">${user.firstName} ${user.lastName}</h6>
                         <small class="text-muted">
-                          <fmt:formatDate value="${user.createdAt}" pattern="MMM dd, yyyy" />
+                          <fmt:formatDate value="${user.createdAtDate}" pattern="MMM dd, yyyy HH:mm" />
                         </small>
                       </div>
-                      <span class="badge badge-${user.role == 'TEACHER' ? 'success' : 'info'} ms-auto">
-                          ${user.role}
+                      <span class="badge badge-${user.role.roleName == 'TEACHER' ? 'success' : 'info'} ms-auto">
+                          ${user.role.roleName}
                       </span>
                     </div>
                   </c:forEach>

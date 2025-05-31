@@ -10,6 +10,8 @@ import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.dao.RegisterDAO;
 import project.demo.coursemanagement.dao.RegisterDAOImpl;
 import project.demo.coursemanagement.dao.RegisterDAO.RegistrationStats;
+import project.demo.coursemanagement.dao.UserDAO;
+import project.demo.coursemanagement.dao.UserDAOImpl;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,12 +28,48 @@ public class AdminController extends HttpServlet {
         RegisterDAO registerDAO = new RegisterDAOImpl();
         RegistrationStats stats = registerDAO.getRegistrationStatistics();
 
+        // Lấy danh sách đăng ký gần đây (10 người gần nhất)
+        java.util.List<project.demo.coursemanagement.entities.User> recentRegistrations = registerDAO.getRecentRegistrations(10);
+
+        // Lấy danh sách user đăng nhập gần đây (10 người gần nhất)
+        UserDAO userDAO = new UserDAOImpl();
+        java.util.List<project.demo.coursemanagement.entities.User> recentLogins = userDAO.getRecentLogins(10);
+
+        // Chuyển đổi Instant sang Date cho JSP formatting
+        if (recentRegistrations != null) {
+            for (project.demo.coursemanagement.entities.User user : recentRegistrations) {
+                if (user.getCreatedAt() != null) {
+                    user.setCreatedAtDate(java.util.Date.from(user.getCreatedAt()));
+                }
+                // lastLogin cũng cần được chuyển đổi cho cả recentRegistrations nếu muốn hiển thị
+                 if (user.getLastLogin() != null) {
+                    user.setLastLoginDate(java.util.Date.from(user.getLastLogin()));
+                 }
+            }
+        }
+
+        if (recentLogins != null) {
+             for (project.demo.coursemanagement.entities.User user : recentLogins) {
+                 if (user.getCreatedAt() != null) {
+                     user.setCreatedAtDate(java.util.Date.from(user.getCreatedAt()));
+                 }
+                 if (user.getLastLogin() != null) {
+                     user.setLastLoginDate(java.util.Date.from(user.getLastLogin()));
+                 }
+             }
+         }
+
         // Tạo map để truyền sang JSP (có thể mở rộng cho các thống kê khác)
         Map<String, Object> dashboardStats = new HashMap<>();
         dashboardStats.put("totalUsers", stats.getTotalUsers());
         // Có thể bổ sung các trường khác nếu cần
 
         request.setAttribute("dashboardStats", dashboardStats);
+        // Đặt danh sách user đăng ký gần đây vào request attribute
+        request.setAttribute("recentUsers", recentRegistrations);
+
+        // Đặt danh sách user đăng nhập gần đây vào request attribute cho Recent Activities
+        request.setAttribute("recentActivities", recentLogins);
 
         // Forward tới admin.jsp (nằm trong WEB-INF/views)
         request.getRequestDispatcher("/WEB-INF/views/admin.jsp")
