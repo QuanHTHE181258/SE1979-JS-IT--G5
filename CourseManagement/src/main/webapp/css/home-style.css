@@ -61,7 +61,7 @@ body {
     cursor: pointer;
 }
 
-/* Content */
+/* Home Content */
 .home-content {
     display: flex;
     flex-direction: column;
@@ -140,7 +140,7 @@ body {
     border-radius: 8px;
     color: black;
     display: inline-block;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .course-title {
@@ -157,6 +157,10 @@ body {
 .card-body {
     font-size: 14px;
     margin-top: 10px;
+    background: white;
+    color: black;
+    padding: 5px 15px;
+    border-radius: 15px;
 }
 
 .course-details p {
@@ -181,6 +185,12 @@ body {
 
 .join-btn:hover {
     background-color: #f0f0f0;
+}
+
+/* View Courses Content */
+.container h1 {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 /* Footer */

@@ -1,61 +1,80 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: hoang
-  Date: 5/26/2025
-  Time: 8:46 PM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html>
-<head>
-    <title>Course List</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
-<h1>Course List</h1>
-<table border="1">
-    <thead>
-    <tr>
-        <th>Course Code</th>
-        <th>Title</th>
-        <th>Short Description</th>
-        <th>Teacher</th>
-        <th>Price</th>
-        <th>Duration (Hours)</th>
-        <th>Max Students</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach var="courses" items="${courses}">
-        <tr>
-            <td>${courses.courseCode}</td>
-            <td>${courses.title}</td>
-            <td>${courses.shortDescription}</td>
-            <td>${courses.teacherUsername}</td>
-            <td>${courses.price}</td>
-            <td>${courses.durationHours}</td>
-            <td>${courses.maxStudents}</td>
-            <td>${courses.startDate}</td>
-            <td>${courses.endDate}</td>
-        </tr>
-    </c:forEach>
-    </tbody>
-</table>
-</body>
-</html>
+    <%--
+      Created by IntelliJ IDEA.
+      User: hoang
+      Date: 5/26/2025
+      Time: 8:46 PM
+      To change this template use File | Settings | File Templates.
+    --%>
+    <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+    <html>
+    <head>
+        <title>Course List</title>
+        <link rel="stylesheet" href="css/home-style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    </head>
+    <body>
+    <%-- Header --%>
+    <div class="home-header">
+        <div class="home-header-logo"><a href="home" style="text-decoration: none; color: white">Courses Learning Web</a></div>
+        <div class="home-header-courses"><a href="course" style="text-decoration: none; color: white">Courses</a></div>
+        <div class="home-header-searchbar">
+            <input type="text" placeholder="Search..." class="search-input">
+            <span class="search-icon"><i class="fas fa-search"></i></span>
+        </div>
+        <div class="home-header-login"><a href="login" style="text-decoration: none; color: white">Login</a></div>
+        <div class="home-header-register"><a href="register" style="text-decoration: none; color: white">Register</a></div>
+    </div>
+
+    <%-- Content --%>
+    <div class="container">
+        <h1>Course List</h1>
+        <ul class="course-list">
+            <c:forEach var="courses" items="${courses}">
+                <li class="course-card col-3">
+                    <div class="card-header">
+                        <span class="course-code">${courses.courseCode}</span>
+                        <h3 class="course-title">${courses.title}</h3>
+                        <p class="course-teacher">${courses.teacherUsername}</p>
+                    </div>
+                    <div class="card-body">
+                        <p class="course-desc">${courses.shortDescription}</p>
+                        <div class="course-detail">
+                            <p><strong>Price:</strong> $${courses.price}</p>
+                            <p><strong>Duration:</strong> ${courses.durationHours} hours</p>
+                            <p><strong>Max Students:</strong> ${courses.maxStudents}</p>
+                            <p><strong>Start Date:</strong>
+                                <fmt:formatDate value="${courses.startDateAsDate}" pattern="dd/MM/yyyy" type="date"/>
+                            </p>
+                            <p><strong>End Date:</strong>
+                                <fmt:formatDate value="${courses.endDateAsDate}" pattern="dd/MM/yyyy" type="date"/>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="join-btn">JOIN</button>
+                    </div>
+                </li>
+            </c:forEach>
+        </ul>
+    </div>
+
+    <%-- Footer --%>
+    <div class="home-footer">
+        <div class="footer-content">
+            <h3>Courses Learning Web</h3>
+            <p>Email: example@gmail.com</p>
+            <p>Phone: 000-000-0000</p>
+            <p>Address: 123 Learning Street, Education City</p>
+            <div class="social-icons">
+                <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+            <p>© 2025 Courses Learning Web. All rights reserved.</p>
+        </div>
+    </div>
+    </body>
+    </html>

@@ -47,10 +47,10 @@
                                 <p><strong>Duration:</strong> ${course.durationHours} hours</p>
                                 <p><strong>Max Students:</strong> ${course.maxStudents}</p>
                                 <p><strong>Start Date:</strong>
-                                    <fmt:formatDate value="${course.startDateAsDate}" pattern="yyyy-MM-dd" type="date" />
+                                    <fmt:formatDate value="${course.startDateAsDate}" pattern="dd/MM/yyyy" type="date"/>
                                 </p>
                                 <p><strong>End Date:</strong>
-                                    <fmt:formatDate value="${course.endDateAsDate}" pattern="yyyy-MM-dd" type="date" />
+                                    <fmt:formatDate value="${course.endDateAsDate}" pattern="dd/MM/yyyy" type="date"/>
                                 </p>
                             </div>
                         </div>
