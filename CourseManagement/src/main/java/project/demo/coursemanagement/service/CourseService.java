@@ -4,15 +4,23 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import project.demo.coursemanagement.entities.Course;
 import project.demo.coursemanagement.utils.HibernateUtil;
+import project.demo.coursemanagement.dao.CourseViewDAOimp;
+import project.demo.coursemanagement.dto.CourseDTO;
+import project.demo.coursemanagement.entities.Cours;
+import java.util.List;
 
 public class CourseService {
 
     private static SessionFactory sessionFactory;
     private static CourseService instance;
 
+    private CourseViewDAOimp courseDAO;
+
     private CourseService(){
         HibernateUtil.getInstance(); // initializes sessionFactory internally
         sessionFactory = HibernateUtil.getSessionFactory();
+        this.courseDAO = new CourseViewDAOimp();
+
     }
 
     public static CourseService getInstance(){
@@ -28,6 +36,11 @@ public class CourseService {
             course = session.get(Course.class, id);
         }
         return course;
+    }
+
+    public List<CourseDTO> getAllCourses() {
+        System.out.println("CourseService: getAllCourses() method called");
+        return courseDAO.getAllCourses();
     }
 
 }

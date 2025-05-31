@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import project.demo.coursemanagement.service.EnrollmentService;
 
-@WebServlet("/home")
+@WebServlet(name = "HomeServlet",urlPatterns = {"/home"})
 public class HomeServlet extends HttpServlet {
 
     private EnrollmentService enrollmentService;
@@ -21,6 +21,6 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("home.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
     }
 }
