@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="CourseManagement:war" />
+    </artifacts-to-build>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9e96ebfc-9a91-489e-a1fc-7e6cd454a016" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/controllers/CourseController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/controllers/CourseViewServlet.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/controllers/HomeServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/controllers/HomeServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Assignment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Category.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Cours.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/CourseReview.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Enrollment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/ForumReply.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/ForumTopic.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Lesson.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/LessonProgress.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Material.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Notification.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Role.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Submission.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/SystemSetting.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/UserImage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/webapp/view-course.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/src/main/webapp/view-course.jsp" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="com.intellij.jpb.JpaEntity" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
+  </component>
+  <component name="LogFilters">
+    <option name="FILTER_ERRORS" value="false" />
+    <option name="FILTER_WARNINGS" value="false" />
+    <option name="FILTER_INFO" value="true" />
+    <option name="FILTER_DEBUG" value="true" />
+    <option name="CUSTOM_FILTER" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2xdVU5UGEvM5hyoUg8FnLhbCmSU" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JUnit.All in SE1979-JS-IT--G5 (1).executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in SE1979-JS-IT--G5 (2).executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in SE1979-JS-IT--G5 (3).executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in SE1979-JS-IT--G5.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.CourseManagement [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Tomcat Server.CourseManagement.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;AnhVN&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Admin/OneDrive/Documents/GitHub/SE1979-JS-IT--G5&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;sqlserver.localdb&quot;,
+      &quot;sqlserver&quot;
+    ]
+  }
+}</component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn clean install" />
+    </option>
+  </component>
+  <component name="RunManager" selected="JUnit.All in SE1979-JS-IT--G5 (3)">
+    <configuration name="InitData.sql" type="DatabaseScript" editBeforeRun="true" temporary="true" nameIsGenerated="true">
+      <script-file value="$PROJECT_DIR$/databases/InitData.sql" />
+      <script-mode>FILE</script-mode>
+      <method v="2" />
+    </configuration>
+    <configuration name="All in SE1979-JS-IT--G5 (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="SE1979-JS-IT--G5" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in SE1979-JS-IT--G5 (2)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="SE1979-JS-IT--G5" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in SE1979-JS-IT--G5 (3)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="SE1979-JS-IT--G5" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in SE1979-JS-IT--G5" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="SE1979-JS-IT--G5" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CourseManagement" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 10.1.41" ALTERNATIVE_JRE_ENABLED="false">
+      <option name="UPDATING_POLICY" value="restart-server" />
+      <deployment>
+        <artifact name="CourseManagement:war">
+          <settings>
+            <option name="CONTEXT_PATH" value="/CourseManagement_war" />
+          </settings>
+        </artifact>
+      </deployment>
+      <server-settings>
+        <option name="BASE_DIRECTORY_NAME" value="9dfad0d6-5ab3-4d8f-9b84-7adcf2b8b2c6" />
+      </server-settings>
+      <log_file alias="Tomcat Manager Log" path="%IDEA_RUN:CATALINA_BASE%/logs/manager.*" />
+      <log_file alias="Tomcat Host Manager Log" path="%IDEA_RUN:CATALINA_BASE%/logs/host-manager.*" />
+      <log_file alias="Tomcat Localhost Access Log" path="%IDEA_RUN:CATALINA_BASE%/logs/localhost_access_log.*" />
+      <predefined_log_file enabled="true" id="Tomcat" />
+      <predefined_log_file enabled="true" id="Tomcat Catalina" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="49340" />
+      </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Profile">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="CourseManagement:war" />
+        </option>
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.All in SE1979-JS-IT--G5 (3)" />
+        <item itemvalue="JUnit.All in SE1979-JS-IT--G5 (2)" />
+        <item itemvalue="JUnit.All in SE1979-JS-IT--G5 (1)" />
+        <item itemvalue="Database Script.InitData.sql" />
+        <item itemvalue="JUnit.All in SE1979-JS-IT--G5" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9e96ebfc-9a91-489e-a1fc-7e6cd454a016" name="Changes" comment="" />
+      <created>1748267949410</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1748267949410</updated>
+      <workItem from="1748267950731" duration="310000" />
+      <workItem from="1748268302277" duration="9137000" />
+      <workItem from="1748277505157" duration="6246000" />
+      <workItem from="1748335464004" duration="965000" />
+      <workItem from="1748357075363" duration="6976000" />
+      <workItem from="1748446903074" duration="389000" />
+      <workItem from="1748448120578" duration="7292000" />
+      <workItem from="1748585133384" duration="3244000" />
+      <workItem from="1748702673724" duration="568000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="AnhVN" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

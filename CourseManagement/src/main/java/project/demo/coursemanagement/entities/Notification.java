@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Notifications")
@@ -50,10 +50,10 @@ public class Notification {
 
     @ColumnDefault("getdate()")
     @Column(name = "created_at")
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "read_at")
-    private Instant readAt;
+    private LocalDateTime readAt;
 
     public Integer getId() {
         return id;
@@ -119,19 +119,19 @@ public class Notification {
         this.isRead = isRead;
     }
 
-    public Instant getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Instant getReadAt() {
+    public LocalDateTime getReadAt() {
         return readAt;
     }
 
-    public void setReadAt(Instant readAt) {
+    public void setReadAt(LocalDateTime readAt) {
         this.readAt = readAt;
     }
 

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Enrollments")
@@ -23,14 +23,14 @@ public class Enrollment {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "course_id", nullable = false)
-    private Cours course;
+    private Course course;
 
     @ColumnDefault("getdate()")
     @Column(name = "enrollment_date")
-    private Instant enrollmentDate;
+    private LocalDateTime enrollmentDate;
 
     @Column(name = "completion_date")
-    private Instant completionDate;
+    private LocalDateTime completionDate;
 
     @ColumnDefault("0")
     @Column(name = "progress_percentage", precision = 5, scale = 2)
@@ -64,27 +64,27 @@ public class Enrollment {
         this.student = student;
     }
 
-    public Cours getCourse() {
+    public Course getCourse() {
         return course;
     }
 
-    public void setCourse(Cours course) {
+    public void setCourse(Course course) {
         this.course = course;
     }
 
-    public Instant getEnrollmentDate() {
+    public LocalDateTime getEnrollmentDate() {
         return enrollmentDate;
     }
 
-    public void setEnrollmentDate(Instant enrollmentDate) {
+    public void setEnrollmentDate(LocalDateTime enrollmentDate) {
         this.enrollmentDate = enrollmentDate;
     }
 
-    public Instant getCompletionDate() {
+    public LocalDateTime getCompletionDate() {
         return completionDate;
     }
 
-    public void setCompletionDate(Instant completionDate) {
+    public void setCompletionDate(LocalDateTime completionDate) {
         this.completionDate = completionDate;
     }
 

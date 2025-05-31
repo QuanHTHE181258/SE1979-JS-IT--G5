@@ -7,11 +7,11 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Courses")
-public class Cours {
+public class Course {
     @Id
     @Column(name = "course_id", nullable = false)
     private Integer id;
@@ -78,24 +78,24 @@ public class Cours {
     private Integer maxStudents;
 
     @Column(name = "enrollment_start_date")
-    private Instant enrollmentStartDate;
+    private LocalDateTime enrollmentStartDate;
 
     @Column(name = "enrollment_end_date")
-    private Instant enrollmentEndDate;
+    private LocalDateTime enrollmentEndDate;
 
     @Column(name = "start_date")
-    private Instant startDate;
+    private LocalDateTime startDate;
 
     @Column(name = "end_date")
-    private Instant endDate;
+    private LocalDateTime endDate;
 
     @ColumnDefault("getdate()")
     @Column(name = "created_at")
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     @ColumnDefault("getdate()")
     @Column(name = "updated_at")
-    private Instant updatedAt;
+    private LocalDateTime updatedAt;
 
     public Integer getId() {
         return id;
@@ -209,51 +209,51 @@ public class Cours {
         this.maxStudents = maxStudents;
     }
 
-    public Instant getEnrollmentStartDate() {
+    public LocalDateTime getEnrollmentStartDate() {
         return enrollmentStartDate;
     }
 
-    public void setEnrollmentStartDate(Instant enrollmentStartDate) {
+    public void setEnrollmentStartDate(LocalDateTime enrollmentStartDate) {
         this.enrollmentStartDate = enrollmentStartDate;
     }
 
-    public Instant getEnrollmentEndDate() {
+    public LocalDateTime getEnrollmentEndDate() {
         return enrollmentEndDate;
     }
 
-    public void setEnrollmentEndDate(Instant enrollmentEndDate) {
+    public void setEnrollmentEndDate(LocalDateTime enrollmentEndDate) {
         this.enrollmentEndDate = enrollmentEndDate;
     }
 
-    public Instant getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Instant startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public Instant getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Instant endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
-    public Instant getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Instant getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Instant updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 

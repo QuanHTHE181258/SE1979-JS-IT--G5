@@ -9,7 +9,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Submissions")
@@ -49,7 +49,7 @@ public class Submission {
 
     @ColumnDefault("getdate()")
     @Column(name = "submission_date")
-    private Instant submissionDate;
+    private LocalDateTime submissionDate;
 
     @ColumnDefault("0")
     @Column(name = "is_late")
@@ -71,7 +71,7 @@ public class Submission {
     private User gradedBy;
 
     @Column(name = "graded_date")
-    private Instant gradedDate;
+    private LocalDateTime gradedDate;
 
     @Size(max = 20)
     @ColumnDefault("'SUBMITTED'")
@@ -134,11 +134,11 @@ public class Submission {
         this.filePath = filePath;
     }
 
-    public Instant getSubmissionDate() {
+    public LocalDateTime getSubmissionDate() {
         return submissionDate;
     }
 
-    public void setSubmissionDate(Instant submissionDate) {
+    public void setSubmissionDate(LocalDateTime submissionDate) {
         this.submissionDate = submissionDate;
     }
 
@@ -182,11 +182,11 @@ public class Submission {
         this.gradedBy = gradedBy;
     }
 
-    public Instant getGradedDate() {
+    public LocalDateTime getGradedDate() {
         return gradedDate;
     }
 
-    public void setGradedDate(Instant gradedDate) {
+    public void setGradedDate(LocalDateTime gradedDate) {
         this.gradedDate = gradedDate;
     }
 

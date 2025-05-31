@@ -9,7 +9,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Assignments")
@@ -22,7 +22,7 @@ public class Assignment {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "course_id", nullable = false)
-    private Cours course;
+    private Course course;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lesson_id")
@@ -53,7 +53,7 @@ public class Assignment {
     private BigDecimal weight;
 
     @Column(name = "due_date")
-    private Instant dueDate;
+    private LocalDateTime dueDate;
 
     @ColumnDefault("0")
     @Column(name = "allow_late_submission")
@@ -73,11 +73,11 @@ public class Assignment {
 
     @ColumnDefault("getdate()")
     @Column(name = "created_at")
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     @ColumnDefault("getdate()")
     @Column(name = "updated_at")
-    private Instant updatedAt;
+    private LocalDateTime updatedAt;
 
     public Integer getId() {
         return id;
@@ -87,11 +87,11 @@ public class Assignment {
         this.id = id;
     }
 
-    public Cours getCourse() {
+    public Course getCourse() {
         return course;
     }
 
-    public void setCourse(Cours course) {
+    public void setCourse(Course course) {
         this.course = course;
     }
 
@@ -143,11 +143,11 @@ public class Assignment {
         this.weight = weight;
     }
 
-    public Instant getDueDate() {
+    public LocalDateTime getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Instant dueDate) {
+    public void setDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -183,19 +183,19 @@ public class Assignment {
         this.isPublished = isPublished;
     }
 
-    public Instant getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Instant getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Instant updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 

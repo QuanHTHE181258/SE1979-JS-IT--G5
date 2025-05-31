@@ -6,7 +6,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 public class LessonProgress {
@@ -30,7 +30,7 @@ public class LessonProgress {
     private Boolean isCompleted;
 
     @Column(name = "completion_date")
-    private Instant completionDate;
+    private LocalDateTime completionDate;
 
     @ColumnDefault("0")
     @Column(name = "watch_time_minutes")
@@ -72,11 +72,11 @@ public class LessonProgress {
         this.isCompleted = isCompleted;
     }
 
-    public Instant getCompletionDate() {
+    public LocalDateTime getCompletionDate() {
         return completionDate;
     }
 
-    public void setCompletionDate(Instant completionDate) {
+    public void setCompletionDate(LocalDateTime completionDate) {
         this.completionDate = completionDate;
     }
 

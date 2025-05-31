@@ -8,7 +8,7 @@ import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ForumTopics")
@@ -21,7 +21,7 @@ public class ForumTopic {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "course_id", nullable = false)
-    private Cours course;
+    private Course course;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -57,11 +57,11 @@ public class ForumTopic {
 
     @ColumnDefault("getdate()")
     @Column(name = "created_at")
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     @ColumnDefault("getdate()")
     @Column(name = "updated_at")
-    private Instant updatedAt;
+    private LocalDateTime updatedAt;
 
     public Integer getId() {
         return id;
@@ -71,11 +71,11 @@ public class ForumTopic {
         this.id = id;
     }
 
-    public Cours getCourse() {
+    public Course getCourse() {
         return course;
     }
 
-    public void setCourse(Cours course) {
+    public void setCourse(Course course) {
         this.course = course;
     }
 
@@ -135,19 +135,19 @@ public class ForumTopic {
         this.replyCount = replyCount;
     }
 
-    public Instant getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Instant getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Instant updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 

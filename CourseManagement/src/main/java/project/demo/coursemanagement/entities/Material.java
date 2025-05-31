@@ -8,7 +8,7 @@ import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Materials")
@@ -62,7 +62,7 @@ public class Material {
 
     @ColumnDefault("getdate()")
     @Column(name = "upload_date")
-    private Instant uploadDate;
+    private LocalDateTime uploadDate;
 
     public Integer getId() {
         return id;
@@ -144,11 +144,11 @@ public class Material {
         this.isDownloadable = isDownloadable;
     }
 
-    public Instant getUploadDate() {
+    public LocalDateTime getUploadDate() {
         return uploadDate;
     }
 
-    public void setUploadDate(Instant uploadDate) {
+    public void setUploadDate(LocalDateTime uploadDate) {
         this.uploadDate = uploadDate;
     }
 

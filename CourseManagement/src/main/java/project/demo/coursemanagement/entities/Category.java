@@ -9,7 +9,8 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "Categories")
@@ -35,7 +36,7 @@ public class Category {
 
     @ColumnDefault("getdate()")
     @Column(name = "created_at")
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     public Integer getId() {
         return id;
@@ -69,11 +70,11 @@ public class Category {
         this.isActive = isActive;
     }
 
-    public Instant getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
