@@ -10,27 +10,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e96ebfc-9a91-489e-a1fc-7e6cd454a016" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/controllers/CourseController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/CourseManagement/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/controllers/CourseViewServlet.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/controllers/HomeServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/controllers/HomeServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Assignment.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Category.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Cours.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/CourseReview.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Enrollment.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/ForumReply.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/ForumTopic.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Lesson.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/LessonProgress.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Material.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Notification.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Role.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Submission.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/SystemSetting.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/UserImage.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/webapp/view-course.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/src/main/webapp/view-course.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/controllers/CourseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/controllers/CourseDetailController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/controllers/CourseViewServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/controllers/CourseViewServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/dao/CourseViewDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/dao/CourseViewDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/dao/RegisterDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/dao/RegisterDAOImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/dao/UserDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/dao/UserDAOImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/Course.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/entities/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/service/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/service/CourseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/service/EnrollmentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/service/EnrollmentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/service/RegisterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/src/main/java/project/demo/coursemanagement/service/RegisterService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/src/main/resources/hibernate.cfg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseManagement/src/main/webapp/WEB-INF/views/view-course.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/CourseManagement/src/main/webapp/WEB-INF/views/view-course.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +102,7 @@
       <command value="mvn clean install" />
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.All in SE1979-JS-IT--G5 (3)">
+  <component name="RunManager" selected="Tomcat Server.CourseManagement">
     <configuration name="InitData.sql" type="DatabaseScript" editBeforeRun="true" temporary="true" nameIsGenerated="true">
       <script-file value="$PROJECT_DIR$/databases/InitData.sql" />
       <script-mode>FILE</script-mode>
@@ -262,7 +261,8 @@
       <workItem from="1748446903074" duration="389000" />
       <workItem from="1748448120578" duration="7292000" />
       <workItem from="1748585133384" duration="3244000" />
-      <workItem from="1748702673724" duration="568000" />
+      <workItem from="1748702673724" duration="1214000" />
+      <workItem from="1748705176351" duration="6717000" />
     </task>
     <servers />
   </component>

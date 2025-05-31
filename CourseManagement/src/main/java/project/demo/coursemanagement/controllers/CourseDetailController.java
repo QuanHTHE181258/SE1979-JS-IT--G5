@@ -9,8 +9,8 @@ import project.demo.coursemanagement.service.CourseService;
 
 import java.io.IOException;
 
-@WebServlet("/course")
-public class CourseController extends HttpServlet {
+@WebServlet("/course/detail")
+public class CourseDetailController extends HttpServlet {
 
     private CourseService courseService;
 

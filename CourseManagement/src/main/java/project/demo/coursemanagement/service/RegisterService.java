@@ -8,6 +8,7 @@ import project.demo.coursemanagement.dto.ValidationResult;
 import project.demo.coursemanagement.utils.PasswordUtil;
 import project.demo.coursemanagement.utils.ValidationUtil;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +45,10 @@ public class RegisterService {
             }
             // Set creation timestamp
             if (user.getCreatedAt() == null) {
-                user.setCreatedAt(Instant.now());
+                user.setCreatedAt(Timestamp.from(Instant.now()));
             }
             if (user.getUpdatedAt() == null) {
-                user.setUpdatedAt(Instant.now());
+                user.setUpdatedAt(Timestamp.from(Instant.now()));
             }
 
             // Log registration attempt

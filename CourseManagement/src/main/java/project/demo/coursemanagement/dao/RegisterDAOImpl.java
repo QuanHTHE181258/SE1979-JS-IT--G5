@@ -6,6 +6,7 @@ import project.demo.coursemanagement.utils.DatabaseConnection;
 
 import java.sql.*;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -407,12 +408,12 @@ public class RegisterDAOImpl implements RegisterDAO {
 
         Timestamp createdAt = rs.getTimestamp("created_at");
         if (createdAt != null) {
-            user.setCreatedAt(createdAt.toInstant());
+            user.setCreatedAt(Timestamp.from(Instant.now()));
         }
 
         Timestamp updatedAt = rs.getTimestamp("updated_at");
         if (updatedAt != null) {
-            user.setUpdatedAt(updatedAt.toInstant());
+            user.setUpdatedAt(Timestamp.from(Instant.now()));
         }
 
         // Map Role
@@ -434,7 +435,7 @@ public class RegisterDAOImpl implements RegisterDAO {
 
         Timestamp createdAt = rs.getTimestamp("created_at");
         if (createdAt != null) {
-            role.setCreatedAt(createdAt.toInstant());
+            role.setCreatedAt(LocalDateTime.from(createdAt.toInstant()));
         }
 
         return role;

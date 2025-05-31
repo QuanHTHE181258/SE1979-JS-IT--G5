@@ -27,6 +27,12 @@
 </head>
 <body>
 <h1>Course List</h1>
+
+<form method="get" action="course" style="margin-bottom: 20px;">
+    <input type="text" name="search" placeholder="Search courses..." value="${param.search}" />
+    <button type="submit">Search</button>
+</form>
+
 <table border="1">
     <thead>
     <tr>
@@ -39,6 +45,7 @@
         <th>Max Students</th>
         <th>Start Date</th>
         <th>End Date</th>
+        <th>Action</th>
     </tr>
     </thead>
     <tbody>
@@ -53,6 +60,15 @@
             <td>${courses.maxStudents}</td>
             <td>${courses.startDate}</td>
             <td>${courses.endDate}</td>
+            <td>
+                <c:if test="${not empty sessionScope.currentUser}">
+                    <form action="${pageContext.request.contextPath}/enroll" method="post">
+                        <input type="hidden" name="userId" value="${sessionScope.currentUser.id}" />
+                        <input type="hidden" name="courseId" value="${course.id}" />
+                        <button type="submit">Enroll</button>
+                    </form>
+                </c:if>
+            </td>
         </tr>
     </c:forEach>
     </tbody>

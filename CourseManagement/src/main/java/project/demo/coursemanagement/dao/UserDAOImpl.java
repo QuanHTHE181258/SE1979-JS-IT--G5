@@ -1,15 +1,12 @@
 package project.demo.coursemanagement.dao;
 
-import project.demo.coursemanagement.dao.UserDAO;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.utils.DatabaseConnection;
 import project.demo.coursemanagement.entities.Role;
 
 import java.sql.*;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.sql.Timestamp;
 
 public class UserDAOImpl implements UserDAO {
 
@@ -105,13 +102,13 @@ public class UserDAOImpl implements UserDAO {
         user.setIsActive(rs.getBoolean("is_active"));
         user.setEmailVerified(rs.getBoolean("email_verified"));
         Timestamp lastLoginTs = rs.getTimestamp("last_login");
-        user.setLastLogin(lastLoginTs != null ? lastLoginTs.toInstant() : null);
+        user.setLastLogin(lastLoginTs);
 
         Timestamp createdAtTs = rs.getTimestamp("created_at");
-        user.setCreatedAt(createdAtTs != null ? createdAtTs.toInstant() : null);
+        user.setCreatedAt(createdAtTs);
 
         Timestamp updatedAtTs = rs.getTimestamp("updated_at");
-        user.setUpdatedAt(updatedAtTs != null ? updatedAtTs.toInstant() : null);
+        user.setUpdatedAt(updatedAtTs);
 
         // Map Role
         Role role = new Role();

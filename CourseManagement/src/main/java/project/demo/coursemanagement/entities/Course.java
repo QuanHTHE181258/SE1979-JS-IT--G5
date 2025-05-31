@@ -3,6 +3,9 @@ package project.demo.coursemanagement.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
@@ -10,6 +13,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "Courses")
 public class Course {
     @Id
@@ -96,165 +101,4 @@ public class Course {
     @ColumnDefault("getdate()")
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getCourseCode() {
-        return courseCode;
-    }
-
-    public void setCourseCode(String courseCode) {
-        this.courseCode = courseCode;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getShortDescription() {
-        return shortDescription;
-    }
-
-    public void setShortDescription(String shortDescription) {
-        this.shortDescription = shortDescription;
-    }
-
-    public User getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(User teacher) {
-        this.teacher = teacher;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public Integer getDurationHours() {
-        return durationHours;
-    }
-
-    public void setDurationHours(Integer durationHours) {
-        this.durationHours = durationHours;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-    public Boolean getIsPublished() {
-        return isPublished;
-    }
-
-    public void setIsPublished(Boolean isPublished) {
-        this.isPublished = isPublished;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public Integer getMaxStudents() {
-        return maxStudents;
-    }
-
-    public void setMaxStudents(Integer maxStudents) {
-        this.maxStudents = maxStudents;
-    }
-
-    public LocalDateTime getEnrollmentStartDate() {
-        return enrollmentStartDate;
-    }
-
-    public void setEnrollmentStartDate(LocalDateTime enrollmentStartDate) {
-        this.enrollmentStartDate = enrollmentStartDate;
-    }
-
-    public LocalDateTime getEnrollmentEndDate() {
-        return enrollmentEndDate;
-    }
-
-    public void setEnrollmentEndDate(LocalDateTime enrollmentEndDate) {
-        this.enrollmentEndDate = enrollmentEndDate;
-    }
-
-    public LocalDateTime getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDateTime getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
 }

@@ -6,7 +6,7 @@ import project.demo.coursemanagement.entities.Course;
 import project.demo.coursemanagement.utils.HibernateUtil;
 import project.demo.coursemanagement.dao.CourseViewDAOimp;
 import project.demo.coursemanagement.dto.CourseDTO;
-import project.demo.coursemanagement.entities.Cours;
+
 import java.util.List;
 
 public class CourseService {
