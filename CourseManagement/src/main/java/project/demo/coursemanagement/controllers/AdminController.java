@@ -12,6 +12,7 @@ import project.demo.coursemanagement.dao.RegisterDAOImpl;
 import project.demo.coursemanagement.dao.RegisterDAO.RegistrationStats;
 import project.demo.coursemanagement.dao.UserDAO;
 import project.demo.coursemanagement.dao.UserDAOImpl;
+import project.demo.coursemanagement.dao.CourseDAO;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,19 +22,29 @@ import java.io.IOException;
 @WebServlet(name = "AdminController", urlPatterns = {"/admin"})
 public class AdminController extends HttpServlet {
 
+    private final UserDAO userDAO;
+    private final RegisterDAO registerDAO;
+    private CourseDAO courseDAO;
+
+    public AdminController() {
+        this.userDAO = new UserDAOImpl();
+        this.registerDAO = new RegisterDAOImpl();
+        this.courseDAO = new CourseDAO();
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Lấy thống kê user
         RegisterDAO registerDAO = new RegisterDAOImpl();
-        RegistrationStats stats = registerDAO.getRegistrationStatistics();
+        RegistrationStats stats = this.registerDAO.getRegistrationStatistics();
 
         // Lấy danh sách đăng ký gần đây (10 người gần nhất)
-        java.util.List<project.demo.coursemanagement.entities.User> recentRegistrations = registerDAO.getRecentRegistrations(10);
+        java.util.List<project.demo.coursemanagement.entities.User> recentRegistrations = this.registerDAO.getRecentRegistrations(10);
 
         // Lấy danh sách user đăng nhập gần đây (10 người gần nhất)
         UserDAO userDAO = new UserDAOImpl();
-        java.util.List<project.demo.coursemanagement.entities.User> recentLogins = userDAO.getRecentLogins(10);
+        java.util.List<project.demo.coursemanagement.entities.User> recentLogins = this.userDAO.getRecentLogins(10);
 
         // Chuyển đổi Instant sang Date cho JSP formatting
         if (recentRegistrations != null) {
@@ -59,9 +70,13 @@ public class AdminController extends HttpServlet {
              }
          }
 
+        // Lấy tổng số khóa học
+        int totalCourses = this.courseDAO.countCourses(null, null);
+
         // Tạo map để truyền sang JSP (có thể mở rộng cho các thống kê khác)
         Map<String, Object> dashboardStats = new HashMap<>();
         dashboardStats.put("totalUsers", stats.getTotalUsers());
+        dashboardStats.put("totalCourses", totalCourses);
         // Có thể bổ sung các trường khác nếu cần
 
         request.setAttribute("dashboardStats", dashboardStats);
