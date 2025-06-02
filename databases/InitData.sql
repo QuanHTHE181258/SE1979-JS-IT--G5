@@ -1,3 +1,4 @@
+-- pass: Anhquoc@123
 INSERT INTO Users (username,
                    email,
                    password_hash,
@@ -12,7 +13,7 @@ INSERT INTO Users (username,
                    last_login)
 VALUES ('johndoe123',
         'johndoe@example.com',
-        'hashed_password_example_123456',
+        '$2a$10$CuuAENEH6t.IGBYHyyiyNO8EXT6KpcsI0eEzKLR9NURTSPSUs2PJO',
         'John',
         'Doe',
         '0123456789',
