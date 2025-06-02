@@ -9,7 +9,6 @@ import java.util.List;
 
 public class HomeDAOimp implements HomeDAO {
 
-    List<CourseDTO> courses = new ArrayList<>();
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
@@ -17,6 +16,7 @@ public class HomeDAOimp implements HomeDAO {
 
     @Override
     public List<CourseDTO> getAllCourses() {
+        List<CourseDTO> courses = new ArrayList<>();
         try {
             conn = dbConn.getConnection();
             String sql = """
