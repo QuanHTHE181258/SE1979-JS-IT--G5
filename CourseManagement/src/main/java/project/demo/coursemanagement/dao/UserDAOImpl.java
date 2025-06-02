@@ -172,13 +172,19 @@ public class UserDAOImpl implements UserDAO {
         user.setIsActive(rs.getBoolean("is_active"));
         user.setEmailVerified(rs.getBoolean("email_verified"));
         Timestamp lastLoginTs = rs.getTimestamp("last_login");
-        user.setLastLogin(lastLoginTs != null ? lastLoginTs.toInstant() : null);
+        if (lastLoginTs != null) {
+            user.setLastLogin(lastLoginTs.toInstant());
+        }
 
         Timestamp createdAtTs = rs.getTimestamp("created_at");
-        user.setCreatedAt(createdAtTs != null ? createdAtTs.toInstant() : null);
+        if (createdAtTs != null) {
+            user.setCreatedAt(createdAtTs.toInstant());
+        }
 
         Timestamp updatedAtTs = rs.getTimestamp("updated_at");
-        user.setUpdatedAt(updatedAtTs != null ? updatedAtTs.toInstant() : null);
+        if (updatedAtTs != null) {
+            user.setUpdatedAt(updatedAtTs.toInstant());
+        }
 
         // Map Role
         Role role = new Role();
@@ -252,4 +258,3 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 }
-

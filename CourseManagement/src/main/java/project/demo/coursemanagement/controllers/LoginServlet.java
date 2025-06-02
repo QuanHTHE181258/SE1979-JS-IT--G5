@@ -15,6 +15,8 @@ import java.io.IOException;
 /**
  * Servlet for handling user login
  */
+
+//Test account: admin / admin123
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
 
@@ -147,7 +149,7 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect(contextPath + "/teacher/dashboard");
                     break;
                 case "USER": // Student
-                    response.sendRedirect(contextPath + "/student/dashboard");
+                    response.sendRedirect(contextPath + "/student-dashboard");
                     break;
                 default:
                     response.sendRedirect(contextPath + "/dashboard");

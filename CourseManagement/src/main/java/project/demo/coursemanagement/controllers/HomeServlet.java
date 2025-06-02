@@ -7,15 +7,18 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import project.demo.coursemanagement.service.HomeService;
+import project.demo.coursemanagement.service.EnrollmentService;
 
 @WebServlet(name = "HomeServlet",urlPatterns = {"/home"})
 public class HomeServlet extends HttpServlet {
     private HomeService homeService;
+    private EnrollmentService enrollmentService;
 
     @Override
     public void init() throws ServletException {
         super.init();
         this.homeService = new HomeService();
+        this.enrollmentService = EnrollmentService.getInstance();
     }
 
     @Override

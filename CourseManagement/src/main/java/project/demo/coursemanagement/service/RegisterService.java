@@ -8,6 +8,7 @@ import project.demo.coursemanagement.dto.ValidationResult;
 import project.demo.coursemanagement.utils.PasswordUtil;
 import project.demo.coursemanagement.utils.ValidationUtil;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;

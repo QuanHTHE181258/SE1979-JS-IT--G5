@@ -1,10 +1,14 @@
 package project.demo.coursemanagement.dto;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Date;
 
+@Data
 public class CourseDTO {
+    private Integer id;
     private String courseCode;
     private String title;
     private String description;
@@ -27,6 +31,15 @@ public class CourseDTO {
 
 
     public CourseDTO() {
+    }
+
+    // Keep getters and setters for compatibility with existing code
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public int getLessonCount() {

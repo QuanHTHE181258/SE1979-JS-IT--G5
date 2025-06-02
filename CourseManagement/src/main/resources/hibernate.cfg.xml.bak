@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+
+        <!-- JDBC connection settings -->
+        <property name="hibernate.connection.url">jdbc:sqlserver://localhost:1433;databaseName=CourseManagementSystem;encrypt=true;trustServerCertificate=true</property>
+        <property name="hibernate.connection.username">sa</property>
+        <property name="hibernate.connection.password">123456</property>
+
+        <!-- SQL dialect -->
+        <!-- Echo all executed SQL to stdout -->
+        <property name="hibernate.show_sql">true</property>
+
+        <!-- Automatically create/drop tables -->
+        <property name="hibernate.hbm2ddl.auto">validate</property>
+
+        <!-- Your annotated entity classes -->
+        <!-- Add other mappings as needed -->
+        <mapping class="project.demo.coursemanagement.entities.Assignment"/>
+        <mapping class="project.demo.coursemanagement.entities.Category"/>
+        <mapping class="project.demo.coursemanagement.entities.Cours"/>
+        <mapping class="project.demo.coursemanagement.entities.CourseReview"/>
+        <mapping class="project.demo.coursemanagement.entities.Enrollment"/>
+        <mapping class="project.demo.coursemanagement.entities.ForumReply"/>
+        <mapping class="project.demo.coursemanagement.entities.ForumTopic"/>
+        <mapping class="project.demo.coursemanagement.entities.Lesson"/>
+        <mapping class="project.demo.coursemanagement.entities.LessonProgress"/>
+        <mapping class="project.demo.coursemanagement.entities.Material"/>
+        <mapping class="project.demo.coursemanagement.entities.Notification"/>
+        <mapping class="project.demo.coursemanagement.entities.Role"/>
+        <mapping class="project.demo.coursemanagement.entities.Submission"/>
+        <mapping class="project.demo.coursemanagement.entities.SystemSetting"/>
+        <mapping class="project.demo.coursemanagement.entities.User"/>
+        <mapping class="project.demo.coursemanagement.entities.UserImage"/>
+
+    </session-factory>
+</hibernate-configuration>

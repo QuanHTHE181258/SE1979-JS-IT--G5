@@ -1,27 +1,62 @@
 package project.demo.coursemanagement.service;
 
+import project.demo.coursemanagement.dao.CourseViewDAO;
 import project.demo.coursemanagement.dao.CourseViewDAOimp;
 import project.demo.coursemanagement.dto.CourseDTO;
 import project.demo.coursemanagement.entities.Cours;
 import java.util.List;
 
+/**
+ * Service class for course-related operations
+ */
 public class CourseService {
-    private CourseViewDAOimp courseDAO;
 
-    public CourseService() {
-        this.courseDAO = new CourseViewDAOimp();
+    private static CourseService instance;
+    private final CourseViewDAO courseViewDAO;
+
+    private CourseService(){
+        this.courseViewDAO = new CourseViewDAOimp();
     }
 
+    public static CourseService getInstance(){
+        if(instance == null){
+            instance = new CourseService();
+        }
+        return instance;
+    }
+
+    /**
+     * Get a course by its ID
+     * @param id the ID of the course
+     * @return the course object or null if not found
+     */
+    public Cours getCourseBy(int id){
+        return courseViewDAO.getCourseById(id);
+    }
+
+    /**
+     * Get all courses
+     * @return a list of all courses
+     */
     public List<CourseDTO> getAllCourses() {
-        System.out.println("CourseService: getAllCourses() method called");
-        return courseDAO.getAllCourses();
+        return courseViewDAO.getAllCourses();
     }
 
+    /**
+     * Get courses by page
+     * @param page the page number
+     * @param size the page size
+     * @return a list of courses for the specified page
+     */
     public List<CourseDTO> getCoursesByPage(int page, int size) {
-        return courseDAO.getCoursesByPage(page, size);
+        return courseViewDAO.getCoursesByPage(page, size);
     }
 
+    /**
+     * Get the total number of courses
+     * @return the total number of courses
+     */
     public int getTotalCourseCount() {
-        return courseDAO.getTotalCourseCount();
+        return courseViewDAO.getTotalCourseCount();
     }
 }
