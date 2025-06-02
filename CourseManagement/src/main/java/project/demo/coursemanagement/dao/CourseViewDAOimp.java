@@ -17,12 +17,10 @@ public class CourseViewDAOimp implements CourseViewDAO {
 
     @Override
     public List<CourseDTO> getAllCourses() {
-
-
         try {
             conn = dbConn.getConnection();
             String sql = """
-            SELECT  c.course_code, c.title, c.short_description, u.username, c.price,
+            SELECT  c.course_id, c.course_code, c.title, c.short_description, u.username, c.price,
                     c.duration_hours, c.max_students, c.start_date, c.end_date
             FROM Courses c
             JOIN Users u ON c.teacher_id = u.user_id 
@@ -54,6 +52,7 @@ public class CourseViewDAOimp implements CourseViewDAO {
     private CourseDTO extractCourseFromResultSet(ResultSet rs) throws SQLException {
         try {
             CourseDTO course = new CourseDTO();
+            course.setId(rs.getInt("course_id"));
             course.setCourseCode(rs.getString("course_code"));
             course.setTitle(rs.getString("title"));
             course.setShortDescription(rs.getString("short_description"));

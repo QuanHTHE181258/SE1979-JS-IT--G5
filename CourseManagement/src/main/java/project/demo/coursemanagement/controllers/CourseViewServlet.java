@@ -23,13 +23,13 @@ public class CourseViewServlet extends HttpServlet {
         String searchKeyword = request.getParameter("search");
 
         // Get full list first
-        List<CourseDTO> courses = courseService.getAllCourses();
-        System.out.println("Total courses: " + courses.size());
+        List<CourseDTO> listCourseDto = courseService.getAllCourses();
+        System.out.println("Total courses: " + listCourseDto.size());
 
         // Filter based on search keyword
         if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
             String keywordLower = searchKeyword.trim().toLowerCase();
-            courses = courses.stream()
+            listCourseDto = listCourseDto.stream()
                     .filter(
                             course -> course.getTitle().toLowerCase().contains(keywordLower)
                             || course.getCourseCode().toLowerCase().contains(keywordLower)
@@ -37,9 +37,7 @@ public class CourseViewServlet extends HttpServlet {
                     .collect(Collectors.toList());
         }
 
-        System.out.println("Filtered courses: " + courses.size());
-
-        request.setAttribute("courses", courses);
+        request.setAttribute("listCourseDto", listCourseDto);
         request.getRequestDispatcher("WEB-INF/views/view-course.jsp").forward(request, response);
     }
 }

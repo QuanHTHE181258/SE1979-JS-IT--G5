@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "Enrollments")
 public class Enrollment {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // or AUTO, SEQUENCE, TABLE
     @Column(name = "enrollment_id", nullable = false)
     private Integer id;
 
