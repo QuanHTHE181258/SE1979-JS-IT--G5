@@ -39,7 +39,6 @@ public class CourseService {
     }
 
     public List<CourseDTO> getAllCourses() {
-        System.out.println("CourseService: getAllCourses() method called");
         return courseDAO.getAllCourses();
     }
 
