@@ -91,6 +91,15 @@ public class User {
     @Transient
     private Date createdAtDate;
 
+    @Transient
+    public java.util.Date getDateOfBirthAsDate() {
+        if (dateOfBirth == null) {
+            return null;
+        }
+        return java.sql.Date.valueOf(dateOfBirth);
+    }
+
+
     public java.util.Date getLastLoginDate() { return lastLoginDate; }
     public void setLastLoginDate(java.util.Date lastLoginDate) { this.lastLoginDate = lastLoginDate; }
 

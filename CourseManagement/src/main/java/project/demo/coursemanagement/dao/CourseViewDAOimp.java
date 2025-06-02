@@ -9,14 +9,15 @@ import java.util.List;
 
 public class CourseViewDAOimp implements CourseViewDAO {
 
-    Connection conn = null;
-    PreparedStatement ps = null;
-    ResultSet rs = null;
-    DatabaseConnection dbConn = DatabaseConnection.getInstance();
-
     @Override
     public List<CourseDTO> getAllCourses() {
+
         List<CourseDTO> courses = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        DatabaseConnection dbConn = DatabaseConnection.getInstance();
+
         try {
             conn = dbConn.getConnection();
             String sql = """

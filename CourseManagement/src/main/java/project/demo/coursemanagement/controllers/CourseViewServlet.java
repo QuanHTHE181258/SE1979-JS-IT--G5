@@ -34,6 +34,7 @@ public class CourseViewServlet extends HttpServlet {
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
 
+
         request.getRequestDispatcher("WEB-INF/views/view-course.jsp").forward(request, response);
     }
 }

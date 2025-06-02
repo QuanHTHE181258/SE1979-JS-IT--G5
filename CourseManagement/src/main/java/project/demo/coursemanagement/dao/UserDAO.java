@@ -5,10 +5,20 @@ import project.demo.coursemanagement.entities.User;
 public interface UserDAO {
 
     User findUserByUsernameOrEmail(String identifier);
+
     User findUserById(Integer id);
+
     User findUserByIdIncludeInactive(Integer id);
+
     boolean UpdateLastLogin(Integer userId);
+
     List<User> getAllUsers();
+
     List<User> searchUsersByName(String searchTerm);
+
     List<User> getRecentLogins(int limit);
+
+    boolean updatePassword(Integer userId, String newPassword);
+
+    boolean updateAndUploadAvatar(Integer userId, String avatarPath);
 }

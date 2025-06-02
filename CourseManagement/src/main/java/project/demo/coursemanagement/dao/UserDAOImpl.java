@@ -1,15 +1,11 @@
 package project.demo.coursemanagement.dao;
 
-import project.demo.coursemanagement.dao.UserDAO;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.utils.DatabaseConnection;
 import project.demo.coursemanagement.entities.Role;
 
 import java.sql.*;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +47,7 @@ public class UserDAOImpl implements UserDAO {
     public User findUserById(Integer id) {
         String sql = """
                     SELECT u.user_id, u.username, u.email, u.password_hash,
-                           u.full_name, u.phone, u.date_of_birth, u.avatar_url,
+                           u.first_name, u.last_name, u.phone, u.date_of_birth, u.avatar_url,
                            u.is_active, u.email_verified, u.last_login,
                            u.created_at, u.updated_at,
                            r.role_id, r.role_name, r.description as role_description
@@ -222,6 +218,38 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public boolean updatePassword(Integer userId, String newPassword) {
+        String sql = "UPDATE Users SET password_hash = ? WHERE user_id = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement statement = conn.prepareStatement(sql)) {
+
+            statement.setString(1, newPassword);
+            statement.setInt(2, userId);
+            return statement.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error updating password: " + e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateAndUploadAvatar(Integer userId, String avatarPath) {
+        String sql = "UPDATE Users SET avatar_url = ? WHERE user_id = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement statement = conn.prepareStatement(sql)) {
+
+            statement.setString(1, avatarPath);
+            statement.setInt(2, userId);
+            return statement.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error updating and uploading avatar: " + e.getMessage());
+            return false;
+        }
     }
 }
 

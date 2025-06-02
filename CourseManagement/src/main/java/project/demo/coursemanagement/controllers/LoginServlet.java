@@ -62,7 +62,6 @@ public class LoginServlet extends HttpServlet {
 
         System.out.println("LoginServlet POST request received");
 
-        // Get form parameters
         String identifier = request.getParameter("identifier"); // username or email
         String password = request.getParameter("password");
         String rememberMe = request.getParameter("rememberMe");
@@ -86,19 +85,15 @@ public class LoginServlet extends HttpServlet {
             if (user != null) {
                 // Login successful
                 System.out.println("Login successful for user: " + user.getUsername());
-
                 // Create user session
                 SessionUtil.setUserSession(request, user);
-
                 // Handle "Remember Me" functionality (optional)
                 if ("on".equals(rememberMe)) {
                     // Can implement remember me cookies here
                     System.out.println("Remember me requested for: " + user.getUsername());
                 }
-
                 // Set success message
                 SessionUtil.setFlashMessage(request, "success", "Welcome back, " + user.getFirstName() + user.getLastName() + "!");
-
                 // Redirect to dashboard
                 redirectToDashboard(request, response);
 

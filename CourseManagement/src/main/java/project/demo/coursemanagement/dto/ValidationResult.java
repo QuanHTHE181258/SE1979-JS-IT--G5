@@ -119,21 +119,14 @@ public class ValidationResult {
         this.successMessage = successMessage;
     }
 
-    // Helper methods
-
-    /**
-     * Add a single error
-     */
+    // Add a single error
     public void addError(String error) {
         if (error != null && !error.trim().isEmpty()) {
             this.errors.add(error.trim());
             this.valid = false;
         }
     }
-
-    /**
-     * Add multiple errors
-     */
+    // Add multiple errors
     public void addErrors(List<String> errors) {
         if (errors != null) {
             for (String error : errors) {
@@ -142,9 +135,7 @@ public class ValidationResult {
         }
     }
 
-    /**
-     * Add multiple errors (varargs)
-     */
+    // Add multiple errors (varargs)
     public void addErrors(String... errors) {
         if (errors != null) {
             for (String error : errors) {
@@ -153,18 +144,14 @@ public class ValidationResult {
         }
     }
 
-    /**
-     * Add a single warning
-     */
+   //Add a single warning
     public void addWarning(String warning) {
         if (warning != null && !warning.trim().isEmpty()) {
             this.warnings.add(warning.trim());
         }
     }
 
-    /**
-     * Add multiple warnings
-     */
+    // Add multiple warnings
     public void addWarnings(List<String> warnings) {
         if (warnings != null) {
             for (String warning : warnings) {
@@ -173,72 +160,52 @@ public class ValidationResult {
         }
     }
 
-    /**
-     * Check if there are any errors
-     */
+    // Check if the result is valid (no errors)
     public boolean hasErrors() {
         return !errors.isEmpty();
     }
 
-    /**
-     * Check if there are any warnings
-     */
+    // Check if there are any warnings
     public boolean hasWarnings() {
         return !warnings.isEmpty();
     }
 
-    /**
-     * Get total number of errors
-     */
+    // Get total number of errors
     public int getErrorCount() {
         return errors.size();
     }
 
-    /**
-     * Get total number of warnings
-     */
+    // Get total number of warnings
     public int getWarningCount() {
         return warnings.size();
     }
 
-    /**
-     * Get first error message (if any)
-     */
+    // Get first error message (if any)
     public String getFirstError() {
         return errors.isEmpty() ? null : errors.get(0);
     }
 
-    /**
-     * Get first warning message (if any)
-     */
+    // Get first warning message (if any)
     public String getFirstWarning() {
         return warnings.isEmpty() ? null : warnings.get(0);
     }
 
-    /**
-     * Get all errors as a single string (separated by newlines)
-     */
+    // Get all errors as a single string (separated by newlines)
     public String getErrorsAsString() {
         return String.join("\n", errors);
     }
 
-    /**
-     * Get all errors as a single string with custom separator
-     */
+    // Get all errors as a single string with custom separator
     public String getErrorsAsString(String separator) {
         return String.join(separator, errors);
     }
 
-    /**
-     * Get all warnings as a single string (separated by newlines)
-     */
+    // Get all warnings as a single string (separated by newlines)
     public String getWarningsAsString() {
         return String.join("\n", warnings);
     }
 
-    /**
-     * Clear all errors and warnings
-     */
+    // Get all warnings as a single string with custom separator
     public void clear() {
         this.errors.clear();
         this.warnings.clear();
@@ -246,9 +213,7 @@ public class ValidationResult {
         this.successMessage = null;
     }
 
-    /**
-     * Clear only errors
-     */
+    // Clear all errors and revalidate
     public void clearErrors() {
         this.errors.clear();
         // Revalidate: if no errors, result is valid
@@ -257,16 +222,12 @@ public class ValidationResult {
         }
     }
 
-    /**
-     * Clear only warnings
-     */
+    // Clear all warnings
     public void clearWarnings() {
         this.warnings.clear();
     }
 
-    /**
-     * Merge another ValidationResult into this one
-     */
+    // Merge another ValidationResult into this one
     public void merge(ValidationResult other) {
         if (other != null) {
             this.addErrors(other.getErrors());
@@ -339,24 +300,18 @@ public class ValidationResult {
         return json.toString();
     }
 
-    /**
-     * Create ValidationResult from exception
-     */
+    //Create ValidationResult from an Exception
     public static ValidationResult fromException(Exception e) {
         String message = e.getMessage() != null ? e.getMessage() : "An unexpected error occurred";
         return ValidationResult.failure(message);
     }
 
-    /**
-     * Create ValidationResult for field validation
-     */
+    // Create ValidationResult for a specific field with error message
     public static ValidationResult forField(String fieldName, String errorMessage) {
         return ValidationResult.failure(fieldName + ": " + errorMessage);
     }
 
-    /**
-     * Combine multiple validation results
-     */
+    // Combine multiple validation results from varargs
     public static ValidationResult combine(ValidationResult... results) {
         ValidationResult combined = ValidationResult.success();
 
@@ -369,9 +324,7 @@ public class ValidationResult {
         return combined;
     }
 
-    /**
-     * Combine multiple validation results from list
-     */
+    // Combine multiple validation results from a list
     public static ValidationResult combine(List<ValidationResult> results) {
         ValidationResult combined = ValidationResult.success();
 
@@ -386,6 +339,7 @@ public class ValidationResult {
         return combined;
     }
 
+    // Convert to string representation for debugging
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -400,6 +354,7 @@ public class ValidationResult {
         return sb.toString();
     }
 
+    // Override equals and hashCode for proper comparison
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -412,7 +367,7 @@ public class ValidationResult {
         if (!warnings.equals(that.warnings)) return false;
         return successMessage != null ? successMessage.equals(that.successMessage) : that.successMessage == null;
     }
-
+    // Override hashCode for proper hashing
     @Override
     public int hashCode() {
         int result = (valid ? 1 : 0);
