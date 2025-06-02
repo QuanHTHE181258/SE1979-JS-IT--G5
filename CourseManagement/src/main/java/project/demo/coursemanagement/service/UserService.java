@@ -69,10 +69,10 @@ public class UserService {
         return userDAO.findUserById(userId); 
     }
 
-    public void createUser(String username, String email, String password, String roleName) throws Exception {
-        // Basic validation
+    public void createUser(String username, String email, String password, String firstName, String lastName, String phone, String roleName) throws Exception {
+        // Basic validation - only require username, email, password, and roleName for creation
         if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty() || roleName == null || roleName.trim().isEmpty()) {
-            throw new IllegalArgumentException("All fields are required.");
+            throw new IllegalArgumentException("Username, email, password, and role are required.");
         }
 
         // Check username and email existence
@@ -93,6 +93,10 @@ public class UserService {
         user.setPasswordHash(PasswordUtil.hashPassword(password));
         user.setRole(role);
         user.setIsActive(true);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setPhone(phone);
+        user.setEmailVerified(false); // Set default value
         // Set other default fields if necessary (e.g., created_at, updated_at)
 
         boolean success = userDAO.createUser(user);
@@ -101,10 +105,10 @@ public class UserService {
         }
     }
 
-    public void updateUser(int userId, String username, String email, String roleName, boolean isActive) throws Exception {
+    public void updateUser(int userId, String username, String email, String phone, String roleName, boolean isActive) throws Exception {
         // Basic validation
-         if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty() || roleName == null || roleName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Username, email, and role are required.");
+         if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty() || phone == null || phone.trim().isEmpty() || roleName == null || roleName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Username, email, phone, and role are required.");
         }
 
         User existingUser = userDAO.findUserByIdIncludeInactive(userId); // Use IncludeInactive to update status
@@ -136,6 +140,7 @@ public class UserService {
         // Update user object
         existingUser.setUsername(username);
         existingUser.setEmail(email);
+        existingUser.setPhone(phone);
         existingUser.setRole(newRole);
         existingUser.setIsActive(isActive);
         // Update other fields if necessary (e.g., updated_at)

@@ -168,40 +168,40 @@
         </div>
       </div>
 
-      <!-- Quick Actions -->
-      <div class="row mb-4">
-        <div class="col-12">
-          <div class="card shadow">
-            <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Quick Actions</h6>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-3 mb-3">
-                  <a href="${pageContext.request.contextPath}/admin/users/new?role=USER_MANAGER" class="btn btn-primary w-100">
-                    <i class="fas fa-user-shield"></i> Add User Manager
-                  </a>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <a href="${pageContext.request.contextPath}/admin/users/new?role=COURSE_MANAGER" class="btn btn-success w-100">
-                    <i class="fas fa-book-reader"></i> Add Course Manager
-                  </a>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <a href="${pageContext.request.contextPath}/admin/courses/new" class="btn btn-info w-100">
-                    <i class="fas fa-plus"></i> Add New Course
-                  </a>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <a href="${pageContext.request.contextPath}/admin/reports/export" class="btn btn-warning w-100">
-                    <i class="fas fa-file-export"></i> Export Reports
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+<%--      <!-- Quick Actions -->--%>
+<%--      <div class="row mb-4">--%>
+<%--        <div class="col-12">--%>
+<%--          <div class="card shadow">--%>
+<%--            <div class="card-header py-3">--%>
+<%--              <h6 class="m-0 font-weight-bold text-primary">Quick Actions</h6>--%>
+<%--            </div>--%>
+<%--            <div class="card-body">--%>
+<%--              <div class="row">--%>
+<%--                <div class="col-md-3 mb-3">--%>
+<%--                  <a href="${pageContext.request.contextPath}/admin/users/new?role=USER_MANAGER" class="btn btn-primary w-100">--%>
+<%--                    <i class="fas fa-user-shield"></i> Add User Manager--%>
+<%--                  </a>--%>
+<%--                </div>--%>
+<%--                <div class="col-md-3 mb-3">--%>
+<%--                  <a href="${pageContext.request.contextPath}/admin/users/new?role=COURSE_MANAGER" class="btn btn-success w-100">--%>
+<%--                    <i class="fas fa-book-reader"></i> Add Course Manager--%>
+<%--                  </a>--%>
+<%--                </div>--%>
+<%--                <div class="col-md-3 mb-3">--%>
+<%--                  <a href="${pageContext.request.contextPath}/admin/courses/new" class="btn btn-info w-100">--%>
+<%--                    <i class="fas fa-plus"></i> Add New Course--%>
+<%--                  </a>--%>
+<%--                </div>--%>
+<%--                <div class="col-md-3 mb-3">--%>
+<%--                  <a href="${pageContext.request.contextPath}/admin/reports/export" class="btn btn-warning w-100">--%>
+<%--                    <i class="fas fa-file-export"></i> Export Reports--%>
+<%--                  </a>--%>
+<%--                </div>--%>
+<%--              </div>--%>
+<%--            </div>--%>
+<%--          </div>--%>
+<%--        </div>--%>
+<%--      </div>--%>
 
       <!-- Recent Activities -->
       <div class="row">
@@ -251,6 +251,60 @@
                   <div class="text-center py-4">
                     <i class="fas fa-inbox fa-3x text-gray-300 mb-3"></i>
                     <p class="text-muted">No recent activities found</p>
+                  </div>
+                </c:otherwise>
+              </c:choose>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Created Courses -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Recent Created Courses</h6>
+            </div>
+            <div class="card-body">
+              <c:choose>
+                <c:when test="${not empty recentCourses}">
+                  <div class="table-responsive">
+                    <table class="table table-bordered">
+                      <thead>
+                      <tr>
+                        <th>Course Code</th>
+                        <th>Title</th>
+                        <th>Teacher</th>
+                        <th>Created At</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <c:forEach var="course" items="${recentCourses}">
+                        <tr>
+                          <td>${course.courseCode}</td>
+                          <td>${course.title}</td>
+                          <td>${course.teacherUsername}</td>
+                          <td>
+                              <c:choose>
+                                  <c:when test="${not empty course.createdAtDate}">
+                                      <fmt:formatDate value="${course.createdAtDate}" pattern="MMM dd, yyyy HH:mm" />
+                                  </c:when>
+                                  <c:otherwise>
+                                      N/A
+                                  </c:otherwise>
+                              </c:choose>
+                          </td>
+                        </tr>
+                      </c:forEach>
+                      </tbody>
+                    </table>
+                  </div>
+                </c:when>
+                <c:otherwise>
+                  <div class="text-center py-4">
+                    <i class="fas fa-book fa-3x text-gray-300 mb-3"></i>
+                    <p class="text-muted">No recent courses created</p>
                   </div>
                 </c:otherwise>
               </c:choose>

@@ -43,8 +43,10 @@ public class AdminController extends HttpServlet {
         java.util.List<project.demo.coursemanagement.entities.User> recentRegistrations = this.registerDAO.getRecentRegistrations(10);
 
         // Lấy danh sách user đăng nhập gần đây (10 người gần nhất)
-        UserDAO userDAO = new UserDAOImpl();
         java.util.List<project.demo.coursemanagement.entities.User> recentLogins = this.userDAO.getRecentLogins(10);
+
+        // Lấy danh sách khóa học gần đây (ví dụ 5 khóa gần nhất)
+        java.util.List<project.demo.coursemanagement.dto.CourseDTO> recentCourses = this.courseDAO.getRecentCourses(5);
 
         // Chuyển đổi Instant sang Date cho JSP formatting
         if (recentRegistrations != null) {
@@ -85,6 +87,9 @@ public class AdminController extends HttpServlet {
 
         // Đặt danh sách user đăng nhập gần đây vào request attribute cho Recent Activities
         request.setAttribute("recentActivities", recentLogins);
+
+        // Đặt danh sách khóa học gần đây vào request attribute
+        request.setAttribute("recentCourses", recentCourses);
 
         // Forward tới admin.jsp (nằm trong WEB-INF/views)
         request.getRequestDispatcher("/WEB-INF/views/admin.jsp")

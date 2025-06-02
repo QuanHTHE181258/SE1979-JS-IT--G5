@@ -162,6 +162,45 @@ public class CourseDAO {
         return total;
     }
 
+    public List<CourseDTO> getRecentCourses(int limit) {
+        List<CourseDTO> recentCourses = new ArrayList<>();
+        String sql = """
+        SELECT TOP (?) c.course_code, c.title, c.teacher_id, u.username AS teacher_username, c.created_at
+        FROM Courses c
+        JOIN Users u ON c.teacher_id = u.user_id
+        ORDER BY c.created_at DESC
+    """;
+
+        try (Connection conn = dbConn.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, limit);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    CourseDTO course = new CourseDTO();
+                    course.setCourseCode(rs.getString("course_code"));
+                    course.setTitle(rs.getString("title"));
+                    course.setTeacherId(rs.getInt("teacher_id"));
+                    course.setTeacherUsername(rs.getString("teacher_username"));
+                    // Assuming CourseDTO has a field for creation date (Instant or Date)
+                    Timestamp createdAt = rs.getTimestamp("created_at");
+                    if (createdAt != null) {
+                        course.setCreatedAt(createdAt.toInstant()); // Set as Instant
+                         course.setCreatedAtDate(java.util.Date.from(createdAt.toInstant())); // Set as Date for JSP
+                    }
+                    recentCourses.add(course);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error getting recent courses: " + e.getMessage());
+        }
+
+        return recentCourses;
+    }
+
     public CourseDTO getCourseByCode(String courseCode) {
         String sql = """
         SELECT c.course_code, c.title, c.description, c.short_description, 

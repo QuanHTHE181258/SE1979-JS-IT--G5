@@ -5,10 +5,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import project.demo.coursemanagement.utils.SessionUtil;
 import project.demo.coursemanagement.entities.User;
+import project.demo.coursemanagement.dao.CourseDAO;
+import project.demo.coursemanagement.dto.CourseDTO;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "CourseManagerController", urlPatterns = {
     "/admin/courses",          // Trang giới thiệu tạo Course Manager
@@ -16,65 +18,60 @@ import java.io.IOException;
     "/admin/course-management" // Trang quản lý khóa học
 })
 public class AdminCourseController extends HttpServlet {
+
+    private final CourseDAO courseDAO = new CourseDAO();
+    private static final int PAGE_SIZE = 3; // Define PAGE_SIZE
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         String path = request.getServletPath();
-        User loggedInUser = SessionUtil.getUserFromSession(request);
-
-        // Tạm thời bỏ qua kiểm tra đăng nhập cho trang giới thiệu tạo Course Manager để xem layout
-        // KIỂM TRA ĐĂNG NHẬP BẮT BUỘC PHẢI CÓ TRONG CODE PRODUCTION
-        if (!"/admin/courses".equals(path) && loggedInUser == null) {
-             response.sendRedirect(request.getContextPath() + "/login");
-             return;
-        }
-
-        // Lấy role chỉ khi user đã đăng nhập
-        String userRole = (loggedInUser != null) ? loggedInUser.getRole().getRoleName() : null;
 
         switch (path) {
             case "/admin/courses":
-                 // Chỉ ADMIN được truy cập trang giới thiệu tạo Course Manager
-                 // Kiểm tra quyền này vẫn được giữ lại
-                if ("ADMIN".equals(userRole)) {
-                    request.getRequestDispatcher("/WEB-INF/views/admin_course.jsp").forward(request, response);
-                } else if (loggedInUser != null) {
-                    // Nếu đã đăng nhập nhưng không phải ADMIN
-                    response.sendRedirect(request.getContextPath() + "/access-denied"); 
-                } else {
-                    // Nếu chưa đăng nhập, vẫn hiển thị trang (chỉ cho mục đích xem layout)
-                    // Nội dung trang sẽ bị giới hạn bởi kiểm tra session trong JSP (đã comment)
-                     request.getRequestDispatcher("/WEB-INF/views/admin_course.jsp").forward(request, response);
-                }
+                request.getRequestDispatcher("/WEB-INF/views/admin_course.jsp").forward(request, response);
                 break;
                 
             case "/admin/courses/new":
-                // Chỉ ADMIN được truy cập form tạo Course Manager mới
-                String roleParam = request.getParameter("role");
-                if ("ADMIN".equals(userRole) && "COURSE_MANAGER".equals(roleParam)) {
-                     request.getRequestDispatcher("/WEB-INF/views/admin_course_new.jsp").forward(request, response);
-                } else if (loggedInUser != null && "ADMIN".equals(userRole)){
-                    // Nếu là ADMIN nhưng role parameter sai, chuyển hướng về trang giới thiệu
-                     response.sendRedirect(request.getContextPath() + "/admin/courses");
-                } else {
-                     // Nếu chưa đăng nhập hoặc không có quyền, chuyển hướng
-                     response.sendRedirect(request.getContextPath() + (loggedInUser == null ? "/login" : "/access-denied"));
-                }
+                request.getRequestDispatcher("/WEB-INF/views/admin_course_new.jsp").forward(request, response);
                 break;
                 
             case "/admin/course-management":
-                // ADMIN và COURSE_MANAGER được truy cập trang quản lý khóa học
-                 if ("ADMIN".equals(userRole) || "COURSE_MANAGER".equals(userRole)) {
-                     request.getRequestDispatcher("/WEB-INF/views/course_management.jsp").forward(request, response);
-                 } else {
-                      // Nếu chưa đăng nhập hoặc không có quyền, chuyển hướng
-                      response.sendRedirect(request.getContextPath() + (loggedInUser == null ? "/login" : "/access-denied"));
-                 }
+                String keyword = request.getParameter("keyword");
+                String categoryParam = request.getParameter("categoryId");
+                String pageParam = request.getParameter("page");
+
+                Integer categoryId = null;
+                int page = 1;
+
+                if (categoryParam != null && !categoryParam.isEmpty()) {
+                    try {
+                        categoryId = Integer.parseInt(categoryParam);
+                    } catch (NumberFormatException ignored) {}
+                }
+
+                if (pageParam != null) {
+                    try {
+                        page = Integer.parseInt(pageParam);
+                    } catch (NumberFormatException ignored) {}
+                }
+
+                List<CourseDTO> courses = courseDAO.getCoursesForManager(keyword, categoryId, page, PAGE_SIZE);
+
+                int totalCourses = courseDAO.countCourses(keyword, categoryId);
+                int totalPages = (int) Math.ceil((double) totalCourses / PAGE_SIZE);
+
+                request.setAttribute("courses", courses);
+                request.setAttribute("currentPage", page);
+                request.setAttribute("totalPages", totalPages);
+                request.setAttribute("keyword", keyword);
+                request.setAttribute("categoryId", categoryId);
+
+                request.getRequestDispatcher("/WEB-INF/views/manager-course.jsp").forward(request, response);
                 break;
                 
             default:
-                // Chuyển hướng mặc định nếu URL không khớp
-                response.sendRedirect(request.getContextPath() + "/admin"); // Chuyển về trang admin dashboard nếu không khớp
+                response.sendRedirect(request.getContextPath() + "/admin");
                 break;
         }
     }
@@ -83,27 +80,12 @@ public class AdminCourseController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         String path = request.getServletPath();
-        User loggedInUser = SessionUtil.getUserFromSession(request);
-
-        // Yêu cầu đăng nhập để thực hiện POST request
-        if (loggedInUser == null) {
-             response.sendRedirect(request.getContextPath() + "/login");
-             return;
-        }
-        
-        String userRole = loggedInUser.getRole().getRoleName();
 
         if ("/admin/courses/new".equals(path)) {
-            // Chỉ ADMIN được phép xử lý POST request tạo Course Manager mới
-            if ("ADMIN".equals(userRole)) {
-                 // TODO: Implement course manager creation logic
-                 response.sendRedirect(request.getContextPath() + "/admin/courses"); // Chuyển hướng sau khi tạo
-            } else {
-                 response.sendRedirect(request.getContextPath() + "/access-denied");
-            }
+            // TODO: Implement course manager creation logic
+            response.sendRedirect(request.getContextPath() + "/admin/courses");
         } else {
-            // Chuyển hướng mặc định cho các POST request không khớp
-             response.sendRedirect(request.getContextPath() + "/admin");
+            response.sendRedirect(request.getContextPath() + "/admin");
         }
     }
 }
