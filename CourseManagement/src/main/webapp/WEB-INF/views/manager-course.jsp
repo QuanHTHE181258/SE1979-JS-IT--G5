@@ -399,11 +399,10 @@
         <h1>Course Management</h1>
         <p>Manage and organize your courses with ease</p>
     </div>
-
     <div class="search-section">
         <form class="search-form" method="get" action="">
+            <button type="button" class="search-btn" onclick="window.location.href='create-course'">Add New Course</button>
             <input type="text" name="keyword" placeholder="Search course title..." value="${keyword}" class="search-input"/>
-
             <select name="categoryId" class="search-select">
                 <option value="">All Categories</option>
                 <option value="1" ${categoryId == 1 ? 'selected' : ''}>Programming</option>
@@ -412,7 +411,6 @@
                 <option value="4" ${categoryId == 4 ? 'selected' : ''}>Language</option>
                 <option value="5" ${categoryId == 5 ? 'selected' : ''}>Other</option>
             </select>
-
             <button type="submit" class="search-btn">Search</button>
         </form>
     </div>

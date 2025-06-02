@@ -12,7 +12,7 @@ import java.util.List;
 @WebServlet("/manager-courses")
 public class ManagerCourseListServlet extends HttpServlet {
     private final CourseDAO courseDAO = new CourseDAO();
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 6;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
