@@ -9,7 +9,6 @@ import java.util.List;
 
 public class CourseViewDAOimp implements CourseViewDAO {
 
-    List<CourseDTO> courses = new ArrayList<>();
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
@@ -17,15 +16,14 @@ public class CourseViewDAOimp implements CourseViewDAO {
 
     @Override
     public List<CourseDTO> getAllCourses() {
-
-
+        List<CourseDTO> courses = new ArrayList<>();
         try {
             conn = dbConn.getConnection();
             String sql = """
-            SELECT DISTINCT c.course_code, c.title, c.short_description, u.username, c.price,
-                    c.duration_hours, c.max_students, c.start_date, c.end_date
-            FROM Courses c
-            JOIN Users u ON c.teacher_id = u.user_id 
+                SELECT DISTINCT c.course_code, c.title, c.short_description, u.username, c.price,
+                        c.duration_hours, c.max_students, c.start_date, c.end_date
+                FROM Courses c
+                JOIN Users u ON c.teacher_id = u.user_id 
             """;
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -49,6 +47,63 @@ public class CourseViewDAOimp implements CourseViewDAO {
         }
 
         return courses;
+    }
+
+    public List<CourseDTO> getCoursesByPage(int page, int size) {
+        List<CourseDTO> courses = new ArrayList<>();
+        try {
+            conn = dbConn.getConnection();
+            String sql = """
+            SELECT DISTINCT c.course_code, c.title, c.short_description, u.username, c.price,
+                    c.duration_hours, c.max_students, c.start_date, c.end_date
+            FROM Courses c
+            JOIN Users u ON c.teacher_id = u.user_id 
+            ORDER BY c.course_code
+            OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
+        """;
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, (page - 1) * size);
+            ps.setInt(2, size);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                CourseDTO course = extractCourseFromResultSet(rs);
+                courses.add(course);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) dbConn.closeConnection(conn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return courses;
+    }
+
+    public int getTotalCourseCount() {
+        int count = 0;
+        try {
+            conn = dbConn.getConnection();
+            String sql = "SELECT COUNT(*) FROM Courses";
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next()) count = rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) dbConn.closeConnection(conn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return count;
     }
 
     private CourseDTO extractCourseFromResultSet(ResultSet rs) throws SQLException {

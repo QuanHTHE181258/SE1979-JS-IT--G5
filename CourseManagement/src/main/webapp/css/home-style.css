@@ -188,9 +188,29 @@ body {
 }
 
 /* View Courses Content */
+.container {
+    margin: auto;
+}
+
 .container h1 {
     text-align: center;
     margin-bottom: 20px;
+}
+
+.pagination {
+    text-align: center;
+    margin: 30px;
+}
+.pagination a {
+    margin: 0 5px;
+    text-decoration: none;
+    color: #333;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+}
+.pagination a.active {
+    background-color: #333;
+    color: white;
 }
 
 /* Footer */

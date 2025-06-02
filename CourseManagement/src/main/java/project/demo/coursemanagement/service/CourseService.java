@@ -16,4 +16,12 @@ public class CourseService {
         System.out.println("CourseService: getAllCourses() method called");
         return courseDAO.getAllCourses();
     }
+
+    public List<CourseDTO> getCoursesByPage(int page, int size) {
+        return courseDAO.getCoursesByPage(page, size);
+    }
+
+    public int getTotalCourseCount() {
+        return courseDAO.getTotalCourseCount();
+    }
 }

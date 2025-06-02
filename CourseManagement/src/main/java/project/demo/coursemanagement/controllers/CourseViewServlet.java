@@ -16,10 +16,24 @@ public class CourseViewServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("CourseViewServlet: doGet() method called");
-        List<CourseDTO> courses = courseService.getAllCourses();
-        System.out.println("Number of courses in servlet: " + courses.size());
+        int page = 1;
+        int size = 6; // số khóa học mỗi trang
+
+        String pageParam = request.getParameter("page");
+        if (pageParam != null) {
+            try {
+                page = Integer.parseInt(pageParam);
+            } catch (NumberFormatException ignored) {}
+        }
+
+        List<CourseDTO> courses = courseService.getCoursesByPage(page, size);
+        int totalCourses = courseService.getTotalCourseCount();
+        int totalPages = (int) Math.ceil((double) totalCourses / size);
+
         request.setAttribute("courses", courses);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+
         request.getRequestDispatcher("WEB-INF/views/view-course.jsp").forward(request, response);
     }
 }

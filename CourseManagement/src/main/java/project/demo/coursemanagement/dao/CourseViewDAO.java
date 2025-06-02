@@ -8,4 +8,7 @@ public interface CourseViewDAO {
 
     List<CourseDTO> getAllCourses();
 
+    List<CourseDTO> getCoursesByPage(int page, int size);
+
+    int getTotalCourseCount();
 }
