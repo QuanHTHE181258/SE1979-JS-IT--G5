@@ -9,32 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/CourseDetailController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/EnrollmentController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/StudentDashboard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dto/EnrolledCourse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/EnrollmentService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/utils/HibernateUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/student-dashboard.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../databases/InitData.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/CourseViewServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/CourseViewServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/HomeServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/HomeServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/LoginServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/RegisterServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/RegisterServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/CourseViewDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/CourseViewDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/CourseViewDAOimp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/CourseViewDAOimp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/RegisterDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/RegisterDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/UserDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/UserDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dto/CourseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dto/CourseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/entities/Cours.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/CourseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/RegisterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/RegisterService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view-course.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view-course.jsp" afterDir="false" />
-    </list>
+    <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -71,7 +46,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "Tomcat Server.Tomcat 10.1.29.executor": "Run",
-    "git-widget-placeholder": "Merging MergeTest",
+    "git-widget-placeholder": "MergeTest",
     "junie.onboarding.icon.badge.shown": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -203,7 +178,7 @@
       <option name="presentableId" value="Default" />
       <updated>1748888682101</updated>
       <workItem from="1748888683486" duration="2506000" />
-      <workItem from="1748891211066" duration="4177000" />
+      <workItem from="1748891211066" duration="4322000" />
     </task>
     <servers />
   </component>
