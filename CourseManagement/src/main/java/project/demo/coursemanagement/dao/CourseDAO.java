@@ -332,5 +332,60 @@ public class CourseDAO {
         }
     }
 
+    public boolean insertCourse(CourseDTO course) throws SQLException {
+        String sql = """
+        INSERT INTO courses (
+            course_code, title, description, short_description, teacher_id, category_id,
+            image_url, price, duration_hours, level, is_published, is_active,
+            max_students, enrollment_start_date, enrollment_end_date, start_date, end_date,
+            created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), GETDATE())
+    """;
+
+        try (Connection conn = dbConn.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, course.getCourseCode());
+            ps.setString(2, course.getTitle());
+            ps.setString(3, course.getDescription());
+            ps.setString(4, course.getShortDescription());
+            ps.setInt(5, course.getTeacherId());
+            ps.setInt(6, course.getCategoryId());
+            ps.setString(7, course.getImageUrl());
+            ps.setBigDecimal(8, course.getPrice());
+            ps.setInt(9, course.getDurationHours());
+            ps.setString(10, course.getLevel());
+            ps.setBoolean(11, course.isPublished());
+            ps.setBoolean(12, course.isActive());
+            ps.setInt(13, course.getMaxStudents());
+
+            if (course.getEnrollmentStartDate() != null) {
+                ps.setTimestamp(14, Timestamp.from(course.getEnrollmentStartDate()));
+            } else {
+                ps.setNull(14, Types.TIMESTAMP);
+            }
+
+            if (course.getEnrollmentEndDate() != null) {
+                ps.setTimestamp(15, Timestamp.from(course.getEnrollmentEndDate()));
+            } else {
+                ps.setNull(15, Types.TIMESTAMP);
+            }
+
+            if (course.getStartDate() != null) {
+                ps.setTimestamp(16, Timestamp.from(course.getStartDate()));
+            } else {
+                ps.setNull(16, Types.TIMESTAMP);
+            }
+
+            if (course.getEndDate() != null) {
+                ps.setTimestamp(17, Timestamp.from(course.getEndDate()));
+            } else {
+                ps.setNull(17, Types.TIMESTAMP);
+            }
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        }
+    }
 
 }
