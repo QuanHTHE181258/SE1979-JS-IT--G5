@@ -5,7 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import project.demo.coursemanagement.dao.CourseDAO;
+import project.demo.coursemanagement.dao.impl.CourseDAOImp;
 import project.demo.coursemanagement.dto.CourseDTO;
 
 import java.io.IOException;
@@ -105,7 +105,7 @@ public class CreateCourseServlet extends HttpServlet {
 
         boolean success = false;
         try {
-            success = new CourseDAO().insertCourse(course);
+            success = new CourseDAOImp().insertCourse(course);
         } catch (Exception ex) {
             throw new ServletException(ex);
         }

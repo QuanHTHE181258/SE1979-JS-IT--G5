@@ -1,5 +1,6 @@
-package project.demo.coursemanagement.dao;
+package project.demo.coursemanagement.dao.impl;
 
+import project.demo.coursemanagement.dao.HomeDAO;
 import project.demo.coursemanagement.dto.CourseDTO;
 import project.demo.coursemanagement.utils.DatabaseConnection;
 

@@ -6,18 +6,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import project.demo.coursemanagement.dao.UserDAO;
-import project.demo.coursemanagement.dao.UserDAOImpl;
+import project.demo.coursemanagement.dao.impl.UserDAOImpl;
 import project.demo.coursemanagement.dao.RegisterDAO;
-import project.demo.coursemanagement.dao.RegisterDAOImpl;
+import project.demo.coursemanagement.dao.impl.RegisterDAOImpl;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.service.UserService;
 import project.demo.coursemanagement.entities.Role;
 
 import java.io.IOException;
 import java.util.Date;
-import java.time.Instant;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @WebServlet(name = "AdminUserController", urlPatterns = {"/admin/users", "/admin/users/*"})

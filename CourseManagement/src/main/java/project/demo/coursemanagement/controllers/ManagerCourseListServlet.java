@@ -1,6 +1,6 @@
 package project.demo.coursemanagement.controllers;
 
-import project.demo.coursemanagement.dao.CourseDAO;
+import project.demo.coursemanagement.dao.impl.CourseDAOImp;
 import project.demo.coursemanagement.dto.CourseDTO;
 
 import jakarta.servlet.ServletException;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @WebServlet("/manager-courses")
 public class ManagerCourseListServlet extends HttpServlet {
-    private final CourseDAO courseDAO = new CourseDAO();
+    private final CourseDAOImp courseDAO = new CourseDAOImp();
     private static final int PAGE_SIZE = 6;
 
     @Override

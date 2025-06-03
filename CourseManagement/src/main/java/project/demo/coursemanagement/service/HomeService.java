@@ -1,7 +1,7 @@
 package project.demo.coursemanagement.service;
 
 import project.demo.coursemanagement.dao.HomeDAO;
-import project.demo.coursemanagement.dao.HomeDAOimp;
+import project.demo.coursemanagement.dao.impl.HomeDAOimp;
 import project.demo.coursemanagement.dto.CourseDTO;
 
 import java.math.BigDecimal;

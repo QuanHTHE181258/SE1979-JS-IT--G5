@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.service.UserService;
 import project.demo.coursemanagement.dao.UserDAO;
-import project.demo.coursemanagement.dao.UserDAOImpl;
+import project.demo.coursemanagement.dao.impl.UserDAOImpl;
 
 import java.io.IOException;
 import java.util.List;

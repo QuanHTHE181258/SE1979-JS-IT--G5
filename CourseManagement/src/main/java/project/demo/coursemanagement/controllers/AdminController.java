@@ -5,14 +5,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.dao.RegisterDAO;
-import project.demo.coursemanagement.dao.RegisterDAOImpl;
+import project.demo.coursemanagement.dao.impl.RegisterDAOImpl;
 import project.demo.coursemanagement.dao.RegisterDAO.RegistrationStats;
 import project.demo.coursemanagement.dao.UserDAO;
-import project.demo.coursemanagement.dao.UserDAOImpl;
-import project.demo.coursemanagement.dao.CourseDAO;
+import project.demo.coursemanagement.dao.impl.UserDAOImpl;
+import project.demo.coursemanagement.dao.impl.CourseDAOImp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,12 +22,12 @@ public class AdminController extends HttpServlet {
 
     private final UserDAO userDAO;
     private final RegisterDAO registerDAO;
-    private CourseDAO courseDAO;
+    private CourseDAOImp courseDAO;
 
     public AdminController() {
         this.userDAO = new UserDAOImpl();
         this.registerDAO = new RegisterDAOImpl();
-        this.courseDAO = new CourseDAO();
+        this.courseDAO = new CourseDAOImp();
     }
 
     @Override

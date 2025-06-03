@@ -1,7 +1,7 @@
 package project.demo.coursemanagement.service;
 
 import project.demo.coursemanagement.dao.EnrollmentDAO;
-import project.demo.coursemanagement.dao.EnrollmentDAOImp;
+import project.demo.coursemanagement.dao.impl.EnrollmentDAOImp;
 import project.demo.coursemanagement.dto.EnrolledCourse;
 import project.demo.coursemanagement.entities.Enrollment;
 

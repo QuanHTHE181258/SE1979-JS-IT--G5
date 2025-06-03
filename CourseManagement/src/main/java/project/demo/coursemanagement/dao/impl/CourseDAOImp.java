@@ -1,4 +1,4 @@
-package project.demo.coursemanagement.dao;
+package project.demo.coursemanagement.dao.impl;
 
 import project.demo.coursemanagement.dto.CourseDTO;
 import project.demo.coursemanagement.utils.DatabaseConnection;
@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseDAO {
+public class CourseDAOImp {
     List<CourseDTO> courses = new ArrayList<>();
     Connection conn = null;
     PreparedStatement ps = null;

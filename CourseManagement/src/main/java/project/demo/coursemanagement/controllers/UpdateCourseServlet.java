@@ -5,7 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import project.demo.coursemanagement.dao.CourseDAO;
+import project.demo.coursemanagement.dao.impl.CourseDAOImp;
 import project.demo.coursemanagement.dto.CourseDTO;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -15,7 +15,7 @@ import java.time.format.DateTimeParseException;
 @WebServlet("/update-course")
 public class UpdateCourseServlet extends HttpServlet {
 
-    private final CourseDAO courseDAO = new CourseDAO();
+    private final CourseDAOImp courseDAO = new CourseDAOImp();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

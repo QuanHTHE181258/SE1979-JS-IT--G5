@@ -1,12 +1,12 @@
 package project.demo.coursemanagement.service;
 
 import project.demo.coursemanagement.dao.UserDAO;
-import project.demo.coursemanagement.dao.UserDAOImpl;
+import project.demo.coursemanagement.dao.impl.UserDAOImpl;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.entities.Role;
 import project.demo.coursemanagement.utils.PasswordUtil;
 import project.demo.coursemanagement.dao.RoleDAO;
-import project.demo.coursemanagement.dao.RoleDAOImpl;
+import project.demo.coursemanagement.dao.impl.RoleDAOImpl;
 
 import java.util.List;
 

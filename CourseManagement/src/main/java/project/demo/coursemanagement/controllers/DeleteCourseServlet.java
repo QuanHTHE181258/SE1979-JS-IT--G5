@@ -1,7 +1,7 @@
 
 package project.demo.coursemanagement.controllers;
 
-import project.demo.coursemanagement.dao.CourseDAO;
+import project.demo.coursemanagement.dao.impl.CourseDAOImp;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,7 +16,7 @@ public class DeleteCourseServlet extends HttpServlet {
         String courseCode = request.getParameter("code");
 
         if (courseCode != null && !courseCode.isEmpty()) {
-            CourseDAO dao = new CourseDAO();
+            CourseDAOImp dao = new CourseDAOImp();
             dao.deleteCourseByCode(courseCode);
         }
 

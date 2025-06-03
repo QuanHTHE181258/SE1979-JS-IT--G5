@@ -1,7 +1,7 @@
 package project.demo.coursemanagement.service;
 
 import project.demo.coursemanagement.dao.CourseViewDAO;
-import project.demo.coursemanagement.dao.CourseViewDAOimp;
+import project.demo.coursemanagement.dao.impl.CourseViewDAOimp;
 import project.demo.coursemanagement.dto.CourseDTO;
 import project.demo.coursemanagement.entities.Cours;
 import java.util.List;

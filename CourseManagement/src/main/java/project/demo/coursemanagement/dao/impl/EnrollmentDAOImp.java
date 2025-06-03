@@ -1,5 +1,6 @@
-package project.demo.coursemanagement.dao;
+package project.demo.coursemanagement.dao.impl;
 
+import project.demo.coursemanagement.dao.EnrollmentDAO;
 import project.demo.coursemanagement.dto.EnrolledCourse;
 import project.demo.coursemanagement.entities.Category;
 import project.demo.coursemanagement.entities.Cours;

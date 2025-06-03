@@ -1,5 +1,6 @@
-package project.demo.coursemanagement.dao;
+package project.demo.coursemanagement.dao.impl;
 
+import project.demo.coursemanagement.dao.UserDAO;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.utils.DatabaseConnection;
 import project.demo.coursemanagement.entities.Role;

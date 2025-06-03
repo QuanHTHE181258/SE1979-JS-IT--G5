@@ -1,4 +1,4 @@
-package project.demo.coursemanagement.dao;
+package project.demo.coursemanagement.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import project.demo.coursemanagement.dao.RoleDAO;
 import project.demo.coursemanagement.entities.Role;
 import project.demo.coursemanagement.utils.DatabaseConnection; // Assuming DatabaseConnection is your DB utility
 

@@ -1,9 +1,9 @@
 package project.demo.coursemanagement.service;
 
 import project.demo.coursemanagement.dao.ProfileDAO;
-import project.demo.coursemanagement.dao.ProfileDAOImpl;
+import project.demo.coursemanagement.dao.impl.ProfileDAOImpl;
 import project.demo.coursemanagement.dao.UserDAO;
-import project.demo.coursemanagement.dao.UserDAOImpl;
+import project.demo.coursemanagement.dao.impl.UserDAOImpl;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.entities.UserImage;
 import project.demo.coursemanagement.dto.ProfileUpdateRequest;
@@ -13,7 +13,6 @@ import project.demo.coursemanagement.utils.ValidationUtil;
 
 import jakarta.servlet.http.Part;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;

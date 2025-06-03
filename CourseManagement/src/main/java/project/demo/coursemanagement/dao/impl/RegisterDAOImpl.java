@@ -1,12 +1,12 @@
-package project.demo.coursemanagement.dao;
+package project.demo.coursemanagement.dao.impl;
 
+import project.demo.coursemanagement.dao.RegisterDAO;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.entities.Role;
 import project.demo.coursemanagement.utils.DatabaseConnection;
 
 import java.sql.*;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

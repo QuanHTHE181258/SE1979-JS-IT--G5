@@ -1,14 +1,13 @@
 package project.demo.coursemanagement.service;
 
 import project.demo.coursemanagement.dao.RegisterDAO;
-import project.demo.coursemanagement.dao.RegisterDAOImpl;
+import project.demo.coursemanagement.dao.impl.RegisterDAOImpl;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.dto.RegistrationRequest;
 import project.demo.coursemanagement.dto.ValidationResult;
 import project.demo.coursemanagement.utils.PasswordUtil;
 import project.demo.coursemanagement.utils.ValidationUtil;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
