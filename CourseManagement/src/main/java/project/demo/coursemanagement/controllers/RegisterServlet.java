@@ -287,14 +287,14 @@ public class RegisterServlet extends HttpServlet {
                     response.sendRedirect(contextPath + "/teacher/dashboard");
                     break;
                 case "USER":
-                    response.sendRedirect(contextPath + "/dashboard");
+                    response.sendRedirect(contextPath + "/student-dashboard");
                     break;
                 default:
-                    response.sendRedirect(contextPath + "/dashboard");
+                    response.sendRedirect(contextPath + "/student-dashboard");
                     break;
             }
         } else {
-            response.sendRedirect(contextPath + "/dashboard");
+            response.sendRedirect(contextPath + "/student-dashboard");
         }
     }
 

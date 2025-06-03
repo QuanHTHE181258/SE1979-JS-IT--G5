@@ -152,12 +152,12 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect(contextPath + "/student-dashboard");
                     break;
                 default:
-                    response.sendRedirect(contextPath + "/dashboard");
+                    response.sendRedirect(contextPath + "/student-dashboard");
                     break;
             }
         } else {
             // Fallback to general dashboard
-            response.sendRedirect(contextPath + "/dashboard");
+            response.sendRedirect(contextPath + "/student-dashboard");
         }
     }
 

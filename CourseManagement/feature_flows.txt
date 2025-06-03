@@ -1,0 +1,85 @@
+# Feature Flows in Course Management System
+
+This document outlines the flow of three key features in the Course Management System:
+1. Login/Logout
+2. Registration
+3. Profile Management
+
+## 1. Login/Logout Flow
+
+### Login Flow
+
+**LoginServlet → UserService → UserDAO**
+
+1. **LoginServlet.doGet**: 
+   - Checks if user is logged in → redirects to dashboard or shows login form
+
+2. **LoginServlet.doPost**:
+   - Gets credentials → authenticates user → creates session → redirects to dashboard
+   - On failure: displays error message
+
+3. **UserService.authenticate**:
+   - Finds user → verifies password → updates last login time
+
+4. **SessionUtil**:
+   - Manages user session (create, check, clear)
+
+### Logout Flow
+
+**LogoutServlet → SessionUtil**
+
+1. **LogoutServlet.processLogout**:
+   - Gets user info → clears session → sets message → redirects to login
+
+## 2. Registration Flow
+
+**RegisterServlet → RegisterService → RegisterDAO**
+
+1. **RegisterServlet.doGet**:
+   - Checks if user is logged in → redirects to dashboard or shows registration form
+
+2. **RegisterServlet.doPost**:
+   - Gets form data → validates input → checks for duplicates → creates user → registers user
+   - On success: sends welcome email → redirects to login page
+   - On failure: displays error messages
+
+3. **RegisterService**:
+   - Validates user data → creates user in database → sends welcome email
+   - Checks for duplicate username/email
+   - Hashes passwords securely
+
+4. **ValidationUtil**:
+   - Validates registration data (username, email, password format)
+
+5. **Data Flow**:
+   - Form submission → RegistrationRequest → User entity → Database
+
+## 3. Profile Management Flow
+
+**ProfileServlet → ProfileService → ProfileDAO**
+
+1. **Request Routing**:
+   - **ProfileServlet.doGet** routes to appropriate handler based on URL path:
+     - `/profile` → View profile
+     - `/profile/edit` → Edit profile form
+     - `/profile/password` → Password change form
+     - `/profile/avatar` → Avatar management
+     - `/profile/view/{userId}` → View other user's profile
+
+2. **View Profile**:
+   - Gets user data → retrieves statistics → displays profile information
+
+3. **Edit Profile**:
+   - **Form Display**: Gets user data → shows edit form
+   - **Form Processing**: Validates input → updates profile → redirects to profile page
+
+4. **Password Management**:
+   - **Form Display**: Shows password change form
+   - **Form Processing**: Validates current password → validates new password → updates password
+
+5. **Avatar Management**:
+   - **Upload**: Validates file type/size → uploads file → updates database with URL
+   - **Delete**: Removes file → clears URL in database
+
+6. **Data Flow**:
+   - Form submission → ProfileUpdateRequest → Database update → Session update

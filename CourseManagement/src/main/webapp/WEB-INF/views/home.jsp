@@ -26,6 +26,8 @@
         </div>
         <div class="home-header-login"><a href="login" style="text-decoration: none; color: white">Login</a></div>
         <div class="home-header-register"><a href="register" style="text-decoration: none; color: white">Register</a></div>
+        <div class="home-header-profile"><a href="profile" style="text-decoration: none; color: white">Profile</a></div>
+
     </div>
     <%-- Content container --%>
     <div class="home-content">

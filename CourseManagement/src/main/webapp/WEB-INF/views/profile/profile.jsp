@@ -355,7 +355,7 @@
   <div class="profile-card">
     <!-- Header -->
     <div class="profile-header">
-      <a href="${pageContext.request.contextPath}/dashboard" class="back-button">
+      <a href="${pageContext.request.contextPath}/student-dashboard" class="back-button">
         <i class="fas fa-arrow-left"></i>
       </a>
       <h2>My Profile</h2>
