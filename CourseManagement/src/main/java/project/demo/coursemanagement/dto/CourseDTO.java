@@ -28,6 +28,8 @@ public class CourseDTO {
     private Instant startDate;
     private Instant endDate;
     private int lessonCount;
+    private Instant createdAt;
+    private java.util.Date createdAtDate;
 
 
     public CourseDTO() {
@@ -192,6 +194,22 @@ public class CourseDTO {
 
     public void setEndDate(Instant endDate) {
         this.endDate = endDate;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public java.util.Date getCreatedAtDate() {
+        return createdAtDate;
+    }
+
+    public void setCreatedAtDate(java.util.Date createdAtDate) {
+        this.createdAtDate = createdAtDate;
     }
 
     public Date getStartDateAsDate() {

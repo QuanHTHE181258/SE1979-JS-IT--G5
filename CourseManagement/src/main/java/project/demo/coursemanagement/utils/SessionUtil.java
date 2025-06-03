@@ -109,6 +109,14 @@ public class SessionUtil {
         return hasRole(request, "USER");
     }
 
+    public static boolean isUserManager(HttpServletRequest request) {
+        return hasRole(request, "USER_MANAGER");
+    }
+
+    public static boolean isCourseManager(HttpServletRequest request) {
+        return hasRole(request, "COURSE_MANAGER");
+    }
+
    // Clear user session
     public static void clearUserSession(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
