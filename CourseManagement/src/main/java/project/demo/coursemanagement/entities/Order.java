@@ -7,44 +7,37 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "lessons")
-public class Lesson {
+@Table(name = "orders")
+public class Order {
     @Id
-    @Column(name = "LessonID", nullable = false)
+    @Column(name = "OrderID", nullable = false)
     private Integer id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "CourseID", nullable = false)
-    private Cours courseID;
-
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "Title")
-    private String title;
-
-    @Nationalized
-    @Lob
-    @Column(name = "Content")
-    private String content;
+    @JoinColumn(name = "UserID", nullable = false)
+    private User userID;
 
     @Size(max = 20)
     @Nationalized
+    @ColumnDefault("'pending'")
     @Column(name = "Status", length = 20)
     private String status;
 
-    @ColumnDefault("0")
-    @Column(name = "IsFreePreview")
-    private Boolean isFreePreview;
+    @Size(max = 50)
+    @Nationalized
+    @Column(name = "PaymentMethod", length = 50)
+    private String paymentMethod;
+
+    @Column(name = "TotalAmount", precision = 10, scale = 2)
+    private BigDecimal totalAmount;
 
     @ColumnDefault("getdate()")
     @Column(name = "CreatedAt")

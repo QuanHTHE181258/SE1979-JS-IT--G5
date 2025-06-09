@@ -12,10 +12,10 @@ import org.hibernate.annotations.OnDeleteAction;
 @Getter
 @Setter
 @Entity
-@Table(name = "materials")
-public class Material {
+@Table(name = "quizzes")
+public class Quiz {
     @Id
-    @Column(name = "MaterialID", nullable = false)
+    @Column(name = "QuizID", nullable = false)
     private Integer id;
 
     @NotNull
@@ -28,10 +28,5 @@ public class Material {
     @Nationalized
     @Column(name = "Title")
     private String title;
-
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "FileURL")
-    private String fileURL;
 
 }

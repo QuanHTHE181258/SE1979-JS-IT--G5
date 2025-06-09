@@ -3,6 +3,8 @@ package project.demo.coursemanagement.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
@@ -10,59 +12,70 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 
+/**
+ * Adapter class to provide backward compatibility with the old UserImage entity.
+ * This class extends UserAvatar and provides the same interface as the old UserImage class.
+ */
+@Getter
+@Setter
 @Entity
-@Table(name = "UserImages")
+@Table(name = "user_avatars")
 public class UserImage {
     @Id
-    @Column(name = "image_id", nullable = false)
+    @Column(name = "AvatarID", nullable = false)
     private Integer id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "UserID", nullable = false)
+    private User userID;
 
     @Size(max = 255)
-    @NotNull
     @Nationalized
-    @Column(name = "image_name", nullable = false)
-    private String imageName;
-
-    @Size(max = 500)
-    @NotNull
-    @Column(name = "image_path", nullable = false, length = 500)
-    private String imagePath;
-
-    @Column(name = "image_size")
-    private Long imageSize;
-
-    @Size(max = 20)
-    @Column(name = "image_type", length = 20)
-    private String imageType;
+    @Column(name = "ImageURL")
+    private String imageURL;
 
     @ColumnDefault("0")
-    @Column(name = "is_default")
+    @Column(name = "IsDefault")
     private Boolean isDefault;
 
     @ColumnDefault("getdate()")
-    @Column(name = "upload_date")
+    @Column(name = "UploadedAt")
+    private Instant uploadedAt;
+
+    // Additional fields for backward compatibility
+    @Transient
+    private User user;
+
+    @Transient
+    private String imageName;
+
+    @Transient
+    private String imagePath;
+
+    @Transient
+    private Long imageSize;
+
+    @Transient
+    private String imageType;
+
+    @Transient
     private Instant uploadDate;
 
-    public Integer getId() {
-        return id;
+    public UserImage() {
+        // Default constructor
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    // Getters and setters for backward compatibility
 
     public User getUser() {
-        return user;
+        return user != null ? user : userID;
     }
 
     public void setUser(User user) {
         this.user = user;
+        this.userID = user;
     }
 
     public String getImageName() {
@@ -74,11 +87,12 @@ public class UserImage {
     }
 
     public String getImagePath() {
-        return imagePath;
+        return imagePath != null ? imagePath : imageURL;
     }
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+        this.imageURL = imagePath;
     }
 
     public Long getImageSize() {
@@ -106,11 +120,11 @@ public class UserImage {
     }
 
     public Instant getUploadDate() {
-        return uploadDate;
+        return uploadDate != null ? uploadDate : uploadedAt;
     }
 
     public void setUploadDate(Instant uploadDate) {
         this.uploadDate = uploadDate;
+        this.uploadedAt = uploadDate;
     }
-
 }
