@@ -207,8 +207,12 @@
       <div class="row">
         <div class="col-12">
           <div class="card shadow mb-4">
-            <div class="card-header py-3">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h6 class="m-0 font-weight-bold text-primary">Recent Activities</h6>
+              <form class="d-flex" method="get" action="">
+                <input type="text" name="activitySearch" class="form-control form-control-sm mr-2" placeholder="Search activities..." value="${param.activitySearch}">
+                <button type="submit" class="btn btn-sm btn-primary">Search</button>
+              </form>
             </div>
             <div class="card-body">
               <c:choose>
@@ -238,7 +242,14 @@
                             </c:choose>
                           </td>
                           <td>
-                            <fmt:formatDate value="${user.createdAtDate}" pattern="MMM dd, yyyy HH:mm" />
+                            <c:choose>
+                              <c:when test="${not empty user.createdAtDate}">
+                                <fmt:formatDate value="${user.createdAtDate}" pattern="MMM dd, yyyy HH:mm" />
+                              </c:when>
+                              <c:otherwise>
+                                N/A
+                              </c:otherwise>
+                            </c:choose>
                           </td>
                           <td>${user.role.roleName}</td>
                         </tr>
@@ -263,8 +274,12 @@
       <div class="row">
         <div class="col-12">
           <div class="card shadow mb-4">
-            <div class="card-header py-3">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h6 class="m-0 font-weight-bold text-primary">Recent Created Courses</h6>
+              <form class="d-flex" method="get" action="">
+                <input type="text" name="courseSearch" class="form-control form-control-sm mr-2" placeholder="Search courses..." value="${param.courseSearch}">
+                <button type="submit" class="btn btn-sm btn-primary">Search</button>
+              </form>
             </div>
             <div class="card-body">
               <c:choose>
@@ -343,39 +358,39 @@
           </div>
         </div>
 
-        <div class="col-lg-6">
-          <div class="card shadow mb-4">
-            <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Recent Registrations</h6>
-            </div>
-            <div class="card-body">
-              <c:choose>
-                <c:when test="${not empty recentUsers}">
-                  <c:forEach var="user" items="${recentUsers}">
-                    <div class="d-flex align-items-center mb-3">
-                      <img src="${pageContext.request.contextPath}/assets/images/avatars/default.jpg"
-                           class="rounded-circle me-3" width="40" height="40">
-                      <div>
-                        <h6 class="mb-1">${user.firstName} ${user.lastName}</h6>
-                        <small class="text-muted">
-                          <fmt:formatDate value="${user.createdAtDate}" pattern="MMM dd, yyyy HH:mm" />
-                        </small>
-                      </div>
-                      <span class="badge badge-${user.role.roleName == 'TEACHER' ? 'success' : 'info'} ms-auto">
-                          ${user.role.roleName}
-                      </span>
-                    </div>
-                  </c:forEach>
-                </c:when>
-                <c:otherwise>
-                  <div class="text-center py-3">
-                    <p class="text-muted">No recent registrations</p>
-                  </div>
-                </c:otherwise>
-              </c:choose>
-            </div>
-          </div>
-        </div>
+<%--        <div class="col-lg-6">--%>
+<%--          <div class="card shadow mb-4">--%>
+<%--            <div class="card-header py-3">--%>
+<%--              <h6 class="m-0 font-weight-bold text-primary">Recent Registrations</h6>--%>
+<%--            </div>--%>
+<%--            <div class="card-body">--%>
+<%--              <c:choose>--%>
+<%--                <c:when test="${not empty recentUsers}">--%>
+<%--                  <c:forEach var="user" items="${recentUsers}">--%>
+<%--                    <div class="d-flex align-items-center mb-3">--%>
+<%--                      <img src="${pageContext.request.contextPath}/assets/images/avatars/default.jpg"--%>
+<%--                           class="rounded-circle me-3" width="40" height="40">--%>
+<%--                      <div>--%>
+<%--                        <h6 class="mb-1">${user.firstName} ${user.lastName}</h6>--%>
+<%--                        <small class="text-muted">--%>
+<%--                          <fmt:formatDate value="${user.createdAtDate}" pattern="MMM dd, yyyy HH:mm" />--%>
+<%--                        </small>--%>
+<%--                      </div>--%>
+<%--                      <span class="badge badge-${user.role.roleName == 'TEACHER' ? 'success' : 'info'} ms-auto">--%>
+<%--                          ${user.role.roleName}--%>
+<%--                      </span>--%>
+<%--                    </div>--%>
+<%--                  </c:forEach>--%>
+<%--                </c:when>--%>
+<%--                <c:otherwise>--%>
+<%--                  <div class="text-center py-3">--%>
+<%--                    <p class="text-muted">No recent registrations</p>--%>
+<%--                  </div>--%>
+<%--                </c:otherwise>--%>
+<%--              </c:choose>--%>
+<%--            </div>--%>
+<%--          </div>--%>
+<%--        </div>--%>
       </div>
     </div>
   </div>

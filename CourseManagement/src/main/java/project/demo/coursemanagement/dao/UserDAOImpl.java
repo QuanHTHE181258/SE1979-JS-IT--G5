@@ -364,22 +364,67 @@ public class UserDAOImpl implements UserDAO {
         user.setEmailVerified(rs.getBoolean("email_verified"));
         Timestamp lastLoginTs = rs.getTimestamp("last_login");
         user.setLastLogin(lastLoginTs != null ? lastLoginTs.toInstant() : null);
-
+        if (lastLoginTs != null) {
+            user.setLastLoginDate(new java.util.Date(lastLoginTs.getTime()));
+        }
         Timestamp createdAtTs = rs.getTimestamp("created_at");
         user.setCreatedAt(createdAtTs != null ? createdAtTs.toInstant() : null);
-
+        if (createdAtTs != null) {
+            user.setCreatedAtDate(new java.util.Date(createdAtTs.getTime()));
+        }
         Timestamp updatedAtTs = rs.getTimestamp("updated_at");
         user.setUpdatedAt(updatedAtTs != null ? updatedAtTs.toInstant() : null);
-
         // Map Role
         Role role = new Role();
         role.setId(rs.getInt("role_id"));
         role.setRoleName(rs.getString("role_name"));
         role.setDescription(rs.getString("role_description"));
-
         user.setRole(role);
-
         return user;
+    }
+
+    @Override
+    public List<User> searchRecentActivities(String keyword, int limit) {
+        List<User> users = new ArrayList<>();
+        String sql = """
+            SELECT TOP (?) u.user_id, u.username, u.email, u.password_hash, u.first_name, u.last_name,
+                   u.phone, u.date_of_birth, u.is_active, u.email_verified, u.created_at, u.updated_at,
+                   r.role_id, r.role_name, r.description, u.last_login
+            FROM Users u 
+            INNER JOIN Roles r ON u.role_id = r.role_id
+            WHERE (u.username LIKE ? OR u.first_name LIKE ? OR u.last_name LIKE ?)
+            AND u.last_login IS NOT NULL
+            ORDER BY u.last_login DESC
+        """;
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, limit);
+            String searchPattern = "%" + keyword + "%";
+            stmt.setString(2, searchPattern);
+            stmt.setString(3, searchPattern);
+            stmt.setString(4, searchPattern);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    User user = mapResultSetToUser(rs);
+                    if (user.getLastLogin() != null) {
+                        user.setLastLoginDate(java.util.Date.from(user.getLastLogin()));
+                    }
+                    if (user.getCreatedAt() != null) {
+                        user.setCreatedAtDate(java.util.Date.from(user.getCreatedAt()));
+                    }
+                    users.add(user);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error searching recent activities: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return users;
     }
 }
 

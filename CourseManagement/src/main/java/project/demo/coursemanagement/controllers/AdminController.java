@@ -13,13 +13,15 @@ import project.demo.coursemanagement.dao.RegisterDAO.RegistrationStats;
 import project.demo.coursemanagement.dao.UserDAO;
 import project.demo.coursemanagement.dao.UserDAOImpl;
 import project.demo.coursemanagement.dao.CourseDAO;
-import java.util.HashMap;
-import java.util.Map;
+import project.demo.coursemanagement.dto.CourseDTO;
+import project.demo.coursemanagement.utils.DatabaseConnection;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.io.IOException;
 
-
-@WebServlet(name = "AdminController", urlPatterns = {"/admin"})
+@WebServlet("/admin/*")
 public class AdminController extends HttpServlet {
 
     private final UserDAO userDAO;
@@ -33,44 +35,40 @@ public class AdminController extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String pathInfo = request.getPathInfo();
+        
+        if (pathInfo == null || pathInfo.equals("/")) {
+            showDashboard(request, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
+    }
+
+    private void showDashboard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Get search parameters
+        String courseSearch = request.getParameter("courseSearch");
+        String activitySearch = request.getParameter("activitySearch");
+
+        // Get recent courses with search
+        List<CourseDTO> recentCourses;
+        if (courseSearch != null && !courseSearch.trim().isEmpty()) {
+            recentCourses = courseDAO.searchRecentCourses(courseSearch, 5);
+        } else {
+            recentCourses = courseDAO.getRecentCourses(5);
+        }
+
+        // Get recent activities with search
+        List<User> recentActivities;
+        if (activitySearch != null && !activitySearch.trim().isEmpty()) {
+            recentActivities = userDAO.searchRecentActivities(activitySearch, 5);
+        } else {
+            recentActivities = userDAO.getRecentLogins(5);
+        }
+
         // Lấy thống kê user
         RegisterDAO registerDAO = new RegisterDAOImpl();
         RegistrationStats stats = this.registerDAO.getRegistrationStatistics();
-
-        // Lấy danh sách đăng ký gần đây (10 người gần nhất)
-        java.util.List<project.demo.coursemanagement.entities.User> recentRegistrations = this.registerDAO.getRecentRegistrations(10);
-
-        // Lấy danh sách user đăng nhập gần đây (10 người gần nhất)
-        java.util.List<project.demo.coursemanagement.entities.User> recentLogins = this.userDAO.getRecentLogins(10);
-
-        // Lấy danh sách khóa học gần đây (ví dụ 5 khóa gần nhất)
-        java.util.List<project.demo.coursemanagement.dto.CourseDTO> recentCourses = this.courseDAO.getRecentCourses(5);
-
-        // Chuyển đổi Instant sang Date cho JSP formatting
-        if (recentRegistrations != null) {
-            for (project.demo.coursemanagement.entities.User user : recentRegistrations) {
-                if (user.getCreatedAt() != null) {
-                    user.setCreatedAtDate(java.util.Date.from(user.getCreatedAt()));
-                }
-                // lastLogin cũng cần được chuyển đổi cho cả recentRegistrations nếu muốn hiển thị
-                 if (user.getLastLogin() != null) {
-                    user.setLastLoginDate(java.util.Date.from(user.getLastLogin()));
-                 }
-            }
-        }
-
-        if (recentLogins != null) {
-             for (project.demo.coursemanagement.entities.User user : recentLogins) {
-                 if (user.getCreatedAt() != null) {
-                     user.setCreatedAtDate(java.util.Date.from(user.getCreatedAt()));
-                 }
-                 if (user.getLastLogin() != null) {
-                     user.setLastLoginDate(java.util.Date.from(user.getLastLogin()));
-                 }
-             }
-         }
 
         // Lấy tổng số khóa học
         int totalCourses = this.courseDAO.countCourses(null, null);
@@ -83,10 +81,10 @@ public class AdminController extends HttpServlet {
 
         request.setAttribute("dashboardStats", dashboardStats);
         // Đặt danh sách user đăng ký gần đây vào request attribute
-        request.setAttribute("recentUsers", recentRegistrations);
+        request.setAttribute("recentUsers", this.registerDAO.getRecentRegistrations(10));
 
         // Đặt danh sách user đăng nhập gần đây vào request attribute cho Recent Activities
-        request.setAttribute("recentActivities", recentLogins);
+        request.setAttribute("recentActivities", recentActivities);
 
         // Đặt danh sách khóa học gần đây vào request attribute
         request.setAttribute("recentCourses", recentCourses);

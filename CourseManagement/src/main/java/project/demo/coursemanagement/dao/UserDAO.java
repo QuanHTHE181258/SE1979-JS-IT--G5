@@ -12,6 +12,7 @@ public interface UserDAO {
     List<User> getAllUsers();
     List<User> searchUsersByName(String searchTerm);
     List<User> getRecentLogins(int limit);
+    List<User> searchRecentActivities(String keyword, int limit);
 
     // Methods for User Management
     List<User> findUsers(String search, String roleName, int offset, int limit);

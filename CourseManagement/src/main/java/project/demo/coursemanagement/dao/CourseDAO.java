@@ -332,5 +332,45 @@ public class CourseDAO {
         }
     }
 
+    public List<CourseDTO> searchRecentCourses(String keyword, int limit) {
+        List<CourseDTO> recentCourses = new ArrayList<>();
+        String sql = """
+        SELECT TOP (?) c.course_code, c.title, c.teacher_id, u.username AS teacher_username, c.created_at
+        FROM Courses c
+        JOIN Users u ON c.teacher_id = u.user_id
+        WHERE c.title LIKE ? OR c.course_code LIKE ?
+        ORDER BY c.created_at DESC
+    """;
+
+        try (Connection conn = dbConn.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, limit);
+            ps.setString(2, "%" + keyword + "%");
+            ps.setString(3, "%" + keyword + "%");
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    CourseDTO course = new CourseDTO();
+                    course.setCourseCode(rs.getString("course_code"));
+                    course.setTitle(rs.getString("title"));
+                    course.setTeacherId(rs.getInt("teacher_id"));
+                    course.setTeacherUsername(rs.getString("teacher_username"));
+                    Timestamp createdAt = rs.getTimestamp("created_at");
+                    if (createdAt != null) {
+                        course.setCreatedAt(createdAt.toInstant());
+                        course.setCreatedAtDate(java.util.Date.from(createdAt.toInstant()));
+                    }
+                    recentCourses.add(course);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error searching recent courses: " + e.getMessage());
+        }
+
+        return recentCourses;
+    }
 
 }

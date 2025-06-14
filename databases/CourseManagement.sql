@@ -6,7 +6,7 @@
 -- Create database
 IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'CourseManagementSystem')
 BEGIN
-    CREATE DATABASE CourseManagementSystem;
+    CREATE DATABASE CourseManagementSystem01;
 END
 GO
 
