@@ -161,9 +161,9 @@ public class UserDAOImpl implements UserDAO {
         }
         return users;
     }
-// get recent logins
+
     @Override
-    public List<User> getRecentLogins(int limit) {
+    public List<User> getRecentLogins(int limit, String roleName) {
         List<User> users = new ArrayList<>();
         String sql = """
             SELECT TOP (?) u.user_id, u.username, u.email, u.password_hash, u.first_name, u.last_name,
@@ -171,13 +171,14 @@ public class UserDAOImpl implements UserDAO {
                    u.created_at, u.updated_at, r.role_id, r.role_name, r.description as role_description
             FROM Users u
             INNER JOIN Roles r ON u.role_id = r.role_id
-            WHERE u.last_login IS NOT NULL
+            WHERE u.last_login IS NOT NULL AND UPPER(r.role_name) = UPPER(?)
             ORDER BY u.last_login DESC
         """;
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, limit);
+            stmt.setString(2, roleName);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -384,7 +385,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public List<User> searchRecentActivities(String keyword, int limit) {
+    public List<User> searchRecentActivities(String keyword, int limit, String roleName) {
         List<User> users = new ArrayList<>();
         String sql = """
             SELECT TOP (?) u.user_id, u.username, u.email, u.password_hash, u.first_name, u.last_name,
@@ -392,8 +393,8 @@ public class UserDAOImpl implements UserDAO {
                    r.role_id, r.role_name, r.description as role_description, u.last_login
             FROM Users u 
             INNER JOIN Roles r ON u.role_id = r.role_id
-            WHERE (u.username LIKE ? OR u.first_name LIKE ? OR u.last_name LIKE ?)
-            AND u.last_login IS NOT NULL
+            WHERE (u.username LIKE ? OR u.first_name LIKE ? OR u.last_name LIKE ? OR u.email LIKE ?)
+            AND u.last_login IS NOT NULL AND UPPER(r.role_name) = UPPER(?)
             ORDER BY u.last_login DESC
         """;
 
@@ -404,7 +405,9 @@ public class UserDAOImpl implements UserDAO {
             String searchPattern = "%" + keyword + "%";
             stmt.setString(2, searchPattern);
             stmt.setString(3, searchPattern);
-            // Only 3 placeholders in the WHERE clause
+            stmt.setString(4, searchPattern);
+            stmt.setString(5, searchPattern);
+            stmt.setString(6, roleName);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {

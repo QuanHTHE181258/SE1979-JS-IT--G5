@@ -210,12 +210,22 @@
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h6 class="m-0 font-weight-bold text-primary">Recent Activities</h6>
               <div class="d-flex align-items-center">
-                <select name="activityLimit" class="form-control form-control-sm mr-2" onchange="this.form.submit()">
-                  <option value="5" ${param.activityLimit == '5' ? 'selected' : ''}>5 items</option>
-                  <option value="10" ${param.activityLimit == '10' ? 'selected' : ''}>10 items</option>
-                </select>
+                <form class="d-flex mr-2" method="get" action="">
+                  <select name="activityRole" class="form-control form-control-sm mr-2" onchange="this.form.submit()">
+                    <option value="student" ${param.activityRole == 'student' ? 'selected' : ''}>Student</option>
+                    <option value="teacher" ${param.activityRole == 'teacher' ? 'selected' : ''}>Teacher</option>
+                  </select>
+                  <select name="activityLimit" class="form-control form-control-sm mr-2" onchange="this.form.submit()">
+                    <option value="5" ${param.activityLimit == '5' ? 'selected' : ''}>5 items</option>
+                    <option value="10" ${param.activityLimit == '10' ? 'selected' : ''}>10 items</option>
+                  </select>
+                  <input type="hidden" name="courseLimit" value="${param.courseLimit}">
+                  <input type="hidden" name="courseSearch" value="${param.courseSearch}">
+                </form>
                 <form class="d-flex" method="get" action="">
                   <input type="hidden" name="activityLimit" value="${param.activityLimit}">
+                  <input type="hidden" name="courseLimit" value="${param.courseLimit}">
+                  <input type="hidden" name="courseSearch" value="${param.courseSearch}">
                   <input type="text" name="activitySearch" class="form-control form-control-sm mr-2" placeholder="Search activities..." value="${param.activitySearch}">
                   <button type="submit" class="btn btn-sm btn-primary">Search</button>
                 </form>
@@ -284,12 +294,18 @@
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h6 class="m-0 font-weight-bold text-primary">Recent Created Courses</h6>
               <div class="d-flex align-items-center">
-                <select name="courseLimit" class="form-control form-control-sm mr-2" onchange="this.form.submit()">
-                  <option value="5" ${param.courseLimit == '5' ? 'selected' : ''}>5 items</option>
-                  <option value="10" ${param.courseLimit == '10' ? 'selected' : ''}>10 items</option>
-                </select>
+                <form class="d-flex mr-2" method="get" action="">
+                  <select name="courseLimit" class="form-control form-control-sm mr-2" onchange="this.form.submit()">
+                    <option value="5" ${param.courseLimit == '5' ? 'selected' : ''}>5 items</option>
+                    <option value="10" ${param.courseLimit == '10' ? 'selected' : ''}>10 items</option>
+                  </select>
+                  <input type="hidden" name="activityLimit" value="${param.activityLimit}">
+                  <input type="hidden" name="activitySearch" value="${param.activitySearch}">
+                </form>
                 <form class="d-flex" method="get" action="">
                   <input type="hidden" name="courseLimit" value="${param.courseLimit}">
+                  <input type="hidden" name="activityLimit" value="${param.activityLimit}">
+                  <input type="hidden" name="activitySearch" value="${param.activitySearch}">
                   <input type="text" name="courseSearch" class="form-control form-control-sm mr-2" placeholder="Search courses..." value="${param.courseSearch}">
                   <button type="submit" class="btn btn-sm btn-primary">Search</button>
                 </form>

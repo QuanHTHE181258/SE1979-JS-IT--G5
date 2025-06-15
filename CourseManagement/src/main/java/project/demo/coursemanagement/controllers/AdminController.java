@@ -66,6 +66,12 @@ public class AdminController extends HttpServlet {
             // If parsing fails, use default values
         }
 
+        // Lấy role cho recent activities (chỉ student/teacher)
+        String activityRole = request.getParameter("activityRole");
+        if (activityRole == null || (!activityRole.equalsIgnoreCase("student") && !activityRole.equalsIgnoreCase("teacher"))) {
+            activityRole = "student"; // mặc định là student
+        }
+
         // Get recent courses with search and limit
         List<CourseDTO> recentCourses;
         if (courseSearch != null && !courseSearch.trim().isEmpty()) {
@@ -74,12 +80,12 @@ public class AdminController extends HttpServlet {
             recentCourses = courseDAO.getRecentCourses(courseLimit);
         }
 
-        // Get recent activities with search and limit
+        // Get recent activities with search, limit, and role
         List<User> recentActivities;
         if (activitySearch != null && !activitySearch.trim().isEmpty()) {
-            recentActivities = userDAO.searchRecentActivities(activitySearch, activityLimit);
+            recentActivities = userDAO.searchRecentActivities(activitySearch, activityLimit, activityRole);
         } else {
-            recentActivities = userDAO.getRecentLogins(activityLimit);
+            recentActivities = userDAO.getRecentLogins(activityLimit, activityRole);
         }
 
         // Lấy thống kê user
