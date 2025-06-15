@@ -36,34 +36,50 @@ public class AdminController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String pathInfo = request.getPathInfo();
-        
-        if (pathInfo == null || pathInfo.equals("/")) {
-            showDashboard(request, response);
-        } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        }
-    }
-
-    private void showDashboard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Get search parameters
         String courseSearch = request.getParameter("courseSearch");
         String activitySearch = request.getParameter("activitySearch");
-
-        // Get recent courses with search
-        List<CourseDTO> recentCourses;
-        if (courseSearch != null && !courseSearch.trim().isEmpty()) {
-            recentCourses = courseDAO.searchRecentCourses(courseSearch, 5);
-        } else {
-            recentCourses = courseDAO.getRecentCourses(5);
+        
+        // Get limit parameters with default values
+        int activityLimit = 5;
+        int courseLimit = 5;
+        
+        try {
+            String activityLimitStr = request.getParameter("activityLimit");
+            if (activityLimitStr != null && !activityLimitStr.trim().isEmpty()) {
+                activityLimit = Integer.parseInt(activityLimitStr);
+                // Ensure limit is either 5 or 10
+                if (activityLimit != 5 && activityLimit != 10) {
+                    activityLimit = 5;
+                }
+            }
+            
+            String courseLimitStr = request.getParameter("courseLimit");
+            if (courseLimitStr != null && !courseLimitStr.trim().isEmpty()) {
+                courseLimit = Integer.parseInt(courseLimitStr);
+                // Ensure limit is either 5 or 10
+                if (courseLimit != 5 && courseLimit != 10) {
+                    courseLimit = 5;
+                }
+            }
+        } catch (NumberFormatException e) {
+            // If parsing fails, use default values
         }
 
-        // Get recent activities with search
+        // Get recent courses with search and limit
+        List<CourseDTO> recentCourses;
+        if (courseSearch != null && !courseSearch.trim().isEmpty()) {
+            recentCourses = courseDAO.searchRecentCourses(courseSearch, courseLimit);
+        } else {
+            recentCourses = courseDAO.getRecentCourses(courseLimit);
+        }
+
+        // Get recent activities with search and limit
         List<User> recentActivities;
         if (activitySearch != null && !activitySearch.trim().isEmpty()) {
-            recentActivities = userDAO.searchRecentActivities(activitySearch, 5);
+            recentActivities = userDAO.searchRecentActivities(activitySearch, activityLimit);
         } else {
-            recentActivities = userDAO.getRecentLogins(5);
+            recentActivities = userDAO.getRecentLogins(activityLimit);
         }
 
         // Lấy thống kê user

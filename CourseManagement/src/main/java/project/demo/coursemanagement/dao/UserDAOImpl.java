@@ -388,8 +388,8 @@ public class UserDAOImpl implements UserDAO {
         List<User> users = new ArrayList<>();
         String sql = """
             SELECT TOP (?) u.user_id, u.username, u.email, u.password_hash, u.first_name, u.last_name,
-                   u.phone, u.date_of_birth, u.is_active, u.email_verified, u.created_at, u.updated_at,
-                   r.role_id, r.role_name, r.description, u.last_login
+                   u.phone, u.date_of_birth, u.avatar_url, u.is_active, u.email_verified, u.created_at, u.updated_at,
+                   r.role_id, r.role_name, r.description as role_description, u.last_login
             FROM Users u 
             INNER JOIN Roles r ON u.role_id = r.role_id
             WHERE (u.username LIKE ? OR u.first_name LIKE ? OR u.last_name LIKE ?)
@@ -404,7 +404,7 @@ public class UserDAOImpl implements UserDAO {
             String searchPattern = "%" + keyword + "%";
             stmt.setString(2, searchPattern);
             stmt.setString(3, searchPattern);
-            stmt.setString(4, searchPattern);
+            // Only 3 placeholders in the WHERE clause
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -427,4 +427,3 @@ public class UserDAOImpl implements UserDAO {
         return users;
     }
 }
-
