@@ -10,8 +10,6 @@ import java.util.List;
  */
 public interface CourseViewDAO {
 
-    Cours getCourseById(int id);
-
     List<CourseDTO> getAllCourses();
 
     List<CourseDTO> getCoursesByPage(int page, int size);
