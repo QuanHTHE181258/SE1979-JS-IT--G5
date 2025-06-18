@@ -1,7 +1,7 @@
 package project.demo.coursemanagement.dao;
 
 import project.demo.coursemanagement.entities.User;
-import project.demo.coursemanagement.entities.UserImage;
+import project.demo.coursemanagement.entities.UserAvatar;
 import project.demo.coursemanagement.dto.ProfileUpdateRequest;
 
 import java.util.List;
@@ -37,29 +37,29 @@ public interface ProfileDAO {
     boolean removeAvatar(Integer userId);
 
     /**
-     * Save user image record
+     * Save user avatar record
      */
-    boolean saveUserImage(UserImage userImage);
+    boolean saveUserAvatar(UserAvatar userAvatar);
 
     /**
-     * Get user images
+     * Get user avatars
      */
-    List<UserImage> getUserImages(Integer userId);
+    List<UserAvatar> getUserAvatars(Integer userId);
 
     /**
-     * Get default user image
+     * Get default user avatar
      */
-    UserImage getDefaultUserImage(Integer userId);
+    UserAvatar getDefaultUserAvatar(Integer userId);
 
     /**
-     * Set default user image
+     * Set default user avatar
      */
-    boolean setDefaultUserImage(Integer userId, Integer imageId);
+    boolean setDefaultUserAvatar(Integer userId, Integer avatarId);
 
     /**
-     * Delete user image
+     * Delete user avatar
      */
-    boolean deleteUserImage(Integer imageId);
+    boolean deleteUserAvatar(Integer avatarId);
 
     /**
      * Check if username exists for other users

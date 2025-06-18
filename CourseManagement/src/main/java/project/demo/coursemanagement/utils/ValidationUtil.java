@@ -57,7 +57,7 @@ public class ValidationUtil {
         validatePassword(request.getPassword(), request.getConfirmPassword(), errors);
         validateFirstName(request.getFirstName(), errors);
         validateLastName(request.getLastName(), errors);
-        validatePhone(request.getPhone(), errors);
+        validatePhone(request.getPhoneNumber(), errors);
         validateDateOfBirth(request.getDateOfBirth(), errors);
         validateRole(request.getRole(), errors);
         validateTermsAcceptance(request.isAgreeToTerms(), errors);

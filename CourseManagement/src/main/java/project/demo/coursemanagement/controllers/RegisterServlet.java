@@ -168,7 +168,7 @@ public class RegisterServlet extends HttpServlet {
         registrationRequest.setLastName(getParameter(request, "lastName"));
 
         // Optional fields
-        registrationRequest.setPhone(getParameter(request, "phone"));
+        registrationRequest.setPhoneNumber(getParameter(request, "phoneNumber"));
         registrationRequest.setDateOfBirth(getParameter(request, "dateOfBirth"));
         registrationRequest.setRole(getParameter(request, "role"));
 
@@ -191,7 +191,7 @@ public class RegisterServlet extends HttpServlet {
         user.setPasswordHash(registerService.hashPassword(registrationRequest.getPassword()));
         user.setFirstName(registrationRequest.getFirstName());
         user.setLastName(registrationRequest.getLastName());
-        user.setPhone(registrationRequest.getPhone());
+        user.setPhoneNumber(registrationRequest.getPhoneNumber());
 
         // Parse date of birth
         if (registrationRequest.getDateOfBirth() != null && !registrationRequest.getDateOfBirth().trim().isEmpty()) {
@@ -205,28 +205,7 @@ public class RegisterServlet extends HttpServlet {
             }
         }
 
-        // Set role
-        Role role = new Role();
-        String requestedRole = registrationRequest.getRole();
-        if (requestedRole != null && !requestedRole.trim().isEmpty()) {
-            // Validate role (only allow USER/TEACHER for self-registration)
-            if ("TEACHER".equalsIgnoreCase(requestedRole)) {
-                role.setRoleName("TEACHER");
-                role.setId(3); // TEACHER role ID
-            } else {
-                role.setRoleName("USER");
-                role.setId(2); // USER role ID (default for students)
-            }
-        } else {
-            // Default to USER role
-            role.setRoleName("USER");
-            role.setId(2);
-        }
-        user.setRole(role);
-
-        // Set default values
-        user.setIsActive(true);
-        user.setEmailVerified(false); // Will be verified later via email
+        // Note: Role is now assigned after user creation via UserRoleDAO
 
         return user;
     }

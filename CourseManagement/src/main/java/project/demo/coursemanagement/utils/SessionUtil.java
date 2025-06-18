@@ -1,9 +1,14 @@
 package project.demo.coursemanagement.utils;
 
 import project.demo.coursemanagement.entities.User;
+import project.demo.coursemanagement.entities.Role;
+import project.demo.coursemanagement.dao.UserRoleDAO;
+import project.demo.coursemanagement.dao.impl.UserRoleDAOImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
+import java.util.List;
 
 /**
  * Utility class for managing user sessions
@@ -15,9 +20,13 @@ public class SessionUtil {
     private static final String USER_ID_SESSION_KEY = "userId";
     private static final String USERNAME_SESSION_KEY = "username";
     private static final String USER_ROLE_SESSION_KEY = "userRole";
+    private static final String USER_ROLES_SESSION_KEY = "userRoles";
 
     // Session timeout (30 minutes in seconds)
     private static final int SESSION_TIMEOUT = 30 * 60;
+
+    // UserRoleDAO instance
+    private static final UserRoleDAO userRoleDAO = new UserRoleDAOImpl();
 
     // Set user session with user details
     public static void setUserSession(HttpServletRequest request, User user) {
@@ -26,11 +35,23 @@ public class SessionUtil {
         // Set session timeout
         session.setMaxInactiveInterval(SESSION_TIMEOUT);
 
+        // Get user roles
+        List<Role> roles = userRoleDAO.findRolesByUserId(user.getId());
+        Role primaryRole = userRoleDAO.findPrimaryRoleByUserId(user.getId());
+
         // Store user information in session
         session.setAttribute(USER_SESSION_KEY, user);
         session.setAttribute(USER_ID_SESSION_KEY, user.getId());
         session.setAttribute(USERNAME_SESSION_KEY, user.getUsername());
-        session.setAttribute(USER_ROLE_SESSION_KEY, user.getRole().getRoleName());
+
+        // Store role information
+        if (primaryRole != null) {
+            session.setAttribute(USER_ROLE_SESSION_KEY, primaryRole.getRoleName());
+        } else {
+            session.setAttribute(USER_ROLE_SESSION_KEY, "USER"); // Default role
+        }
+
+        session.setAttribute(USER_ROLES_SESSION_KEY, roles);
 
         System.out.println("Session created for user: " + user.getUsername());
     }
@@ -68,12 +89,24 @@ public class SessionUtil {
         return null;
     }
 
-    // Get user role from session
+    // Get user role from session (primary role)
     public static String getUserRole(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
 
         if (session != null) {
             return (String) session.getAttribute(USER_ROLE_SESSION_KEY);
+        }
+
+        return null;
+    }
+
+    // Get all user roles from session
+    @SuppressWarnings("unchecked")
+    public static List<Role> getUserRoles(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            return (List<Role>) session.getAttribute(USER_ROLES_SESSION_KEY);
         }
 
         return null;
@@ -91,10 +124,57 @@ public class SessionUtil {
         return false;
     }
 
-    // Check if user has a specific role
+    // Check if user has a specific role (using primary role)
     public static boolean hasRole(HttpServletRequest request, String roleName) {
         String userRole = getUserRole(request);
         return userRole != null && userRole.equals(roleName);
+    }
+
+    // Check if user has any of the specified roles
+    public static boolean hasAnyRole(HttpServletRequest request, String... roleNames) {
+        if (roleNames == null || roleNames.length == 0) {
+            return false;
+        }
+
+        String userRole = getUserRole(request);
+        if (userRole == null) {
+            return false;
+        }
+
+        for (String roleName : roleNames) {
+            if (userRole.equals(roleName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Check if user has all of the specified roles
+    public static boolean hasAllRoles(HttpServletRequest request, String... roleNames) {
+        if (roleNames == null || roleNames.length == 0) {
+            return true;
+        }
+
+        List<Role> userRoles = getUserRoles(request);
+        if (userRoles == null || userRoles.isEmpty()) {
+            return false;
+        }
+
+        // Convert user roles to a set of role names for easier checking
+        java.util.Set<String> userRoleNames = new java.util.HashSet<>();
+        for (Role role : userRoles) {
+            userRoleNames.add(role.getRoleName());
+        }
+
+        // Check if all specified roles are in the user's roles
+        for (String roleName : roleNames) {
+            if (!userRoleNames.contains(roleName)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public static boolean isAdmin(HttpServletRequest request) {

@@ -359,13 +359,13 @@
                     <div class="form-floating">
                         <input type="tel"
                                class="form-control"
-                               id="phone"
-                               name="phone"
+                               id="phoneNumber"
+                               name="phoneNumber"
                                placeholder="Phone Number"
-                               value="${formData.phone}"
+                               value="${formData.phoneNumber}"
                                pattern="[+]?[0-9]{10,15}"
                                title="Phone number must be 10-15 digits">
-                        <label for="phone">
+                        <label for="phoneNumber">
                             <i class="fas fa-phone me-2"></i>Phone (Optional)
                         </label>
                     </div>

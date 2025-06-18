@@ -34,7 +34,7 @@
         <mapping class="project.demo.coursemanagement.entities.Submission"/>
         <mapping class="project.demo.coursemanagement.entities.SystemSetting"/>
         <mapping class="project.demo.coursemanagement.entities.User"/>
-        <mapping class="project.demo.coursemanagement.entities.UserImage"/>
+        <mapping class="project.demo.coursemanagement.entities.UserAvatar"/>
 
     </session-factory>
 </hibernate-configuration>

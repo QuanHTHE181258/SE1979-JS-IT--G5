@@ -34,46 +34,46 @@ public class RegisterService {
      * Register a new user in the system
      */
     public boolean registerUser(User user) {
-        System.out.println("RegisterService: Starting user registration for: " + user.getUsername());
+        System.out.println("[DEBUG_LOG] RegisterService.registerUser: Starting user registration transaction");
+        System.out.println("[DEBUG_LOG] RegisterService.registerUser: User details - Username: " + (user != null ? user.getUsername() : "null") + 
+                          ", Email: " + (user != null ? user.getEmail() : "null"));
 
         try {
             // Validate user object
             if (user == null) {
-                System.err.println("RegisterService: User object is null");
+                System.err.println("[DEBUG_LOG] RegisterService.registerUser: Transaction failed - User object is null");
                 return false;
             }
             // Set creation timestamp
             if (user.getCreatedAt() == null) {
                 user.setCreatedAt(Instant.now());
-            }
-            if (user.getUpdatedAt() == null) {
-                user.setUpdatedAt(Instant.now());
+                System.out.println("[DEBUG_LOG] RegisterService.registerUser: Transaction detail - Setting creation timestamp: " + user.getCreatedAt());
             }
 
             // Log registration attempt
-            System.out.println("RegisterService: Attempting to create user - " +
+            System.out.println("[DEBUG_LOG] RegisterService.registerUser: Transaction in progress - Creating user in database");
+            System.out.println("[DEBUG_LOG] RegisterService.registerUser: Transaction data - " +
                     "Username: " + user.getUsername() +
-                    ", Email: " + user.getEmail() +
-                    ", Role: " + (user.getRole() != null ? user.getRole().getRoleName() : "null"));
+                    ", Email: " + user.getEmail());
 
             // Create user in database
             boolean success = registerDAO.createUser(user);
 
             if (success) {
-                System.out.println("RegisterService: User registration successful for: " + user.getUsername());
+                System.out.println("[DEBUG_LOG] RegisterService.registerUser: Transaction successful - User created with ID: " + user.getId());
 
                 // Log registration event (could be stored in audit table)
                 logRegistrationEvent(user, "SUCCESS", "User registered successfully");
 
             } else {
-                System.err.println("RegisterService: User registration failed for: " + user.getUsername());
+                System.err.println("[DEBUG_LOG] RegisterService.registerUser: Transaction failed - Database operation returned false");
                 logRegistrationEvent(user, "FAILURE", "Database operation failed");
             }
 
             return success;
 
         } catch (Exception e) {
-            System.err.println("RegisterService: Error during registration: " + e.getMessage());
+            System.err.println("[DEBUG_LOG] RegisterService.registerUser: Transaction error - " + e.getMessage());
             e.printStackTrace();
 
             // Log error event
@@ -87,34 +87,49 @@ public class RegisterService {
      * Check for duplicate username or email
      */
     public ValidationResult checkDuplicates(RegistrationRequest request) {
-        System.out.println("RegisterService: Checking duplicates for username: " + request.getUsername() +
-                ", email: " + request.getEmail());
+        System.out.println("[DEBUG_LOG] RegisterService.checkDuplicates: Starting duplicate check transaction");
+        System.out.println("[DEBUG_LOG] RegisterService.checkDuplicates: Transaction data - Username: " + 
+                (request != null ? request.getUsername() : "null") + 
+                ", Email: " + (request != null ? request.getEmail() : "null"));
 
         List<String> errors = new ArrayList<>();
 
         try {
+            if (request == null) {
+                System.err.println("[DEBUG_LOG] RegisterService.checkDuplicates: Transaction failed - Request object is null");
+                errors.add("Invalid registration request");
+                return new ValidationResult(false, errors);
+            }
+
             // Check username uniqueness
+            System.out.println("[DEBUG_LOG] RegisterService.checkDuplicates: Transaction in progress - Checking username uniqueness");
             if (registerDAO.isUsernameExists(request.getUsername())) {
                 String error = "Username '" + request.getUsername() + "' is already taken";
                 errors.add(error);
-                System.out.println("RegisterService: " + error);
+                System.out.println("[DEBUG_LOG] RegisterService.checkDuplicates: Transaction detail - " + error);
+            } else {
+                System.out.println("[DEBUG_LOG] RegisterService.checkDuplicates: Transaction detail - Username is available");
             }
 
             // Check email uniqueness
+            System.out.println("[DEBUG_LOG] RegisterService.checkDuplicates: Transaction in progress - Checking email uniqueness");
             if (registerDAO.isEmailExists(request.getEmail())) {
                 String error = "Email '" + request.getEmail() + "' is already registered";
                 errors.add(error);
-                System.out.println("RegisterService: " + error);
+                System.out.println("[DEBUG_LOG] RegisterService.checkDuplicates: Transaction detail - " + error);
+            } else {
+                System.out.println("[DEBUG_LOG] RegisterService.checkDuplicates: Transaction detail - Email is available");
             }
 
             boolean isValid = errors.isEmpty();
             ValidationResult result = new ValidationResult(isValid, errors);
 
-            System.out.println("RegisterService: Duplicate check completed - Valid: " + isValid);
+            System.out.println("[DEBUG_LOG] RegisterService.checkDuplicates: Transaction completed - Valid: " + isValid + 
+                              ", Error count: " + errors.size());
             return result;
 
         } catch (Exception e) {
-            System.err.println("RegisterService: Error checking duplicates: " + e.getMessage());
+            System.err.println("[DEBUG_LOG] RegisterService.checkDuplicates: Transaction error - " + e.getMessage());
             e.printStackTrace();
 
             errors.add("Unable to verify username and email availability. Please try again.");
@@ -126,20 +141,23 @@ public class RegisterService {
      * Hash password using secure algorithm
      */
     public String hashPassword(String plainPassword) {
-        System.out.println("RegisterService: Hashing password");
+        System.out.println("[DEBUG_LOG] RegisterService.hashPassword: Starting password hashing transaction");
 
         if (plainPassword == null || plainPassword.isEmpty()) {
-            System.err.println("RegisterService: Plain password is null or empty");
+            System.err.println("[DEBUG_LOG] RegisterService.hashPassword: Transaction failed - Plain password is null or empty");
             return null;
         }
 
+        System.out.println("[DEBUG_LOG] RegisterService.hashPassword: Transaction in progress - Password length: " + plainPassword.length());
+
         try {
             String hashedPassword = PasswordUtil.hashPassword(plainPassword);
-            System.out.println("RegisterService: Password hashed successfully");
+            System.out.println("[DEBUG_LOG] RegisterService.hashPassword: Transaction successful - Password hashed, hash length: " + 
+                              (hashedPassword != null ? hashedPassword.length() : 0));
             return hashedPassword;
 
         } catch (Exception e) {
-            System.err.println("RegisterService: Error hashing password: " + e.getMessage());
+            System.err.println("[DEBUG_LOG] RegisterService.hashPassword: Transaction error - " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -149,19 +167,35 @@ public class RegisterService {
      * Validate registration request with business rules
      */
     public ValidationResult validateRegistrationRequest(RegistrationRequest request) {
-        System.out.println("RegisterService: Validating registration request for: " + request.getUsername());
+        System.out.println("[DEBUG_LOG] RegisterService.validateRegistrationRequest: Starting validation transaction");
+        System.out.println("[DEBUG_LOG] RegisterService.validateRegistrationRequest: Transaction data - Username: " + 
+                          (request != null ? request.getUsername() : "null"));
+
+        if (request == null) {
+            System.err.println("[DEBUG_LOG] RegisterService.validateRegistrationRequest: Transaction failed - Request object is null");
+            List<String> errors = new ArrayList<>();
+            errors.add("Invalid registration request");
+            return new ValidationResult(false, errors);
+        }
 
         // First, run standard validation
+        System.out.println("[DEBUG_LOG] RegisterService.validateRegistrationRequest: Transaction in progress - Running standard validation");
         ValidationResult standardValidation = ValidationUtil.validateRegistration(request);
+        System.out.println("[DEBUG_LOG] RegisterService.validateRegistrationRequest: Transaction detail - Standard validation result: Valid=" + 
+                          standardValidation.isValid() + ", Errors=" + standardValidation.getErrorCount());
 
         // Then, run business-specific validation
+        System.out.println("[DEBUG_LOG] RegisterService.validateRegistrationRequest: Transaction in progress - Running business rules validation");
         ValidationResult businessValidation = validateBusinessRules(request);
+        System.out.println("[DEBUG_LOG] RegisterService.validateRegistrationRequest: Transaction detail - Business validation result: Valid=" + 
+                          businessValidation.isValid() + ", Errors=" + businessValidation.getErrorCount());
 
         // Combine results
         ValidationResult combinedResult = ValidationResult.combine(standardValidation, businessValidation);
 
-        System.out.println("RegisterService: Validation completed - Valid: " + combinedResult.isValid() +
-                ", Errors: " + combinedResult.getErrorCount());
+        System.out.println("[DEBUG_LOG] RegisterService.validateRegistrationRequest: Transaction completed - Final result: Valid=" + 
+                          combinedResult.isValid() + ", Errors=" + combinedResult.getErrorCount() + 
+                          ", Warnings=" + combinedResult.getWarningCount());
 
         return combinedResult;
     }
@@ -264,26 +298,40 @@ public class RegisterService {
      * Send welcome email to newly registered user
      */
     public void sendWelcomeEmail(User user) {
-        System.out.println("RegisterService: Sending welcome email to: " + user.getEmail());
+        System.out.println("[DEBUG_LOG] RegisterService.sendWelcomeEmail: Starting email transaction");
+        System.out.println("[DEBUG_LOG] RegisterService.sendWelcomeEmail: Transaction data - Recipient: " + 
+                          (user != null ? user.getEmail() : "null"));
 
         try {
+            if (user == null) {
+                System.err.println("[DEBUG_LOG] RegisterService.sendWelcomeEmail: Transaction failed - User object is null");
+                return;
+            }
+
+            if (user.getEmail() == null || user.getEmail().isEmpty()) {
+                System.err.println("[DEBUG_LOG] RegisterService.sendWelcomeEmail: Transaction failed - Email address is null or empty");
+                return;
+            }
+
             // In a real implementation, this would use an email service
             // For now, we'll just log the action
-
+            System.out.println("[DEBUG_LOG] RegisterService.sendWelcomeEmail: Transaction in progress - Generating email content");
             String emailContent = generateWelcomeEmailContent(user);
-            System.out.println("RegisterService: Welcome email content generated for: " + user.getUsername());
+            System.out.println("[DEBUG_LOG] RegisterService.sendWelcomeEmail: Transaction detail - Email content generated, length: " + 
+                              emailContent.length());
 
             // Simulate email sending
+            System.out.println("[DEBUG_LOG] RegisterService.sendWelcomeEmail: Transaction in progress - Sending email");
             boolean emailSent = simulateEmailSending(user.getEmail(), "Welcome to Course Management System", emailContent);
 
             if (emailSent) {
-                System.out.println("RegisterService: Welcome email sent successfully to: " + user.getEmail());
+                System.out.println("[DEBUG_LOG] RegisterService.sendWelcomeEmail: Transaction successful - Email sent to: " + user.getEmail());
             } else {
-                System.err.println("RegisterService: Failed to send welcome email to: " + user.getEmail());
+                System.err.println("[DEBUG_LOG] RegisterService.sendWelcomeEmail: Transaction failed - Email delivery failed for: " + user.getEmail());
             }
 
         } catch (Exception e) {
-            System.err.println("RegisterService: Error sending welcome email: " + e.getMessage());
+            System.err.println("[DEBUG_LOG] RegisterService.sendWelcomeEmail: Transaction error - " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -297,21 +345,14 @@ public class RegisterService {
         content.append("Your account has been successfully created with the following details:\n");
         content.append("Username: ").append(user.getUsername()).append("\n");
         content.append("Email: ").append(user.getEmail()).append("\n");
-        content.append("Role: ").append(user.getRole().getRoleName()).append("\n\n");
+        content.append("Role: Student\n\n"); // Default to Student role
 
-        if ("TEACHER".equals(user.getRole().getRoleName())) {
-            content.append("As a teacher, you can now:\n");
-            content.append("- Create and manage courses\n");
-            content.append("- Upload course materials\n");
-            content.append("- Track student progress\n");
-            content.append("- Manage assignments and grades\n\n");
-        } else {
-            content.append("As a student, you can now:\n");
-            content.append("- Browse and enroll in courses\n");
-            content.append("- Access course materials\n");
-            content.append("- Submit assignments\n");
-            content.append("- Track your learning progress\n\n");
-        }
+        // Since we can't directly access the role, we'll default to student content
+        content.append("As a student, you can now:\n");
+        content.append("- Browse and enroll in courses\n");
+        content.append("- Access course materials\n");
+        content.append("- Submit assignments\n");
+        content.append("- Track your learning progress\n\n");
 
         content.append("To get started, please log in to your account and explore the available features.\n\n");
         content.append("If you have any questions, please don't hesitate to contact our support team.\n\n");
@@ -323,31 +364,51 @@ public class RegisterService {
 
     // Simulate email sending (for demo purposes)
     private boolean simulateEmailSending(String to, String subject, String content) {
+        System.out.println("[DEBUG_LOG] RegisterService.simulateEmailSending: Starting email simulation transaction");
+        System.out.println("[DEBUG_LOG] RegisterService.simulateEmailSending: Transaction data - " +
+                          "Recipient: " + to + ", " +
+                          "Subject: " + subject + ", " +
+                          "Content length: " + (content != null ? content.length() : 0) + " characters");
 
-
+        // For backward compatibility, also log in the original format
         System.out.println("=== EMAIL SIMULATION ===");
         System.out.println("To: " + to);
         System.out.println("Subject: " + subject);
-        System.out.println("Content Length: " + content.length() + " characters");
+        System.out.println("Content Length: " + (content != null ? content.length() : 0) + " characters");
         System.out.println("Status: SENT");
         System.out.println("========================");
 
+        System.out.println("[DEBUG_LOG] RegisterService.simulateEmailSending: Transaction completed successfully");
         return true;
     }
 
 
     private void logRegistrationEvent(User user, String status, String message) {
+        System.out.println("[DEBUG_LOG] RegisterService.logRegistrationEvent: Starting audit log transaction");
+
         try {
             // In real implementation, this would write to an audit log table
+            Instant timestamp = Instant.now();
+            System.out.println("[DEBUG_LOG] RegisterService.logRegistrationEvent: Transaction data - " +
+                              "Timestamp: " + timestamp + ", " +
+                              "Username: " + (user != null ? user.getUsername() : "null") + ", " +
+                              "Email: " + (user != null ? user.getEmail() : "null") + ", " +
+                              "Status: " + status);
+
+            System.out.println("[DEBUG_LOG] RegisterService.logRegistrationEvent: Transaction detail - Message: " + message);
+
+            // For backward compatibility, also log in the original format
             System.out.println("AUDIT LOG: Registration Event");
-            System.out.println("  Timestamp: " + Instant.now());
+            System.out.println("  Timestamp: " + timestamp);
             System.out.println("  Username: " + (user != null ? user.getUsername() : "null"));
             System.out.println("  Email: " + (user != null ? user.getEmail() : "null"));
             System.out.println("  Status: " + status);
             System.out.println("  Message: " + message);
 
+            System.out.println("[DEBUG_LOG] RegisterService.logRegistrationEvent: Transaction completed successfully");
+
         } catch (Exception e) {
-            System.err.println("RegisterService: Error logging registration event: " + e.getMessage());
+            System.err.println("[DEBUG_LOG] RegisterService.logRegistrationEvent: Transaction error - " + e.getMessage());
         }
     }
 
@@ -355,12 +416,23 @@ public class RegisterService {
      * Get registration statistics (for admin dashboard)
      */
     public RegistrationStatistics getRegistrationStatistics() {
+        System.out.println("[DEBUG_LOG] RegisterService.getRegistrationStatistics: Starting statistics transaction");
+
         try {
             // In real implementation, this would query the database for statistics
-            return new RegistrationStatistics();
+            System.out.println("[DEBUG_LOG] RegisterService.getRegistrationStatistics: Transaction in progress - Retrieving statistics from database");
+
+            RegistrationStatistics stats = new RegistrationStatistics();
+
+            System.out.println("[DEBUG_LOG] RegisterService.getRegistrationStatistics: Transaction completed - " +
+                              "Total: " + stats.getTotalRegistrations() + ", " +
+                              "Today: " + stats.getTodayRegistrations() + ", " +
+                              "Weekly: " + stats.getWeeklyRegistrations());
+
+            return stats;
 
         } catch (Exception e) {
-            System.err.println("RegisterService: Error getting registration statistics: " + e.getMessage());
+            System.err.println("[DEBUG_LOG] RegisterService.getRegistrationStatistics: Transaction error - " + e.getMessage());
             return new RegistrationStatistics();
         }
     }
@@ -369,21 +441,33 @@ public class RegisterService {
      * Check if a username is available
      */
     public boolean isUsernameAvailable(String username) {
+        System.out.println("[DEBUG_LOG] RegisterService.isUsernameAvailable: Starting username availability transaction");
+        System.out.println("[DEBUG_LOG] RegisterService.isUsernameAvailable: Transaction data - Username: " + username);
+
         if (username == null || username.trim().isEmpty()) {
+            System.err.println("[DEBUG_LOG] RegisterService.isUsernameAvailable: Transaction failed - Username is null or empty");
             return false;
         }
 
         try {
             // First check format validity
+            System.out.println("[DEBUG_LOG] RegisterService.isUsernameAvailable: Transaction in progress - Checking username format validity");
             if (!ValidationUtil.isValidUsername(username)) {
+                System.out.println("[DEBUG_LOG] RegisterService.isUsernameAvailable: Transaction detail - Username format is invalid");
                 return false;
             }
 
             // Then check database uniqueness
-            return !registerDAO.isUsernameExists(username.trim());
+            System.out.println("[DEBUG_LOG] RegisterService.isUsernameAvailable: Transaction in progress - Checking username uniqueness in database");
+            boolean exists = registerDAO.isUsernameExists(username.trim());
+            boolean isAvailable = !exists;
+
+            System.out.println("[DEBUG_LOG] RegisterService.isUsernameAvailable: Transaction completed - Username '" + 
+                              username + "' is " + (isAvailable ? "available" : "already taken"));
+            return isAvailable;
 
         } catch (Exception e) {
-            System.err.println("RegisterService: Error checking username availability: " + e.getMessage());
+            System.err.println("[DEBUG_LOG] RegisterService.isUsernameAvailable: Transaction error - " + e.getMessage());
             return false;
         }
     }
@@ -392,21 +476,34 @@ public class RegisterService {
      * Check if an email is available
      */
     public boolean isEmailAvailable(String email) {
+        System.out.println("[DEBUG_LOG] RegisterService.isEmailAvailable: Starting email availability transaction");
+        System.out.println("[DEBUG_LOG] RegisterService.isEmailAvailable: Transaction data - Email: " + email);
+
         if (email == null || email.trim().isEmpty()) {
+            System.err.println("[DEBUG_LOG] RegisterService.isEmailAvailable: Transaction failed - Email is null or empty");
             return false;
         }
 
         try {
             // First check format validity
+            System.out.println("[DEBUG_LOG] RegisterService.isEmailAvailable: Transaction in progress - Checking email format validity");
             if (!ValidationUtil.isValidEmail(email)) {
+                System.out.println("[DEBUG_LOG] RegisterService.isEmailAvailable: Transaction detail - Email format is invalid");
                 return false;
             }
 
             // Then check database uniqueness
-            return !registerDAO.isEmailExists(email.trim().toLowerCase());
+            System.out.println("[DEBUG_LOG] RegisterService.isEmailAvailable: Transaction in progress - Checking email uniqueness in database");
+            String normalizedEmail = email.trim().toLowerCase();
+            boolean exists = registerDAO.isEmailExists(normalizedEmail);
+            boolean isAvailable = !exists;
+
+            System.out.println("[DEBUG_LOG] RegisterService.isEmailAvailable: Transaction completed - Email '" + 
+                              email + "' is " + (isAvailable ? "available" : "already registered"));
+            return isAvailable;
 
         } catch (Exception e) {
-            System.err.println("RegisterService: Error checking email availability: " + e.getMessage());
+            System.err.println("[DEBUG_LOG] RegisterService.isEmailAvailable: Transaction error - " + e.getMessage());
             return false;
         }
     }

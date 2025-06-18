@@ -5,7 +5,7 @@ import project.demo.coursemanagement.dao.impl.ProfileDAOImpl;
 import project.demo.coursemanagement.dao.UserDAO;
 import project.demo.coursemanagement.dao.impl.UserDAOImpl;
 import project.demo.coursemanagement.entities.User;
-import project.demo.coursemanagement.entities.UserImage;
+import project.demo.coursemanagement.entities.UserAvatar;
 import project.demo.coursemanagement.dto.ProfileUpdateRequest;
 import project.demo.coursemanagement.dto.ValidationResult;
 import project.demo.coursemanagement.utils.PasswordUtil;
@@ -289,22 +289,19 @@ public class ProfileService {
             if (success) {
                 System.out.println("ProfileService: Avatar uploaded successfully for user ID: " + userId);
 
-                // Save image record if ProfileDAO is available
+                // Save avatar record if ProfileDAO is available
                 if (profileDAO != null) {
-                    UserImage userImage = new UserImage();
+                    UserAvatar userAvatar = new UserAvatar();
                     User user = new User();
                     user.setId(userId);
-                    userImage.setUser(user);
-                    userImage.setImageName(fileName);
-                    userImage.setImagePath(avatarUrl);
-                    userImage.setImageSize(filePart.getSize());
-                    userImage.setImageType(filePart.getContentType());
-                    userImage.setIsDefault(true);
-                    userImage.setUploadDate(Instant.now());
+                    userAvatar.setUserID(user);
+                    userAvatar.setImageURL(avatarUrl);
+                    userAvatar.setIsDefault(true);
+                    userAvatar.setUploadedAt(Instant.now());
 
-                    profileDAO.saveUserImage(userImage);
-                    if (userImage.getId() != null) {
-                        profileDAO.setDefaultUserImage(userId, userImage.getId());
+                    profileDAO.saveUserAvatar(userAvatar);
+                    if (userAvatar.getId() != null) {
+                        profileDAO.setDefaultUserAvatar(userId, userAvatar.getId());
                     }
                 }
 
@@ -385,7 +382,7 @@ public class ProfileService {
             // Get user profile for additional stats
             User user = profileDAO.getUserProfile(userId);
             if (user != null) {
-                stats.setEmailVerified(user.getEmailVerified() != null ? user.getEmailVerified() : false);
+                stats.setEmailVerified(false); // Email verification is not supported in the new User entity
                 stats.setHasAvatar(user.getAvatarUrl() != null);
                 stats.setAccountAge(calculateAccountAge(user.getCreatedAt()));
                 stats.setLastLoginDaysAgo(calculateDaysSince(user.getLastLogin()));
@@ -404,55 +401,40 @@ public class ProfileService {
     }
 
     /**
-     * Get user's uploaded images
+     * Get user's uploaded avatars
      */
-    public List<UserImage> getUserImages(Integer userId) {
+    public List<UserAvatar> getUserAvatars(Integer userId) {
         if (userId == null) {
             return new ArrayList<>();
         }
 
         try {
-            return profileDAO.getUserImages(userId);
+            return profileDAO.getUserAvatars(userId);
         } catch (Exception e) {
-            System.err.println("ProfileService: Error getting user images: " + e.getMessage());
+            System.err.println("ProfileService: Error getting user avatars: " + e.getMessage());
             e.printStackTrace();
             return new ArrayList<>();
         }
     }
 
     /**
-     * Set default user image
+     * Set default user avatar
      */
-    public boolean setDefaultImage(Integer userId, Integer imageId) {
-        if (userId == null || imageId == null) {
+    public boolean setDefaultAvatar(Integer userId, Integer avatarId) {
+        if (userId == null || avatarId == null) {
             return false;
         }
 
         try {
-            return profileDAO.setDefaultUserImage(userId, imageId);
+            return profileDAO.setDefaultUserAvatar(userId, avatarId);
         } catch (Exception e) {
-            System.err.println("ProfileService: Error setting default image: " + e.getMessage());
+            System.err.println("ProfileService: Error setting default avatar: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
 
-    /**
-     * Delete user image
-     */
-    public boolean deleteImage(Integer imageId) {
-        if (imageId == null) {
-            return false;
-        }
 
-        try {
-            return profileDAO.deleteUserImage(imageId);
-        } catch (Exception e) {
-            System.err.println("ProfileService: Error deleting image: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-    }
 
     // Helper methods
 

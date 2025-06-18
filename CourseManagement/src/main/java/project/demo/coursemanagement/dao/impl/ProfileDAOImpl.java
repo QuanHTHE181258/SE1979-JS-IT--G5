@@ -2,7 +2,7 @@ package project.demo.coursemanagement.dao.impl;
 
 import project.demo.coursemanagement.dao.ProfileDAO;
 import project.demo.coursemanagement.entities.User;
-import project.demo.coursemanagement.entities.UserImage;
+import project.demo.coursemanagement.entities.UserAvatar;
 import project.demo.coursemanagement.entities.Role;
 import project.demo.coursemanagement.dto.ProfileUpdateRequest;
 import project.demo.coursemanagement.utils.DatabaseConnection;
@@ -19,15 +19,13 @@ public class ProfileDAOImpl implements ProfileDAO {
     @Override
     public User getUserProfile(Integer userId) {
         String sql = """
-            SELECT u.user_id, u.username, u.email, u.password_hash, u.first_name, u.last_name,
-                   u.phone, u.date_of_birth, u.avatar_url, u.is_active, u.email_verified,
-                   u.last_login, u.created_at, u.updated_at,
-                   r.role_id, r.role_name, r.description,
-                   ui.image_id, ui.image_path
-            FROM Users u
-            INNER JOIN Roles r ON u.role_id = r.role_id
-            LEFT JOIN UserImages ui ON u.current_avatar_id = ui.image_id
-            WHERE u.user_id = ?
+            SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName,
+                   u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt,
+                   r.RoleID, r.RoleName
+            FROM users u
+            INNER JOIN user_roles ur ON u.UserID = ur.UserID
+            INNER JOIN roles r ON ur.RoleID = r.RoleID
+            WHERE u.UserID = ?
         """;
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -51,41 +49,41 @@ public class ProfileDAOImpl implements ProfileDAO {
 
     @Override
     public boolean updateProfile(ProfileUpdateRequest updateRequest) {
-        StringBuilder sql = new StringBuilder("UPDATE Users SET ");
+        StringBuilder sql = new StringBuilder("UPDATE users SET ");
         List<Object> params = new ArrayList<>();
         boolean first = true;
 
         // Build dynamic update query based on provided fields
         if (updateRequest.getUsername() != null) {
-            sql.append("username = ?");
+            sql.append("Username = ?");
             params.add(updateRequest.getUsername());
             first = false;
         }
 
         if (updateRequest.getEmail() != null) {
             if (!first) sql.append(", ");
-            sql.append("email = ?");
+            sql.append("Email = ?");
             params.add(updateRequest.getEmail());
             first = false;
         }
 
         if (updateRequest.getFirstName() != null) {
             if (!first) sql.append(", ");
-            sql.append("first_name = ?");
+            sql.append("FirstName = ?");
             params.add(updateRequest.getFirstName());
             first = false;
         }
 
         if (updateRequest.getLastName() != null) {
             if (!first) sql.append(", ");
-            sql.append("last_name = ?");
+            sql.append("LastName = ?");
             params.add(updateRequest.getLastName());
             first = false;
         }
 
         if (updateRequest.getPhone() != null) {
             if (!first) sql.append(", ");
-            sql.append("phone = ?");
+            sql.append("PhoneNumber = ?");
             params.add(updateRequest.getPhone().isEmpty() ? null : updateRequest.getPhone());
             first = false;
         }
@@ -94,7 +92,7 @@ public class ProfileDAOImpl implements ProfileDAO {
 
         if (updateRequest.getDateOfBirth() != null) {
             if (!first) sql.append(", ");
-            sql.append("date_of_birth = ?");
+            sql.append("DateOfBirth = ?");
 
             LocalDate dob = updateRequest.getParsedDateOfBirth();
             if (dob != null) {
@@ -105,11 +103,7 @@ public class ProfileDAOImpl implements ProfileDAO {
             first = false;
         }
 
-        // Always update the updated_at timestamp
-        if (!first) sql.append(", ");
-        sql.append("updated_at = GETDATE()");
-
-        sql.append(" WHERE user_id = ?");
+        sql.append(" WHERE UserID = ?");
         params.add(updateRequest.getUserId());
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -145,7 +139,7 @@ public class ProfileDAOImpl implements ProfileDAO {
 
     @Override
     public boolean updatePassword(Integer userId, String newPasswordHash) {
-        String sql = "UPDATE Users SET password_hash = ?, updated_at = GETDATE() WHERE user_id = ?";
+        String sql = "UPDATE users SET PasswordHash = ? WHERE UserID = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -170,7 +164,7 @@ public class ProfileDAOImpl implements ProfileDAO {
 
     @Override
     public boolean updateAvatarUrl(Integer userId, String avatarUrl) {
-        String sql = "UPDATE Users SET avatar_url = ?, updated_at = GETDATE() WHERE user_id = ?";
+        String sql = "UPDATE users SET AvatarURL = ? WHERE UserID = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -195,7 +189,7 @@ public class ProfileDAOImpl implements ProfileDAO {
 
     @Override
     public boolean removeAvatar(Integer userId) {
-        String sql = "UPDATE Users SET avatar_url = NULL, current_avatar_id = NULL, updated_at = GETDATE() WHERE user_id = ?";
+        String sql = "UPDATE users SET AvatarURL = NULL WHERE UserID = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -218,35 +212,32 @@ public class ProfileDAOImpl implements ProfileDAO {
     }
 
     @Override
-    public boolean saveUserImage(UserImage userImage) {
+    public boolean saveUserAvatar(UserAvatar userAvatar) {
         String sql = """
-            INSERT INTO UserImages (user_id, image_name, image_path, image_size, image_type, is_default, upload_date)
-            VALUES (?, ?, ?, ?, ?, ?, GETDATE())
+            INSERT INTO user_avatars (UserID, ImageURL, IsDefault, UploadedAt)
+            VALUES (?, ?, ?, GETDATE())
         """;
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setInt(1, userImage.getUser().getId());
-            stmt.setString(2, userImage.getImageName());
-            stmt.setString(3, userImage.getImagePath());
-            stmt.setLong(4, userImage.getImageSize() != null ? userImage.getImageSize() : 0);
-            stmt.setString(5, userImage.getImageType());
-            stmt.setBoolean(6, userImage.getIsDefault() != null ? userImage.getIsDefault() : false);
+            stmt.setInt(1, userAvatar.getUserID().getId());
+            stmt.setString(2, userAvatar.getImageURL());
+            stmt.setBoolean(3, userAvatar.getIsDefault() != null ? userAvatar.getIsDefault() : false);
 
             int rowsAffected = stmt.executeUpdate();
 
             if (rowsAffected > 0) {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
-                        userImage.setId(rs.getInt(1));
+                        userAvatar.setId(rs.getInt(1));
                         return true;
                     }
                 }
             }
 
         } catch (SQLException e) {
-            System.err.println("Error saving user image: " + e.getMessage());
+            System.err.println("Error saving user avatar: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -254,15 +245,15 @@ public class ProfileDAOImpl implements ProfileDAO {
     }
 
     @Override
-    public List<UserImage> getUserImages(Integer userId) {
+    public List<UserAvatar> getUserAvatars(Integer userId) {
         String sql = """
-            SELECT image_id, user_id, image_name, image_path, image_size, image_type, is_default, upload_date
-            FROM UserImages
-            WHERE user_id = ?
-            ORDER BY upload_date DESC
+            SELECT AvatarID, UserID, ImageURL, IsDefault, UploadedAt
+            FROM user_avatars
+            WHERE UserID = ?
+            ORDER BY UploadedAt DESC
         """;
 
-        List<UserImage> images = new ArrayList<>();
+        List<UserAvatar> avatars = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -271,24 +262,24 @@ public class ProfileDAOImpl implements ProfileDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    images.add(mapResultSetToUserImage(rs));
+                    avatars.add(mapResultSetToUserAvatar(rs));
                 }
             }
 
         } catch (SQLException e) {
-            System.err.println("Error getting user images: " + e.getMessage());
+            System.err.println("Error getting user avatars: " + e.getMessage());
             e.printStackTrace();
         }
 
-        return images;
+        return avatars;
     }
 
     @Override
-    public UserImage getDefaultUserImage(Integer userId) {
+    public UserAvatar getDefaultUserAvatar(Integer userId) {
         String sql = """
-            SELECT image_id, user_id, image_name, image_path, image_size, image_type, is_default, upload_date
-            FROM UserImages
-            WHERE user_id = ? AND is_default = 1
+            SELECT AvatarID, UserID, ImageURL, IsDefault, UploadedAt
+            FROM user_avatars
+            WHERE UserID = ? AND IsDefault = 1
         """;
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -298,12 +289,12 @@ public class ProfileDAOImpl implements ProfileDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return mapResultSetToUserImage(rs);
+                    return mapResultSetToUserAvatar(rs);
                 }
             }
 
         } catch (SQLException e) {
-            System.err.println("Error getting default user image: " + e.getMessage());
+            System.err.println("Error getting default user avatar: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -311,7 +302,7 @@ public class ProfileDAOImpl implements ProfileDAO {
     }
 
     @Override
-    public boolean setDefaultUserImage(Integer userId, Integer imageId) {
+    public boolean setDefaultUserAvatar(Integer userId, Integer avatarId) {
         Connection conn = null;
 
         try {
@@ -319,33 +310,46 @@ public class ProfileDAOImpl implements ProfileDAO {
             conn.setAutoCommit(false);
 
             // First, unset all current defaults
-            String unsetSql = "UPDATE UserImages SET is_default = 0 WHERE user_id = ?";
+            String unsetSql = "UPDATE user_avatars SET IsDefault = 0 WHERE UserID = ?";
             try (PreparedStatement stmt = conn.prepareStatement(unsetSql)) {
                 stmt.setInt(1, userId);
                 stmt.executeUpdate();
             }
 
             // Then set the new default
-            String setSql = "UPDATE UserImages SET is_default = 1 WHERE image_id = ? AND user_id = ?";
+            String setSql = "UPDATE user_avatars SET IsDefault = 1 WHERE AvatarID = ? AND UserID = ?";
             try (PreparedStatement stmt = conn.prepareStatement(setSql)) {
-                stmt.setInt(1, imageId);
+                stmt.setInt(1, avatarId);
                 stmt.setInt(2, userId);
                 stmt.executeUpdate();
             }
 
-            // Update user's current avatar
-            String updateUserSql = "UPDATE Users SET current_avatar_id = ? WHERE user_id = ?";
-            try (PreparedStatement stmt = conn.prepareStatement(updateUserSql)) {
-                stmt.setInt(1, imageId);
-                stmt.setInt(2, userId);
-                stmt.executeUpdate();
+            // Update user's avatar URL
+            String getAvatarUrlSql = "SELECT ImageURL FROM user_avatars WHERE AvatarID = ?";
+            String avatarUrl = null;
+            try (PreparedStatement stmt = conn.prepareStatement(getAvatarUrlSql)) {
+                stmt.setInt(1, avatarId);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        avatarUrl = rs.getString("ImageURL");
+                    }
+                }
+            }
+
+            if (avatarUrl != null) {
+                String updateUserSql = "UPDATE users SET AvatarURL = ? WHERE UserID = ?";
+                try (PreparedStatement stmt = conn.prepareStatement(updateUserSql)) {
+                    stmt.setString(1, avatarUrl);
+                    stmt.setInt(2, userId);
+                    stmt.executeUpdate();
+                }
             }
 
             conn.commit();
             return true;
 
         } catch (SQLException e) {
-            System.err.println("Error setting default user image: " + e.getMessage());
+            System.err.println("Error setting default user avatar: " + e.getMessage());
             e.printStackTrace();
 
             if (conn != null) {
@@ -370,18 +374,18 @@ public class ProfileDAOImpl implements ProfileDAO {
     }
 
     @Override
-    public boolean deleteUserImage(Integer imageId) {
-        String sql = "DELETE FROM UserImages WHERE image_id = ?";
+    public boolean deleteUserAvatar(Integer avatarId) {
+        String sql = "DELETE FROM user_avatars WHERE AvatarID = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, imageId);
+            stmt.setInt(1, avatarId);
 
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.err.println("Error deleting user image: " + e.getMessage());
+            System.err.println("Error deleting user avatar: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -390,7 +394,7 @@ public class ProfileDAOImpl implements ProfileDAO {
 
     @Override
     public boolean isUsernameExistsForOthers(String username, Integer excludeUserId) {
-        String sql = "SELECT COUNT(*) FROM Users WHERE username = ? AND user_id != ?";
+        String sql = "SELECT COUNT(*) FROM users WHERE Username = ? AND UserID != ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -414,7 +418,7 @@ public class ProfileDAOImpl implements ProfileDAO {
 
     @Override
     public boolean isEmailExistsForOthers(String email, Integer excludeUserId) {
-        String sql = "SELECT COUNT(*) FROM Users WHERE email = ? AND user_id != ?";
+        String sql = "SELECT COUNT(*) FROM users WHERE Email = ? AND UserID != ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -438,7 +442,7 @@ public class ProfileDAOImpl implements ProfileDAO {
 
     @Override
     public String getUserPasswordHash(Integer userId) {
-        String sql = "SELECT password_hash FROM Users WHERE user_id = ?";
+        String sql = "SELECT PasswordHash FROM users WHERE UserID = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -447,7 +451,7 @@ public class ProfileDAOImpl implements ProfileDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getString("password_hash");
+                    return rs.getString("PasswordHash");
                 }
             }
 
@@ -461,30 +465,18 @@ public class ProfileDAOImpl implements ProfileDAO {
 
     @Override
     public boolean updateLastUpdatedTime(Integer userId) {
-        String sql = "UPDATE Users SET updated_at = GETDATE() WHERE user_id = ?";
-
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, userId);
-
-            return stmt.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            System.err.println("Error updating last updated time: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return false;
+        // Note: updated_at field no longer exists in the database schema
+        // This method is kept for backward compatibility but doesn't do anything
+        return true;
     }
 
     @Override
     public int getProfileCompletionPercentage(Integer userId) {
         String sql = """
-            SELECT username, email, first_name, last_name, phone, date_of_birth, 
-                   avatar_url, email_verified
-            FROM Users
-            WHERE user_id = ?
+            SELECT Username, Email, FirstName, LastName, PhoneNumber, DateOfBirth, 
+                   AvatarURL
+            FROM users
+            WHERE UserID = ?
         """;
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -494,17 +486,16 @@ public class ProfileDAOImpl implements ProfileDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    int totalFields = 8;
+                    int totalFields = 7;
                     int completedFields = 0;
 
-                    if (rs.getString("username") != null) completedFields++;
-                    if (rs.getString("email") != null) completedFields++;
-                    if (rs.getString("first_name") != null) completedFields++;
-                    if (rs.getString("last_name") != null) completedFields++;
-                    if (rs.getString("phone") != null) completedFields++;
-                    if (rs.getDate("date_of_birth") != null) completedFields++;
-                    if (rs.getString("avatar_url") != null) completedFields++;
-                    if (rs.getBoolean("email_verified")) completedFields++;
+                    if (rs.getString("Username") != null) completedFields++;
+                    if (rs.getString("Email") != null) completedFields++;
+                    if (rs.getString("FirstName") != null) completedFields++;
+                    if (rs.getString("LastName") != null) completedFields++;
+                    if (rs.getString("PhoneNumber") != null) completedFields++;
+                    if (rs.getDate("DateOfBirth") != null) completedFields++;
+                    if (rs.getString("AvatarURL") != null) completedFields++;
 
                     return (completedFields * 100) / totalFields;
                 }
@@ -542,75 +533,52 @@ public class ProfileDAOImpl implements ProfileDAO {
     // Helper method to map ResultSet to User entity
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
         User user = new User();
-        user.setId(rs.getInt("user_id"));
-        user.setUsername(rs.getString("username"));
-        user.setEmail(rs.getString("email"));
-        user.setPasswordHash(rs.getString("password_hash"));
-        user.setFirstName(rs.getString("first_name"));
-        user.setLastName(rs.getString("last_name"));
-        user.setPhone(rs.getString("phone"));
+        user.setId(rs.getInt("UserID"));
+        user.setUsername(rs.getString("Username"));
+        user.setEmail(rs.getString("Email"));
+        user.setPasswordHash(rs.getString("PasswordHash"));
+        user.setFirstName(rs.getString("FirstName"));
+        user.setLastName(rs.getString("LastName"));
+        user.setPhoneNumber(rs.getString("PhoneNumber"));
 
-        Date dateOfBirth = rs.getDate("date_of_birth");
+        Date dateOfBirth = rs.getDate("DateOfBirth");
         if (dateOfBirth != null) {
             user.setDateOfBirth(dateOfBirth.toLocalDate());
         }
 
-        user.setAvatarUrl(rs.getString("avatar_url"));
-        user.setIsActive(rs.getBoolean("is_active"));
-        user.setEmailVerified(rs.getBoolean("email_verified"));
+        user.setAvatarUrl(rs.getString("AvatarURL"));
 
-        Timestamp lastLogin = rs.getTimestamp("last_login");
+        Timestamp lastLogin = rs.getTimestamp("LastLogin");
         if (lastLogin != null) {
             user.setLastLogin(lastLogin.toInstant());
         }
 
-        Timestamp createdAt = rs.getTimestamp("created_at");
+        Timestamp createdAt = rs.getTimestamp("CreatedAt");
         if (createdAt != null) {
             user.setCreatedAt(createdAt.toInstant());
-        }
-
-        Timestamp updatedAt = rs.getTimestamp("updated_at");
-        if (updatedAt != null) {
-            user.setUpdatedAt(updatedAt.toInstant());
-        }
-
-        // Map Role
-        Role role = new Role();
-        role.setId(rs.getInt("role_id"));
-        role.setRoleName(rs.getString("role_name"));
-        role.setDescription(rs.getString("description"));
-        user.setRole(role);
-
-        // Map current avatar if exists
-        int imageId = rs.getInt("image_id");
-        if (!rs.wasNull()) {
-            UserImage avatar = new UserImage();
-            avatar.setId(imageId);
-            avatar.setImagePath(rs.getString("image_path"));
-            user.setCurrentAvatar(avatar);
         }
 
         return user;
     }
 
-    // Helper method to map ResultSet to UserImage entity
-    private UserImage mapResultSetToUserImage(ResultSet rs) throws SQLException {
-        UserImage image = new UserImage();
-        image.setId(rs.getInt("image_id"));
-        image.setImageName(rs.getString("image_name"));
-        image.setImagePath(rs.getString("image_path"));
-        image.setImageSize(rs.getLong("image_size"));
-        image.setImageType(rs.getString("image_type"));
-        image.setIsDefault(rs.getBoolean("is_default"));
+    // Helper method to map ResultSet to UserAvatar entity
+    private UserAvatar mapResultSetToUserAvatar(ResultSet rs) throws SQLException {
+        UserAvatar avatar = new UserAvatar();
+        avatar.setId(rs.getInt("AvatarID"));
 
-        Timestamp uploadDate = rs.getTimestamp("upload_date");
-        if (uploadDate != null) {
-            image.setUploadDate(uploadDate.toInstant());
+        // Create a User object with just the ID
+        User user = new User();
+        user.setId(rs.getInt("UserID"));
+        avatar.setUserID(user);
+
+        avatar.setImageURL(rs.getString("ImageURL"));
+        avatar.setIsDefault(rs.getBoolean("IsDefault"));
+
+        Timestamp uploadedAt = rs.getTimestamp("UploadedAt");
+        if (uploadedAt != null) {
+            avatar.setUploadedAt(uploadedAt.toInstant());
         }
 
-        // Note: We don't set the User object here to avoid circular references
-        // The caller should set it if needed
-
-        return image;
+        return avatar;
     }
 }

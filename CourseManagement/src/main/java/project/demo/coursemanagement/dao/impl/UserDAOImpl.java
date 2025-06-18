@@ -17,14 +17,11 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User findUserByUsernameOrEmail(String identifier) {
         String sql = """
-                    SELECT u.user_id, u.username, u.email, u.password_hash,u.first_name,
-                           u.last_name, u.phone, u.date_of_birth, u.avatar_url,
-                           u.is_active, u.email_verified, u.last_login,
-                           u.created_at, u.updated_at,
-                           r.role_id, r.role_name, r.description as role_description
-                    FROM Users u
-                    INNER JOIN Roles r ON u.role_id = r.role_id
-                    WHERE (u.username = ? OR u.email = ?) AND u.is_active = 1
+                    SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName,
+                           u.LastName, u.PhoneNumber, u.DateOfBirth, u.AvatarURL,
+                           u.LastLogin, u.CreatedAt
+                    FROM users u
+                    WHERE (u.Username = ? OR u.Email = ?)
                 """;
         try (Connection connection = DatabaseConnection.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -48,14 +45,11 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User findUserById(Integer id) {
         String sql = """
-                    SELECT u.user_id, u.username, u.email, u.password_hash,
-                           u.first_name, u.last_name, u.phone, u.date_of_birth, u.avatar_url,
-                           u.is_active, u.email_verified, u.last_login,
-                           u.created_at, u.updated_at,
-                           r.role_id, r.role_name, r.description as role_description
-                    FROM Users u
-                    INNER JOIN Roles r ON u.role_id = r.role_id
-                    WHERE u.user_id = ? AND u.is_active = 1
+                    SELECT u.UserID, u.Username, u.Email, u.PasswordHash,
+                           u.FirstName, u.LastName, u.PhoneNumber, u.DateOfBirth, u.AvatarURL,
+                           u.LastLogin, u.CreatedAt
+                    FROM users u
+                    WHERE u.UserID = ?
                 """;
         try (Connection connection = DatabaseConnection.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -77,36 +71,14 @@ public class UserDAOImpl implements UserDAO {
     // Find user by ID including inactive users
     @Override
     public User findUserByIdIncludeInactive(Integer id) {
-        String sql = """
-                    SELECT u.user_id, u.username, u.email, u.password_hash,
-                           u.first_name, u.last_name, u.phone, u.date_of_birth, u.avatar_url,
-                           u.is_active, u.email_verified, u.last_login,
-                           u.created_at, u.updated_at,
-                           r.role_id, r.role_name, r.description as role_description
-                    FROM Users u
-                    INNER JOIN Roles r ON u.role_id = r.role_id
-                    WHERE u.user_id = ?
-                """;
-        try (Connection connection = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setInt(1, id);
-
-            try(ResultSet rs = statement.executeQuery()){
-                if(rs.next()){
-                    return mapResultSetToUser(rs);
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error finding user by ID (including inactive): " + e.getMessage());
-            e.printStackTrace();
-        }
-        return null;
+        // Note: is_active field no longer exists in the database schema
+        // This method is kept for backward compatibility but now behaves the same as findUserById
+        return findUserById(id);
     }
 
     @Override
     public boolean UpdateLastLogin(Integer userId) {
-        String sql = "UPDATE Users SET last_login = GETDATE() WHERE user_id = ?";
+        String sql = "UPDATE users SET LastLogin = GETDATE() WHERE UserID = ?";
 
         try(Connection conn = DatabaseConnection.getInstance().getConnection();
             PreparedStatement statement = conn.prepareStatement(sql)) {
@@ -122,7 +94,15 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT u.user_id, u.username, u.email, u.password_hash, u.first_name, u.last_name, u.phone, u.date_of_birth, u.avatar_url, u.is_active, u.email_verified, u.last_login, u.created_at, u.updated_at, r.role_id, r.role_name, r.description as role_description FROM Users u INNER JOIN Roles r ON u.role_id = r.role_id";
+        String sql = """
+                    SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName,
+                           u.LastName, u.PhoneNumber, u.DateOfBirth, u.AvatarURL,
+                           u.LastLogin, u.CreatedAt,
+                           r.RoleID, r.RoleName
+                    FROM users u
+                    INNER JOIN user_roles ur ON u.UserID = ur.UserID
+                    INNER JOIN roles r ON ur.RoleID = r.RoleID
+                """;
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -139,7 +119,16 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> searchUsersByName(String searchTerm) {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT u.user_id, u.username, u.email, u.password_hash, u.first_name, u.last_name, u.phone, u.date_of_birth, u.avatar_url, u.is_active, u.email_verified, u.last_login, u.created_at, u.updated_at, r.role_id, r.role_name, r.description as role_description FROM Users u INNER JOIN Roles r ON u.role_id = r.role_id WHERE u.first_name LIKE ? OR u.last_name LIKE ? OR u.username LIKE ?";
+        String sql = """
+                    SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName,
+                           u.LastName, u.PhoneNumber, u.DateOfBirth, u.AvatarURL,
+                           u.LastLogin, u.CreatedAt,
+                           r.RoleID, r.RoleName
+                    FROM users u
+                    INNER JOIN user_roles ur ON u.UserID = ur.UserID
+                    INNER JOIN roles r ON ur.RoleID = r.RoleID
+                    WHERE u.FirstName LIKE ? OR u.LastName LIKE ? OR u.Username LIKE ?
+                """;
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -159,18 +148,20 @@ public class UserDAOImpl implements UserDAO {
         }
         return users;
     }
-// get recent logins
+
+    // get recent logins
     @Override
     public List<User> getRecentLogins(int limit) {
         List<User> users = new ArrayList<>();
         String sql = """
-            SELECT TOP (?) u.user_id, u.username, u.email, u.password_hash, u.first_name, u.last_name,
-                   u.phone, u.date_of_birth, u.avatar_url, u.is_active, u.email_verified, u.last_login,
-                   u.created_at, u.updated_at, r.role_id, r.role_name, r.description as role_description
-            FROM Users u
-            INNER JOIN Roles r ON u.role_id = r.role_id
-            WHERE u.last_login IS NOT NULL
-            ORDER BY u.last_login DESC
+            SELECT TOP (?) u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName,
+                   u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt,
+                   r.RoleID, r.RoleName
+            FROM users u
+            INNER JOIN user_roles ur ON u.UserID = ur.UserID
+            INNER JOIN roles r ON ur.RoleID = r.RoleID
+            WHERE u.LastLogin IS NOT NULL
+            ORDER BY u.LastLogin DESC
         """;
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -192,11 +183,19 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> findUsers(String search, String roleName, int offset, int limit) {
         List<User> users = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT u.user_id, u.username, u.email, u.password_hash, u.first_name, u.last_name, u.phone, u.date_of_birth, u.avatar_url, u.is_active, u.email_verified, u.last_login, u.created_at, u.updated_at, r.role_id, r.role_name, r.description as role_description FROM Users u INNER JOIN Roles r ON u.role_id = r.role_id WHERE 1=1");
+        StringBuilder sql = new StringBuilder("""
+            SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName,
+                   u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt,
+                   r.RoleID, r.RoleName
+            FROM users u
+            INNER JOIN user_roles ur ON u.UserID = ur.UserID
+            INNER JOIN roles r ON ur.RoleID = r.RoleID
+            WHERE 1=1
+        """);
         List<Object> params = new ArrayList<>();
 
         if (search != null && !search.trim().isEmpty()) {
-            sql.append(" AND (u.username LIKE ? OR u.email LIKE ? OR u.first_name LIKE ? OR u.last_name LIKE ?)");
+            sql.append(" AND (u.Username LIKE ? OR u.Email LIKE ? OR u.FirstName LIKE ? OR u.LastName LIKE ?)");
             String searchPattern = "%" + search + "%";
             params.add(searchPattern);
             params.add(searchPattern);
@@ -205,11 +204,11 @@ public class UserDAOImpl implements UserDAO {
         }
 
         if (roleName != null && !roleName.trim().isEmpty()) {
-            sql.append(" AND r.role_name = ?");
+            sql.append(" AND r.RoleName = ?");
             params.add(roleName);
         }
 
-        sql.append(" ORDER BY u.user_id");
+        sql.append(" ORDER BY u.UserID");
         sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"); // SQL Server syntax for pagination
 
         params.add(offset);
@@ -236,11 +235,17 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public int countUsers(String search, String roleName) {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM Users u INNER JOIN Roles r ON u.role_id = r.role_id WHERE 1=1");
+        StringBuilder sql = new StringBuilder("""
+            SELECT COUNT(*) 
+            FROM users u 
+            INNER JOIN user_roles ur ON u.UserID = ur.UserID 
+            INNER JOIN roles r ON ur.RoleID = r.RoleID 
+            WHERE 1=1
+        """);
         List<Object> params = new ArrayList<>();
 
         if (search != null && !search.trim().isEmpty()) {
-            sql.append(" AND (u.username LIKE ? OR u.email LIKE ? OR u.first_name LIKE ? OR u.last_name LIKE ?)");
+            sql.append(" AND (u.Username LIKE ? OR u.Email LIKE ? OR u.FirstName LIKE ? OR u.LastName LIKE ?)");
             String searchPattern = "%" + search + "%";
             params.add(searchPattern);
             params.add(searchPattern);
@@ -249,7 +254,7 @@ public class UserDAOImpl implements UserDAO {
         }
 
         if (roleName != null && !roleName.trim().isEmpty()) {
-            sql.append(" AND r.role_name = ?");
+            sql.append(" AND r.RoleName = ?");
             params.add(roleName);
         }
 
@@ -274,25 +279,29 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public boolean createUser(User user) {
-        String sql = "INSERT INTO Users (username, email, password_hash, first_name, last_name, phone, date_of_birth, avatar_url, role_id, is_active, email_verified, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (Username, Email, PasswordHash, FirstName, LastName, PhoneNumber, DateOfBirth, AvatarURL, CreatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, GETDATE())";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPasswordHash());
             stmt.setString(4, user.getFirstName());
             stmt.setString(5, user.getLastName());
-            stmt.setString(6, user.getPhone());
+            stmt.setString(6, user.getPhoneNumber());
             stmt.setObject(7, user.getDateOfBirth()); // LocalDate
             stmt.setString(8, user.getAvatarUrl());
-            stmt.setInt(9, user.getRole().getId()); // Assuming Role object has an ID
-            stmt.setBoolean(10, user.getIsActive());
-            stmt.setBoolean(11, user.getEmailVerified());
-            stmt.setTimestamp(12, Timestamp.from(Instant.now())); // created_at
-            stmt.setTimestamp(13, Timestamp.from(Instant.now())); // updated_at
 
             int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        user.setId(rs.getInt(1));
+                    }
+                }
+            }
+
             return rowsAffected > 0;
         } catch (SQLException e) {
             System.err.println("Error creating user: " + e.getMessage());
@@ -303,7 +312,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public boolean updateUser(User user) {
-        String sql = "UPDATE Users SET username = ?, email = ?, password_hash = ?, first_name = ?, last_name = ?, phone = ?, date_of_birth = ?, avatar_url = ?, role_id = ?, is_active = ?, email_verified = ?, updated_at = ? WHERE user_id = ?";
+        String sql = "UPDATE users SET Username = ?, Email = ?, PasswordHash = ?, FirstName = ?, LastName = ?, PhoneNumber = ?, DateOfBirth = ?, AvatarURL = ? WHERE UserID = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -312,14 +321,10 @@ public class UserDAOImpl implements UserDAO {
             stmt.setString(3, user.getPasswordHash());
             stmt.setString(4, user.getFirstName());
             stmt.setString(5, user.getLastName());
-            stmt.setString(6, user.getPhone());
+            stmt.setString(6, user.getPhoneNumber());
             stmt.setObject(7, user.getDateOfBirth());
             stmt.setString(8, user.getAvatarUrl());
-            stmt.setInt(9, user.getRole().getId());
-            stmt.setBoolean(10, user.getIsActive());
-            stmt.setBoolean(11, user.getEmailVerified());
-            stmt.setTimestamp(12, Timestamp.from(Instant.now())); // updated_at
-            stmt.setInt(13, user.getId());
+            stmt.setInt(9, user.getId());
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -332,7 +337,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public boolean deleteUser(int userId) {
-        String sql = "DELETE FROM Users WHERE user_id = ?";
+        String sql = "DELETE FROM users WHERE UserID = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -349,46 +354,32 @@ public class UserDAOImpl implements UserDAO {
     // Retrieve user details from ResultSet and map to User object
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
         User user = new User();
-        user.setId(rs.getInt("user_id"));
-        user.setUsername(rs.getString("username"));
-        user.setEmail(rs.getString("email"));
-        user.setPasswordHash(rs.getString("password_hash"));
-        user.setFirstName(rs.getString("first_name"));
-        user.setLastName(rs.getString("last_name"));
-        user.setPhone(rs.getString("phone"));
-        user.setDateOfBirth(rs.getObject("date_of_birth", LocalDate.class));
-        user.setAvatarUrl(rs.getString("avatar_url"));
-        user.setIsActive(rs.getBoolean("is_active"));
-        user.setEmailVerified(rs.getBoolean("email_verified"));
-        Timestamp lastLoginTs = rs.getTimestamp("last_login");
+        user.setId(rs.getInt("UserID"));
+        user.setUsername(rs.getString("Username"));
+        user.setEmail(rs.getString("Email"));
+        user.setPasswordHash(rs.getString("PasswordHash"));
+        user.setFirstName(rs.getString("FirstName"));
+        user.setLastName(rs.getString("LastName"));
+        user.setPhoneNumber(rs.getString("PhoneNumber"));
+        user.setDateOfBirth(rs.getObject("DateOfBirth", LocalDate.class));
+        user.setAvatarUrl(rs.getString("AvatarURL"));
+
+        Timestamp lastLoginTs = rs.getTimestamp("LastLogin");
         if (lastLoginTs != null) {
             user.setLastLogin(lastLoginTs.toInstant());
         }
 
-        Timestamp createdAtTs = rs.getTimestamp("created_at");
+        Timestamp createdAtTs = rs.getTimestamp("CreatedAt");
         if (createdAtTs != null) {
             user.setCreatedAt(createdAtTs.toInstant());
         }
-
-        Timestamp updatedAtTs = rs.getTimestamp("updated_at");
-        if (updatedAtTs != null) {
-            user.setUpdatedAt(updatedAtTs.toInstant());
-        }
-
-        // Map Role
-        Role role = new Role();
-        role.setId(rs.getInt("role_id"));
-        role.setRoleName(rs.getString("role_name"));
-        role.setDescription(rs.getString("role_description"));
-
-        user.setRole(role);
 
         return user;
     }
 
     @Override
     public boolean updatePassword(Integer userId, String newPassword) {
-        String sql = "UPDATE Users SET password_hash = ?, updated_at = GETDATE() WHERE user_id = ?";
+        String sql = "UPDATE users SET PasswordHash = ? WHERE UserID = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement statement = conn.prepareStatement(sql)) {
 
@@ -403,7 +394,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public boolean updateAndUploadAvatar(Integer userId, String avatarPath) {
-        String sql = "UPDATE Users SET avatar_url = ? WHERE user_id = ?";
+        String sql = "UPDATE users SET AvatarURL = ? WHERE UserID = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement statement = conn.prepareStatement(sql)) {
 

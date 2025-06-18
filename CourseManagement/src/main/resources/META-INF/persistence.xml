@@ -9,7 +9,7 @@
         <!-- Entity classes -->
         <class>project.demo.coursemanagement.entities.User</class>
         <class>project.demo.coursemanagement.entities.Role</class>
-        <class>project.demo.coursemanagement.entities.UserImage</class>
+        <class>project.demo.coursemanagement.entities.UserAvatar</class>
 
 
         <properties>

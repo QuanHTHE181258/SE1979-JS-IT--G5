@@ -560,7 +560,7 @@ public class ProfileServlet extends HttpServlet {
             if (updateRequest.getEmail() != null) user.setEmail(updateRequest.getEmail());
             if (updateRequest.getFirstName() != null) user.setFirstName(updateRequest.getFirstName());
             if (updateRequest.getLastName() != null) user.setLastName(updateRequest.getLastName());
-            if (updateRequest.getPhone() != null) user.setPhone(updateRequest.getPhone());
+            if (updateRequest.getPhone() != null) user.setPhoneNumber(updateRequest.getPhone());
             if (updateRequest.getDateOfBirth() != null) {
                 try {
                     LocalDate dob = LocalDate.parse(updateRequest.getDateOfBirth(),
