@@ -141,19 +141,47 @@ public class LoginServlet extends HttpServlet {
         String userRole = SessionUtil.getUserRole(request);
 
         if (userRole != null) {
-            switch (userRole) {
-                case "ADMIN":
-                    response.sendRedirect(contextPath + "/admin/dashboard");
-                    break;
-                case "TEACHER":
-                    response.sendRedirect(contextPath + "/teacher/dashboard");
-                    break;
-                case "USER": // Student
-                    response.sendRedirect(contextPath + "/student-dashboard");
-                    break;
-                default:
-                    response.sendRedirect(contextPath + "/student-dashboard");
-                    break;
+            try {
+                // Try to parse as role ID
+                int roleId = Integer.parseInt(userRole);
+                switch (roleId) {
+                    case 5: // Admin
+                        response.sendRedirect(contextPath + "/admin/dashboard");
+                        break;
+                    case 2: // Teacher
+                        response.sendRedirect(contextPath + "/teacher/dashboard");
+                        break;
+                    case 1: // Student
+                        response.sendRedirect(contextPath + "/student-dashboard");
+                        break;
+                    case 3: // CourseManager
+                        response.sendRedirect(contextPath + "/course-manager/dashboard");
+                        break;
+                    case 4: // UserManager
+                        response.sendRedirect(contextPath + "/user-manager/dashboard");
+                        break;
+                    case 0: // Guest
+                    default:
+                        response.sendRedirect(contextPath + "/student-dashboard");
+                        break;
+                }
+            } catch (NumberFormatException e) {
+                // For backward compatibility, handle role names
+                switch (userRole) {
+                    case "ADMIN":
+                        response.sendRedirect(contextPath + "/admin/dashboard");
+                        break;
+                    case "TEACHER":
+                        response.sendRedirect(contextPath + "/teacher/dashboard");
+                        break;
+                    case "USER":
+                    case "STUDENT":
+                        response.sendRedirect(contextPath + "/student-dashboard");
+                        break;
+                    default:
+                        response.sendRedirect(contextPath + "/student-dashboard");
+                        break;
+                }
             }
         } else {
             // Fallback to general dashboard

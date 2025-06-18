@@ -453,8 +453,8 @@
 <script>
     // Role descriptions
     const roleDescriptions = {
-        'USER': 'As a Student, you can enroll in courses, access learning materials, submit assignments, and track your progress.',
-        'TEACHER': 'As a Teacher, you can create courses, manage students, upload materials, create assignments, and grade submissions.'
+        '1': 'As a Student, you can enroll in courses, access learning materials, submit assignments, and track your progress.',
+        '2': 'As a Teacher, you can create courses, manage students, upload materials, create assignments, and grade submissions.'
     };
 
     // Update role description

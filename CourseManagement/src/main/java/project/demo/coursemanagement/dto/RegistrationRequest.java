@@ -37,7 +37,7 @@ public class RegistrationRequest {
         // Initialize with default values
         this.agreeToTerms = false;
         this.subscribeNewsletter = false;
-        this.role = "USER"; // Default role
+        this.role = "1"; // Default role (Student, ID 1)
     }
 
     public RegistrationRequest(String username, String email, String password,
@@ -125,7 +125,7 @@ public class RegistrationRequest {
     }
 
     public void setRole(String role) {
-        this.role = role != null ? role.trim().toUpperCase() : "USER";
+        this.role = role != null ? role.trim() : "1";
     }
 
     public boolean isAgreeToTerms() {
@@ -218,12 +218,12 @@ public class RegistrationRequest {
 
     // Check if this is a teacher registration
     public boolean isTeacherRegistration() {
-        return "TEACHER".equalsIgnoreCase(role);
+        return "2".equals(role) || "TEACHER".equalsIgnoreCase(role);
     }
 
     // Check if this is a student registration
     public boolean isStudentRegistration() {
-        return "USER".equalsIgnoreCase(role) || role == null;
+        return "1".equals(role) || "USER".equalsIgnoreCase(role) || "STUDENT".equalsIgnoreCase(role) || role == null;
     }
 
     // Validate the registration request

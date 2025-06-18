@@ -34,9 +34,17 @@ public class RegisterService {
      * Register a new user in the system
      */
     public boolean registerUser(User user) {
+        return registerUser(user, 1); // Default to Student role (ID 1)
+    }
+
+    /**
+     * Register a new user in the system with a specific role
+     */
+    public boolean registerUser(User user, Integer roleId) {
         System.out.println("[DEBUG_LOG] RegisterService.registerUser: Starting user registration transaction");
         System.out.println("[DEBUG_LOG] RegisterService.registerUser: User details - Username: " + (user != null ? user.getUsername() : "null") + 
-                          ", Email: " + (user != null ? user.getEmail() : "null"));
+                          ", Email: " + (user != null ? user.getEmail() : "null") +
+                          ", Role ID: " + roleId);
 
         try {
             // Validate user object
@@ -54,16 +62,27 @@ public class RegisterService {
             System.out.println("[DEBUG_LOG] RegisterService.registerUser: Transaction in progress - Creating user in database");
             System.out.println("[DEBUG_LOG] RegisterService.registerUser: Transaction data - " +
                     "Username: " + user.getUsername() +
-                    ", Email: " + user.getEmail());
+                    ", Email: " + user.getEmail() +
+                    ", Role ID: " + roleId);
 
             // Create user in database
             boolean success = registerDAO.createUser(user);
+
+            // Assign the specified role to the user
+            boolean rolesAssigned = false;
+            if (success) {
+                rolesAssigned = registerDAO.assignRole(user, roleId);
+                System.out.println("[DEBUG_LOG] RegisterService.registerUser: Role assignment - " +
+                        "User ID: " + user.getId() +
+                        ", Role ID: " + roleId +
+                        ", Success: " + rolesAssigned);
+            }
 
             if (success) {
                 System.out.println("[DEBUG_LOG] RegisterService.registerUser: Transaction successful - User created with ID: " + user.getId());
 
                 // Log registration event (could be stored in audit table)
-                logRegistrationEvent(user, "SUCCESS", "User registered successfully");
+                logRegistrationEvent(user, "SUCCESS", "User registered successfully with role ID: " + roleId);
 
             } else {
                 System.err.println("[DEBUG_LOG] RegisterService.registerUser: Transaction failed - Database operation returned false");
@@ -234,22 +253,37 @@ public class RegisterService {
      * Check if role registration is currently allowed
      */
     private boolean isRoleRegistrationAllowed(String role) {
-        // Business logic: Only allow USER and TEACHER self-registration
-        // ADMIN and GUEST roles should not be available for self-registration
+        // Business logic: Only allow Student (1) and Teacher (2) self-registration
+        // Other roles should not be available for self-registration
 
         if (role == null) {
-            return true; // Default to USER role
+            return true; // Default to Student role
         }
 
-        switch (role.toUpperCase()) {
-            case "USER":
-            case "TEACHER":
-                return true;
-            case "ADMIN":
-            case "GUEST":
-                return false; // These roles require admin approval
-            default:
-                return false; // Unknown roles not allowed
+        try {
+            int roleId = Integer.parseInt(role);
+            switch (roleId) {
+                case 1: // Student
+                case 2: // Teacher
+                    return true;
+                case 0: // Guest
+                case 3: // CourseManager
+                case 4: // UserManager
+                case 5: // Admin
+                    return false; // These roles require admin approval
+                default:
+                    return false; // Unknown roles not allowed
+            }
+        } catch (NumberFormatException e) {
+            // If role is not a number, try to match by name for backward compatibility
+            switch (role.toUpperCase()) {
+                case "STUDENT":
+                    return true;
+                case "TEACHER":
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 
@@ -298,9 +332,17 @@ public class RegisterService {
      * Send welcome email to newly registered user
      */
     public void sendWelcomeEmail(User user) {
+        sendWelcomeEmail(user, 1); // Default to Student role (ID 1)
+    }
+
+    /**
+     * Send welcome email to newly registered user with specified role
+     */
+    public void sendWelcomeEmail(User user, Integer roleId) {
         System.out.println("[DEBUG_LOG] RegisterService.sendWelcomeEmail: Starting email transaction");
         System.out.println("[DEBUG_LOG] RegisterService.sendWelcomeEmail: Transaction data - Recipient: " + 
-                          (user != null ? user.getEmail() : "null"));
+                          (user != null ? user.getEmail() : "null") +
+                          ", Role ID: " + roleId);
 
         try {
             if (user == null) {
@@ -316,7 +358,7 @@ public class RegisterService {
             // In a real implementation, this would use an email service
             // For now, we'll just log the action
             System.out.println("[DEBUG_LOG] RegisterService.sendWelcomeEmail: Transaction in progress - Generating email content");
-            String emailContent = generateWelcomeEmailContent(user);
+            String emailContent = generateWelcomeEmailContent(user, roleId);
             System.out.println("[DEBUG_LOG] RegisterService.sendWelcomeEmail: Transaction detail - Email content generated, length: " + 
                               emailContent.length());
 
@@ -338,6 +380,11 @@ public class RegisterService {
 
     // Generate welcome email content based on user role
     private String generateWelcomeEmailContent(User user) {
+        return generateWelcomeEmailContent(user, 1); // Default to Student role (ID 1)
+    }
+
+    // Generate welcome email content based on user role with specified role ID
+    private String generateWelcomeEmailContent(User user, Integer roleId) {
         StringBuilder content = new StringBuilder();
 
         content.append("Dear ").append(user.getFirstName()).append(" ").append(user.getLastName()).append(",\n\n");
@@ -345,14 +392,24 @@ public class RegisterService {
         content.append("Your account has been successfully created with the following details:\n");
         content.append("Username: ").append(user.getUsername()).append("\n");
         content.append("Email: ").append(user.getEmail()).append("\n");
-        content.append("Role: Student\n\n"); // Default to Student role
 
-        // Since we can't directly access the role, we'll default to student content
-        content.append("As a student, you can now:\n");
-        content.append("- Browse and enroll in courses\n");
-        content.append("- Access course materials\n");
-        content.append("- Submit assignments\n");
-        content.append("- Track your learning progress\n\n");
+        // Add role-specific content based on the role ID
+        if (roleId == 2) { // Teacher role
+            content.append("Role: Teacher\n\n");
+            content.append("As a teacher, you can now:\n");
+            content.append("- Create and manage courses\n");
+            content.append("- Upload course materials\n");
+            content.append("- Create assignments and quizzes\n");
+            content.append("- Grade student submissions\n");
+            content.append("- Communicate with students\n\n");
+        } else { // Default to Student role
+            content.append("Role: Student\n\n");
+            content.append("As a student, you can now:\n");
+            content.append("- Browse and enroll in courses\n");
+            content.append("- Access course materials\n");
+            content.append("- Submit assignments\n");
+            content.append("- Track your learning progress\n\n");
+        }
 
         content.append("To get started, please log in to your account and explore the available features.\n\n");
         content.append("If you have any questions, please don't hesitate to contact our support team.\n\n");

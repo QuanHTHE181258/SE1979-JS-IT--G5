@@ -46,9 +46,9 @@ public class SessionUtil {
 
         // Store role information
         if (primaryRole != null) {
-            session.setAttribute(USER_ROLE_SESSION_KEY, primaryRole.getRoleName());
+            session.setAttribute(USER_ROLE_SESSION_KEY, primaryRole.getId().toString());
         } else {
-            session.setAttribute(USER_ROLE_SESSION_KEY, "USER"); // Default role
+            session.setAttribute(USER_ROLE_SESSION_KEY, "1"); // Default role (Student, ID 1)
         }
 
         session.setAttribute(USER_ROLES_SESSION_KEY, roles);
@@ -125,24 +125,77 @@ public class SessionUtil {
     }
 
     // Check if user has a specific role (using primary role)
-    public static boolean hasRole(HttpServletRequest request, String roleName) {
-        String userRole = getUserRole(request);
-        return userRole != null && userRole.equals(roleName);
-    }
-
-    // Check if user has any of the specified roles
-    public static boolean hasAnyRole(HttpServletRequest request, String... roleNames) {
-        if (roleNames == null || roleNames.length == 0) {
-            return false;
-        }
-
+    public static boolean hasRole(HttpServletRequest request, String roleIdOrName) {
         String userRole = getUserRole(request);
         if (userRole == null) {
             return false;
         }
 
-        for (String roleName : roleNames) {
-            if (userRole.equals(roleName)) {
+        // Direct match (works for both role IDs and names)
+        if (userRole.equals(roleIdOrName)) {
+            return true;
+        }
+
+        // For backward compatibility, try to match role names to IDs
+        try {
+            // If roleIdOrName is a name and userRole is an ID
+            int roleId = Integer.parseInt(userRole);
+            switch (roleIdOrName) {
+                case "ADMIN":
+                    return roleId == 5;
+                case "TEACHER":
+                    return roleId == 2;
+                case "USER":
+                case "STUDENT":
+                    return roleId == 1;
+                case "COURSE_MANAGER":
+                    return roleId == 3;
+                case "USER_MANAGER":
+                    return roleId == 4;
+                case "GUEST":
+                    return roleId == 0;
+            }
+        } catch (NumberFormatException e) {
+            // If userRole is a name and roleIdOrName is an ID
+            try {
+                int roleId = Integer.parseInt(roleIdOrName);
+                switch (userRole) {
+                    case "ADMIN":
+                        return roleId == 5;
+                    case "TEACHER":
+                        return roleId == 2;
+                    case "USER":
+                    case "STUDENT":
+                        return roleId == 1;
+                    case "COURSE_MANAGER":
+                        return roleId == 3;
+                    case "USER_MANAGER":
+                        return roleId == 4;
+                    case "GUEST":
+                        return roleId == 0;
+                }
+            } catch (NumberFormatException ex) {
+                // Both are names, but different names
+                if (userRole.equals("USER") && roleIdOrName.equals("STUDENT")) {
+                    return true;
+                }
+                if (userRole.equals("STUDENT") && roleIdOrName.equals("USER")) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    // Check if user has any of the specified roles
+    public static boolean hasAnyRole(HttpServletRequest request, String... roleIdsOrNames) {
+        if (roleIdsOrNames == null || roleIdsOrNames.length == 0) {
+            return false;
+        }
+
+        for (String roleIdOrName : roleIdsOrNames) {
+            if (hasRole(request, roleIdOrName)) {
                 return true;
             }
         }
@@ -161,16 +214,26 @@ public class SessionUtil {
             return false;
         }
 
-        // Convert user roles to a set of role names for easier checking
-        java.util.Set<String> userRoleNames = new java.util.HashSet<>();
+        // Convert user roles to a set of role IDs for easier checking
+        java.util.Set<String> userRoleIds = new java.util.HashSet<>();
         for (Role role : userRoles) {
-            userRoleNames.add(role.getRoleName());
+            userRoleIds.add(role.getId().toString());
         }
 
         // Check if all specified roles are in the user's roles
         for (String roleName : roleNames) {
-            if (!userRoleNames.contains(roleName)) {
-                return false;
+            if (!userRoleIds.contains(roleName)) {
+                // For backward compatibility, try to match by role name
+                boolean foundByName = false;
+                for (Role role : userRoles) {
+                    if (role.getRoleName().equals(roleName)) {
+                        foundByName = true;
+                        break;
+                    }
+                }
+                if (!foundByName) {
+                    return false;
+                }
             }
         }
 
@@ -178,23 +241,27 @@ public class SessionUtil {
     }
 
     public static boolean isAdmin(HttpServletRequest request) {
-        return hasRole(request, "ADMIN");
+        return hasRole(request, "5"); // Admin role ID
     }
 
     public static boolean isTeacher(HttpServletRequest request) {
-        return hasRole(request, "TEACHER");
+        return hasRole(request, "2"); // Teacher role ID
     }
 
     public static boolean isStudent(HttpServletRequest request) {
-        return hasRole(request, "USER");
+        return hasRole(request, "1"); // Student role ID
     }
 
     public static boolean isUserManager(HttpServletRequest request) {
-        return hasRole(request, "USER_MANAGER");
+        return hasRole(request, "4"); // UserManager role ID
     }
 
     public static boolean isCourseManager(HttpServletRequest request) {
-        return hasRole(request, "COURSE_MANAGER");
+        return hasRole(request, "3"); // CourseManager role ID
+    }
+
+    public static boolean isGuest(HttpServletRequest request) {
+        return hasRole(request, "0"); // Guest role ID
     }
 
    // Clear user session

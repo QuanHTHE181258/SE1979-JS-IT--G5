@@ -56,6 +56,35 @@ public class RegisterDAOImpl implements RegisterDAO {
         return false;
     }
 
+    public boolean assignDefaultRoles(User user) {
+        // Default to Student role (ID 1)
+        return assignRole(user, 1);
+    }
+
+    @Override
+    public boolean assignRole(User user, Integer roleId) {
+        String sql = """
+            INSERT INTO user_roles (UserID, RoleID)
+            VALUES (?, ?)
+        """;
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, user.getId()); // Set user ID
+            stmt.setInt(2, roleId); // Set role ID
+
+            int result = stmt.executeUpdate();
+            return result > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error assigning role: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     // Check if username exists
     @Override
     public boolean isUsernameExists(String username) {
@@ -210,8 +239,7 @@ public class RegisterDAOImpl implements RegisterDAO {
         String sql = """
             SELECT RoleID, RoleName 
             FROM roles 
-            WHERE RoleName IN ('USER', 'TEACHER')
-            ORDER BY RoleName
+            WHERE RoleID = 1  -- Student role (ID 1)
         """;
 
         List<Role> roles = new ArrayList<>();

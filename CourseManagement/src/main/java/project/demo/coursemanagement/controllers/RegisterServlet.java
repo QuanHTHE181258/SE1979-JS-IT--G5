@@ -112,8 +112,24 @@ public class RegisterServlet extends HttpServlet {
             // Create user entity
             User user = createUserFromRequest(registrationRequest);
 
-            // Register user
-            boolean registrationSuccess = registerService.registerUser(user);
+            // Get selected role
+            Integer roleId = 1; // Default to Student role (ID 1)
+            try {
+                if (registrationRequest.getRole() != null && !registrationRequest.getRole().isEmpty()) {
+                    roleId = Integer.parseInt(registrationRequest.getRole());
+                    System.out.println("Selected role ID: " + roleId);
+                }
+            } catch (NumberFormatException e) {
+                // Handle legacy role names
+                String roleName = registrationRequest.getRole();
+                if ("TEACHER".equalsIgnoreCase(roleName)) {
+                    roleId = 2; // Teacher role ID
+                }
+                System.out.println("Converted role name '" + roleName + "' to role ID: " + roleId);
+            }
+
+            // Register user with the selected role
+            boolean registrationSuccess = registerService.registerUser(user, roleId);
 
             if (registrationSuccess) {
                 // Registration successful
@@ -121,7 +137,7 @@ public class RegisterServlet extends HttpServlet {
 
                 // Send welcome email (optional)
                 try {
-                    registerService.sendWelcomeEmail(user);
+                    registerService.sendWelcomeEmail(user, roleId);
                 } catch (Exception e) {
                     System.err.println("Failed to send welcome email: " + e.getMessage());
                     // Don't fail registration if email fails
@@ -241,10 +257,10 @@ public class RegisterServlet extends HttpServlet {
      * Set role options for the form
      */
     private void setRoleOptions(HttpServletRequest request) {
-        // Only allow USER and TEACHER for self-registration
+        // Only allow Student (1) and Teacher (2) for self-registration
         java.util.Map<String, String> roleOptions = new java.util.LinkedHashMap<>();
-        roleOptions.put("USER", "Student");
-        roleOptions.put("TEACHER", "Teacher");
+        roleOptions.put("1", "Student");
+        roleOptions.put("2", "Teacher");
         request.setAttribute("roleOptions", roleOptions);
     }
 
@@ -258,19 +274,47 @@ public class RegisterServlet extends HttpServlet {
         String userRole = SessionUtil.getUserRole(request);
 
         if (userRole != null) {
-            switch (userRole) {
-                case "ADMIN":
-                    response.sendRedirect(contextPath + "/admin/dashboard");
-                    break;
-                case "TEACHER":
-                    response.sendRedirect(contextPath + "/teacher/dashboard");
-                    break;
-                case "USER":
-                    response.sendRedirect(contextPath + "/student-dashboard");
-                    break;
-                default:
-                    response.sendRedirect(contextPath + "/student-dashboard");
-                    break;
+            try {
+                // Try to parse as role ID
+                int roleId = Integer.parseInt(userRole);
+                switch (roleId) {
+                    case 5: // Admin
+                        response.sendRedirect(contextPath + "/admin/dashboard");
+                        break;
+                    case 2: // Teacher
+                        response.sendRedirect(contextPath + "/teacher/dashboard");
+                        break;
+                    case 1: // Student
+                        response.sendRedirect(contextPath + "/student-dashboard");
+                        break;
+                    case 3: // CourseManager
+                        response.sendRedirect(contextPath + "/course-manager/dashboard");
+                        break;
+                    case 4: // UserManager
+                        response.sendRedirect(contextPath + "/user-manager/dashboard");
+                        break;
+                    case 0: // Guest
+                    default:
+                        response.sendRedirect(contextPath + "/student-dashboard");
+                        break;
+                }
+            } catch (NumberFormatException e) {
+                // For backward compatibility, handle role names
+                switch (userRole) {
+                    case "ADMIN":
+                        response.sendRedirect(contextPath + "/admin/dashboard");
+                        break;
+                    case "TEACHER":
+                        response.sendRedirect(contextPath + "/teacher/dashboard");
+                        break;
+                    case "USER":
+                    case "STUDENT":
+                        response.sendRedirect(contextPath + "/student-dashboard");
+                        break;
+                    default:
+                        response.sendRedirect(contextPath + "/student-dashboard");
+                        break;
+                }
             }
         } else {
             response.sendRedirect(contextPath + "/student-dashboard");

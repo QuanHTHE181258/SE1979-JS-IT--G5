@@ -397,7 +397,17 @@
         </div>
 
         <h3>${user.firstName} ${user.lastName}
-          <span class="role-badge">${sessionScope.userRole}</span>
+          <span class="role-badge">
+            <c:choose>
+              <c:when test="${sessionScope.userRole == '0'}">Guest</c:when>
+              <c:when test="${sessionScope.userRole == '1'}">Student</c:when>
+              <c:when test="${sessionScope.userRole == '2'}">Teacher</c:when>
+              <c:when test="${sessionScope.userRole == '3'}">Course Manager</c:when>
+              <c:when test="${sessionScope.userRole == '4'}">User Manager</c:when>
+              <c:when test="${sessionScope.userRole == '5'}">Admin</c:when>
+              <c:otherwise>${sessionScope.userRole}</c:otherwise>
+            </c:choose>
+          </span>
         </h3>
 
         <div class="completion-badge">
@@ -496,7 +506,7 @@
             <div class="stat-label">Last Login</div>
           </div>
 
-          <c:if test="${sessionScope.userRole == 'USER'}">
+          <c:if test="${sessionScope.userRole == '1' || sessionScope.userRole == 'USER' || sessionScope.userRole == 'STUDENT'}">
             <div class="stat-card">
               <div class="stat-icon" style="color: #fa709a;">
                 <i class="fas fa-book"></i>
@@ -514,7 +524,7 @@
             </div>
           </c:if>
 
-          <c:if test="${sessionScope.userRole == 'TEACHER'}">
+          <c:if test="${sessionScope.userRole == '2' || sessionScope.userRole == 'TEACHER'}">
             <div class="stat-card">
               <div class="stat-icon" style="color: #fa709a;">
                 <i class="fas fa-chalkboard-teacher"></i>
