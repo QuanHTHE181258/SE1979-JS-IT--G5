@@ -15,16 +15,6 @@ import org.hibernate.annotations.Nationalized;
 @Entity
 @Table(name = "roles")
 public class Role {
-    // Transient field for backward compatibility
-    private transient String description;
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
     @Id
     @Column(name = "RoleID", nullable = false)
     private Integer id;

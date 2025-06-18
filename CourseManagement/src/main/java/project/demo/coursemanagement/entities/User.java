@@ -19,63 +19,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "users")
 public class User {
-    // Transient fields for backward compatibility
-    private transient Role role;
-    private transient UserImage currentAvatar;
-    private transient Boolean isActive;
-    private transient Boolean emailVerified;
-    private transient Instant updatedAt;
-    private transient String phone; // Alias for phoneNumber
-
-    // Getters and setters for backward compatibility
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public UserImage getCurrentAvatar() {
-        return currentAvatar;
-    }
-
-    public void setCurrentAvatar(UserImage currentAvatar) {
-        this.currentAvatar = currentAvatar;
-    }
-
-    public Boolean getIsActive() {
-        return isActive != null ? isActive : true;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public Boolean getEmailVerified() {
-        return emailVerified != null ? emailVerified : false;
-    }
-
-    public void setEmailVerified(Boolean emailVerified) {
-        this.emailVerified = emailVerified;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public String getPhone() {
-        return getPhoneNumber();
-    }
-
-    public void setPhone(String phone) {
-        setPhoneNumber(phone);
-    }
     @Id
     @Column(name = "UserID", nullable = false)
     private Integer id;
