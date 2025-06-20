@@ -57,7 +57,8 @@ public class HomeDAOimp implements HomeDAO {
             course.setCourseID(rs.getInt("CourseID"));
             course.setCourseTitle(rs.getString("Title"));
             course.setCourseDescription(rs.getString("Description"));
-            course.setTeacherName(rs.getString("Name"));
+            course.setTeacherName(rs.getString("Username"));
+            course.setRating(rs.getDouble("Rating"));
             course.setCategories(rs.getString("Name"));
             course.setPrice(rs.getBigDecimal("Price"));
             course.setCourseStatus(rs.getString("Status"));

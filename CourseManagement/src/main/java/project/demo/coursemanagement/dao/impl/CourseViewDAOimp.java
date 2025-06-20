@@ -38,7 +38,7 @@ public class CourseViewDAOimp implements CourseViewDAO {
                 CourseDTO course = extractCourseFromResultSet(rs);
                 courses.add(course);
             }
-            System.out.println("Number of courses retrieved: " + courses.size());
+            System.out.println("Number of courses retrieved in view-courses: " + courses.size());
         } catch (SQLException e) {
             e.printStackTrace();
             System.err.println("Error retrieving courses: " + e.getMessage());
@@ -65,7 +65,7 @@ public class CourseViewDAOimp implements CourseViewDAO {
                         FROM courses c
                         JOIN users u ON c.InstructorID = u.UserID
                         JOIN categories ct on ct.CategoryID = c.CategoryID\s
-                        ORDER BY c.course_code
+                        ORDER BY c.CourseID
                         OFFSET ? ROWS
                         FETCH NEXT ? ROWS ONLY
         """;
@@ -78,8 +78,10 @@ public class CourseViewDAOimp implements CourseViewDAO {
                 CourseDTO course = extractCourseFromResultSet(rs);
                 courses.add(course);
             }
+            System.out.println("Number of courses pages retrieved in view-courses : " + courses.size());
         } catch (SQLException e) {
             e.printStackTrace();
+            System.err.println("Error retrieving courses: " + e.getMessage());
         } finally {
             try {
                 if (rs != null) rs.close();
@@ -120,7 +122,8 @@ public class CourseViewDAOimp implements CourseViewDAO {
             course.setCourseID(rs.getInt("CourseID"));
             course.setCourseTitle(rs.getString("Title"));
             course.setCourseDescription(rs.getString("Description"));
-            course.setTeacherName(rs.getString("Name"));
+            course.setTeacherName(rs.getString("Username"));
+            course.setRating(rs.getDouble("Rating"));
             course.setCategories(rs.getString("Name"));
             course.setPrice(rs.getBigDecimal("Price"));
             course.setCourseStatus(rs.getString("Status"));
