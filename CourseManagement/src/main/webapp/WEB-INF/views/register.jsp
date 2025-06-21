@@ -359,13 +359,13 @@
                     <div class="form-floating">
                         <input type="tel"
                                class="form-control"
-                               id="phone"
-                               name="phone"
+                               id="phoneNumber"
+                               name="phoneNumber"
                                placeholder="Phone Number"
-                               value="${formData.phone}"
+                               value="${formData.phoneNumber}"
                                pattern="[+]?[0-9]{10,15}"
                                title="Phone number must be 10-15 digits">
-                        <label for="phone">
+                        <label for="phoneNumber">
                             <i class="fas fa-phone me-2"></i>Phone (Optional)
                         </label>
                     </div>
@@ -453,8 +453,8 @@
 <script>
     // Role descriptions
     const roleDescriptions = {
-        'USER': 'As a Student, you can enroll in courses, access learning materials, submit assignments, and track your progress.',
-        'TEACHER': 'As a Teacher, you can create courses, manage students, upload materials, create assignments, and grade submissions.'
+        '1': 'As a Student, you can enroll in courses, access learning materials, submit assignments, and track your progress.',
+        '2': 'As a Teacher, you can create courses, manage students, upload materials, create assignments, and grade submissions.'
     };
 
     // Update role description

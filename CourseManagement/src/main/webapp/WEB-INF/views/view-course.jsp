@@ -31,6 +31,14 @@
 <%-- Content --%>
 <div class="container">
     <h1>Course List</h1>
+    <%-- Search Form --%>
+    <div class="search-container">
+        <form action="course" method="get" class="search-form">
+            <input type="text" name="search" placeholder="Search courses..." value="${searchKeyword}" class="search-input">
+            <button type="submit" class="search-button">Search</button>
+        </form>
+    </div>
+
     <ul class="course-list">
         <c:forEach var="course" items="${courses}">
             <li class="course-card">
@@ -59,11 +67,32 @@
             </li>
         </c:forEach>
     </ul>
+
+    <%-- Enhanced Pagination Controls --%>
     <div class="pagination">
         <c:if test="${totalPages > 1}">
-            <c:forEach begin="1" end="${totalPages}" var="i">
-                <a href="course?page=${i}" class="${i == currentPage ? 'active' : ''}">${i}</a>
-            </c:forEach>
+            <ul class="pagination-list">
+                <%-- Previous button --%>
+                <c:if test="${currentPage > 1}">
+                    <li class="page-item">
+                        <a href="course?page=${currentPage - 1}${searchKeyword != null ? '&search=' : ''}${searchKeyword != null ? searchKeyword : ''}" class="page-link">&laquo; Previous</a>
+                    </li>
+                </c:if>
+
+                <%-- Page numbers --%>
+                <c:forEach begin="1" end="${totalPages}" var="i">
+                    <li class="page-item ${i == currentPage ? 'active' : ''}">
+                        <a href="course?page=${i}${searchKeyword != null ? '&search=' : ''}${searchKeyword != null ? searchKeyword : ''}" class="page-link">${i}</a>
+                    </li>
+                </c:forEach>
+
+                <%-- Next button --%>
+                <c:if test="${currentPage < totalPages}">
+                    <li class="page-item">
+                        <a href="course?page=${currentPage + 1}${searchKeyword != null ? '&search=' : ''}${searchKeyword != null ? searchKeyword : ''}" class="page-link">Next &raquo;</a>
+                    </li>
+                </c:if>
+            </ul>
         </c:if>
     </div>
 </div>

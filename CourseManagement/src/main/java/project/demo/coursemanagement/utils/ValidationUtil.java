@@ -57,7 +57,7 @@ public class ValidationUtil {
         validatePassword(request.getPassword(), request.getConfirmPassword(), errors);
         validateFirstName(request.getFirstName(), errors);
         validateLastName(request.getLastName(), errors);
-        validatePhone(request.getPhone(), errors);
+        validatePhone(request.getPhoneNumber(), errors);
         validateDateOfBirth(request.getDateOfBirth(), errors);
         validateRole(request.getRole(), errors);
         validateTermsAcceptance(request.isAgreeToTerms(), errors);
@@ -287,13 +287,15 @@ public class ValidationUtil {
      */
     public static void validateRole(String role, List<String> errors) {
         if (role == null || role.trim().isEmpty()) {
-            return; // Role will default to USER if not specified
+            return; // Role will default to 1 (Student) if not specified
         }
 
-        role = role.trim().toUpperCase();
+        role = role.trim();
 
-        // Only allow USER and TEACHER for self-registration
-        if (!role.equals("USER") && !role.equals("TEACHER")) {
+        // Only allow 1 (Student) and 2 (Teacher) for self-registration
+        if (!role.equals("1") && !role.equals("2") && 
+            !role.equals("USER") && !role.equals("TEACHER") && 
+            !role.equalsIgnoreCase("STUDENT")) {
             errors.add("Invalid role selection");
         }
     }

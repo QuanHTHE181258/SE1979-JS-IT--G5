@@ -16,10 +16,9 @@ public class RegisterDAOImpl implements RegisterDAO {
     @Override
     public boolean createUser(User user) {
         String sql = """
-            INSERT INTO Users (username, email, password_hash, first_name, last_name, 
-                             phone, date_of_birth, role_id, is_active, email_verified, 
-                             created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), GETDATE())
+            INSERT INTO users (Username, Email, PasswordHash, FirstName, LastName, 
+                             PhoneNumber, DateOfBirth, CreatedAt)
+            VALUES (?, ?, ?, ?, ?, ?, ?, GETDATE())
         """;
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -30,17 +29,13 @@ public class RegisterDAOImpl implements RegisterDAO {
             stmt.setString(3, user.getPasswordHash());
             stmt.setString(4, user.getFirstName());
             stmt.setString(5, user.getLastName());
-            stmt.setString(6, user.getPhone());
+            stmt.setString(6, user.getPhoneNumber());
 
             if (user.getDateOfBirth() != null) {
                 stmt.setDate(7, Date.valueOf(user.getDateOfBirth()));
             } else {
                 stmt.setNull(7, Types.DATE);
             }
-
-            stmt.setInt(8, user.getRole().getId());
-            stmt.setBoolean(9, user.getIsActive() != null ? user.getIsActive() : true);
-            stmt.setBoolean(10, user.getEmailVerified() != null ? user.getEmailVerified() : false);
 
             int result = stmt.executeUpdate();
 
@@ -61,10 +56,39 @@ public class RegisterDAOImpl implements RegisterDAO {
         return false;
     }
 
+    public boolean assignDefaultRoles(User user) {
+        // Default to Student role (ID 1)
+        return assignRole(user, 1);
+    }
+
+    @Override
+    public boolean assignRole(User user, Integer roleId) {
+        String sql = """
+            INSERT INTO user_roles (UserID, RoleID)
+            VALUES (?, ?)
+        """;
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, user.getId()); // Set user ID
+            stmt.setInt(2, roleId); // Set role ID
+
+            int result = stmt.executeUpdate();
+            return result > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error assigning role: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     // Check if username exists
     @Override
     public boolean isUsernameExists(String username) {
-        String sql = "SELECT COUNT(*) FROM Users WHERE username = ?";
+        String sql = "SELECT COUNT(*) FROM users WHERE Username = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -87,7 +111,7 @@ public class RegisterDAOImpl implements RegisterDAO {
     // Check if email exists
     @Override
     public boolean isEmailExists(String email) {
-        String sql = "SELECT COUNT(*) FROM Users WHERE email = ?";
+        String sql = "SELECT COUNT(*) FROM users WHERE Email = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -111,12 +135,10 @@ public class RegisterDAOImpl implements RegisterDAO {
     @Override
     public User findByUsername(String username) {
         String sql = """
-            SELECT u.user_id, u.username, u.email, u.password_hash, u.first_name, u.last_name,
-                   u.phone, u.date_of_birth, u.is_active, u.email_verified, u.created_at, u.updated_at,
-                   r.role_id, r.role_name, r.description
-            FROM Users u 
-            INNER JOIN Roles r ON u.role_id = r.role_id
-            WHERE u.username = ?
+            SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName,
+                   u.PhoneNumber, u.DateOfBirth, u.LastLogin, u.CreatedAt
+            FROM users u 
+            WHERE u.Username = ?
         """;
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -141,12 +163,10 @@ public class RegisterDAOImpl implements RegisterDAO {
     @Override
     public User findByEmail(String email) {
         String sql = """
-            SELECT u.user_id, u.username, u.email, u.password_hash, u.first_name, u.last_name,
-                   u.phone, u.date_of_birth, u.is_active, u.email_verified, u.created_at, u.updated_at,
-                   r.role_id, r.role_name, r.description
-            FROM Users u 
-            INNER JOIN Roles r ON u.role_id = r.role_id
-            WHERE u.email = ?
+            SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName,
+                   u.PhoneNumber, u.DateOfBirth, u.LastLogin, u.CreatedAt
+            FROM users u 
+            WHERE u.Email = ?
         """;
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -170,7 +190,7 @@ public class RegisterDAOImpl implements RegisterDAO {
     // Get role by name
     @Override
     public Role findRoleByName(String roleName) {
-        String sql = "SELECT role_id, role_name, description, created_at FROM Roles WHERE role_name = ?";
+        String sql = "SELECT RoleID, RoleName FROM roles WHERE RoleName = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -193,7 +213,7 @@ public class RegisterDAOImpl implements RegisterDAO {
     // Get role by ID
     @Override
     public Role findRoleById(Integer roleId) {
-        String sql = "SELECT role_id, role_name, description, created_at FROM Roles WHERE role_id = ?";
+        String sql = "SELECT RoleID, RoleName FROM roles WHERE RoleID = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -217,10 +237,9 @@ public class RegisterDAOImpl implements RegisterDAO {
     @Override
     public List<Role> getAvailableRoles() {
         String sql = """
-            SELECT role_id, role_name, description, created_at 
-            FROM Roles 
-            WHERE role_name IN ('USER', 'TEACHER')
-            ORDER BY role_name
+            SELECT RoleID, RoleName 
+            FROM roles 
+            WHERE RoleID = 1  -- Student role (ID 1)
         """;
 
         List<Role> roles = new ArrayList<>();
@@ -241,43 +260,21 @@ public class RegisterDAOImpl implements RegisterDAO {
     }
 
     // Update email verification status
+    // Note: email_verified field no longer exists in the database schema
     @Override
     public boolean updateEmailVerificationStatus(Integer userId, boolean verified) {
-        String sql = "UPDATE Users SET email_verified = ?, updated_at = GETDATE() WHERE user_id = ?";
-
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setBoolean(1, verified);
-            stmt.setInt(2, userId);
-
-            return stmt.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            System.err.println("Error updating email verification status: " + e.getMessage());
-        }
-
-        return false;
+        // This method is kept for backward compatibility but doesn't do anything
+        System.out.println("updateEmailVerificationStatus called but email_verified field no longer exists");
+        return true;
     }
 
     // Update user active status
+    // Note: is_active field no longer exists in the database schema
     @Override
     public boolean updateUserActiveStatus(Integer userId, boolean active) {
-        String sql = "UPDATE Users SET is_active = ?, updated_at = GETDATE() WHERE user_id = ?";
-
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setBoolean(1, active);
-            stmt.setInt(2, userId);
-
-            return stmt.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            System.err.println("Error updating user active status: " + e.getMessage());
-        }
-
-        return false;
+        // This method is kept for backward compatibility but doesn't do anything
+        System.out.println("updateUserActiveStatus called but is_active field no longer exists");
+        return true;
     }
 
     // Get registration statistics
@@ -285,12 +282,10 @@ public class RegisterDAOImpl implements RegisterDAO {
     public RegistrationStats getRegistrationStatistics() {
         String sql = """
             SELECT 
-                (SELECT COUNT(*) FROM Users) as total_users,
-                (SELECT COUNT(*) FROM Users WHERE CAST(created_at AS DATE) = CAST(GETDATE() AS DATE)) as today_registrations,
-                (SELECT COUNT(*) FROM Users WHERE created_at >= DATEADD(week, -1, GETDATE())) as weekly_registrations,
-                (SELECT COUNT(*) FROM Users WHERE created_at >= DATEADD(month, -1, GETDATE())) as monthly_registrations,
-                (SELECT COUNT(*) FROM Users WHERE is_active = 1) as active_users,
-                (SELECT COUNT(*) FROM Users WHERE email_verified = 0) as pending_verifications
+                (SELECT COUNT(*) FROM users) as total_users,
+                (SELECT COUNT(*) FROM users WHERE CAST(CreatedAt AS DATE) = CAST(GETDATE() AS DATE)) as today_registrations,
+                (SELECT COUNT(*) FROM users WHERE CreatedAt >= DATEADD(week, -1, GETDATE())) as weekly_registrations,
+                (SELECT COUNT(*) FROM users WHERE CreatedAt >= DATEADD(month, -1, GETDATE())) as monthly_registrations
         """;
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -303,8 +298,8 @@ public class RegisterDAOImpl implements RegisterDAO {
                         rs.getInt("today_registrations"),
                         rs.getInt("weekly_registrations"),
                         rs.getInt("monthly_registrations"),
-                        rs.getInt("active_users"),
-                        rs.getInt("pending_verifications")
+                        0, // No active_users field in new schema
+                        0  // No pending_verifications field in new schema
                 );
             }
 
@@ -319,12 +314,10 @@ public class RegisterDAOImpl implements RegisterDAO {
     @Override
     public List<User> getRecentRegistrations(int limit) {
         String sql = """
-            SELECT TOP (?) u.user_id, u.username, u.email, u.password_hash, u.first_name, u.last_name,
-                   u.phone, u.date_of_birth, u.is_active, u.email_verified, u.created_at, u.updated_at,
-                   r.role_id, r.role_name, r.description
-            FROM Users u 
-            INNER JOIN Roles r ON u.role_id = r.role_id
-            ORDER BY u.created_at DESC
+            SELECT TOP (?) u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName,
+                   u.PhoneNumber, u.DateOfBirth, u.LastLogin, u.CreatedAt
+            FROM users u 
+            ORDER BY u.CreatedAt DESC
         """;
 
         List<User> users = new ArrayList<>();
@@ -390,38 +383,28 @@ public class RegisterDAOImpl implements RegisterDAO {
     // Map ResultSet to User entity
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
         User user = new User();
-        user.setId(rs.getInt("user_id"));
-        user.setUsername(rs.getString("username"));
-        user.setEmail(rs.getString("email"));
-        user.setPasswordHash(rs.getString("password_hash"));
-        user.setFirstName(rs.getString("first_name"));
-        user.setLastName(rs.getString("last_name"));
-        user.setPhone(rs.getString("phone"));
+        user.setId(rs.getInt("UserID"));
+        user.setUsername(rs.getString("Username"));
+        user.setEmail(rs.getString("Email"));
+        user.setPasswordHash(rs.getString("PasswordHash"));
+        user.setFirstName(rs.getString("FirstName"));
+        user.setLastName(rs.getString("LastName"));
+        user.setPhoneNumber(rs.getString("PhoneNumber"));
 
-        Date dateOfBirth = rs.getDate("date_of_birth");
+        Date dateOfBirth = rs.getDate("DateOfBirth");
         if (dateOfBirth != null) {
             user.setDateOfBirth(dateOfBirth.toLocalDate());
         }
 
-        user.setIsActive(rs.getBoolean("is_active"));
-        user.setEmailVerified(rs.getBoolean("email_verified"));
-
-        Timestamp createdAt = rs.getTimestamp("created_at");
+        Timestamp createdAt = rs.getTimestamp("CreatedAt");
         if (createdAt != null) {
             user.setCreatedAt(createdAt.toInstant());
         }
 
-        Timestamp updatedAt = rs.getTimestamp("updated_at");
-        if (updatedAt != null) {
-            user.setUpdatedAt(updatedAt.toInstant());
+        Timestamp lastLogin = rs.getTimestamp("LastLogin");
+        if (lastLogin != null) {
+            user.setLastLogin(lastLogin.toInstant());
         }
-
-        // Map Role
-        Role role = new Role();
-        role.setId(rs.getInt("role_id"));
-        role.setRoleName(rs.getString("role_name"));
-        role.setDescription(rs.getString("description"));
-        user.setRole(role);
 
         return user;
     }
@@ -429,14 +412,8 @@ public class RegisterDAOImpl implements RegisterDAO {
     // Map ResultSet to Role entity
     private Role mapResultSetToRole(ResultSet rs) throws SQLException {
         Role role = new Role();
-        role.setId(rs.getInt("role_id"));
-        role.setRoleName(rs.getString("role_name"));
-        role.setDescription(rs.getString("description"));
-
-        Timestamp createdAt = rs.getTimestamp("created_at");
-        if (createdAt != null) {
-            role.setCreatedAt(createdAt.toInstant());
-        }
+        role.setId(rs.getInt("RoleID"));
+        role.setRoleName(rs.getString("RoleName"));
 
         return role;
     }

@@ -2,9 +2,9 @@ package project.demo.coursemanagement.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -12,26 +12,25 @@ import org.hibernate.annotations.OnDeleteAction;
 @Getter
 @Setter
 @Entity
-@Table(name = "materials")
-public class Material {
+@Table(name = "answers")
+public class Answer {
     @Id
-    @Column(name = "MaterialID", nullable = false)
+    @Column(name = "AnswerID", nullable = false)
     private Integer id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "LessonID", nullable = false)
-    private Lesson lessonID;
+    @JoinColumn(name = "QuestionID", nullable = false)
+    private Question questionID;
 
-    @Size(max = 255)
     @Nationalized
-    @Column(name = "Title")
-    private String title;
+    @Lob
+    @Column(name = "AnswerText")
+    private String answerText;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "FileURL")
-    private String fileURL;
+    @ColumnDefault("0")
+    @Column(name = "IsCorrect")
+    private Boolean isCorrect;
 
 }

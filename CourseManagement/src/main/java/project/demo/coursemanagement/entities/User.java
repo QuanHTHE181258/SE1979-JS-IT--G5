@@ -1,237 +1,74 @@
 package project.demo.coursemanagement.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Date;
 
+@Getter
+@Setter
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 public class User {
     @Id
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "UserID", nullable = false)
     private Integer id;
 
     @Size(max = 50)
     @NotNull
-    @Column(name = "username", nullable = false, length = 50)
+    @Nationalized
+    @Column(name = "Username", nullable = false, length = 50)
     private String username;
 
     @Size(max = 100)
     @NotNull
-    @Column(name = "email", nullable = false, length = 100)
+    @Nationalized
+    @Column(name = "Email", nullable = false, length = 100)
     private String email;
 
     @Size(max = 255)
     @NotNull
-    @Column(name = "password_hash", nullable = false)
+    @Nationalized
+    @Column(name = "PasswordHash", nullable = false)
     private String passwordHash;
 
-    @Size(max = 50)
-    @NotNull
+    @Size(max = 20)
     @Nationalized
-    @Column(name = "first_name", nullable = false, length = 50)
+    @Column(name = "FirstName", length = 20)
     private String firstName;
 
-    @Size(max = 50)
-    @NotNull
+    @Size(max = 20)
     @Nationalized
-    @Column(name = "last_name", nullable = false, length = 50)
+    @Column(name = "LastName", length = 20)
     private String lastName;
 
-    @Size(max = 20)
-    @Column(name = "phone", length = 20)
-    private String phone;
-
-    @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @ColumnDefault("2")
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
-
     @Size(max = 255)
-    @ColumnDefault("NULL")
-    @Column(name = "avatar_url")
+    @Nationalized
+    @Column(name = "AvatarUrl")
     private String avatarUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "current_avatar_id")
-    private UserImage currentAvatar;
+    @Size(max = 20)
+    @Nationalized
+    @Column(name = "PhoneNumber", length = 20)
+    private String phoneNumber;
 
-    @ColumnDefault("1")
-    @Column(name = "is_active")
-    private Boolean isActive;
+    @Column(name = "DateOfBirth")
+    private LocalDate dateOfBirth;
 
-    @ColumnDefault("0")
-    @Column(name = "email_verified")
-    private Boolean emailVerified;
-
-    @Column(name = "last_login")
+    @Column(name = "LastLogin")
     private Instant lastLogin;
 
     @ColumnDefault("getdate()")
-    @Column(name = "created_at")
+    @Column(name = "CreatedAt")
     private Instant createdAt;
-
-    @ColumnDefault("getdate()")
-    @Column(name = "updated_at")
-    private Instant updatedAt;
-
-    @Transient
-    private Date lastLoginDate;
-
-    @Transient
-    private Date createdAtDate;
-
-    @Transient
-    public java.util.Date getDateOfBirthAsDate() {
-        if (dateOfBirth == null) {
-            return null;
-        }
-        return java.sql.Date.valueOf(dateOfBirth);
-    }
-
-
-    public java.util.Date getLastLoginDate() { return lastLoginDate; }
-    public void setLastLoginDate(java.util.Date lastLoginDate) { this.lastLoginDate = lastLoginDate; }
-
-    public java.util.Date getCreatedAtDate() { return createdAtDate; }
-    public void setCreatedAtDate(java.util.Date createdAtDate) { this.createdAtDate = createdAtDate; }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
-
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
-    }
-
-    public UserImage getCurrentAvatar() {
-        return currentAvatar;
-    }
-
-    public void setCurrentAvatar(UserImage currentAvatar) {
-        this.currentAvatar = currentAvatar;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public Boolean getEmailVerified() {
-        return emailVerified;
-    }
-
-    public void setEmailVerified(Boolean emailVerified) {
-        this.emailVerified = emailVerified;
-    }
-
-    public Instant getLastLogin() {
-        return lastLogin;
-    }
-
-    public void setLastLogin(Instant lastLogin) {
-        this.lastLogin = lastLogin;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 
 }

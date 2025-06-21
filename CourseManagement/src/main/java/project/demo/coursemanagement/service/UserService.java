@@ -7,6 +7,8 @@ import project.demo.coursemanagement.entities.Role;
 import project.demo.coursemanagement.utils.PasswordUtil;
 import project.demo.coursemanagement.dao.RoleDAO;
 import project.demo.coursemanagement.dao.impl.RoleDAOImpl;
+import project.demo.coursemanagement.dao.UserRoleDAO;
+import project.demo.coursemanagement.dao.impl.UserRoleDAOImpl;
 
 import java.util.List;
 
@@ -15,10 +17,12 @@ public class UserService {
     private static final int USERS_PER_PAGE = 10;
     private final UserDAO userDAO;
     private final RoleDAO roleDAO;
+    private final UserRoleDAO userRoleDAO;
 
     public UserService(){
         this.userDAO = new UserDAOImpl();
-        this.roleDAO = new RoleDAOImpl(); // Assuming you have a RoleDAO
+        this.roleDAO = new RoleDAOImpl();
+        this.userRoleDAO = new UserRoleDAOImpl();
     }
 
     public User authenticate(String identifier, String password){
@@ -29,11 +33,7 @@ public class UserService {
             return null;
         }
 
-        if(!user.getIsActive()){
-            System.out.println("User is not active");
-            return null;
-        }
-
+        // Check if password matches
         if(PasswordUtil.verifyPassword(password, user.getPasswordHash())){
             userDAO.UpdateLastLogin(user.getId());
             System.out.println("Authentication successful");
@@ -69,7 +69,7 @@ public class UserService {
         return userDAO.findUserById(userId); 
     }
 
-    public void createUser(String username, String email, String password, String firstName, String lastName, String phone, String roleName) throws Exception {
+    public void createUser(String username, String email, String password, String firstName, String lastName, String phoneNumber, String roleName) throws Exception {
         // Basic validation - only require username, email, password, and roleName for creation
         if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty() || roleName == null || roleName.trim().isEmpty()) {
             throw new IllegalArgumentException("Username, email, password, and role are required.");
@@ -81,7 +81,7 @@ public class UserService {
         }
 
         // Find Role by name
-        Role role = roleDAO.findByRoleName(roleName); // Assuming RoleDAO has findByRoleName
+        Role role = roleDAO.findByRoleName(roleName);
         if (role == null) {
             throw new IllegalArgumentException("Invalid role specified.");
         }
@@ -91,23 +91,29 @@ public class UserService {
         user.setUsername(username);
         user.setEmail(email);
         user.setPasswordHash(PasswordUtil.hashPassword(password));
-        user.setRole(role);
-        user.setIsActive(true);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        user.setPhone(phone);
-        user.setEmailVerified(false); // Set default value
+        user.setPhoneNumber(phoneNumber);
         // Set other default fields if necessary (e.g., created_at, updated_at)
 
+        // Create the user first
         boolean success = userDAO.createUser(user);
         if (!success) {
             throw new Exception("Failed to create user.");
         }
+
+        // Then assign the role to the user
+        success = userRoleDAO.assignRoleToUser(user.getId(), role.getId());
+        if (!success) {
+            // If role assignment fails, delete the user to maintain consistency
+            userDAO.deleteUser(user.getId());
+            throw new Exception("Failed to assign role to user.");
+        }
     }
 
-    public void updateUser(int userId, String username, String email, String phone, String roleName, boolean isActive) throws Exception {
+    public void updateUser(int userId, String username, String email, String phoneNumber, String roleName, boolean isActive) throws Exception {
         // Basic validation
-         if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty() || phone == null || phone.trim().isEmpty() || roleName == null || roleName.trim().isEmpty()) {
+         if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty() || phoneNumber == null || phoneNumber.trim().isEmpty() || roleName == null || roleName.trim().isEmpty()) {
             throw new IllegalArgumentException("Username, email, phone, and role are required.");
         }
 
@@ -140,14 +146,21 @@ public class UserService {
         // Update user object
         existingUser.setUsername(username);
         existingUser.setEmail(email);
-        existingUser.setPhone(phone);
-        existingUser.setRole(newRole);
-        existingUser.setIsActive(isActive);
+        existingUser.setPhoneNumber(phoneNumber);
         // Update other fields if necessary (e.g., updated_at)
 
         boolean success = userDAO.updateUser(existingUser);
-         if (!success) {
+        if (!success) {
             throw new Exception("Failed to update user.");
+        }
+
+        // Update user role
+        // First remove all existing roles
+        userRoleDAO.removeAllRolesFromUser(userId);
+        // Then assign the new role
+        success = userRoleDAO.assignRoleToUser(userId, newRole.getId());
+        if (!success) {
+            throw new Exception("Failed to update user role.");
         }
     }
 
@@ -164,20 +177,8 @@ public class UserService {
         }
      }
 
-     public void toggleUserStatus(int userId) throws Exception {
-         User userToToggle = userDAO.findUserByIdIncludeInactive(userId);
-         if (userToToggle == null) {
-              throw new Exception("User not found.");
-         }
-          // TODO: Add check to prevent deactivating the currently logged-in user
-
-         userToToggle.setIsActive(!userToToggle.getIsActive());
-
-         boolean success = userDAO.updateUser(userToToggle);
-          if (!success) {
-            throw new Exception("Failed to toggle user status.");
-        }
-     }
+     // Note: User entity no longer has isActive field, so this method is removed
+     // If status tracking is needed, it should be implemented differently
 
      // Assuming RoleDAO exists and has findByRoleName
      // You might also need a method to get all roles for the dropdown in JSP

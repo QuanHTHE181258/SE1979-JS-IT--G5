@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="en_US" />
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -396,7 +397,17 @@
         </div>
 
         <h3>${user.firstName} ${user.lastName}
-          <span class="role-badge">${user.role.roleName}</span>
+          <span class="role-badge">
+            <c:choose>
+              <c:when test="${sessionScope.userRole == '0'}">Guest</c:when>
+              <c:when test="${sessionScope.userRole == '1'}">Student</c:when>
+              <c:when test="${sessionScope.userRole == '2'}">Teacher</c:when>
+              <c:when test="${sessionScope.userRole == '3'}">Course Manager</c:when>
+              <c:when test="${sessionScope.userRole == '4'}">User Manager</c:when>
+              <c:when test="${sessionScope.userRole == '5'}">Admin</c:when>
+              <c:otherwise>${sessionScope.userRole}</c:otherwise>
+            </c:choose>
+          </span>
         </h3>
 
         <div class="completion-badge">
@@ -428,14 +439,8 @@
             </div>
             <div class="info-value">
               ${user.email}
-              <c:choose>
-                <c:when test="${user.emailVerified}">
-                  <i class="fas fa-check-circle verified-badge" title="Verified"></i>
-                </c:when>
-                <c:otherwise>
-                  <i class="fas fa-exclamation-circle unverified-badge" title="Not Verified"></i>
-                </c:otherwise>
-              </c:choose>
+              <!-- Email verification is not supported in the new User entity -->
+              <i class="fas fa-exclamation-circle unverified-badge" title="Not Verified"></i>
             </div>
           </div>
 
@@ -446,8 +451,8 @@
             </div>
             <div class="info-value">
               <c:choose>
-                <c:when test="${not empty user.phone}">
-                  ${user.phone}
+                <c:when test="${not empty user.phoneNumber}">
+                  ${user.phoneNumber}
                 </c:when>
                 <c:otherwise>
                   <span class="text-muted">Not provided</span>
@@ -464,7 +469,9 @@
             <div class="info-value">
               <c:choose>
                 <c:when test="${not empty user.dateOfBirth}">
-                  <fmt:formatDate value="${user.dateOfBirthAsDate}" pattern="dd MMM yyyy"/>
+                  <c:set var="datePattern" value="dd MMM yyyy" />
+                  <fmt:parseDate value="${user.dateOfBirth}" pattern="yyyy-MM-dd" var="parsedDate" type="date" />
+                  <fmt:formatDate value="${parsedDate}" pattern="${datePattern}" />
                 </c:when>
                 <c:otherwise>
                   <span class="text-muted">Not provided</span>
@@ -476,7 +483,7 @@
       </div>
 
       <!-- Statistics Section -->
-      <div class="stats-section"> 
+      <div class="stats-section">
         <h4 class="mb-4">
           <i class="fas fa-chart-bar me-2"></i>
           Account Statistics
@@ -499,7 +506,7 @@
             <div class="stat-label">Last Login</div>
           </div>
 
-          <c:if test="${user.role.roleName == 'USER'}">
+          <c:if test="${sessionScope.userRole == '1' || sessionScope.userRole == 'USER' || sessionScope.userRole == 'STUDENT'}">
             <div class="stat-card">
               <div class="stat-icon" style="color: #fa709a;">
                 <i class="fas fa-book"></i>
@@ -517,7 +524,7 @@
             </div>
           </c:if>
 
-          <c:if test="${user.role.roleName == 'TEACHER'}">
+          <c:if test="${sessionScope.userRole == '2' || sessionScope.userRole == 'TEACHER'}">
             <div class="stat-card">
               <div class="stat-icon" style="color: #fa709a;">
                 <i class="fas fa-chalkboard-teacher"></i>

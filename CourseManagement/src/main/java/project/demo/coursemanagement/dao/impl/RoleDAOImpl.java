@@ -15,7 +15,7 @@ public class RoleDAOImpl implements RoleDAO {
 
     @Override
     public Role findByRoleName(String roleName) {
-        String sql = "SELECT role_id, role_name, description FROM Roles WHERE role_name = ?";
+        String sql = "SELECT RoleID, RoleName FROM roles WHERE RoleName = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -35,7 +35,7 @@ public class RoleDAOImpl implements RoleDAO {
 
     @Override
     public Role findById(int roleId) {
-        String sql = "SELECT role_id, role_name, description FROM Roles WHERE role_id = ?";
+        String sql = "SELECT RoleID, RoleName FROM roles WHERE RoleID = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -56,7 +56,7 @@ public class RoleDAOImpl implements RoleDAO {
     @Override
     public List<Role> findAll() {
         List<Role> roles = new ArrayList<>();
-        String sql = "SELECT role_id, role_name, description FROM Roles ORDER BY role_id";
+        String sql = "SELECT RoleID, RoleName FROM roles ORDER BY RoleID";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -73,9 +73,8 @@ public class RoleDAOImpl implements RoleDAO {
 
     private Role mapResultSetToRole(ResultSet rs) throws SQLException {
         Role role = new Role();
-        role.setId(rs.getInt("role_id"));
-        role.setRoleName(rs.getString("role_name"));
-        role.setDescription(rs.getString("description"));
+        role.setId(rs.getInt("RoleID"));
+        role.setRoleName(rs.getString("RoleName"));
         return role;
     }
 } 

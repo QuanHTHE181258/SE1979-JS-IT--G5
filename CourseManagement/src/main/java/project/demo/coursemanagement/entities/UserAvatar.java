@@ -5,33 +5,39 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @Entity
-@Table(name = "materials")
-public class Material {
+@Table(name = "user_avatars")
+public class UserAvatar {
     @Id
-    @Column(name = "MaterialID", nullable = false)
+    @Column(name = "AvatarID", nullable = false)
     private Integer id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "LessonID", nullable = false)
-    private Lesson lessonID;
+    @JoinColumn(name = "UserID", nullable = false)
+    private User userID;
 
     @Size(max = 255)
     @Nationalized
-    @Column(name = "Title")
-    private String title;
+    @Column(name = "ImageURL")
+    private String imageURL;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "FileURL")
-    private String fileURL;
+    @ColumnDefault("0")
+    @Column(name = "IsDefault")
+    private Boolean isDefault;
+
+    @ColumnDefault("getdate()")
+    @Column(name = "UploadedAt")
+    private Instant uploadedAt;
 
 }

@@ -35,6 +35,10 @@ public interface RegisterDAO {
 
     boolean logRegistrationAttempt(String username, String email, String ipAddress, boolean success, String message);
 
+    boolean assignDefaultRoles(User user);
+
+    boolean assignRole(User user, Integer roleId);
+
     // Inner class for registration statistics
     class RegistrationStats {
         private int totalUsers;

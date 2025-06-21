@@ -19,7 +19,7 @@ public class RegistrationRequest {
     private String lastName;
 
     // Optional fields
-    private String phone;
+    private String phoneNumber;
     private String dateOfBirth;
     private String role;
 
@@ -37,7 +37,7 @@ public class RegistrationRequest {
         // Initialize with default values
         this.agreeToTerms = false;
         this.subscribeNewsletter = false;
-        this.role = "USER"; // Default role
+        this.role = "1"; // Default role (Student, ID 1)
     }
 
     public RegistrationRequest(String username, String email, String password,
@@ -100,15 +100,15 @@ public class RegistrationRequest {
         this.lastName = lastName != null ? lastName.trim() : null;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone(String phone) {
-        if (phone != null && !phone.trim().isEmpty()) {
-            this.phone = phone.trim().replaceAll("\\s+", "");
+    public void setPhoneNumber(String phoneNumber) {
+        if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
+            this.phoneNumber = phoneNumber.trim().replaceAll("\\s+", "");
         } else {
-            this.phone = null;  // Set to null instead of empty string
+            this.phoneNumber = null;  // Set to null instead of empty string
         }
     }
 
@@ -125,7 +125,7 @@ public class RegistrationRequest {
     }
 
     public void setRole(String role) {
-        this.role = role != null ? role.trim().toUpperCase() : "USER";
+        this.role = role != null ? role.trim() : "1";
     }
 
     public boolean isAgreeToTerms() {
@@ -218,12 +218,12 @@ public class RegistrationRequest {
 
     // Check if this is a teacher registration
     public boolean isTeacherRegistration() {
-        return "TEACHER".equalsIgnoreCase(role);
+        return "2".equals(role) || "TEACHER".equalsIgnoreCase(role);
     }
 
     // Check if this is a student registration
     public boolean isStudentRegistration() {
-        return "USER".equalsIgnoreCase(role) || role == null;
+        return "1".equals(role) || "USER".equalsIgnoreCase(role) || "STUDENT".equalsIgnoreCase(role) || role == null;
     }
 
     // Validate the registration request
@@ -259,7 +259,7 @@ public class RegistrationRequest {
         safeCopy.setEmail(this.email);
         safeCopy.setFirstName(this.firstName);
         safeCopy.setLastName(this.lastName);
-        safeCopy.setPhone(this.phone);
+        safeCopy.setPhoneNumber(this.phoneNumber);
         safeCopy.setDateOfBirth(this.dateOfBirth);
         safeCopy.setRole(this.role);
         safeCopy.setAgreeToTerms(this.agreeToTerms);
@@ -310,8 +310,8 @@ public class RegistrationRequest {
             return this;
         }
 
-        public Builder phone(String phone) {
-            request.setPhone(phone);
+        public Builder phoneNumber(String phoneNumber) {
+            request.setPhoneNumber(phoneNumber);
             return this;
         }
 
