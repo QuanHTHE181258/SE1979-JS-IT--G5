@@ -113,6 +113,7 @@ public class UpdateCourseServlet extends HttpServlet {
                 request.setAttribute("error", "Invalid date format.");
                 forwardBackWithCourse(request, response, course);
                 return;
+                //abc
             }
 
             course.setCategoryId(parseIntOrDefault(categoryIdStr, 0));
