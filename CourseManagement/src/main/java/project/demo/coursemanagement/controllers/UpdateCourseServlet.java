@@ -116,7 +116,7 @@ public class UpdateCourseServlet extends HttpServlet {
             }
 
             course.setCategoryId(parseIntOrDefault(categoryIdStr, 0));
-            course.setTeacherId(parseIntOrDefault(teacherIdStr, 4));
+            course.setTeacherId(parseIntOrDefault(teacherIdStr, 1));
 
             boolean updated = courseDAO.updateCourse(course);
             if (updated) {
@@ -125,6 +125,7 @@ public class UpdateCourseServlet extends HttpServlet {
                 request.setAttribute("error", "Update failed. Please try again.");
                 forwardBackWithCourse(request, response, course);
             }
+
 
         } catch (Exception e) {
             e.printStackTrace();
