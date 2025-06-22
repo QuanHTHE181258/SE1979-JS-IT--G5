@@ -30,7 +30,7 @@
             <p><strong>Description:</strong> ${course.courseDescription}</p>
             <p><strong>Price:</strong> $<fmt:formatNumber value="${course.price}" type="number" maxFractionDigits="2"/></p>
             <p><strong>Rating:</strong> ${course.rating}</p>
-            <p><strong>Teacher:</strong> ${course.teacherName}</p>
+            <p><strong>Teacher:</strong> <a href="instructorInfo">${course.teacherName}</a></p>
             <c:if test="${not empty course.categories}">
                 <p><strong>Categories:</strong> ${course.categories}</p>
             </c:if>
@@ -41,7 +41,9 @@
             <fmt:parseDate value="${createdAtInstant}" pattern="yyyy-MM-dd'T'HH:mm:ss.SSSX" var="parsedDate" type="both" />
             <p><strong>Created At:</strong> <fmt:formatDate value="${parsedDate}" pattern="HH:mm dd-MM-yyyy"/></p>
             <div class="card-footer">
-                <button class="join-btn">JOIN</button>
+                <a href="login">
+                    <button class="join-btn">JOIN</button>
+                </a>
             </div>
 
             <!-- Danh sách Lessons -->

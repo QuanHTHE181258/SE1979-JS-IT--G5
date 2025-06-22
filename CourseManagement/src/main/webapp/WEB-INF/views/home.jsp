@@ -51,7 +51,9 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button class="join-btn">JOIN</button>
+                            <a href="login">
+                                <button class="join-btn">JOIN</button>
+                            </a>
                         </div>
                     </li>
                 </c:forEach>
@@ -78,7 +80,9 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button class="join-btn">JOIN</button>
+                            <a href="login">
+                                <button class="join-btn">JOIN</button>
+                            </a>
                         </div>
                     </li>
                 </c:forEach>
@@ -105,7 +109,9 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button class="join-btn">JOIN</button>
+                            <a href="login">
+                                <button class="join-btn">JOIN</button>
+                            </a>
                         </div>
                     </li>
                 </c:forEach>
