@@ -12,7 +12,7 @@ import project.demo.coursemanagement.service.CoursePreviewService;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/previewCourse")
+@WebServlet("/courseDetails")
 public class CoursePreviewServlet extends HttpServlet {
     private final CoursePreviewService courseCatalogService = CoursePreviewService.getInstance();
 
@@ -44,6 +44,6 @@ public class CoursePreviewServlet extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        req.getRequestDispatcher("/WEB-INF/views/course-preview.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/course-details.jsp").forward(req, resp);
     }
 }
