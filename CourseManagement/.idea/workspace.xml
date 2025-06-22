@@ -2,28 +2,14 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="CourseManagement:war" />
+      <artifact name="CourseManagement:war exploded" />
     </artifacts-to-build>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="update create product">
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/ViewAllCoursesServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/CategoryDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/CourseDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/CategoryDAOImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/CourseDAOImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dto/CategoryDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dto/CourseStatsDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/entities/Enrollment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/CategoryService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/CourseService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/manage-course/view-all.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/UpdateCourseServlet.java" beforeDir="false" />
-    </list>
+    <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="fix bug" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -73,6 +59,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "Tomcat Server.Tomcat 10.1.29.executor": "Run",
+    "Tomcat Server.Tomcat 10.1.34.executor": "Run",
     "git-widget-placeholder": "KhiemNB",
     "junie.onboarding.icon.badge.shown": "true",
     "node.js.detected.package.eslint": "true",
@@ -202,8 +189,25 @@
       <workItem from="1748888683486" duration="2506000" />
       <workItem from="1748891211066" duration="4322000" />
       <workItem from="1748929277790" duration="1800000" />
-      <workItem from="1750578641532" duration="1586000" />
+      <workItem from="1750578641532" duration="2006000" />
     </task>
+    <task id="LOCAL-00001" summary="Merge remote-tracking branch 'origin/main' into KhiemNB">
+      <option name="closed" value="true" />
+      <created>1750603029780</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1750603029780</updated>
+    </task>
+    <task id="LOCAL-00002" summary="fix bug">
+      <option name="closed" value="true" />
+      <created>1750603047810</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1750603047810</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -228,6 +232,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="update create product" />
-    <option name="LAST_COMMIT_MESSAGE" value="update create product" />
+    <MESSAGE value="fix bug view all product, add search, filter, pagination client side" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/main' into KhiemNB" />
+    <MESSAGE value="fix bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix bug" />
   </component>
 </project>
