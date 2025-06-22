@@ -8,5 +8,6 @@ public interface CourseDAO {
     List<CourseStatsDTO> getAllCoursesWithStats();
     List<CourseStatsDTO> getCoursesByCategory(Long categoryId);
     boolean insertCourse(project.demo.coursemanagement.entities.Cours course);
+    boolean updateCourse(project.demo.coursemanagement.entities.Cours course);
 
 }

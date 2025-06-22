@@ -148,4 +148,25 @@ public class CourseDAOImpl implements CourseDAO {
             return false;
         }
     }
+
+    @Override
+    public boolean updateCourse(Cours course) {
+        String sql = "UPDATE courses SET Title=?, Description=?, Price=?, ImageURL=?, InstructorID=?, CategoryID=?, Status=? WHERE CourseID=?";
+        try (Connection conn = project.demo.coursemanagement.utils.DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, course.getTitle());
+            stmt.setString(2, course.getDescription());
+            stmt.setBigDecimal(3, course.getPrice());
+            stmt.setString(4, course.getImageURL());
+            stmt.setLong(5, course.getInstructorID() != null ? course.getInstructorID().getId() : null);
+            stmt.setLong(6, course.getCategory() != null ? course.getCategory().getId() : null);
+            stmt.setString(7, course.getStatus() == null ? "active" : course.getStatus());
+            stmt.setInt(8, course.getId());
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
