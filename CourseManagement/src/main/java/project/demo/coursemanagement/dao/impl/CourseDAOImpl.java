@@ -2,6 +2,9 @@ package project.demo.coursemanagement.dao.impl;
 
 import project.demo.coursemanagement.dao.CourseDAO;
 import project.demo.coursemanagement.dto.CourseStatsDTO;
+import project.demo.coursemanagement.entities.Cours;
+import project.demo.coursemanagement.entities.User;
+
 import project.demo.coursemanagement.utils.DatabaseConnection;
 
 import java.sql.*;
@@ -17,6 +20,7 @@ public class CourseDAOImpl implements CourseDAO {
         String sql = """
         SELECT c.CourseID, c.Title, c.Description, c.Price, c.Rating, c.CreatedAt, c.ImageURL,
             cat.CategoryID, cat.Name as CategoryName,
+            u.UserID as InstructorID, u.FirstName as InstructorFirstName, u.LastName as InstructorLastName,
             (SELECT COUNT(*) FROM feedback f WHERE f.CourseID = c.CourseID) AS FeedbackCount,
             (SELECT COUNT(*) FROM materials m
                 JOIN lessons l ON m.LessonID = l.LessonID
@@ -27,6 +31,7 @@ public class CourseDAOImpl implements CourseDAO {
             (SELECT COUNT(*) FROM enrollments e WHERE e.course_id = c.CourseID) AS EnrollmentCount
         FROM Courses c
         LEFT JOIN categories cat ON c.CategoryID = cat.CategoryID
+        LEFT JOIN users u ON c.InstructorID = u.UserID
         ORDER BY c.CreatedAt DESC
     """;
 
@@ -36,7 +41,7 @@ public class CourseDAOImpl implements CourseDAO {
 
             while (rs.next()) {
                 CourseStatsDTO course = new CourseStatsDTO(
-                        (long) rs.getInt("CourseID"),
+                        rs.getLong("CourseID"),
                         rs.getString("Title"),
                         rs.getString("Description"),
                         rs.getBigDecimal("Price"),
@@ -48,7 +53,10 @@ public class CourseDAOImpl implements CourseDAO {
                         rs.getLong("QuizCount"),
                         rs.getLong("EnrollmentCount"),
                         rs.getLong("CategoryID"),
-                        rs.getString("CategoryName")
+                        rs.getString("CategoryName"),
+                        rs.getLong("InstructorID"),
+                        rs.getString("InstructorFirstName"),
+                        rs.getString("InstructorLastName")
                 );
                 courses.add(course);
             }
@@ -68,6 +76,7 @@ public class CourseDAOImpl implements CourseDAO {
         String sql = """
         SELECT c.CourseID, c.Title, c.Description, c.Price, c.Rating, c.CreatedAt, c.ImageURL,
             cat.CategoryID, cat.Name as CategoryName,
+            u.UserID as InstructorID, u.FirstName as InstructorFirstName, u.LastName as InstructorLastName,
             (SELECT COUNT(*) FROM feedback f WHERE f.CourseID = c.CourseID) AS FeedbackCount,
             (SELECT COUNT(*) FROM materials m
                 JOIN lessons l ON m.LessonID = l.LessonID
@@ -78,6 +87,7 @@ public class CourseDAOImpl implements CourseDAO {
             (SELECT COUNT(*) FROM enrollments e WHERE e.course_id = c.CourseID) AS EnrollmentCount
         FROM Courses c
         LEFT JOIN categories cat ON c.CategoryID = cat.CategoryID
+        LEFT JOIN users u ON c.InstructorID = u.UserID
         WHERE c.CategoryID = ?
         ORDER BY c.CreatedAt DESC
         """;
@@ -90,7 +100,7 @@ public class CourseDAOImpl implements CourseDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     CourseStatsDTO course = new CourseStatsDTO(
-                            (long) rs.getInt("CourseID"),
+                            rs.getLong("CourseID"),
                             rs.getString("Title"),
                             rs.getString("Description"),
                             rs.getBigDecimal("Price"),
@@ -102,7 +112,10 @@ public class CourseDAOImpl implements CourseDAO {
                             rs.getLong("QuizCount"),
                             rs.getLong("EnrollmentCount"),
                             rs.getLong("CategoryID"),
-                            rs.getString("CategoryName")
+                            rs.getString("CategoryName"),
+                            rs.getLong("InstructorID"),
+                            rs.getString("InstructorFirstName"),
+                            rs.getString("InstructorLastName")
                     );
                     courses.add(course);
                 }
@@ -114,5 +127,25 @@ public class CourseDAOImpl implements CourseDAO {
         }
 
         return courses;
+    }
+
+    @Override
+    public boolean insertCourse(Cours course) {
+        String sql = "INSERT INTO courses (Title, Description, Price, ImageURL, InstructorID, CategoryID, Status, CreatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, GETDATE())";
+        try (Connection conn = project.demo.coursemanagement.utils.DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, course.getTitle());
+            stmt.setString(2, course.getDescription());
+            stmt.setBigDecimal(3, course.getPrice());
+            stmt.setString(4, course.getImageURL());
+            stmt.setLong(5, course.getInstructorID() != null ? course.getInstructorID().getId() : null);
+            stmt.setLong(6, course.getCategory() != null ? course.getCategory().getId() : null);
+            stmt.setString(7, course.getStatus() == null ? "active" : course.getStatus());
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

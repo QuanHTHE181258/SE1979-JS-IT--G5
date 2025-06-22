@@ -35,7 +35,7 @@
     }
 
     body {
-      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      /*background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);*/
       min-height: 100vh;
       padding: 20px 0;
     }
@@ -46,7 +46,8 @@
       border-radius: var(--border-radius);
       box-shadow: var(--card-shadow);
       padding: 2rem;
-      margin: 0 auto;
+      width: 100%;
+      margin: 0;
       transition: var(--transition);
     }
 
@@ -260,7 +261,7 @@
   </style>
 </head>
 <body>
-<div class="container">
+<div >
   <div class="main-container fade-in">
     <!-- Page Header -->
     <div class="page-header">
@@ -325,13 +326,14 @@
       <table id="courseTable" class="table custom-table shadow-sm rounded bg-white">
         <thead class="table-header text-center">
         <tr>
-          <th>#</th>
+          <th>No.</th>
+          <th>Image</th>
           <th>Title</th>
           <th>Category</th>
           <th>Price</th>
           <th>Statistics</th>
-          <th>Created</th>
           <th>Actions</th>
+          <th>Instructor</th>
         </tr>
         </thead>
         <tbody>
@@ -340,6 +342,9 @@
             <c:forEach var="course" items="${courses}" varStatus="status">
               <tr class="text-center align-middle">
                 <td>${status.index + 1}</td>
+                <td>
+                  <img src="${pageContext.request.contextPath}/${course.imageURL}" alt="Course image" style="max-width: 80px; max-height: 60px; border-radius: 8px; object-fit: cover; box-shadow: 0 2px 8px rgba(0,0,0,0.07);">
+                </td>
                 <td class="text-start fw-semibold text-primary course-title">
                   <div><c:out value="${course.title}" escapeXml="true"/></div>
                   <small class="text-muted">
@@ -374,7 +379,7 @@
                       <i class="fas fa-star text-warning me-1"></i>
                       <c:out value="${course.rating != null ? course.rating : '0'}"/>
                     </span>
-                    <span class="badge rounded-pill bg-light text-dark" title="Feedback Count">
+                    <span class="badge rounded-pill bg-light text-dark" title="Feedback count">
                       <i class="fas fa-comments text-info me-1"></i>
                       <c:out value="${course.feedbackCount != null ? course.feedbackCount : '0'}"/>
                     </span>
@@ -386,40 +391,37 @@
                       <i class="fas fa-question-circle text-primary me-1"></i>
                       <c:out value="${course.quizCount != null ? course.quizCount : '0'}"/>
                     </span>
-                    <span class="badge rounded-pill bg-light text-dark" title="Students Enrolled">
+                    <span class="badge rounded-pill bg-light text-dark" title="Enrolled students">
                       <i class="fas fa-users text-secondary me-1"></i>
                       <c:out value="${course.enrollmentCount != null ? course.enrollmentCount : '0'}"/>
                     </span>
                   </div>
                 </td>
                 <td>
-                  <span class="badge bg-light text-dark">
-                    <i class="far fa-calendar-alt me-1"></i>
-                    <c:out value="${course.createdAt}" escapeXml="true"/>
-                  </span>
-                </td>
-                <td>
-                  <div class="d-flex justify-content-center gap-2 flex-wrap">
-                    <a href="course?id=${course.id}" class="btn btn-outline-info btn-sm" title="View Details">
-                      <i class="fas fa-eye"></i>
+                  <div class="d-flex flex-column align-items-center gap-2 flex-wrap">
+                    <a href="course?id=${course.id}" class="btn btn-outline-info btn-sm w-100" title="View details">
+                      <i class="fas fa-eye"></i> View
                     </a>
-                    <a href="course-feedback?id=${course.id}" class="btn btn-outline-warning btn-sm" title="View Feedback">
-                      <i class="fas fa-comments"></i>
+                    <a href="course-feedback?id=${course.id}" class="btn btn-outline-warning btn-sm w-100" title="View feedback">
+                      <i class="fas fa-comments"></i> Feedback
                     </a>
-                    <a href="update-course?id=${course.id}" class="btn btn-outline-secondary btn-sm" title="Update Course">
-                      <i class="fas fa-edit"></i>
+                    <a href="update-course?id=${course.id}" class="btn btn-outline-secondary btn-sm w-100" title="Edit course">
+                      <i class="fas fa-edit"></i> Edit
                     </a>
-                    <a href="course-lessons?id=${course.id}" class="btn btn-outline-primary btn-sm" title="Manage Lessons">
-                      <i class="fas fa-list-ul"></i>
+                    <a href="course-lessons?id=${course.id}" class="btn btn-outline-primary btn-sm w-100" title="Manage lessons">
+                      <i class="fas fa-list-ul"></i> Lessons
                     </a>
                   </div>
+                </td>
+                <td>
+                  <c:out value="${course.instructorFirstName}"/> <c:out value="${course.instructorLastName}"/>
                 </td>
               </tr>
             </c:forEach>
           </c:when>
           <c:otherwise>
             <tr>
-              <td colspan="7" class="text-center py-4">
+              <td colspan="8" class="text-center py-4">
                 <div class="no-results">
                   <i class="fas fa-graduation-cap"></i>
                   <h5>No courses available</h5>
@@ -498,26 +500,27 @@
       const titleFilter = searchInput.value.toLowerCase().trim();
       const categoryFilterValue = categoryFilter.value;
 
+      // Filter rows based on title and category
       this.filteredRows = this.allRows.filter(row => {
-        // Skip if no valid cells or is empty state row
+        // Skip if row is invalid or is an empty state row
         if (!row.cells || row.cells.length < 3) return false;
 
-        // Title filter
+        // --- Title filter ---
         const titleCell = row.querySelector(".course-title");
         if (!titleCell) return false;
-
         const titleText = (titleCell.textContent || titleCell.innerText).toLowerCase();
         const titleMatch = titleFilter === '' || titleText.includes(titleFilter);
 
-        // Category filter
+        // --- Category filter ---
         const categoryCell = row.cells[2];
         if (!categoryCell) return false;
-
         const categoryText = categoryCell.textContent.trim();
-        const categoryMatch = categoryFilterValue === "" ||
-                categoryText.includes(categoryFilterValue) ||
-                (categoryFilterValue === "Uncategorized" && categoryText.includes("Uncategorized"));
+        const categoryMatch =
+          categoryFilterValue === "" ||
+          categoryText.includes(categoryFilterValue) ||
+          (categoryFilterValue === "Uncategorized" && categoryText.includes("Uncategorized"));
 
+        // Only include rows that match both filters
         return titleMatch && categoryMatch;
       });
 

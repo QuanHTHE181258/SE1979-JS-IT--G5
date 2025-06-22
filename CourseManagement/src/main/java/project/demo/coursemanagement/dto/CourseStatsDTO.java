@@ -22,11 +22,16 @@ public class CourseStatsDTO {
     private Long categoryId;
     private String categoryName;
 
+    private Long instructorId;
+    private String instructorFirstName;
+    private String instructorLastName;
+
     // Constructor
     public CourseStatsDTO(Long id, String title, String description, BigDecimal price,
                           Double rating, Instant createdAt, String imageURL,
                           Long feedbackCount, Long materialCount, Long quizCount, Long enrollmentCount,
-                          Long categoryId, String categoryName) {
+                          Long categoryId, String categoryName,
+                          Long instructorId, String instructorFirstName, String instructorLastName) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -40,6 +45,9 @@ public class CourseStatsDTO {
         this.enrollmentCount = enrollmentCount;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
+        this.instructorId = instructorId;
+        this.instructorFirstName = instructorFirstName;
+        this.instructorLastName = instructorLastName;
     }
 
     public Long getCategoryId() {
@@ -144,5 +152,29 @@ public class CourseStatsDTO {
 
     public void setEnrollmentCount(Long enrollmentCount) {
         this.enrollmentCount = enrollmentCount;
+    }
+
+    public Long getInstructorId() {
+        return instructorId;
+    }
+
+    public void setInstructorId(Long instructorId) {
+        this.instructorId = instructorId;
+    }
+
+    public String getInstructorFirstName() {
+        return instructorFirstName;
+    }
+
+    public void setInstructorFirstName(String instructorFirstName) {
+        this.instructorFirstName = instructorFirstName;
+    }
+
+    public String getInstructorLastName() {
+        return instructorLastName;
+    }
+
+    public void setInstructorLastName(String instructorLastName) {
+        this.instructorLastName = instructorLastName;
     }
 }
