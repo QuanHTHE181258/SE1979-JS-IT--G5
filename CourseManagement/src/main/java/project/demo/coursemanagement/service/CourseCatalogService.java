@@ -3,7 +3,11 @@ package project.demo.coursemanagement.service;
 import project.demo.coursemanagement.dao.CourseCatalogDAO;
 import project.demo.coursemanagement.dao.impl.CourseCatalogDAOimp;
 import project.demo.coursemanagement.dto.CourseDTO;
+import project.demo.coursemanagement.dto.FeedbackDTO;
+import project.demo.coursemanagement.dto.LessonDTO;
 import project.demo.coursemanagement.entities.Cours;
+
+import java.util.List;
 
 /**
  * Service class for course catalog operations
@@ -24,12 +28,15 @@ public class CourseCatalogService {
         return instance;
     }
 
-    /**
-     * Get a course by its ID
-     * @param id the ID of the course
-     * @return the course object or null if not found
-     */
     public CourseDTO getCourseById(int id) {
         return courseCatalogDAO.getCourseInfoById(id);
+    }
+
+    public List<LessonDTO> getLessonsByCourseId(int courseId) {
+        return courseCatalogDAO.getLessonsByCourseId(courseId);
+    }
+
+    public List<FeedbackDTO> getFeedbacksByCourseId(int courseId) {
+        return courseCatalogDAO.getFeedbacksByCourseId(courseId);
     }
 }

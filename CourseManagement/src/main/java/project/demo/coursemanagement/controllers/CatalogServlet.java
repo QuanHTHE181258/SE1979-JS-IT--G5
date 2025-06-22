@@ -4,10 +4,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import project.demo.coursemanagement.dto.CourseDTO;
+import project.demo.coursemanagement.dto.FeedbackDTO;
+import project.demo.coursemanagement.dto.LessonDTO;
 import project.demo.coursemanagement.entities.Cours;
 import project.demo.coursemanagement.service.CourseCatalogService;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/catalog")
 public class CatalogServlet extends HttpServlet {
@@ -21,8 +24,13 @@ public class CatalogServlet extends HttpServlet {
             try {
                 int courseId = Integer.parseInt(idParam);
                 CourseDTO course = courseCatalogService.getCourseById(courseId);
+                List<LessonDTO> lessons = courseCatalogService.getLessonsByCourseId(courseId);
+                List<FeedbackDTO> feedbacks = courseCatalogService.getFeedbacksByCourseId(courseId);
+
                 if (course != null) {
                     req.setAttribute("course", course);
+                    req.setAttribute("lessons", lessons);
+                    req.setAttribute("feedbacks", feedbacks);
                 } else {
                     req.setAttribute("error", "Course not found.");
                     resp.setStatus(HttpServletResponse.SC_NOT_FOUND);

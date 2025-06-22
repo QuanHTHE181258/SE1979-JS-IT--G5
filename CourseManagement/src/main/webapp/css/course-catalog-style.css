@@ -127,3 +127,147 @@ body {
     margin-bottom: 15px;
 }
 
+.join-btn {
+    background: linear-gradient(120deg, #65e0f6, #85a1fd);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.join-btn:hover {
+    cursor: pointer;
+}
+
+/* Lessons Section */
+.lessons-section {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.lessons-section h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.lesson-list {
+    list-style: none;
+    padding: 0;
+}
+
+.lesson-item {
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.lesson-status {
+    color: #7f8c8d;
+    margin-left: 5px;
+}
+
+.lesson-preview {
+    color: #27ae60;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.lesson-item small {
+    color: #7f8c8d;
+    font-size: 12px;
+}
+
+/* Feedbacks Section */
+.feedbacks-section {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.feedbacks-section h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.feedback-list {
+    list-style: none;
+    padding: 0;
+}
+
+.feedback-item {
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.feedback-rating {
+    color: #f39c12;
+    margin-left: 5px;
+}
+
+.feedback-comment {
+    color: #7f8c8d;
+    margin-top: 5px;
+    display: block;
+}
+
+.feedback-item small {
+    color: #7f8c8d;
+    font-size: 12px;
+}
+
+
+/* Footer */
+.home-footer {
+    width: 100%;
+    background: linear-gradient(120deg, #65e0f6 0%, #85a1fd 100%);
+    color: white;
+    padding: 15px 0;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.footer-content {
+    max-width: 500px;
+    text-align: left;
+}
+
+.footer-content h3 {
+    font-size: 20px;
+    margin: 8px 0px;
+}
+
+.footer-content p {
+    margin: 3px 0;
+    font-size: 14px;
+}
+
+.social-icons {
+    margin: 10px 0;
+}
+
+.social-icons a {
+    color: white;
+    margin-right: 15px;
+    font-size: 18px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #ccc;
+}
+
