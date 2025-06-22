@@ -1,0 +1,129 @@
+/* Reset mặc định */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Work Sans", sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f5f7fa;
+    color: #333;
+}
+
+/* Header */
+.home-header {
+    width: 100%;
+    height: 75px;
+    background: linear-gradient(120deg, #65e0f6, #85a1fd);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.home-header > div {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.home-header-logo a,
+.home-header-courses a,
+.home-header-login a,
+.home-header-register a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 15px;
+    transition: color 0.3s ease;
+}
+
+.home-header-logo a:hover,
+.home-header-courses a:hover,
+.home-header-login a:hover,
+.home-header-register a:hover {
+    color: #ffd700; /* Màu vàng nhạt khi hover */
+}
+
+.home-header-searchbar {
+    flex-grow: 1;
+    position: relative;
+    max-width: 500px;
+    margin: 0 20px;
+}
+
+.home-header-searchbar .search-input {
+    width: 100%;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 20px;
+    padding: 0 40px 0 15px;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.home-header-searchbar .search-input:focus {
+    background-color: white;
+}
+
+.home-header-searchbar .search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.home-header-searchbar .search-icon:hover {
+    color: #ffd700;
+}
+
+/* Course Detail Container */
+.course-detail-container {
+    width: 90%;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    flex-grow: 1;
+}
+
+.course-detail-container h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.course-detail-container p {
+    margin: 10px 0;
+    line-height: 1.6;
+    color: #7f8c8d;
+}
+
+.course-detail-container strong {
+    color: #34495e;
+}
+
+.course-detail-container .error {
+    color: #e74c3c;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+

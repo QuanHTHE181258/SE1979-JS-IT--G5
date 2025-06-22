@@ -16,6 +16,7 @@ public class CourseDTO {
     private String teacherName;
     private String categories;
     private String courseStatus;
+    private Instant createdAt;
 
     public CourseDTO() {
     }
@@ -82,5 +83,13 @@ public class CourseDTO {
 
     public void setCourseStatus(String courseStatus) {
         this.courseStatus = courseStatus;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
     }
 }
