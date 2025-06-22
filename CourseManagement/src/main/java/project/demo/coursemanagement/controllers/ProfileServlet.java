@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Servlet for handling user profile management
@@ -36,8 +38,15 @@ public class ProfileServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        profileService = new ProfileService();
-        System.out.println("ProfileServlet initialized");
+
+        // Get the real webapp path
+        String webappPath = getServletContext().getRealPath("/");
+        System.out.println("ProfileServlet: Webapp path: " + webappPath);
+
+        // Pass the webapp path
+        profileService = new ProfileService(webappPath);
+
+        System.out.println("ProfileServlet initialized with webapp path");
     }
 
     /**
@@ -127,9 +136,8 @@ public class ProfileServlet extends HttpServlet {
         }
 
         try {
-            // Get fresh user data from database
+            // Get user data from database
             User user = profileService.getUserById(userId);
-
 
             if (user == null) {
                 SessionUtil.setFlashMessage(request, "error", "Unable to load profile. Please try again.");
@@ -196,8 +204,16 @@ public class ProfileServlet extends HttpServlet {
                 }
             }
 
+            // Add form validation constraints for the JSP
+            Map<String, Object> formConstraints = new HashMap<>();
+            formConstraints.put("maxUsernameLength", 20);
+            formConstraints.put("maxEmailLength", 100);
+            formConstraints.put("maxNameLength", 50);
+            formConstraints.put("minAge", 13);
+            request.setAttribute("formConstraints", formConstraints);
+
             request.setAttribute("user", user);
-            request.getRequestDispatcher("/WEB-INF/views/profile/edit.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/profile/edit_profile.jsp").forward(request, response);
 
         } catch (Exception e) {
             System.err.println("Error loading profile edit form: " + e.getMessage());
@@ -554,26 +570,45 @@ public class ProfileServlet extends HttpServlet {
         Integer userId = SessionUtil.getUserId(request);
         User user = profileService.getUserById(userId);
 
-        // Merge form data with current user data
+        // Merge form data with current user data for redisplay
         if (updateRequest != null && user != null) {
-            if (updateRequest.getUsername() != null) user.setUsername(updateRequest.getUsername());
-            if (updateRequest.getEmail() != null) user.setEmail(updateRequest.getEmail());
-            if (updateRequest.getFirstName() != null) user.setFirstName(updateRequest.getFirstName());
-            if (updateRequest.getLastName() != null) user.setLastName(updateRequest.getLastName());
-            if (updateRequest.getPhone() != null) user.setPhoneNumber(updateRequest.getPhone());
-            if (updateRequest.getDateOfBirth() != null) {
+            if (updateRequest.getUsername() != null && !updateRequest.getUsername().trim().isEmpty()) {
+                user.setUsername(updateRequest.getUsername());
+            }
+            if (updateRequest.getEmail() != null && !updateRequest.getEmail().trim().isEmpty()) {
+                user.setEmail(updateRequest.getEmail());
+            }
+            if (updateRequest.getFirstName() != null) {
+                user.setFirstName(updateRequest.getFirstName().trim().isEmpty() ? null : updateRequest.getFirstName());
+            }
+            if (updateRequest.getLastName() != null) {
+                user.setLastName(updateRequest.getLastName().trim().isEmpty() ? null : updateRequest.getLastName());
+            }
+            if (updateRequest.getPhone() != null) {
+                user.setPhoneNumber(updateRequest.getPhone().trim().isEmpty() ? null : updateRequest.getPhone());
+            }
+            if (updateRequest.getDateOfBirth() != null && !updateRequest.getDateOfBirth().trim().isEmpty()) {
                 try {
                     LocalDate dob = LocalDate.parse(updateRequest.getDateOfBirth(),
                             DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                     user.setDateOfBirth(dob);
                 } catch (DateTimeParseException e) {
-                    // Ignore parse errors
+                    // Keep original date if parsing fails
+                    System.err.println("Error parsing date of birth: " + e.getMessage());
                 }
             }
         }
 
+        // Add form constraints for redisplay
+        Map<String, Object> formConstraints = new HashMap<>();
+        formConstraints.put("maxUsernameLength", 20);
+        formConstraints.put("maxEmailLength", 100);
+        formConstraints.put("maxNameLength", 50);
+        formConstraints.put("minAge", 13);
+        request.setAttribute("formConstraints", formConstraints);
+
         request.setAttribute("user", user);
-        request.getRequestDispatcher("/WEB-INF/views/profile/edit.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/profile/edit_profile.jsp").forward(request, response);
     }
 
     /**

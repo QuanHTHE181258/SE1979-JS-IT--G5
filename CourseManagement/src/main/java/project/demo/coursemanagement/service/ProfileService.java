@@ -31,12 +31,22 @@ public class ProfileService {
 
     private ProfileDAO profileDAO;
     private UserDAO userDAO;
-    private static final String UPLOAD_DIR = "uploads/avatars";
+    private static final String UPLOAD_DIR = "assets/avatar";
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+    private String webappPath;
 
     public ProfileService() {
         this.profileDAO = new ProfileDAOImpl();
         this.userDAO = new UserDAOImpl();
+    }
+
+    /**
+     * Constructor with webapp path for proper file uploads
+     */
+    public ProfileService(String webappPath) {
+        this.profileDAO = new ProfileDAOImpl();
+        this.userDAO = new UserDAOImpl();
+        this.webappPath = webappPath;
     }
 
     /**
@@ -264,8 +274,16 @@ public class ProfileService {
         }
 
         try {
-            // Create upload directory if it doesn't exist
-            Path uploadPath = Paths.get(UPLOAD_DIR);
+            // Use webapp path to create the correct upload directory
+            Path uploadPath;
+            if (webappPath != null) {
+                uploadPath = Paths.get(webappPath, UPLOAD_DIR);
+            } else {
+                // Fallback to relative path (not recommended for production)
+                uploadPath = Paths.get(UPLOAD_DIR);
+                System.err.println("ProfileService: Warning - Using relative path for avatar upload. This may not work correctly.");
+            }
+
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
@@ -288,6 +306,8 @@ public class ProfileService {
 
             if (success) {
                 System.out.println("ProfileService: Avatar uploaded successfully for user ID: " + userId);
+                System.out.println("ProfileService: Avatar saved to: " + filePath.toAbsolutePath());
+                System.out.println("ProfileService: Avatar URL: " + avatarUrl);
 
                 // Save avatar record if ProfileDAO is available
                 if (profileDAO != null) {
@@ -339,10 +359,17 @@ public class ProfileService {
             String avatarUrl = user.getAvatarUrl();
             if (avatarUrl.startsWith("/" + UPLOAD_DIR)) {
                 String fileName = avatarUrl.substring(avatarUrl.lastIndexOf('/') + 1);
-                Path filePath = Paths.get(UPLOAD_DIR, fileName);
+
+                Path filePath;
+                if (webappPath != null) {
+                    filePath = Paths.get(webappPath, UPLOAD_DIR, fileName);
+                } else {
+                    filePath = Paths.get(UPLOAD_DIR, fileName);
+                }
 
                 try {
                     Files.deleteIfExists(filePath);
+                    System.out.println("ProfileService: Deleted avatar file: " + filePath.toAbsolutePath());
                 } catch (IOException e) {
                     System.err.println("ProfileService: Error deleting avatar file: " + e.getMessage());
                     // Continue even if file deletion fails
@@ -433,8 +460,6 @@ public class ProfileService {
             return false;
         }
     }
-
-
 
     // Helper methods
 

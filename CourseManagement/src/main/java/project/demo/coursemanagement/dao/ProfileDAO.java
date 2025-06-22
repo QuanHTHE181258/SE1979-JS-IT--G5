@@ -11,94 +11,40 @@ import java.util.List;
  */
 public interface ProfileDAO {
 
-    /**
-     * Get user profile by ID
-     */
     User getUserProfile(Integer userId);
 
-    /**
-     * Update user profile
-     */
     boolean updateProfile(ProfileUpdateRequest updateRequest);
 
-    /**
-     * Update user password
-     */
     boolean updatePassword(Integer userId, String newPasswordHash);
 
-    /**
-     * Update user avatar URL
-     */
     boolean updateAvatarUrl(Integer userId, String avatarUrl);
 
-    /**
-     * Remove user avatar
-     */
     boolean removeAvatar(Integer userId);
 
-    /**
-     * Save user avatar record
-     */
     boolean saveUserAvatar(UserAvatar userAvatar);
 
-    /**
-     * Get user avatars
-     */
     List<UserAvatar> getUserAvatars(Integer userId);
 
-    /**
-     * Get default user avatar
-     */
     UserAvatar getDefaultUserAvatar(Integer userId);
 
-    /**
-     * Set default user avatar
-     */
     boolean setDefaultUserAvatar(Integer userId, Integer avatarId);
 
-    /**
-     * Delete user avatar
-     */
     boolean deleteUserAvatar(Integer avatarId);
 
-    /**
-     * Check if username exists for other users
-     */
     boolean isUsernameExistsForOthers(String username, Integer excludeUserId);
 
-    /**
-     * Check if email exists for other users
-     */
     boolean isEmailExistsForOthers(String email, Integer excludeUserId);
 
-    /**
-     * Get user's current password hash
-     */
     String getUserPasswordHash(Integer userId);
 
-    /**
-     * Update user's last updated timestamp
-     */
     boolean updateLastUpdatedTime(Integer userId);
 
-    /**
-     * Get profile completion percentage
-     */
     int getProfileCompletionPercentage(Integer userId);
 
-    /**
-     * Log profile update activity
-     */
     boolean logProfileActivity(Integer userId, String activityType, String details);
 
-    /**
-     * Get recent profile activities
-     */
     List<ProfileActivity> getRecentProfileActivities(Integer userId, int limit);
 
-    /**
-     * Inner class for profile activity
-     */
     class ProfileActivity {
         private Integer activityId;
         private Integer userId;
