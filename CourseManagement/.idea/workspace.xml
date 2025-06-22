@@ -10,8 +10,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="update create product">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/ViewAllCoursesServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/CategoryDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/CourseDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/CategoryDAOImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/CourseDAOImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dto/CategoryDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dto/CourseStatsDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/entities/Enrollment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/CategoryService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/CourseService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/manage-course/view-all.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/UpdateCourseServlet.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,21 +88,25 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\hoang\Documents\GitHub\SE1979-JS-IT--G5\CourseManagement\src\main\webapp\WEB-INF\views" />
+      <recent name="D:\FULearnig\SUMMER2025\SWP391\SWP391_Git\SE1979-JS-IT--G5\CourseManagement\src\main\java\project\demo\coursemanagement\service" />
+      <recent name="D:\FULearnig\SUMMER2025\SWP391\SWP391_Git\SE1979-JS-IT--G5\CourseManagement\src\main\webapp\WEB-INF\views\manage-course" />
+      <recent name="D:\FULearnig\SUMMER2025\SWP391\SWP391_Git\SE1979-JS-IT--G5\CourseManagement\src\main\java\project\demo\coursemanagement\dto" />
+      <recent name="D:\FULearnig\SUMMER2025\SWP391\SWP391_Git\SE1979-JS-IT--G5\CourseManagement\src\main\java\project\demo\coursemanagement\entities" />
+      <recent name="D:\FULearnig\SUMMER2025\SWP391\SWP391_Git\SE1979-JS-IT--G5\CourseManagement\src\main\java\project\demo\coursemanagement\dao\impl" />
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="Tomcat 10.1.29" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 10.1.29" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+    <configuration name="Tomcat 10.1.34" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 10.1.34" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment>
-        <artifact name="CourseManagement:war">
+        <artifact name="CourseManagement:war exploded">
           <settings>
-            <option name="CONTEXT_PATH" value="/CourseManagement_war" />
+            <option name="CONTEXT_PATH" value="/CourseManagement_war_exploded" />
           </settings>
         </artifact>
       </deployment>
       <server-settings>
-        <option name="BASE_DIRECTORY_NAME" value="077ca099-be0b-46d6-b47c-45ffce676481" />
+        <option name="BASE_DIRECTORY_NAME" value="0ecb8063-e744-4b90-ab5c-eca1b9cb0a61" />
       </server-settings>
       <predefined_log_file enabled="true" id="Tomcat" />
       <predefined_log_file enabled="true" id="Tomcat Catalina" />
@@ -99,7 +114,7 @@
       <predefined_log_file id="Tomcat Host Manager" />
       <predefined_log_file id="Tomcat Localhost Access" />
       <RunnerSettings RunnerId="AppServerDebuggerRunner">
-        <option name="DEBUG_PORT" value="53623" />
+        <option name="DEBUG_PORT" value="63341" />
       </RunnerSettings>
       <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="AppServerDebuggerRunner">
         <option name="USE_ENV_VARIABLES" value="true" />
@@ -164,7 +179,7 @@
       <method v="2">
         <option name="Make" enabled="true" />
         <option name="BuildArtifacts" enabled="true">
-          <artifact name="CourseManagement:war" />
+          <artifact name="CourseManagement:war exploded" />
         </option>
       </method>
     </configuration>
@@ -187,12 +202,29 @@
       <workItem from="1748888683486" duration="2506000" />
       <workItem from="1748891211066" duration="4322000" />
       <workItem from="1748929277790" duration="1800000" />
-      <workItem from="1750578641532" duration="732000" />
+      <workItem from="1750578641532" duration="1586000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="false" />
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="update create product" />
