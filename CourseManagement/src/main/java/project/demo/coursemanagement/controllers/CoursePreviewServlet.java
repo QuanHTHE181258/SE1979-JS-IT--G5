@@ -7,14 +7,14 @@ import project.demo.coursemanagement.dto.CourseDTO;
 import project.demo.coursemanagement.dto.FeedbackDTO;
 import project.demo.coursemanagement.dto.LessonDTO;
 import project.demo.coursemanagement.entities.Cours;
-import project.demo.coursemanagement.service.CourseCatalogService;
+import project.demo.coursemanagement.service.CoursePreviewService;
 
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/catalog")
-public class CatalogServlet extends HttpServlet {
-    private final CourseCatalogService courseCatalogService = CourseCatalogService.getInstance();
+@WebServlet("/previewCourse")
+public class CoursePreviewServlet extends HttpServlet {
+    private final CoursePreviewService courseCatalogService = CoursePreviewService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -44,6 +44,6 @@ public class CatalogServlet extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        req.getRequestDispatcher("/WEB-INF/views/course-catalog.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/course-preview.jsp").forward(req, resp);
     }
 }

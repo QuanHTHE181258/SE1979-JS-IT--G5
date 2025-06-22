@@ -7,7 +7,7 @@ import project.demo.coursemanagement.entities.Cours;
 
 import java.util.List;
 
-public interface CourseCatalogDAO {
+public interface CoursePreviewDAO {
 
     CourseDTO getCourseInfoById(int id);
 

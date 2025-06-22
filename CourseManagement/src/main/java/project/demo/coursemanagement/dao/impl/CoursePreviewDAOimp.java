@@ -1,10 +1,9 @@
 package project.demo.coursemanagement.dao.impl;
 
-import project.demo.coursemanagement.dao.CourseCatalogDAO;
+import project.demo.coursemanagement.dao.CoursePreviewDAO;
 import project.demo.coursemanagement.dto.CourseDTO;
 import project.demo.coursemanagement.dto.FeedbackDTO;
 import project.demo.coursemanagement.dto.LessonDTO;
-import project.demo.coursemanagement.entities.Cours;
 import project.demo.coursemanagement.utils.DatabaseConnection;
 
 import java.sql.*;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CourseCatalogDAOimp implements CourseCatalogDAO {
+public class CoursePreviewDAOimp implements CoursePreviewDAO {
 
     Connection conn = null;
     PreparedStatement ps = null;
