@@ -19,7 +19,6 @@ import project.demo.coursemanagement.utils.DatabaseConnection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Date;
 import java.io.IOException;
 
 @WebServlet("/admin/*")
@@ -86,18 +85,9 @@ public class AdminController extends HttpServlet {
         if (activitySearch != null && !activitySearch.trim().isEmpty()) {
             recentActivities = userDAO.searchRecentActivities(activitySearch, activityLimit, activityRole);
         } else {
-            recentActivities = userDAO.getRecentLogins(activityLimit); // This now gets recent users by creation date
+            // Get recent users by creation date for the specified role
+            recentActivities = userDAO.getRecentUsersByRole(activityLimit, activityRole);
         }
-
-        // Convert Instant to Date for JSP formatting
-        recentActivities.forEach(user -> {
-            if (user.getLastLogin() != null) {
-                user.setLastLoginDate(Date.from(user.getLastLogin()));
-            }
-            if (user.getCreatedAt() != null) {
-                user.setCreatedAtDate(Date.from(user.getCreatedAt()));
-            }
-        });
 
         // Lấy thống kê user
         RegisterDAO registerDAO = new RegisterDAOImpl();

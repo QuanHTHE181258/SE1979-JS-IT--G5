@@ -31,4 +31,6 @@ public interface UserDAO {
     boolean deleteUser(int userId);
     
     List<User> searchRecentActivities(String keyword, int limit, String role);
+    
+    List<User> getRecentUsersByRole(int limit, String role);
 }
