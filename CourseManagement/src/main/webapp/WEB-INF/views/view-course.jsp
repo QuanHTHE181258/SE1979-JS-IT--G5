@@ -36,7 +36,7 @@
             <li class="course-card">
                 <div class="card-header">
                     <span class="course-code">${course.courseID}</span>
-                    <h3 class="course-title"><a href="previewCourse?courseID=${course.courseID}">${course.courseTitle}</a></h3>
+                    <h3 class="course-title"><a href="courseDetails?courseID=${course.courseID}">${course.courseTitle}</a></h3>
                     <p class="course-teacher">${course.teacherName}</p>
                 </div>
                 <div class="card-body">
