@@ -169,4 +169,32 @@ public class CourseDAOImpl implements CourseDAO {
             return false;
         }
     }
+
+    public List<Cours> getCoursesByInstructorId(Integer instructorId) {
+        List<Cours> list = new ArrayList<>();
+        String sql = "SELECT CourseID, Title, Description, Price, Rating, CreatedAt, ImageURL, InstructorID, CategoryID, Status FROM courses WHERE InstructorID = ?";
+        try (Connection conn = project.demo.coursemanagement.utils.DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, instructorId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Cours c = new Cours();
+                    c.setId(rs.getInt("CourseID"));
+                    c.setTitle(rs.getString("Title"));
+                    c.setDescription(rs.getString("Description"));
+                    c.setPrice(rs.getBigDecimal("Price"));
+                    c.setRating(rs.getDouble("Rating"));
+                    c.setCreatedAt(rs.getTimestamp("CreatedAt").toInstant());
+                    c.setImageURL(rs.getString("ImageURL"));
+                    // InstructorID, CategoryID, Status
+                    c.setStatus(rs.getString("Status"));
+                    // Bạn có thể set thêm Instructor, Category nếu cần
+                    list.add(c);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

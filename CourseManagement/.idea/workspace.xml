@@ -9,12 +9,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="fix bug">
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/UpdateCourseServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/manage-course/update-course.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/CourseDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/CourseDAO.java" afterDir="false" />
+    <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="refactor update course, validation">
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/ViewTeachingCoursesServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/teaching-courses.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/CourseDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/CourseDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/update-course.jsp" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,7 +204,7 @@
       <workItem from="1748888683486" duration="2506000" />
       <workItem from="1748891211066" duration="4322000" />
       <workItem from="1748929277790" duration="1800000" />
-      <workItem from="1750578641532" duration="7458000" />
+      <workItem from="1750578641532" duration="10254000" />
     </task>
     <task id="LOCAL-00001" summary="Merge remote-tracking branch 'origin/main' into KhiemNB">
       <option name="closed" value="true" />
@@ -223,7 +222,23 @@
       <option name="project" value="LOCAL" />
       <updated>1750603047810</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="refactor update course, validation">
+      <option name="closed" value="true" />
+      <created>1750609163505</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1750609163505</updated>
+    </task>
+    <task id="LOCAL-00004" summary="refactor update course, validation">
+      <option name="closed" value="true" />
+      <created>1750609176299</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1750609176299</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -251,6 +266,7 @@
     <MESSAGE value="fix bug view all product, add search, filter, pagination client side" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main' into KhiemNB" />
     <MESSAGE value="fix bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix bug" />
+    <MESSAGE value="refactor update course, validation" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor update course, validation" />
   </component>
 </project>
