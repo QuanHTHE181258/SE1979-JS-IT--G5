@@ -109,7 +109,7 @@
             
             <div class="form-group">
                 <label for="phone">Phone:</label>
-                <input type="text" id="phone" name="phone" value="${user.phone}">
+                <input type="text" id="phone" name="phone" value="${user.phoneNumber}">
             </div>
             
             <div class="form-group">
@@ -118,28 +118,17 @@
                     <c:forEach items="${roles}" var="role">
                         <c:choose>
                             <c:when test="${not empty user}">
-                                <%-- When editing, only allow selecting USER or TEACHER --%>
-                                <c:if test="${role.roleName == 'USER' || role.roleName == 'TEACHER'}">
-                                    <option value="${role.roleName}" ${user.role.roleName == role.roleName ? 'selected' : ''}>${role.roleName}</option>
+                                <%-- When editing, allow selecting Student or Teacher --%>
+                                <c:if test="${role.roleName == 'Student' || role.roleName == 'Teacher'}">
+                                    <option value="${role.roleName}" ${user.role != null and user.role.roleName == role.roleName ? 'selected' : ''}>${role.roleName}</option>
                                 </c:if>
                             </c:when>
                             <c:otherwise>
                                 <%-- When creating, allow selecting any role, default to roleName from request --%>
-                                <%-- Filter to only show USER_MANAGER when creating --%>
-                                <c:if test="${role.roleName == 'USER_MANAGER'}">
-                                    <option value="${role.roleName}" ${roleName == role.roleName ? 'selected' : ''}>${role.roleName}</option>
-                                </c:if>
+                                <option value="${role.roleName}" ${roleName == role.roleName ? 'selected' : ''}>${role.roleName}</option>
                             </c:otherwise>
                         </c:choose>
                     </c:forEach>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="isActive">Is Active:</label>
-                <select id="isActive" name="isActive">
-                    <option value="true" <c:if test="${empty user || user.isActive}">selected</c:if>>Yes</option>
-                    <option value="false" <c:if test="${not empty user && !user.isActive}">selected</c:if>>No</option>
                 </select>
             </div>
             

@@ -42,6 +42,11 @@
         </a>
       </li>
       <li>
+        <a href="${pageContext.request.contextPath}/admin/orders">
+          <i class="fas fa-shopping-cart"></i> Order Management
+        </a>
+      </li>
+      <li>
         <a href="${pageContext.request.contextPath}/admin/categories">
           <i class="fas fa-tags"></i> Categories
         </a>
@@ -240,7 +245,7 @@
                           <td>
                             <fmt:formatDate value="${user.createdAtDate}" pattern="MMM dd, yyyy HH:mm" />
                           </td>
-                          <td>${user.role.roleName}</td>
+                          <td>User</td>
                         </tr>
                       </c:forEach>
                       </tbody>
@@ -329,7 +334,7 @@
                         <h6 class="mb-1">${course.title}</h6>
                         <small class="text-muted">${course.enrollmentCount} students</small>
                       </div>
-                      <span class="badge badge-primary">${course.category.name}</span>
+                      <span class="badge badge-primary">Category ${course.categoryId}</span>
                     </div>
                   </c:forEach>
                 </c:when>
@@ -361,9 +366,7 @@
                           <fmt:formatDate value="${user.createdAtDate}" pattern="MMM dd, yyyy HH:mm" />
                         </small>
                       </div>
-                      <span class="badge badge-${user.role.roleName == 'TEACHER' ? 'success' : 'info'} ms-auto">
-                          ${user.role.roleName}
-                      </span>
+                      <span class="badge badge-info ms-auto">User</span>
                     </div>
                   </c:forEach>
                 </c:when>

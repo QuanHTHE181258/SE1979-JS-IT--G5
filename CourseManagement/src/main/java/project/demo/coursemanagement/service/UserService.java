@@ -69,6 +69,19 @@ public class UserService {
         return userDAO.findUserById(userId); 
     }
 
+    public User getUserByIdWithRole(int userId) {
+        User user = userDAO.findUserById(userId);
+        if (user != null) {
+            // Get user's role
+            List<Role> userRoles = userRoleDAO.findRolesByUserId(userId);
+            if (!userRoles.isEmpty()) {
+                // For now, just set the first role (primary role)
+                user.setRole(userRoles.get(0));
+            }
+        }
+        return user;
+    }
+
     public void createUser(String username, String email, String password, String firstName, String lastName, String phoneNumber, String roleName) throws Exception {
         // Basic validation - only require username, email, password, and roleName for creation
         if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty() || roleName == null || roleName.trim().isEmpty()) {
@@ -111,13 +124,13 @@ public class UserService {
         }
     }
 
-    public void updateUser(int userId, String username, String email, String phoneNumber, String roleName, boolean isActive) throws Exception {
+    public void updateUser(int userId, String username, String email, String phoneNumber, String roleName) throws Exception {
         // Basic validation
          if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty() || phoneNumber == null || phoneNumber.trim().isEmpty() || roleName == null || roleName.trim().isEmpty()) {
             throw new IllegalArgumentException("Username, email, phone, and role are required.");
         }
 
-        User existingUser = userDAO.findUserByIdIncludeInactive(userId); // Use IncludeInactive to update status
+        User existingUser = userDAO.findUserById(userId); // Use findUserById since no isActive field
         if (existingUser == null) {
             throw new Exception("User not found.");
         }

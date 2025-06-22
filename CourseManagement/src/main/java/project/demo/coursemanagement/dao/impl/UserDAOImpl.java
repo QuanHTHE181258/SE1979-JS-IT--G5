@@ -3,7 +3,6 @@ package project.demo.coursemanagement.dao.impl;
 import project.demo.coursemanagement.dao.UserDAO;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.utils.DatabaseConnection;
-import project.demo.coursemanagement.entities.Role;
 
 import java.sql.*;
 import java.time.Instant;
@@ -97,11 +96,8 @@ public class UserDAOImpl implements UserDAO {
         String sql = """
                     SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName,
                            u.LastName, u.PhoneNumber, u.DateOfBirth, u.AvatarURL,
-                           u.LastLogin, u.CreatedAt,
-                           r.RoleID, r.RoleName
+                           u.LastLogin, u.CreatedAt
                     FROM users u
-                    INNER JOIN user_roles ur ON u.UserID = ur.UserID
-                    INNER JOIN roles r ON ur.RoleID = r.RoleID
                 """;
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -122,11 +118,8 @@ public class UserDAOImpl implements UserDAO {
         String sql = """
                     SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName,
                            u.LastName, u.PhoneNumber, u.DateOfBirth, u.AvatarURL,
-                           u.LastLogin, u.CreatedAt,
-                           r.RoleID, r.RoleName
+                           u.LastLogin, u.CreatedAt
                     FROM users u
-                    INNER JOIN user_roles ur ON u.UserID = ur.UserID
-                    INNER JOIN roles r ON ur.RoleID = r.RoleID
                     WHERE u.FirstName LIKE ? OR u.LastName LIKE ? OR u.Username LIKE ?
                 """;
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -155,13 +148,9 @@ public class UserDAOImpl implements UserDAO {
         List<User> users = new ArrayList<>();
         String sql = """
             SELECT TOP (?) u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName,
-                   u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt,
-                   r.RoleID, r.RoleName
+                   u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt
             FROM users u
-            INNER JOIN user_roles ur ON u.UserID = ur.UserID
-            INNER JOIN roles r ON ur.RoleID = r.RoleID
-            WHERE u.LastLogin IS NOT NULL
-            ORDER BY u.LastLogin DESC
+            ORDER BY u.CreatedAt DESC
         """;
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -183,15 +172,28 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> findUsers(String search, String roleName, int offset, int limit) {
         List<User> users = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("""
-            SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName,
-                   u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt,
-                   r.RoleID, r.RoleName
-            FROM users u
-            INNER JOIN user_roles ur ON u.UserID = ur.UserID
-            INNER JOIN roles r ON ur.RoleID = r.RoleID
-            WHERE 1=1
-        """);
+        StringBuilder sql = new StringBuilder();
+        
+        if (roleName != null && !roleName.trim().isEmpty()) {
+            // Include role filter
+            sql.append("""
+                SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName,
+                       u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt
+                FROM users u
+                INNER JOIN user_roles ur ON u.UserID = ur.UserID
+                INNER JOIN roles r ON ur.RoleID = r.RoleID
+                WHERE 1=1
+            """);
+        } else {
+            // No role filter
+            sql.append("""
+                SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName,
+                       u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt
+                FROM users u
+                WHERE 1=1
+            """);
+        }
+        
         List<Object> params = new ArrayList<>();
 
         if (search != null && !search.trim().isEmpty()) {
@@ -235,13 +237,26 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public int countUsers(String search, String roleName) {
-        StringBuilder sql = new StringBuilder("""
-            SELECT COUNT(*) 
-            FROM users u 
-            INNER JOIN user_roles ur ON u.UserID = ur.UserID 
-            INNER JOIN roles r ON ur.RoleID = r.RoleID 
-            WHERE 1=1
-        """);
+        StringBuilder sql = new StringBuilder();
+        
+        if (roleName != null && !roleName.trim().isEmpty()) {
+            // Include role filter
+            sql.append("""
+                SELECT COUNT(*) 
+                FROM users u 
+                INNER JOIN user_roles ur ON u.UserID = ur.UserID 
+                INNER JOIN roles r ON ur.RoleID = r.RoleID 
+                WHERE 1=1
+            """);
+        } else {
+            // No role filter
+            sql.append("""
+                SELECT COUNT(*) 
+                FROM users u 
+                WHERE 1=1
+            """);
+        }
+        
         List<Object> params = new ArrayList<>();
 
         if (search != null && !search.trim().isEmpty()) {
@@ -406,5 +421,36 @@ public class UserDAOImpl implements UserDAO {
             System.err.println("Error updating and uploading avatar: " + e.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public List<User> searchRecentActivities(String keyword, int limit, String role) {
+        List<User> result = new ArrayList<>();
+        String sql = "SELECT TOP (?) u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName, " +
+                     "u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt " +
+                     "FROM users u " +
+                     "JOIN user_roles ur ON u.UserID = ur.UserID " +
+                     "JOIN roles r ON ur.RoleID = r.RoleID " +
+                     "WHERE (LOWER(u.Username) LIKE ? OR LOWER(u.Email) LIKE ? OR LOWER(u.FirstName) LIKE ? OR LOWER(u.LastName) LIKE ?) " +
+                     "AND LOWER(r.RoleName) = ? " +
+                     "ORDER BY u.LastLogin DESC";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            String kw = "%" + keyword.toLowerCase() + "%";
+            stmt.setInt(1, limit);
+            stmt.setString(2, kw);
+            stmt.setString(3, kw);
+            stmt.setString(4, kw);
+            stmt.setString(5, kw);
+            stmt.setString(6, role.toLowerCase());
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                User user = mapResultSetToUser(rs);
+                result.add(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

@@ -71,4 +71,36 @@ public class User {
     @Column(name = "CreatedAt")
     private Instant createdAt;
 
+    @jakarta.persistence.Transient
+    private java.util.Date lastLoginDate;
+
+    @jakarta.persistence.Transient
+    private java.util.Date createdAtDate;
+
+    @jakarta.persistence.Transient
+    private Role role;
+
+    public java.util.Date getLastLoginDate() {
+        return lastLoginDate;
+    }
+
+    public void setLastLoginDate(java.util.Date lastLoginDate) {
+        this.lastLoginDate = lastLoginDate;
+    }
+
+    public java.util.Date getCreatedAtDate() {
+        return createdAtDate;
+    }
+
+    public void setCreatedAtDate(java.util.Date createdAtDate) {
+        this.createdAtDate = createdAtDate;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 }
