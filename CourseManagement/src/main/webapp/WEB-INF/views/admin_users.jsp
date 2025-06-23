@@ -37,7 +37,12 @@
                     <i class="fas fa-shopping-cart"></i> Order Management
                 </a>
             </li>
-            <li <c:if test="${request.servletPath == '/admin/categories'}">class="active"</c:if>>
+            <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/admin/revenue-analytics">
+                    <i class="fas fa-chart-bar"></i> Revenue Analytics
+                </a>
+            </li>
+            <!-- <li <c:if test="${request.servletPath == '/admin/categories'}">class="active"</c:if>>
                 <a href="${pageContext.request.contextPath}/admin/categories">
                     <i class="fas fa-tags"></i> Categories
                 </a>
@@ -61,7 +66,7 @@
                 <a href="${pageContext.request.contextPath}/admin/settings">
                     <i class="fas fa-cog"></i> Settings
                 </a>
-            </li>
+            </li> -->
         </ul>
     </nav>
 

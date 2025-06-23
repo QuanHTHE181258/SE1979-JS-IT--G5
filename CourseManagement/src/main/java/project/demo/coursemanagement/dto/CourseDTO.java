@@ -27,6 +27,8 @@ public class CourseDTO {
     private Instant createdAt;
     private java.util.Date createdAtDate;
     private int enrollmentCount;
+    private BigDecimal rating;
+    private String status;
 
 
     public CourseDTO() {
@@ -214,5 +216,21 @@ public class CourseDTO {
 
     public void setEnrollmentCount(int enrollmentCount) {
         this.enrollmentCount = enrollmentCount;
+    }
+
+    public BigDecimal getRating() {
+        return rating;
+    }
+
+    public void setRating(BigDecimal rating) {
+        this.rating = rating;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

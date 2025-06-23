@@ -20,58 +20,37 @@
 <body>
 <div class="wrapper">
   <!-- Sidebar -->
-  <nav id="sidebar" class="bg-dark text-white">
-    <div class="sidebar-header">
-      <h3>Admin Panel</h3>
+  <nav class="col-md-2 d-md-block sidebar min-vh-100" id="sidebar">
+    <div class="position-sticky pt-3">
+      <h3 class="text-white text-center mb-4">Admin Panel</h3>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" href="${pageContext.request.contextPath}/admin/dashboard">
+            <i class="fas fa-home"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="${pageContext.request.contextPath}/admin/courses">
+            <i class="fas fa-book"></i> Courses
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="${pageContext.request.contextPath}/admin/orders">
+            <i class="fas fa-shopping-cart"></i> Orders
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="${pageContext.request.contextPath}/admin/users">
+            <i class="fas fa-users"></i> Users
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="${pageContext.request.contextPath}/admin/revenue-analytics">
+            <i class="fas fa-chart-bar"></i> Revenue Analytics
+          </a>
+        </li>
+      </ul>
     </div>
-
-    <ul class="list-unstyled components">
-      <li class="active">
-        <a href="${pageContext.request.contextPath}/admin">
-          <i class="fas fa-tachometer-alt"></i> Dashboard
-        </a>
-      </li>
-      <li>
-        <a href="${pageContext.request.contextPath}/admin/users">
-          <i class="fas fa-users"></i> User Management
-        </a>
-      </li>
-      <li>
-        <a href="${pageContext.request.contextPath}/admin/courses">
-          <i class="fas fa-book"></i> Course Management
-        </a>
-      </li>
-      <li>
-        <a href="${pageContext.request.contextPath}/admin/orders">
-          <i class="fas fa-shopping-cart"></i> Order Management
-        </a>
-      </li>
-      <li>
-        <a href="${pageContext.request.contextPath}/admin/categories">
-          <i class="fas fa-tags"></i> Categories
-        </a>
-      </li>
-      <li>
-        <a href="${pageContext.request.contextPath}/admin/enrollments">
-          <i class="fas fa-user-graduate"></i> Enrollments
-        </a>
-      </li>
-      <li>
-        <a href="${pageContext.request.contextPath}/admin/feedback">
-          <i class="fas fa-comments"></i> Feedback
-        </a>
-      </li>
-      <li>
-        <a href="${pageContext.request.contextPath}/admin/reports">
-          <i class="fas fa-chart-bar"></i> Reports
-        </a>
-      </li>
-      <li>
-        <a href="${pageContext.request.contextPath}/admin/settings">
-          <i class="fas fa-cog"></i> Settings
-        </a>
-      </li>
-    </ul>
   </nav>
 
   <!-- Page Content -->

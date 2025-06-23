@@ -155,7 +155,8 @@ public class OrderDAOImpl implements OrderDAO {
     private List<OrderDetailDTO> getOrderDetails(Integer orderId) {
         List<OrderDetailDTO> details = new ArrayList<>();
         String sql = """
-            SELECT od.OrderDetailID, od.OrderID, od.CourseID, c.Title as CourseTitle, od.Price
+            SELECT od.OrderDetailID, od.OrderID, od.CourseID, c.Title as CourseTitle, od.Price,
+                   c.Description, c.Rating, c.CreatedAt, c.ImageURL, c.Status
             FROM orderdetails od
             JOIN courses c ON od.CourseID = c.CourseID
             WHERE od.OrderID = ?
@@ -174,6 +175,20 @@ public class OrderDAOImpl implements OrderDAO {
                     detail.setCourseId(rs.getInt("CourseID"));
                     detail.setCourseTitle(rs.getString("CourseTitle"));
                     detail.setPrice(rs.getBigDecimal("Price"));
+                    // Set thêm các trường course vào CourseDTO
+                    project.demo.coursemanagement.dto.CourseDTO course = new project.demo.coursemanagement.dto.CourseDTO();
+                    course.setCourseCode(String.valueOf(rs.getInt("CourseID")));
+                    course.setTitle(rs.getString("CourseTitle"));
+                    course.setDescription(rs.getString("Description"));
+                    course.setRating(rs.getBigDecimal("Rating"));
+                    java.sql.Timestamp createdAt = rs.getTimestamp("CreatedAt");
+                    if (createdAt != null) {
+                        course.setCreatedAt(createdAt.toInstant());
+                        course.setCreatedAtDate(new java.util.Date(createdAt.getTime()));
+                    }
+                    course.setImageUrl(rs.getString("ImageURL"));
+                    course.setStatus(rs.getString("Status"));
+                    detail.setCourse(course);
                     details.add(detail);
                 }
             }
@@ -398,5 +413,39 @@ public class OrderDAOImpl implements OrderDAO {
             e.printStackTrace();
         }
         return revenueByMonth;
+    }
+
+    public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueDetails() {
+        List<project.demo.coursemanagement.dto.RevenueDetailDTO> details = new ArrayList<>();
+        String sql = """
+            SELECT o.OrderID, o.CreatedAt, o.Status, o.TotalAmount,
+                   c.Title AS CourseTitle, od.Price AS CoursePrice,
+                   u.FirstName, u.LastName, u.Email
+            FROM orders o
+            JOIN orderdetails od ON o.OrderID = od.OrderID
+            JOIN courses c ON od.CourseID = c.CourseID
+            JOIN users u ON o.UserID = u.UserID
+            WHERE o.Status = 'paid'
+            ORDER BY o.CreatedAt DESC
+        """;
+        try (Connection conn = dbConn.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                project.demo.coursemanagement.dto.RevenueDetailDTO dto = new project.demo.coursemanagement.dto.RevenueDetailDTO();
+                dto.setOrderId(rs.getInt("OrderID"));
+                dto.setOrderDate(rs.getTimestamp("CreatedAt"));
+                dto.setStatus(rs.getString("Status"));
+                dto.setTotalAmount(rs.getBigDecimal("TotalAmount"));
+                dto.setCourseTitle(rs.getString("CourseTitle"));
+                dto.setCoursePrice(rs.getBigDecimal("CoursePrice"));
+                dto.setCustomerName(rs.getString("FirstName") + " " + rs.getString("LastName"));
+                dto.setCustomerEmail(rs.getString("Email"));
+                details.add(dto);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return details;
     }
 }

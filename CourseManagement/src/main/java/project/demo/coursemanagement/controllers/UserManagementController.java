@@ -27,12 +27,14 @@ public class UserManagementController extends HttpServlet {
         String keyword = request.getParameter("keyword");
         request.setAttribute("keyword", keyword);
 
-        // Get list of all users
-        List<User> allUsers = userService.getUsers(keyword, null, 1);
+        // Lấy danh sách học sinh
+        List<User> students = userService.getUsers(keyword, "Student", 1);
+        // Lấy danh sách giảng viên
+        List<User> teachers = userService.getUsers(keyword, "Teacher", 1);
 
-        // Set lists as request attributes
-        request.setAttribute("students", allUsers);
-        request.setAttribute("teachers", allUsers);
+        // Truyền hai danh sách riêng biệt sang JSP
+        request.setAttribute("students", students);
+        request.setAttribute("teachers", teachers);
 
         // Forward to JSP
         request.getRequestDispatcher("/WEB-INF/views/user_management.jsp").forward(request, response);

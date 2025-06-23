@@ -200,6 +200,11 @@
                             <i class="fas fa-users"></i> Users
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/admin/revenue-analytics">
+                            <i class="fas fa-chart-bar"></i> Revenue Analytics
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -208,9 +213,6 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Order Management</h1>
                 <div class="btn-group" role="group">
-                    <a href="${pageContext.request.contextPath}/admin/orders/analytics" class="btn btn-info">
-                        <i class="fas fa-chart-bar"></i> Analytics
-                    </a>
                     <div class="btn-group" role="group">
                         <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="fas fa-download"></i> Export
@@ -325,6 +327,10 @@
                                         <tr>
                                             <th>Course</th>
                                             <th>Price</th>
+                                            <th>Description</th>
+                                            <th>Rating</th>
+                                            <th>Status</th>
+<%--                                            <th>Image</th>--%>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -335,6 +341,14 @@
                                                     <fmt:formatNumber value="${detail.price}"
                                                                       type="currency"
                                                                       currencySymbol="$"/>
+                                                </td>
+                                                <td>${detail.course.description}</td>
+                                                <td>${detail.course.rating}</td>
+                                                <td>${detail.course.status}</td>
+                                                <td>
+                                                    <c:if test="${not empty detail.course.imageUrl}">
+                                                        <img src="${detail.course.imageUrl}" alt="Course Image" style="max-width:60px;max-height:40px;"/>
+                                                    </c:if>
                                                 </td>
                                             </tr>
                                         </c:forEach>

@@ -100,7 +100,11 @@
                 <th>ID</th>
                 <th>Username</th>
                 <th>Email</th>
+                <th>Full Name</th>
                 <th>Phone</th>
+                <th>Date of Birth</th>
+                <th>Last Login</th>
+                <th>Created At</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -111,7 +115,11 @@
                     <td>${student.id}</td>
                     <td>${student.username}</td>
                     <td>${student.email}</td>
+                    <td>${student.firstName} ${student.lastName}</td>
                     <td>${student.phoneNumber}</td>
+                    <td>${student.dateOfBirth}</td>
+                    <td>${student.lastLogin}</td>
+                    <td>${student.createdAt}</td>
                     <td>Active</td>
                     <td>
                         <a href="${pageContext.request.contextPath}/admin/users/edit/${student.id}" class="btn btn-primary btn-sm">Edit</a>
@@ -130,7 +138,11 @@
                 <th>ID</th>
                 <th>Username</th>
                 <th>Email</th>
+                <th>Full Name</th>
                 <th>Phone</th>
+                <th>Date of Birth</th>
+                <th>Last Login</th>
+                <th>Created At</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -141,7 +153,11 @@
                     <td>${teacher.id}</td>
                     <td>${teacher.username}</td>
                     <td>${teacher.email}</td>
+                    <td>${teacher.firstName} ${teacher.lastName}</td>
                     <td>${teacher.phoneNumber}</td>
+                    <td>${teacher.dateOfBirth}</td>
+                    <td>${teacher.lastLogin}</td>
+                    <td>${teacher.createdAt}</td>
                     <td>Active</td>
                     <td>
                         <a href="${pageContext.request.contextPath}/admin/users/edit/${teacher.id}" class="btn btn-primary btn-sm">Edit</a>
