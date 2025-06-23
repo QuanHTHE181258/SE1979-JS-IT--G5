@@ -497,15 +497,14 @@ public class UserDAOImpl implements UserDAO {
     // Helper method to map ResultSet to User with role information
     private User mapResultSetToUserWithRole(ResultSet rs) throws SQLException {
         User user = mapResultSetToUser(rs);
-        
         // Set role information
         String roleName = rs.getString("RoleName");
         if (roleName != null) {
-            Role role = new Role();
-            role.setRoleName(roleName);
-            user.setRole(role);
+            // Role role = new Role();
+            // role.setRoleName(roleName);
+            // user.setRole(role); // Xóa dòng này vì User không có setRole
+            // Nếu cần, có thể trả về roleName ngoài entity
         }
-        
         return user;
     }
 

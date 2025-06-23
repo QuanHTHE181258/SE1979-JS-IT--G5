@@ -77,9 +77,6 @@ public class User {
     @jakarta.persistence.Transient
     private java.util.Date createdAtDate;
 
-    @jakarta.persistence.Transient
-    private Role role;
-
     public java.util.Date getLastLoginDate() {
         return lastLoginDate;
     }
@@ -94,13 +91,5 @@ public class User {
 
     public void setCreatedAtDate(java.util.Date createdAtDate) {
         this.createdAtDate = createdAtDate;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 }

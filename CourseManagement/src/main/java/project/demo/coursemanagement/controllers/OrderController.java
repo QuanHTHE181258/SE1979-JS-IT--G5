@@ -5,12 +5,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import project.demo.coursemanagement.dao.OrderDAO;
-import project.demo.coursemanagement.dao.OrderDAOImpl;
 import project.demo.coursemanagement.dto.OrderDTO;
 import project.demo.coursemanagement.dto.OrderAnalyticsDTO;
 import project.demo.coursemanagement.service.OrderService;
-import project.demo.coursemanagement.service.impl.OrderServiceImpl;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,8 +19,7 @@ import java.util.List;
     "/admin/orders/analytics"
 })
 public class OrderController extends HttpServlet {
-    private final OrderDAO orderDAO = new OrderDAOImpl();
-    private final OrderService orderService = new OrderServiceImpl();
+    private final OrderService orderService = new OrderService();
     private static final int PAGE_SIZE = 8;
 
     @Override
@@ -62,17 +58,17 @@ public class OrderController extends HttpServlet {
 
         if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
             // Search functionality
-            orders = orderDAO.searchOrders(searchKeyword, offset, PAGE_SIZE);
-            totalOrders = orderDAO.countSearchResults(searchKeyword);
+            orders = orderService.searchOrders(searchKeyword, offset, PAGE_SIZE);
+            totalOrders = orderService.countSearchResults(searchKeyword);
             request.setAttribute("searchKeyword", searchKeyword);
         } else if (status != null && !status.isEmpty()) {
             // Filter by status
-            orders = orderDAO.getOrdersByStatus(status);
+            orders = orderService.getOrdersByStatus(status);
             totalOrders = orders.size(); // For status filtering, we already have all orders
         } else {
             // Default pagination
-            orders = orderDAO.getOrdersWithPagination(offset, PAGE_SIZE);
-            totalOrders = orderDAO.countOrders();
+            orders = orderService.getOrdersWithPagination(offset, PAGE_SIZE);
+            totalOrders = orderService.countOrders();
         }
 
         totalPages = (int) Math.ceil((double) totalOrders / PAGE_SIZE);
@@ -94,9 +90,9 @@ public class OrderController extends HttpServlet {
         // Get orders based on filter
         List<OrderDTO> orders;
         if (status != null && !status.isEmpty()) {
-            orders = orderDAO.getOrdersByStatus(status);
+            orders = orderService.getOrdersByStatus(status);
         } else {
-            orders = orderDAO.getAllOrders();
+            orders = orderService.getAllOrders();
         }
         
         // Export using service (Transaction 1: Controller → Service)
@@ -143,7 +139,7 @@ public class OrderController extends HttpServlet {
             if (orderIdParam != null && newStatus != null) {
                 try {
                     int orderId = Integer.parseInt(orderIdParam);
-                    boolean success = orderDAO.updateOrderStatus(orderId, newStatus);
+                    boolean success = orderService.updateOrderStatus(orderId, newStatus);
 
                     if (success) {
                         response.sendRedirect(request.getContextPath() + "/admin/orders");

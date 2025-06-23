@@ -5,10 +5,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import project.demo.coursemanagement.dao.UserDAO;
-import project.demo.coursemanagement.dao.impl.UserDAOImpl;
-import project.demo.coursemanagement.dao.RegisterDAO;
-import project.demo.coursemanagement.dao.impl.RegisterDAOImpl;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.service.UserService;
 import project.demo.coursemanagement.entities.Role;
@@ -19,17 +15,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @WebServlet(name = "AdminUserController", urlPatterns = {"/admin/users", "/admin/users/*"})
 public class AdminUserController extends HttpServlet {
-    private final UserDAO userDAO;
-    private final RegisterDAO registerDAO;
     private UserService userService;
-
-    public AdminUserController() {
-        this.userDAO = new UserDAOImpl();
-        this.registerDAO = new RegisterDAOImpl();
-    }
 
     @Override
     public void init() throws ServletException {
@@ -45,14 +33,12 @@ public class AdminUserController extends HttpServlet {
         request.setAttribute("searchTerm", searchTerm);
 
         if (pathInfo == null || pathInfo.equals("/")) {
-            // List all users or search
             List<User> userList;
             if (searchTerm != null && !searchTerm.trim().isEmpty()) {
-                userList = userDAO.searchUsersByName(searchTerm);
+                userList = userService.getUsers(searchTerm, null, 1);
             } else {
-                userList = userDAO.getAllUsers();
+                userList = userService.getAllUsers();
             }
-            // Convert Instant to Date for JSP formatting
             userList.forEach(user -> {
                 if (user.getLastLogin() != null) {
                     user.setLastLoginDate(Date.from(user.getLastLogin()));
@@ -75,7 +61,7 @@ public class AdminUserController extends HttpServlet {
                     int userId = Integer.parseInt(userIdString);
 
                     // Handle GET request for edit page
-                    User user = userService.getUserByIdWithRole(userId);
+                    User user = userService.getUserById(userId);
                     if (user != null) {
                         List<Role> roles = userService.getAllRoles(); // Assuming this method exists in UserService
                         request.setAttribute("user", user);
@@ -146,9 +132,10 @@ public class AdminUserController extends HttpServlet {
                 String lastName = request.getParameter("lastName");
                 String phone = request.getParameter("phone");
                 String roleName = request.getParameter("roleName");
-                // Note: isActive is not used since User entity doesn't have this field
+                boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
 
                 // Call UserService to update the user
+                // The updateUser method in UserService.java should handle fetching the Role object
                 userService.updateUser(userId, username, email, phone, roleName);
 
                 // Redirect back to user management page with success message
@@ -214,10 +201,10 @@ public class AdminUserController extends HttpServlet {
             try {
                 int userId = Integer.parseInt(userIdString);
                 // Reuse the logic from the previous doGet, but it's now in doPost
-                if (userDAO.findUserByIdIncludeInactive(userId) != null) { // Check if user exists (active or inactive)
+                if (userService.findUserByIdIncludeInactive(userId) != null) { // Check if user exists (active or inactive)
                     switch (action) {
                         case "deactivate":
-                            if (registerDAO.updateUserActiveStatus(userId, false)) {
+                            if (userService.updateUserActiveStatus(userId, false)) {
                                 // Redirect back to user management page
                                 response.sendRedirect(request.getContextPath() + "/admin/user-management?message=User deactivated successfully");
                             } else {
@@ -225,7 +212,7 @@ public class AdminUserController extends HttpServlet {
                             }
                             break;
                         case "activate":
-                            if (registerDAO.updateUserActiveStatus(userId, true)) {
+                            if (userService.updateUserActiveStatus(userId, true)) {
                                 // Redirect back to user management page
                                 response.sendRedirect(request.getContextPath() + "/admin/user-management?message=User activated successfully");
                             } else {

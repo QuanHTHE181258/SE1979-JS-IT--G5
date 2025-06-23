@@ -7,8 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.service.UserService;
-import project.demo.coursemanagement.dao.UserDAO;
-import project.demo.coursemanagement.dao.impl.UserDAOImpl;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,13 +14,11 @@ import java.util.List;
 @WebServlet(name = "UserManagementController", urlPatterns = {"/admin/user-management", "/admin/user-management/*"})
 public class UserManagementController extends HttpServlet {
     private UserService userService;
-    private UserDAO userDAO;
 
     @Override
     public void init() throws ServletException {
         super.init();
         this.userService = new UserService();
-        this.userDAO = new UserDAOImpl();
     }
 
     @Override

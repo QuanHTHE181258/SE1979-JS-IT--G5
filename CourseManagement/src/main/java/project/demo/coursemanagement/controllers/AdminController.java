@@ -5,16 +5,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import project.demo.coursemanagement.entities.User;
-import project.demo.coursemanagement.dao.RegisterDAO;
-import project.demo.coursemanagement.dao.impl.RegisterDAOImpl;
-import project.demo.coursemanagement.dao.RegisterDAO.RegistrationStats;
-import project.demo.coursemanagement.dao.UserDAO;
-import project.demo.coursemanagement.dao.impl.UserDAOImpl;
-import project.demo.coursemanagement.dao.CourseDAO;
 import project.demo.coursemanagement.dto.CourseDTO;
-import project.demo.coursemanagement.utils.DatabaseConnection;
+import project.demo.coursemanagement.service.UserService;
+import project.demo.coursemanagement.service.CourseService;
+import project.demo.coursemanagement.service.RegisterService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,16 +18,9 @@ import java.io.IOException;
 
 @WebServlet("/admin/*")
 public class AdminController extends HttpServlet {
-
-    private final UserDAO userDAO;
-    private final RegisterDAO registerDAO;
-    private CourseDAO courseDAO;
-
-    public AdminController() {
-        this.userDAO = new UserDAOImpl();
-        this.registerDAO = new RegisterDAOImpl();
-        this.courseDAO = new CourseDAO();
-    }
+    private final UserService userService = new UserService();
+    private final RegisterService registerService = new RegisterService();
+    private final CourseService courseService = new CourseService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -48,7 +36,6 @@ public class AdminController extends HttpServlet {
             String activityLimitStr = request.getParameter("activityLimit");
             if (activityLimitStr != null && !activityLimitStr.trim().isEmpty()) {
                 activityLimit = Integer.parseInt(activityLimitStr);
-                // Ensure limit is either 5 or 10
                 if (activityLimit != 5 && activityLimit != 10) {
                     activityLimit = 5;
                 }
@@ -57,7 +44,6 @@ public class AdminController extends HttpServlet {
             String courseLimitStr = request.getParameter("courseLimit");
             if (courseLimitStr != null && !courseLimitStr.trim().isEmpty()) {
                 courseLimit = Integer.parseInt(courseLimitStr);
-                // Ensure limit is either 5 or 10
                 if (courseLimit != 5 && courseLimit != 10) {
                     courseLimit = 5;
                 }
@@ -66,58 +52,45 @@ public class AdminController extends HttpServlet {
             // If parsing fails, use default values
         }
 
-        // Lấy role cho recent activities (chỉ student/teacher)
         String activityRole = request.getParameter("activityRole");
         if (activityRole == null || (!activityRole.equalsIgnoreCase("student") && !activityRole.equalsIgnoreCase("teacher"))) {
-            activityRole = "student"; // mặc định là student
+            activityRole = "student";
         }
 
         // Get recent courses with search and limit
         List<CourseDTO> recentCourses;
         if (courseSearch != null && !courseSearch.trim().isEmpty()) {
-            recentCourses = courseDAO.searchRecentCourses(courseSearch, courseLimit);
+            recentCourses = courseService.searchRecentCourses(courseSearch, courseLimit);
         } else {
-            recentCourses = courseDAO.getRecentCourses(courseLimit);
+            recentCourses = courseService.getRecentCourses(courseLimit);
         }
 
         // Get recent activities with search, limit, and role
         List<User> recentActivities;
         if (activitySearch != null && !activitySearch.trim().isEmpty()) {
-            recentActivities = userDAO.searchRecentActivities(activitySearch, activityLimit, activityRole);
+            recentActivities = userService.searchRecentActivities(activitySearch, activityLimit, activityRole);
         } else {
-            // Get recent users by creation date for the specified role
-            recentActivities = userDAO.getRecentUsersByRole(activityLimit, activityRole);
+            recentActivities = userService.getRecentUsersByRole(activityLimit, activityRole);
         }
 
         // Lấy thống kê user
-        RegisterDAO registerDAO = new RegisterDAOImpl();
-        RegistrationStats stats = this.registerDAO.getRegistrationStatistics();
+        RegisterService.RegistrationStatistics stats = registerService.getRegistrationStatistics();
 
         // Lấy tổng số khóa học
-        int totalCourses = this.courseDAO.countCourses(null, null);
+        int totalCourses = courseService.countCourses(null, null);
 
-        // Tạo map để truyền sang JSP (có thể mở rộng cho các thống kê khác)
         Map<String, Object> dashboardStats = new HashMap<>();
-        dashboardStats.put("totalUsers", stats.getTotalUsers());
+        dashboardStats.put("totalUsers", stats.getTotalRegistrations());
         dashboardStats.put("totalCourses", totalCourses);
         dashboardStats.put("activeEnrollments", 0); // TODO: Implement enrollment counting
         dashboardStats.put("totalRevenue", 0.0); // TODO: Implement revenue calculation
-        // Có thể bổ sung các trường khác nếu cần
 
         request.setAttribute("dashboardStats", dashboardStats);
-        // Đặt danh sách user đăng ký gần đây vào request attribute
-        request.setAttribute("recentUsers", this.registerDAO.getRecentRegistrations(10));
-
-        // Đặt danh sách user đăng nhập gần đây vào request attribute cho Recent Activities
+        request.setAttribute("recentUsers", stats.getTodayRegistrations()); // Hoặc lấy từ service khác nếu cần
         request.setAttribute("recentActivities", recentActivities);
-
-        // Đặt danh sách khóa học gần đây vào request attribute
         request.setAttribute("recentCourses", recentCourses);
+        request.setAttribute("topCourses", courseService.getTopCourses(5));
 
-        // Đặt danh sách top courses vào request attribute
-        request.setAttribute("topCourses", this.courseDAO.getTopCourses(5));
-
-        // Forward tới admin.jsp (nằm trong WEB-INF/views)
         request.getRequestDispatcher("/WEB-INF/views/admin.jsp")
                 .forward(request, response);
     }

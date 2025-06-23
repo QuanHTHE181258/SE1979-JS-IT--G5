@@ -120,7 +120,7 @@
                             <c:when test="${not empty user}">
                                 <%-- When editing, allow selecting Student or Teacher --%>
                                 <c:if test="${role.roleName == 'Student' || role.roleName == 'Teacher'}">
-                                    <option value="${role.roleName}" ${user.role != null and user.role.roleName == role.roleName ? 'selected' : ''}>${role.roleName}</option>
+                                    <option value="${role.roleName}" <c:if test="${user.role != null && user.role.roleName == role.roleName}">selected</c:if>>${role.roleName}</option>
                                 </c:if>
                             </c:when>
                             <c:otherwise>

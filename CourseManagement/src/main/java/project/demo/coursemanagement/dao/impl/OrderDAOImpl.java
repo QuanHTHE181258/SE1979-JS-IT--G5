@@ -1,5 +1,6 @@
-package project.demo.coursemanagement.dao;
+package project.demo.coursemanagement.dao.impl;
 
+import project.demo.coursemanagement.dao.OrderDAO;
 import project.demo.coursemanagement.dto.OrderDTO;
 import project.demo.coursemanagement.dto.OrderDetailDTO;
 import project.demo.coursemanagement.dto.OrderAnalyticsDTO;

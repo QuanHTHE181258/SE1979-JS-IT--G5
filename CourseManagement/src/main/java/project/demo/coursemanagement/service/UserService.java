@@ -74,10 +74,8 @@ public class UserService {
         if (user != null) {
             // Get user's role
             List<Role> userRoles = userRoleDAO.findRolesByUserId(userId);
-            if (!userRoles.isEmpty()) {
-                // For now, just set the first role (primary role)
-                user.setRole(userRoles.get(0));
-            }
+            // Không setRole vào entity User nữa
+            // Nếu cần, có thể trả về userRoles.get(0) hoặc roleName ngoài entity
         }
         return user;
     }
@@ -198,4 +196,25 @@ public class UserService {
       public List<Role> getAllRoles() {
           return roleDAO.findAll(); // Assuming RoleDAO has findAll
       }
+
+    public List<User> getAllUsers() {
+        return userDAO.getAllUsers();
+    }
+
+    public User findUserByIdIncludeInactive(int userId) {
+        return userDAO.findUserByIdIncludeInactive(userId);
+    }
+
+    public boolean updateUserActiveStatus(int userId, boolean active) {
+        project.demo.coursemanagement.dao.RegisterDAO registerDAO = new project.demo.coursemanagement.dao.impl.RegisterDAOImpl();
+        return registerDAO.updateUserActiveStatus(userId, active);
+    }
+
+    public List<User> searchRecentActivities(String keyword, int limit, String role) {
+        return userDAO.searchRecentActivities(keyword, limit, role);
+    }
+
+    public List<User> getRecentUsersByRole(int limit, String role) {
+        return userDAO.getRecentUsersByRole(limit, role);
+    }
 }

@@ -5,9 +5,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import project.demo.coursemanagement.entities.User;
-import project.demo.coursemanagement.dao.CourseDAO;
 import project.demo.coursemanagement.dto.CourseDTO;
+import project.demo.coursemanagement.service.CourseService;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,9 +17,8 @@ import java.util.List;
         "/admin/course-management" // Trang quản lý khóa học
 })
 public class AdminCourseController extends HttpServlet {
-
-    private final CourseDAO courseDAO = new CourseDAO();
-    private static final int PAGE_SIZE = 3; // Define PAGE_SIZE
+    private final CourseService courseService = new CourseService();
+    private static final int PAGE_SIZE = 3;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -56,9 +54,8 @@ public class AdminCourseController extends HttpServlet {
                     } catch (NumberFormatException ignored) {}
                 }
 
-                List<CourseDTO> courses = courseDAO.getCoursesForManager(keyword, categoryId, page, PAGE_SIZE);
-
-                int totalCourses = courseDAO.countCourses(keyword, categoryId);
+                List<CourseDTO> courses = courseService.getCoursesForManager(keyword, categoryId, page, PAGE_SIZE);
+                int totalCourses = courseService.countCourses(keyword, categoryId);
                 int totalPages = (int) Math.ceil((double) totalCourses / PAGE_SIZE);
 
                 request.setAttribute("courses", courses);
