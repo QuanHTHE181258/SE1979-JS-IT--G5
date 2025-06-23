@@ -10,18 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="add new feature view teaching courses list for teacher">
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/LessonDetailServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/MaterialDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/QuizDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/MaterialDAOImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/QuizDAOImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/MaterialService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/QuizService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/lesson-detail.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/LessonDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/LessonDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/LessonDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/LessonDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/LessonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/LessonService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

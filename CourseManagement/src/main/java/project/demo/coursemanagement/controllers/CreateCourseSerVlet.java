@@ -119,7 +119,7 @@ public class CreateCourseSerVlet extends HttpServlet {
         cours.setInstructorID(instructor);
         // Gán category
         Category category = new Category();
-        category.setId(categoryId);
+        category.setId(categoryId != null ? categoryId.intValue() : null);
         cours.setCategory(category);
         cours.setStatus("active");
         // Lưu DB
