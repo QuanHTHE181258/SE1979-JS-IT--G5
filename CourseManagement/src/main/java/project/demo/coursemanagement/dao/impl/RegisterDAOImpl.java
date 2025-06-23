@@ -43,6 +43,8 @@ public class RegisterDAOImpl implements RegisterDAO {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
                         user.setId(rs.getInt(1));
+                        // Set default avatar URL
+                        setDefaultAvatar(user.getId());
                     }
                 }
                 return true;
@@ -59,6 +61,25 @@ public class RegisterDAOImpl implements RegisterDAO {
     public boolean assignDefaultRoles(User user) {
         // Default to Student role (ID 1)
         return assignRole(user, 1);
+    }
+
+    private void setDefaultAvatar(Integer userId) {
+        String updateAvatarSql = "UPDATE users SET AvatarURL = ? WHERE UserID = ?";
+        String defaultAvatarPath = "/assets/avatar/default_avatar.png";
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(updateAvatarSql)) {
+
+            stmt.setString(1, defaultAvatarPath);
+            stmt.setInt(2, userId);
+            stmt.executeUpdate();
+
+            System.out.println("Default avatar set for user ID: " + userId);
+
+        } catch (SQLException e) {
+            System.err.println("Error setting default avatar: " + e.getMessage());
+            // Don't fail registration if avatar setting fails
+        }
     }
 
     @Override
@@ -417,4 +438,5 @@ public class RegisterDAOImpl implements RegisterDAO {
 
         return role;
     }
+
 }

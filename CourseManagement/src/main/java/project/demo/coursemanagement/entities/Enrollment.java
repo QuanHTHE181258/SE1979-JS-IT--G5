@@ -2,9 +2,12 @@ package project.demo.coursemanagement.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Getter
@@ -12,7 +15,6 @@ import java.time.Instant;
 @Entity
 @Table(name = "enrollments")
 public class Enrollment {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "enrollment_id", nullable = false)
@@ -28,21 +30,27 @@ public class Enrollment {
     @JoinColumn(name = "course_id", nullable = false)
     private Cours course;
 
+    @ColumnDefault("getdate()")
     @Column(name = "enrollment_date")
     private Instant enrollmentDate;
 
     @Column(name = "completion_date")
     private Instant completionDate;
 
-    @Column(name = "progress_percentage")
-    private Integer progressPercentage = 0;
+    @ColumnDefault("0")
+    @Column(name = "progress_percentage", precision = 5, scale = 2)
+    private BigDecimal progressPercentage;
 
-    @Column(name = "status", length = 50)
+    @Size(max = 20)
+    @ColumnDefault("'ACTIVE'")
+    @Column(name = "status", length = 20)
     private String status;
 
-    @Column(name = "grade", length = 10)
-    private String grade;
+    @Column(name = "grade", precision = 5, scale = 2)
+    private BigDecimal grade;
 
+    @ColumnDefault("0")
     @Column(name = "certificate_issued")
-    private Boolean certificateIssued = false;
+    private Boolean certificateIssued;
+
 }

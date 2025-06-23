@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <fmt:setLocale value="en_US" />
 <!DOCTYPE html>
 <html lang="en">
@@ -77,60 +78,59 @@
 
     .avatar-section {
       text-align: center;
-      margin-bottom: 50px; /* Increased from 40px */
+      margin-bottom: 50px;
     }
 
     .avatar-container {
       position: relative;
       display: inline-block;
-      margin-bottom: 30px; /* Increased from 20px */
+      margin-bottom: 30px;
     }
 
     .avatar-img {
-      width: 200px; /* Increased from 150px */
-      height: 200px; /* Increased from 150px */
+      width: 200px;
+      height: 200px;
       border-radius: 50%;
       object-fit: cover;
-      border: 6px solid #fff; /* Increased from 5px */
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+      border: 6px solid #fff;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
       background: #f0f0f0;
-      transition: all 0.3s ease; /* Added smooth transition */
-      cursor: pointer; /* Added cursor pointer */
+      transition: all 0.3s ease;
+      cursor: pointer;
     }
 
     .avatar-img:hover {
-      transform: scale(1.05); /* Added hover effect */
+      transform: scale(1.05);
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
     }
 
     .avatar-overlay {
       position: absolute;
-      bottom: 5px; /* Adjusted position */
-      right: 5px; /* Adjusted position */
+      bottom: 5px;
+      right: 5px;
       background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
       color: white;
-      width: 50px; /* Increased from 45px */
-      height: 50px; /* Increased from 45px */
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.3s ease;
-      border: 4px solid #fff; /* Increased from 3px */
-      font-size: 20px; /* Increased from 18px */
+      border: 4px solid #fff;
+      font-size: 20px;
     }
 
     .avatar-overlay:hover {
-      transform: scale(1.15); /* Increased from 1.1 */
-      box-shadow: 0 8px 20px rgba(79, 172, 254, 0.5); /* Enhanced shadow */
+      transform: scale(1.15);
+      box-shadow: 0 8px 20px rgba(79, 172, 254, 0.5);
     }
 
-    /* Enhanced styling for the name section */
     .avatar-section h3 {
-      margin-top: 15px; /* Added more space above name */
-      margin-bottom: 20px; /* Added space below name */
-      font-size: 1.8rem; /* Made name bigger */
+      margin-top: 15px;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
       font-weight: 600;
       color: #2c3e50;
     }
@@ -138,13 +138,13 @@
     .completion-badge {
       background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
       color: white;
-      padding: 10px 25px; /* Increased padding */
-      border-radius: 25px; /* More rounded */
+      padding: 10px 25px;
+      border-radius: 25px;
       display: inline-block;
       font-weight: 600;
-      font-size: 15px; /* Slightly bigger */
+      font-size: 15px;
       margin-bottom: 30px;
-      box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3); /* Added shadow */
+      box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
     }
 
     .info-section {
@@ -349,6 +349,102 @@
       font-size: 18px;
       margin-left: 8px;
     }
+
+    /* New styles for recent enrollments section */
+    .recent-enrollments {
+      margin-top: 30px;
+    }
+
+    .enrollment-item {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+      border: 2px solid #e9ecef;
+      transition: all 0.3s ease;
+    }
+
+    .enrollment-item:hover {
+      border-color: #4facfe;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(79, 172, 254, 0.1);
+    }
+
+    .enrollment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .enrollment-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin: 0;
+    }
+
+    .enrollment-status {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-active {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-completed {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .status-inactive {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .enrollment-progress {
+      margin-top: 10px;
+    }
+
+    .progress {
+      height: 8px;
+      border-radius: 10px;
+      background: #e9ecef;
+    }
+
+    .progress-bar {
+      border-radius: 10px;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .enrollment-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 12px;
+      color: #6c757d;
+    }
+
+    .certificate-badge {
+      background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+      color: #2d3436;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .certificate-badge i {
+      margin-right: 4px;
+    }
   </style>
 </head>
 <body>
@@ -439,7 +535,6 @@
             </div>
             <div class="info-value">
               ${user.email}
-              <!-- Email verification is not supported in the new User entity -->
               <i class="fas fa-exclamation-circle unverified-badge" title="Not Verified"></i>
             </div>
           </div>
@@ -511,7 +606,7 @@
               <div class="stat-icon" style="color: #fa709a;">
                 <i class="fas fa-book"></i>
               </div>
-              <div class="stat-value">12</div>
+              <div class="stat-value" data-count="${profileStats.enrolledCoursesCount}">${profileStats.enrolledCoursesCount}</div>
               <div class="stat-label">Enrolled Courses</div>
             </div>
 
@@ -519,7 +614,7 @@
               <div class="stat-icon" style="color: #fee140;">
                 <i class="fas fa-certificate"></i>
               </div>
-              <div class="stat-value">3</div>
+              <div class="stat-value" data-count="${profileStats.certificatesIssuedCount}">${profileStats.certificatesIssuedCount}</div>
               <div class="stat-label">Certificates</div>
             </div>
           </c:if>
@@ -543,6 +638,72 @@
           </c:if>
         </div>
       </div>
+
+      <!-- Recent Enrollments Section (Only for Students) -->
+      <c:if test="${(sessionScope.userRole == '1' || sessionScope.userRole == 'USER' || sessionScope.userRole == 'STUDENT') && not empty profileStats.recentEnrollments}">
+        <div class="recent-enrollments">
+          <h4 class="mb-4">
+            <i class="fas fa-graduation-cap me-2"></i>
+            Recent Enrollments
+          </h4>
+
+          <c:forEach var="enrollment" items="${profileStats.recentEnrollments}" varStatus="status">
+            <c:if test="${status.index < 3}"> <!-- Show only first 3 enrollments -->
+              <div class="enrollment-item">
+                <div class="enrollment-header">
+                  <h5 class="enrollment-title">${enrollment.courseTitle}</h5>
+                  <span class="enrollment-status
+                    <c:choose>
+                      <c:when test="${enrollment.status == 'ACTIVE'}">status-active</c:when>
+                      <c:when test="${enrollment.status == 'COMPLETED'}">status-completed</c:when>
+                      <c:otherwise>status-inactive</c:otherwise>
+                    </c:choose>">
+                      ${enrollment.status}
+                  </span>
+                </div>
+
+                <c:if test="${enrollment.progressPercentage != null}">
+                  <div class="enrollment-progress">
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar"
+                           style="width: ${enrollment.progressPercentage}%"
+                           aria-valuenow="${enrollment.progressPercentage}"
+                           aria-valuemin="0"
+                           aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </c:if>
+
+                <div class="enrollment-meta">
+                  <span>
+                    Enrolled:
+                    <fmt:formatDate value="${enrollment.enrollmentDate}" pattern="dd MMM yyyy" />
+                  </span>
+                  <div>
+                    <c:if test="${enrollment.grade != null}">
+                      <span class="me-2">Grade: ${enrollment.grade}%</span>
+                    </c:if>
+                    <c:if test="${enrollment.certificateIssued}">
+                      <span class="certificate-badge">
+                        <i class="fas fa-award"></i>
+                        Certified
+                      </span>
+                    </c:if>
+                  </div>
+                </div>
+              </div>
+            </c:if>
+          </c:forEach>
+
+          <c:if test="${fn:length(profileStats.recentEnrollments) > 3}">
+            <div class="text-center mt-3">
+              <a href="${pageContext.request.contextPath}/student-dashboard" class="btn btn-outline-primary btn-sm">
+                View All Enrollments
+              </a>
+            </div>
+          </c:if>
+        </div>
+      </c:if>
 
       <!-- Action Buttons -->
       <div class="action-buttons">
@@ -606,10 +767,10 @@
   document.addEventListener('DOMContentLoaded', function() {
     const statValues = document.querySelectorAll('.stat-value');
     statValues.forEach(stat => {
-      const finalValue = stat.textContent;
-      if (!isNaN(finalValue)) {
+      const finalValue = stat.getAttribute('data-count') || stat.textContent;
+      if (!isNaN(finalValue) && finalValue !== '') {
         let currentValue = 0;
-        const increment = Math.ceil(finalValue / 30);
+        const increment = Math.ceil(finalValue / 30) || 1;
         const timer = setInterval(() => {
           currentValue += increment;
           if (currentValue >= finalValue) {
@@ -620,9 +781,19 @@
         }, 50);
       }
     });
+
+    // Animate progress bars
+    const progressBars = document.querySelectorAll('.progress-bar');
+    progressBars.forEach(bar => {
+      const width = bar.style.width;
+      bar.style.width = '0%';
+      setTimeout(() => {
+        bar.style.width = width;
+      }, 500);
+    });
   });
 
-  // Progress bar animation
+  // Progress bar animation for profile completion
   const completionPercentage = ${profileStats.profileCompletionPercentage};
   const progressBar = document.createElement('div');
   progressBar.style.cssText = `

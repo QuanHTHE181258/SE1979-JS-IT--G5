@@ -134,20 +134,6 @@ public class ProfileUpdateRequest {
     // Helper methods
 
     /**
-     * Get the full name
-     */
-    public String getFullName() {
-        if (firstName != null && lastName != null) {
-            return firstName + " " + lastName;
-        } else if (firstName != null) {
-            return firstName;
-        } else if (lastName != null) {
-            return lastName;
-        }
-        return "";
-    }
-
-    /**
      * Parse date of birth to LocalDate
      */
     public LocalDate getParsedDateOfBirth() {
@@ -162,14 +148,6 @@ public class ProfileUpdateRequest {
         }
     }
 
-    /**
-     * Check if this is a basic profile update (no password change)
-     */
-    public boolean isBasicProfileUpdate() {
-        return (username != null || email != null || firstName != null ||
-                lastName != null || phone != null || dateOfBirth != null) &&
-                currentPassword == null && newPassword == null;
-    }
 
     /**
      * Check if this is a password change request
@@ -211,23 +189,6 @@ public class ProfileUpdateRequest {
         return hasChanges();
     }
 
-    /**
-     * Create a safe copy for logging (without sensitive data)
-     */
-    public ProfileUpdateRequest createSafeLogCopy() {
-        ProfileUpdateRequest safeCopy = new ProfileUpdateRequest();
-        safeCopy.setUserId(this.userId);
-        safeCopy.setUsername(this.username);
-        safeCopy.setEmail(this.email);
-        safeCopy.setFirstName(this.firstName);
-        safeCopy.setLastName(this.lastName);
-        safeCopy.setPhone(this.phone);
-        safeCopy.setDateOfBirth(this.dateOfBirth);
-        safeCopy.setAvatarUrl(this.avatarUrl);
-        safeCopy.setRemoveAvatar(this.removeAvatar);
-        // Passwords are intentionally not copied
-        return safeCopy;
-    }
 
     @Override
     public String toString() {
