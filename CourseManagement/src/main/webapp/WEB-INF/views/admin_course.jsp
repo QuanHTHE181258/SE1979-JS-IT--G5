@@ -21,6 +21,8 @@
                 <i class="fas fa-users"></i>User Management</a></li>
             <li class="active"><a href="${pageContext.request.contextPath}/admin/courses">
                 <i class="fas fa-book"></i> Courses Management</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/orders">
+                <i class="fas fa-shopping-cart"></i> Order Management</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/categories">
                 <i class="fas fa-tags"></i> Categories</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/reports">

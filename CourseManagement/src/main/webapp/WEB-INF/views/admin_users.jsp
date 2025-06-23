@@ -32,6 +32,11 @@
                     <i class="fas fa-book"></i> Courses Management
                 </a>
             </li>
+            <li <c:if test="${request.servletPath == '/admin/orders'}">class="active"</c:if>>
+                <a href="${pageContext.request.contextPath}/admin/orders">
+                    <i class="fas fa-shopping-cart"></i> Order Management
+                </a>
+            </li>
             <li <c:if test="${request.servletPath == '/admin/categories'}">class="active"</c:if>>
                 <a href="${pageContext.request.contextPath}/admin/categories">
                     <i class="fas fa-tags"></i> Categories
