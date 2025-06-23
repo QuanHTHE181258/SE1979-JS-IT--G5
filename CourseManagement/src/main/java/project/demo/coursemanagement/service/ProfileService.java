@@ -396,35 +396,80 @@ public class ProfileService {
      * Get profile statistics
      */
     public ProfileStatistics getProfileStatistics(Integer userId) {
-        if (userId == null) {
-            return new ProfileStatistics();
-        }
+        ProfileStatistics stats = new ProfileStatistics();
 
         try {
-            ProfileStatistics stats = new ProfileStatistics();
-
-            // Get profile completion percentage
+            // Get basic profile statistics
             stats.setProfileCompletionPercentage(profileDAO.getProfileCompletionPercentage(userId));
 
-            // Get user profile for additional stats
+            // Get user for account age and last login
             User user = profileDAO.getUserProfile(userId);
             if (user != null) {
-                stats.setEmailVerified(false); // Email verification is not supported in the new User entity
-                stats.setHasAvatar(user.getAvatarUrl() != null);
-                stats.setAccountAge(calculateAccountAge(user.getCreatedAt()));
-                stats.setLastLoginDaysAgo(calculateDaysSince(user.getLastLogin()));
+                // Calculate account age
+                if (user.getCreatedAt() != null) {
+                    long daysSinceCreation = java.time.Duration.between(user.getCreatedAt(), java.time.Instant.now()).toDays();
+                    if (daysSinceCreation == 0) {
+                        stats.setAccountAgeFormatted("Today");
+                    } else if (daysSinceCreation == 1) {
+                        stats.setAccountAgeFormatted("1 day");
+                    } else if (daysSinceCreation < 30) {
+                        stats.setAccountAgeFormatted(daysSinceCreation + " days");
+                    } else if (daysSinceCreation < 365) {
+                        long months = daysSinceCreation / 30;
+                        stats.setAccountAgeFormatted(months + (months == 1 ? " month" : " months"));
+                    } else {
+                        long years = daysSinceCreation / 365;
+                        stats.setAccountAgeFormatted(years + (years == 1 ? " year" : " years"));
+                    }
+                } else {
+                    stats.setAccountAgeFormatted("Unknown");
+                }
+
+                // Format last login
+                if (user.getLastLogin() != null) {
+                    long hoursSinceLogin = java.time.Duration.between(user.getLastLogin(), java.time.Instant.now()).toHours();
+                    if (hoursSinceLogin == 0) {
+                        stats.setLastLoginFormatted("Just now");
+                    } else if (hoursSinceLogin == 1) {
+                        stats.setLastLoginFormatted("1 hour ago");
+                    } else if (hoursSinceLogin < 24) {
+                        stats.setLastLoginFormatted(hoursSinceLogin + " hours ago");
+                    } else {
+                        long daysSinceLogin = hoursSinceLogin / 24;
+                        if (daysSinceLogin == 1) {
+                            stats.setLastLoginFormatted("1 day ago");
+                        } else {
+                            stats.setLastLoginFormatted(daysSinceLogin + " days ago");
+                        }
+                    }
+                } else {
+                    stats.setLastLoginFormatted("Never");
+                }
             }
 
-            // Get recent activities
-            stats.setRecentActivities(profileDAO.getRecentProfileActivities(userId, 5));
+            // Get enrollment statistics
+            stats.setEnrolledCoursesCount(profileDAO.getEnrolledCoursesCount(userId));
+            stats.setCompletedCoursesCount(profileDAO.getCompletedCoursesCount(userId));
+            stats.setCertificatesIssuedCount(profileDAO.getCertificatesIssuedCount(userId));
 
-            return stats;
+            // Get recent enrollments
+            stats.setRecentEnrollments(profileDAO.getRecentEnrollments(userId, 5));
 
         } catch (Exception e) {
-            System.err.println("ProfileService: Error getting profile statistics: " + e.getMessage());
+            System.err.println("Error getting profile statistics: " + e.getMessage());
             e.printStackTrace();
-            return new ProfileStatistics();
+
+            // Set default values on error
+            stats.setProfileCompletionPercentage(0);
+            stats.setAccountAgeFormatted("Unknown");
+            stats.setLastLoginFormatted("Unknown");
+            stats.setEnrolledCoursesCount(0);
+            stats.setCompletedCoursesCount(0);
+            stats.setCertificatesIssuedCount(0);
+            stats.setRecentEnrollments(new ArrayList<>());
         }
+
+        return stats;
     }
 
     /**
@@ -502,17 +547,18 @@ public class ProfileService {
      */
     public static class ProfileStatistics {
         private int profileCompletionPercentage;
-        private boolean emailVerified;
-        private boolean hasAvatar;
-        private int accountAge; // in days
-        private int lastLoginDaysAgo;
-        private List<ProfileDAO.ProfileActivity> recentActivities;
+        private String accountAgeFormatted;
+        private String lastLoginFormatted;
+        private int enrolledCoursesCount;
+        private int completedCoursesCount;
+        private int certificatesIssuedCount;
+        private List<ProfileDAO.EnrollmentSummary> recentEnrollments;
 
         public ProfileStatistics() {
-            this.recentActivities = new ArrayList<>();
+            this.recentEnrollments = new ArrayList<>();
         }
 
-        // Getters and setters
+        // Existing getters and setters
         public int getProfileCompletionPercentage() {
             return profileCompletionPercentage;
         }
@@ -521,91 +567,53 @@ public class ProfileService {
             this.profileCompletionPercentage = profileCompletionPercentage;
         }
 
-        public boolean isEmailVerified() {
-            return emailVerified;
-        }
-
-        public void setEmailVerified(boolean emailVerified) {
-            this.emailVerified = emailVerified;
-        }
-
-        public boolean isHasAvatar() {
-            return hasAvatar;
-        }
-
-        public void setHasAvatar(boolean hasAvatar) {
-            this.hasAvatar = hasAvatar;
-        }
-
-        public int getAccountAge() {
-            return accountAge;
-        }
-
-        public void setAccountAge(int accountAge) {
-            this.accountAge = accountAge;
-        }
-
-        public int getLastLoginDaysAgo() {
-            return lastLoginDaysAgo;
-        }
-
-        public void setLastLoginDaysAgo(int lastLoginDaysAgo) {
-            this.lastLoginDaysAgo = lastLoginDaysAgo;
-        }
-
-        public List<ProfileDAO.ProfileActivity> getRecentActivities() {
-            return recentActivities;
-        }
-
-        public void setRecentActivities(List<ProfileDAO.ProfileActivity> recentActivities) {
-            this.recentActivities = recentActivities;
-        }
-
-        // Helper methods
-        public String getCompletionStatus() {
-            if (profileCompletionPercentage >= 100) {
-                return "Complete";
-            } else if (profileCompletionPercentage >= 75) {
-                return "Almost Complete";
-            } else if (profileCompletionPercentage >= 50) {
-                return "Partially Complete";
-            } else {
-                return "Incomplete";
-            }
-        }
-
         public String getAccountAgeFormatted() {
-            if (accountAge == 0) {
-                return "Today";
-            } else if (accountAge == 1) {
-                return "1 day";
-            } else if (accountAge < 30) {
-                return accountAge + " days";
-            } else if (accountAge < 365) {
-                int months = accountAge / 30;
-                return months + (months == 1 ? " month" : " months");
-            } else {
-                int years = accountAge / 365;
-                return years + (years == 1 ? " year" : " years");
-            }
+            return accountAgeFormatted;
+        }
+
+        public void setAccountAgeFormatted(String accountAgeFormatted) {
+            this.accountAgeFormatted = accountAgeFormatted;
         }
 
         public String getLastLoginFormatted() {
-            if (lastLoginDaysAgo < 0) {
-                return "Never";
-            } else if (lastLoginDaysAgo == 0) {
-                return "Today";
-            } else if (lastLoginDaysAgo == 1) {
-                return "Yesterday";
-            } else if (lastLoginDaysAgo < 7) {
-                return lastLoginDaysAgo + " days ago";
-            } else if (lastLoginDaysAgo < 30) {
-                int weeks = lastLoginDaysAgo / 7;
-                return weeks + (weeks == 1 ? " week ago" : " weeks ago");
-            } else {
-                int months = lastLoginDaysAgo / 30;
-                return months + (months == 1 ? " month ago" : " months ago");
-            }
+            return lastLoginFormatted;
+        }
+
+        public void setLastLoginFormatted(String lastLoginFormatted) {
+            this.lastLoginFormatted = lastLoginFormatted;
+        }
+
+        // New getters and setters for enrollment statistics
+        public int getEnrolledCoursesCount() {
+            return enrolledCoursesCount;
+        }
+
+        public void setEnrolledCoursesCount(int enrolledCoursesCount) {
+            this.enrolledCoursesCount = enrolledCoursesCount;
+        }
+
+        public int getCompletedCoursesCount() {
+            return completedCoursesCount;
+        }
+
+        public void setCompletedCoursesCount(int completedCoursesCount) {
+            this.completedCoursesCount = completedCoursesCount;
+        }
+
+        public int getCertificatesIssuedCount() {
+            return certificatesIssuedCount;
+        }
+
+        public void setCertificatesIssuedCount(int certificatesIssuedCount) {
+            this.certificatesIssuedCount = certificatesIssuedCount;
+        }
+
+        public List<ProfileDAO.EnrollmentSummary> getRecentEnrollments() {
+            return recentEnrollments;
+        }
+
+        public void setRecentEnrollments(List<ProfileDAO.EnrollmentSummary> recentEnrollments) {
+            this.recentEnrollments = recentEnrollments;
         }
     }
 }
