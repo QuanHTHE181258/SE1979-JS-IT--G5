@@ -37,4 +37,61 @@ public class LessonDAOImpl implements LessonDAO {
         }
         return list;
     }
+
+    @Override
+    public Lesson getLessonById(int lessonId) {
+        String sql = "SELECT LessonID, CourseID, Title, Content, Status, IsFreePreview, CreatedAt FROM lessons WHERE LessonID = ?";
+        try (Connection conn = project.demo.coursemanagement.utils.DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, lessonId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Lesson lesson = new Lesson();
+                    lesson.setId(rs.getInt("LessonID"));
+                    // Set courseID as Cours entity
+                    project.demo.coursemanagement.entities.Cours course = new project.demo.coursemanagement.entities.Cours();
+                    course.setId(rs.getInt("CourseID"));
+                    lesson.setCourseID(course);
+                    lesson.setTitle(rs.getString("Title"));
+                    lesson.setContent(rs.getString("Content"));
+                    lesson.setStatus(rs.getString("Status"));
+                    lesson.setIsFreePreview(rs.getBoolean("IsFreePreview"));
+                    lesson.setCreatedAt(rs.getTimestamp("CreatedAt").toInstant());
+                    return lesson;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Lesson> getLessonsByCourseId(int courseId) {
+        List<Lesson> list = new ArrayList<>();
+        String sql = "SELECT LessonID, CourseID, Title, Content, Status, IsFreePreview, CreatedAt FROM lessons WHERE CourseID = ? ORDER BY LessonID";
+        try (Connection conn = project.demo.coursemanagement.utils.DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, courseId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Lesson lesson = new Lesson();
+                    lesson.setId(rs.getInt("LessonID"));
+                    // Set courseID as Cours entity
+                    project.demo.coursemanagement.entities.Cours course = new project.demo.coursemanagement.entities.Cours();
+                    course.setId(rs.getInt("CourseID"));
+                    lesson.setCourseID(course);
+                    lesson.setTitle(rs.getString("Title"));
+                    lesson.setContent(rs.getString("Content"));
+                    lesson.setStatus(rs.getString("Status"));
+                    lesson.setIsFreePreview(rs.getBoolean("IsFreePreview"));
+                    lesson.setCreatedAt(rs.getTimestamp("CreatedAt").toInstant());
+                    list.add(lesson);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }
