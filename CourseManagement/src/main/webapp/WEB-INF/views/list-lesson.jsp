@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Your Teaching Courses</title>
+    <title>Course Lessons</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { background: #f8fafc; }
@@ -16,51 +16,56 @@
 </head>
 <body>
 <div class="container">
-    <div class="title"><i class="fas fa-chalkboard-teacher me-2"></i>Your Teaching Courses</div>
+    <div class="title"><i class="fas fa-book-open me-2"></i>Lessons for Course #${courseId}</div>
     <!-- Filter & Search Controls -->
     <div class="row mb-3">
         <div class="col-md-4 mb-2">
-            <input type="text" id="searchInput" class="form-control" placeholder="Search by title or description...">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search by lesson title...">
         </div>
         <div class="col-md-3 mb-2">
             <select id="statusFilter" class="form-select">
                 <option value="">All Statuses</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-                <option value="draft">draft</option>
+                <option value="published">published</option>
             </select>
         </div>
     </div>
     <c:choose>
-        <c:when test="${not empty courses}">
+        <c:when test="${not empty lessons}">
             <div class="table-responsive">
                 <table class="table table-bordered align-middle">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th>Lesson ID</th>
                             <th>Title</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Rating</th>
+                            <th>Total Quizzes</th>
+                            <th>Total Materials</th>
                             <th>Status</th>
+                            <th>Is Preview</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="coursesTableBody">
-                        <c:forEach var="course" items="${courses}" varStatus="status">
-                            <tr data-title="${course.title}" data-description="${course.description}" data-status="${course.status}">
-                                <td>${status.index + 1}</td>
-                                <td class="fw-semibold text-primary">${course.title}</td>
-                                <td><c:out value="${course.description}"/></td>
-                                <td><span class="badge bg-success">${course.price}$</span></td>
-                                <td><span class="badge bg-info text-dark">${course.rating}</span></td>
-                                <td><span class="badge bg-secondary">${course.status}</span></td>
-                                <td>
-                                    <a href="course-lessons?id=${course.id}" class="btn btn-outline-info btn-sm mb-1"><i class="fas fa-eye me-1"></i>View Details</a>
-                                    <a href="course-feedback?id=${course.id}" class="btn btn-outline-warning btn-sm mb-1"><i class="fas fa-comments me-1"></i>Feedback</a>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                    <tbody id="lessonsTableBody">
+                    <c:forEach var="ls" items="${lessons}">
+                        <tr data-title="${ls.lesson.title}" data-status="${ls.lesson.status}">
+                            <td>${ls.lesson.id}</td>
+                            <td class="fw-semibold text-primary">${ls.lesson.title}</td>
+                            <td><span class="badge bg-info text-dark">${ls.totalQuizzes}</span></td>
+                            <td><span class="badge bg-success">${ls.totalMaterials}</span></td>
+                            <td><span class="badge bg-secondary">${ls.lesson.status}</span></td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge ${ls.lesson.isFreePreview ? 'bg-success' : 'bg-danger'}">
+                                        ${ls.lesson.isFreePreview ? 'Yes' : 'No'}
+                                    </span>
+                                    <button class="btn btn-outline-primary btn-sm" onclick="changePreview(${ls.lesson.id})">Change</button>
+                                </div>
+                            </td>
+                            <td>
+                                <a href="lesson-details?id=${ls.lesson.id}" class="btn btn-outline-info btn-sm mb-1"><i class="fas fa-eye me-1"></i>View Details</a>
+                                <button class="btn btn-outline-danger btn-sm mb-1" onclick="deleteLesson(${ls.lesson.id})"><i class="fas fa-trash me-1"></i>Delete</button>
+                            </td>
+                        </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
                 <!-- Pagination Controls -->
@@ -70,7 +75,7 @@
             </div>
         </c:when>
         <c:otherwise>
-            <div class="alert alert-info text-center">You are not teaching any courses yet.</div>
+            <div class="alert alert-info">No lessons found for this course.</div>
         </c:otherwise>
     </c:choose>
 </div>
@@ -84,12 +89,11 @@ let currentPage = 1;
 function filterAndPaginate() {
     const search = document.getElementById('searchInput').value.toLowerCase();
     const status = document.getElementById('statusFilter').value;
-    const rows = Array.from(document.querySelectorAll('#coursesTableBody tr'));
+    const rows = Array.from(document.querySelectorAll('#lessonsTableBody tr'));
     let filtered = rows.filter(row => {
         const title = row.getAttribute('data-title').toLowerCase();
-        const desc = row.getAttribute('data-description').toLowerCase();
         const stat = row.getAttribute('data-status');
-        const matchSearch = title.includes(search) || desc.includes(search);
+        const matchSearch = title.includes(search);
         const matchStatus = !status || stat === status;
         return matchSearch && matchStatus;
     });
@@ -122,6 +126,18 @@ function renderPagination(totalPages) {
 document.getElementById('searchInput').addEventListener('input', () => { currentPage = 1; filterAndPaginate(); });
 document.getElementById('statusFilter').addEventListener('change', () => { currentPage = 1; filterAndPaginate(); });
 window.onload = filterAndPaginate;
+
+function deleteLesson(lessonId) {
+    if (confirm('Are you sure you want to delete this lesson?')) {
+        // TODO: Implement AJAX or redirect to delete servlet
+        alert('Delete lesson ' + lessonId + ' (implement backend logic)');
+    }
+}
+
+function changePreview(lessonId) {
+    // TODO: Implement AJAX or redirect to change preview servlet
+    alert('Change preview for lesson ' + lessonId + ' (implement backend logic)');
+}
 </script>
 </body>
 </html>

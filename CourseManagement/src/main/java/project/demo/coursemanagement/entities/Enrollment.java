@@ -35,7 +35,7 @@ public class Enrollment {
     private Instant completionDate;
 
     @Column(name = "progress_percentage")
-    private Integer progressPercentage = 0; // Mặc định 0
+    private Integer progressPercentage = 0;
 
     @Column(name = "status", length = 50)
     private String status;
@@ -44,5 +44,5 @@ public class Enrollment {
     private String grade;
 
     @Column(name = "certificate_issued")
-    private Boolean certificateIssued = false; // Mặc định false
+    private Boolean certificateIssued = false;
 }
