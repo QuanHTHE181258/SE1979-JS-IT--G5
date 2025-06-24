@@ -41,9 +41,12 @@
             <fmt:parseDate value="${createdAtInstant}" pattern="yyyy-MM-dd'T'HH:mm:ss.SSSX" var="parsedDate" type="both" />
             <p><strong>Created At:</strong> <fmt:formatDate value="${parsedDate}" pattern="HH:mm dd-MM-yyyy"/></p>
             <div class="card-footer">
-                <a href="login">
-                    <button class="join-btn">JOIN</button>
-                </a>
+                <form action="CartServlet" method="post">
+                    <input type="hidden" name="action" value="add">
+                    <input type="hidden" name="courseId" value="${course.courseID}" />
+
+                    <button type="submit" class="join-btn">Add to card</button>
+                </form>
             </div>
 
             <!-- Danh sách Lessons -->
