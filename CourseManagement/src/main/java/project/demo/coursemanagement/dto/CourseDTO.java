@@ -1,9 +1,11 @@
 package project.demo.coursemanagement.dto;
 
+import lombok.Data;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Date;
 
+@Data
 public class CourseDTO {
     private String courseCode;
     private String title;
@@ -14,7 +16,7 @@ public class CourseDTO {
     private String imageUrl;
     private BigDecimal price;
     private int durationHours;
-    String teacherUsername;
+    private String teacherUsername;
     private String level;
     private boolean isPublished;
     private boolean isActive;
@@ -28,16 +30,31 @@ public class CourseDTO {
     private java.util.Date createdAtDate;
     private int enrollmentCount;
 
+    private int courseID;
+    private String courseTitle;
+    private String courseDescription;
+    private Double rating;
+    private String teacherName;
+    private String categories;
+    private String courseStatus;
 
     public CourseDTO() {
     }
 
-    public int getLessonCount() {
-        return lessonCount;
+    public String getCourseCode() {
+        return courseCode;
     }
 
-    public void setLessonCount(int lessonCount) {
-        this.lessonCount = lessonCount;
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -46,6 +63,14 @@ public class CourseDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
     }
 
     public int getTeacherId() {
@@ -72,6 +97,30 @@ public class CourseDTO {
         this.imageUrl = imageUrl;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public int getDurationHours() {
+        return durationHours;
+    }
+
+    public void setDurationHours(int durationHours) {
+        this.durationHours = durationHours;
+    }
+
+    public String getTeacherUsername() {
+        return teacherUsername;
+    }
+
+    public void setTeacherUsername(String teacherUsername) {
+        this.teacherUsername = teacherUsername;
+    }
+
     public String getLevel() {
         return level;
     }
@@ -96,6 +145,14 @@ public class CourseDTO {
         isActive = active;
     }
 
+    public int getMaxStudents() {
+        return maxStudents;
+    }
+
+    public void setMaxStudents(int maxStudents) {
+        this.maxStudents = maxStudents;
+    }
+
     public Instant getEnrollmentStartDate() {
         return enrollmentStartDate;
     }
@@ -110,62 +167,6 @@ public class CourseDTO {
 
     public void setEnrollmentEndDate(Instant enrollmentEndDate) {
         this.enrollmentEndDate = enrollmentEndDate;
-    }
-
-    public String getCourseCode() {
-        return courseCode;
-    }
-
-    public void setCourseCode(String courseCode) {
-        this.courseCode = courseCode;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getShortDescription() {
-        return shortDescription;
-    }
-
-    public void setShortDescription(String shortDescription) {
-        this.shortDescription = shortDescription;
-    }
-
-    public String getTeacherUsername() {
-        return teacherUsername;
-    }
-
-    public void setTeacherUsername(String teacherUsername) {
-        this.teacherUsername = teacherUsername;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public int getDurationHours() {
-        return durationHours;
-    }
-
-    public void setDurationHours(int durationHours) {
-        this.durationHours = durationHours;
-    }
-
-    public int getMaxStudents() {
-        return maxStudents;
-    }
-
-    public void setMaxStudents(int maxStudents) {
-        this.maxStudents = maxStudents;
     }
 
     public Instant getStartDate() {
@@ -184,6 +185,14 @@ public class CourseDTO {
         this.endDate = endDate;
     }
 
+    public int getLessonCount() {
+        return lessonCount;
+    }
+
+    public void setLessonCount(int lessonCount) {
+        this.lessonCount = lessonCount;
+    }
+
     public Instant getCreatedAt() {
         return createdAt;
     }
@@ -200,19 +209,75 @@ public class CourseDTO {
         this.createdAtDate = createdAtDate;
     }
 
-    public Date getStartDateAsDate() {
-        return startDate != null ? Date.from(startDate) : null;
-    }
-
-    public Date getEndDateAsDate() {
-        return endDate != null ? Date.from(endDate) : null;
-    }
-
     public int getEnrollmentCount() {
         return enrollmentCount;
     }
 
     public void setEnrollmentCount(int enrollmentCount) {
         this.enrollmentCount = enrollmentCount;
+    }
+
+    public int getCourseID() {
+        return courseID;
+    }
+
+    public void setCourseID(int courseID) {
+        this.courseID = courseID;
+    }
+
+    public String getCourseTitle() {
+        return courseTitle;
+    }
+
+    public void setCourseTitle(String courseTitle) {
+        this.courseTitle = courseTitle;
+    }
+
+    public String getCourseDescription() {
+        return courseDescription;
+    }
+
+    public void setCourseDescription(String courseDescription) {
+        this.courseDescription = courseDescription;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
+    }
+
+    public String getCategories() {
+        return categories;
+    }
+
+    public void setCategories(String categories) {
+        this.categories = categories;
+    }
+
+    public String getCourseStatus() {
+        return courseStatus;
+    }
+
+    public void setCourseStatus(String courseStatus) {
+        this.courseStatus = courseStatus;
+    }
+
+    public Date getStartDateAsDate() {
+        return startDate != null ? Date.from(startDate) : null;
+    }
+
+    public Date getEndDateAsDate() {
+        return endDate != null ? Date.from(endDate) : null;
     }
 }

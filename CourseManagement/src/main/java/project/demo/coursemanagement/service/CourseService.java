@@ -2,91 +2,82 @@ package project.demo.coursemanagement.service;
 
 import project.demo.coursemanagement.dao.CourseDAO;
 import project.demo.coursemanagement.dao.impl.CourseDAOImpl;
+import project.demo.coursemanagement.dao.CourseViewDAO;
+import project.demo.coursemanagement.dao.impl.CourseViewDAOimp;
 import project.demo.coursemanagement.dto.CourseStatsDTO;
 import project.demo.coursemanagement.dto.CourseDTO;
+import project.demo.coursemanagement.entities.Cours;
 
 import java.util.List;
 
-/**
- * Service class for course management
- * Combines functionality from both HEAD and origin/Minhdd commits
- */
 public class CourseService {
 
+    private static CourseService instance;
     private final CourseDAO courseDAO;
+    private final CourseViewDAO courseViewDAO;
 
     public CourseService() {
         this.courseDAO = new CourseDAOImpl();
+        this.courseViewDAO = new CourseViewDAOimp();
     }
 
+    public static CourseService getInstance() {
+        if (instance == null) {
+            instance = new CourseService();
+        }
+        return instance;
+    }
 
-    /**
-     * Get all courses with extra statistics
-     */
     public List<CourseStatsDTO> getAllCoursesWithStats() {
         return courseDAO.getAllCoursesWithStats();
     }
 
-    /**
-     * Get courses by category with statistics
-     */
     public List<CourseStatsDTO> getCoursesByCategory(Long categoryId) {
         return courseDAO.getCoursesByCategory(categoryId);
     }
 
-    /**
-     * Delete course by course code
-     */
     public void deleteCourseByCode(String courseCode) {
         courseDAO.deleteCourseByCode(courseCode);
     }
 
-    /**
-     * Get paginated courses for manager with optional filtering
-     */
     public List<CourseDTO> getCoursesForManager(String keyword, Integer categoryId, int page, int pageSize) {
         return courseDAO.getCoursesForManager(keyword, categoryId, page, pageSize);
     }
 
-    /**
-     * Count courses with optional filtering
-     */
     public int countCourses(String keyword, Integer categoryId) {
         return courseDAO.countCourses(keyword, categoryId);
     }
 
-    /**
-     * Get recent courses limited by count
-     */
     public List<CourseDTO> getRecentCourses(int limit) {
         return courseDAO.getRecentCourses(limit);
     }
 
-    /**
-     * Get single course by course code
-     */
     public CourseDTO getCourseByCode(String courseCode) {
         return courseDAO.getCourseByCode(courseCode);
     }
 
-    /**
-     * Update course using CourseDTO
-     */
     public boolean updateCourse(CourseDTO course) {
         return courseDAO.updateCourse(course);
     }
 
-    /**
-     * Search recent courses by keyword
-     */
     public List<CourseDTO> searchRecentCourses(String keyword, int limit) {
         return courseDAO.searchRecentCourses(keyword, limit);
     }
 
-    /**
-     * Get top courses by enrollment count
-     */
+    // HoangQL's Commit
     public List<CourseDTO> getTopCourses(int limit) {
         return courseDAO.getTopCourses(limit);
+    }
+
+    public List<CourseDTO> getAllCourses() {
+        return courseViewDAO.getAllCourses();
+    }
+
+    public List<CourseDTO> getCoursesByPage(int page, int size) {
+        return courseViewDAO.getCoursesByPage(page, size);
+    }
+
+    public int getTotalCourseCount() {
+        return courseViewDAO.getTotalCourseCount();
     }
 }

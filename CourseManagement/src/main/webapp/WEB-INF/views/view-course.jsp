@@ -31,38 +31,27 @@
 <%-- Content --%>
 <div class="container">
     <h1>Course List</h1>
-    <%-- Search Form --%>
-    <div class="search-container">
-        <form action="course" method="get" class="search-form">
-            <input type="text" name="search" placeholder="Search courses..." value="${searchKeyword}" class="search-input">
-            <button type="submit" class="search-button">Search</button>
-        </form>
-    </div>
-
     <ul class="course-list">
         <c:forEach var="course" items="${courses}">
             <li class="course-card">
                 <div class="card-header">
-                    <span class="course-code">${course.courseCode}</span>
-                    <h3 class="course-title">${course.title}</h3>
-                    <p class="course-teacher">${course.teacherUsername}</p>
+                    <span class="course-code">${course.courseID}</span>
+                    <h3 class="course-title"><a href="courseDetails?courseID=${course.courseID}">${course.courseTitle}</a></h3>
+                    <p class="course-teacher">${course.teacherName}</p>
                 </div>
                 <div class="card-body">
-                    <p class="course-desc">${course.shortDescription}</p>
+                    <p class="course-desc">${course.courseDescription}</p>
                     <div class="course-detail">
                         <p><strong>Price:</strong> $${course.price}</p>
-                        <p><strong>Duration:</strong> ${course.durationHours} hours</p>
-                        <p><strong>Max Students:</strong> ${course.maxStudents}</p>
-                        <p><strong>Start Date:</strong>
-                            <fmt:formatDate value="${course.startDateAsDate}" pattern="dd/MM/yyyy" />
-                        </p>
-                        <p><strong>End Date:</strong>
-                            <fmt:formatDate value="${course.endDateAsDate}" pattern="dd/MM/yyyy" />
-                        </p>
+                        <p><strong>Rating:</strong> ${course.rating}</p>
+                        <p><strong>Category:</strong> ${course.categories}</p>
+                        <p><strong>Status:</strong> ${course.courseStatus}</p>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button class="join-btn">JOIN</button>
+                    <a href="login">
+                        <button class="join-btn">JOIN</button>
+                    </a>
                 </div>
             </li>
         </c:forEach>
