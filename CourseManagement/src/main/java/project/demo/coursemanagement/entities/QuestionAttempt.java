@@ -1,13 +1,15 @@
 package project.demo.coursemanagement.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "question_attempts")
 public class QuestionAttempt {
@@ -26,8 +28,8 @@ public class QuestionAttempt {
     private Question questionID;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SelectedAnswerID")
-    private Answer selectedAnswerID;
+    @JoinColumn(name = "OptionID")
+    private Answer answer;
 
     @Column(name = "IsCorrect")
     private Boolean isCorrect;

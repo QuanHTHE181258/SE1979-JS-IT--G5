@@ -3,8 +3,7 @@ package project.demo.coursemanagement.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
@@ -13,6 +12,9 @@ import java.time.Instant;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "courses")
 public class Cours {
@@ -50,5 +52,11 @@ public class Cours {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "InstructorID")
     private User instructorID;
+
+    @Column(name = "CategoryID")
+    private int categoryID;
+
+    @Column(name = "Status")
+    private String status;
 
 }

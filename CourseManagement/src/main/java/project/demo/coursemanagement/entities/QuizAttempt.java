@@ -2,16 +2,18 @@ package project.demo.coursemanagement.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.Instant;
+import java.util.Date;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "quiz_attempts")
 public class QuizAttempt {
@@ -22,24 +24,22 @@ public class QuizAttempt {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "QuizID", nullable = false)
-    private Quiz quizID;
+    @JoinColumn(name = "UserID", nullable = false)
+    private User user;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "UserID", nullable = false)
-    private User userID;
+    @JoinColumn(name = "QuizID", nullable = false)
+    private Quiz quiz;
 
-    @ColumnDefault("getdate()")
-    @Column(name = "StartTime")
-    private Instant startTime;
-
-    @Column(name = "EndTime")
-    private Instant endTime;
+    @Column(name = "AttemptDate")
+    private Date attemptDate;
 
     @ColumnDefault("0")
     @Column(name = "Score")
     private Double score;
 
+    @Column(name = "completion_time_minutes")
+    private int completionTimeMinutes;
 }

@@ -3,16 +3,20 @@ package project.demo.coursemanagement.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.List;
+
 @Getter
 @Setter
+@Builder
 @Entity
+@AllArgsConstructor
 @Table(name = "quizzes")
+
 public class Quiz {
     @Id
     @Column(name = "QuizID", nullable = false)
@@ -29,4 +33,16 @@ public class Quiz {
     @Column(name = "Title")
     private String title;
 
+    private int durationMinutes;
+
+    private List<Question> questions;
+
+    public Quiz() {}
+
+    public Quiz(Integer id, Lesson lessonID, String title, int durationMinutes) {
+        this.id = id;
+        this.lessonID = lessonID;
+        this.title = title;
+        this.durationMinutes = durationMinutes;
+    }
 }

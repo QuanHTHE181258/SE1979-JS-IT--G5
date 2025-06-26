@@ -2,14 +2,17 @@ package project.demo.coursemanagement.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.List;
+
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @Entity
 @Table(name = "questions")
 public class Question {
@@ -28,4 +31,14 @@ public class Question {
     @Column(name = "QuestionText")
     private String questionText;
 
+    private List<Answer> answerOptions;
+
+    public Question() {
+    }
+
+    public Question(Integer id, Quiz quizID, String questionText) {
+        this.id = id;
+        this.quizID = quizID;
+        this.questionText = questionText;
+    }
 }
