@@ -2,12 +2,14 @@ package project.demo.coursemanagement.controllers;
 
 import project.demo.coursemanagement.dto.StudentPerformanceDTO;
 import project.demo.coursemanagement.service.TeacherPerformanceService;
-
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.WebServlet;
 import java.io.IOException;
 import java.util.List;
 
+@WebServlet("/teacher-performance")
 public class TeacherPerformanceController extends HttpServlet {
     private TeacherPerformanceService service = new TeacherPerformanceService();
 

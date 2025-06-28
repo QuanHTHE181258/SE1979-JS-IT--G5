@@ -49,6 +49,11 @@
             <i class="fas fa-chart-bar"></i> Revenue Analytics
           </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="${pageContext.request.contextPath}/teacher-performance">
+            <i class="fas fa-chart-line"></i> Teacher Performance
+          </a>
+        </li>
       </ul>
     </div>
   </nav>

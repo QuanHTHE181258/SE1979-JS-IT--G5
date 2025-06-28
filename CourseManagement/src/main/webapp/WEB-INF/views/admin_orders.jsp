@@ -229,6 +229,19 @@
                 </div>
             </div>
 
+            <!-- Thêm thông tin tổng số bản ghi -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        Hiển thị ${orders.size()} trong tổng số ${totalOrders} bản ghi
+                        <c:if test="${totalPages > 1}">
+                            (Trang ${currentPage} / ${totalPages})
+                        </c:if>
+                    </div>
+                </div>
+            </div>
+
             <div class="row mb-4">
                 <div class="col-md-6 mb-3">
                     <form action="${pageContext.request.contextPath}/admin/orders" method="GET" class="d-flex">
