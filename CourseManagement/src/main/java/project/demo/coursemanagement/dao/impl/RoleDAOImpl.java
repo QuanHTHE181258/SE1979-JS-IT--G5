@@ -15,7 +15,7 @@ public class RoleDAOImpl implements RoleDAO {
 
     @Override
     public Role findByRoleName(String roleName) {
-        String sql = "SELECT RoleID, RoleName FROM roles WHERE RoleName = ?";
+        String sql = "SELECT RoleID, RoleName FROM roles WHERE UPPER(RoleName) = UPPER(?)";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
