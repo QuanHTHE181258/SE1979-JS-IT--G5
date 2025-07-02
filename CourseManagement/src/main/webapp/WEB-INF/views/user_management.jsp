@@ -5,6 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <title>User Management</title>
+    <link href="${pageContext.request.contextPath}/css/admincss.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -81,91 +83,115 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="top-bar">
-        <h1>User Management</h1>
-        <a href="addUser.jsp" class="add-button">+ Add New User</a>
-    </div>
-
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search users...">
-        <button onclick="searchUsers()">Search</button>
-    </div>
-
-    <div class="user-list section">
-        <h2>Students</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Full Name</th>
-                <th>Phone</th>
-                <th>Date of Birth</th>
-                <th>Last Login</th>
-                <th>Created At</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${students}" var="student">
-                <tr>
-                    <td>${student.id}</td>
-                    <td>${student.username}</td>
-                    <td>${student.email}</td>
-                    <td>${student.firstName} ${student.lastName}</td>
-                    <td>${student.phoneNumber}</td>
-                    <td>${student.dateOfBirth}</td>
-                    <td>${student.lastLogin}</td>
-                    <td>${student.createdAt}</td>
-                    <td>Active</td>
-                    <td>
-                        <a href="${pageContext.request.contextPath}/admin/users/edit/${student.id}" class="btn btn-primary btn-sm">Edit</a>
-                    </td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="user-list section">
-        <h2>Teachers</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Full Name</th>
-                <th>Phone</th>
-                <th>Date of Birth</th>
-                <th>Last Login</th>
-                <th>Created At</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${teachers}" var="teacher">
-                <tr>
-                    <td>${teacher.id}</td>
-                    <td>${teacher.username}</td>
-                    <td>${teacher.email}</td>
-                    <td>${teacher.firstName} ${teacher.lastName}</td>
-                    <td>${teacher.phoneNumber}</td>
-                    <td>${teacher.dateOfBirth}</td>
-                    <td>${teacher.lastLogin}</td>
-                    <td>${teacher.createdAt}</td>
-                    <td>Active</td>
-                    <td>
-                        <a href="${pageContext.request.contextPath}/admin/users/edit/${teacher.id}" class="btn btn-primary btn-sm">Edit</a>
-                    </td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
+<div class="wrapper">
+    <nav id="sidebar" class="">
+        <div class="sidebar-header">
+            <h3>Admin Panel</h3>
+        </div>
+        <ul class="components">
+            <li><a href="${pageContext.request.contextPath}/admin/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/admin/users"><i class="fas fa-users"></i> Users</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/courses"><i class="fas fa-book"></i> Courses</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/orders"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/revenue-analytics"><i class="fas fa-chart-bar"></i> Revenue Analytics</a></li>
+        </ul>
+    </nav>
+    <div id="content">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">User Management</a>
+            </div>
+        </nav>
+        <div class="container-fluid py-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold">Students</h6>
+                </div>
+                <div class="card-body">
+                    <div class="user-list section">
+                        <h2>Students</h2>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Full Name</th>
+                                <th>Phone</th>
+                                <th>Date of Birth</th>
+                                <th>Last Login</th>
+                                <th>Created At</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach items="${students}" var="student">
+                                <tr>
+                                    <td>${student.id}</td>
+                                    <td>${student.username}</td>
+                                    <td>${student.email}</td>
+                                    <td>${student.firstName} ${student.lastName}</td>
+                                    <td>${student.phoneNumber}</td>
+                                    <td>${student.dateOfBirth}</td>
+                                    <td>${student.lastLogin}</td>
+                                    <td>${student.createdAt}</td>
+                                    <td>Active</td>
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/admin/users/edit/${student.id}" class="btn btn-primary btn-sm">Edit</a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow mt-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold">Teachers</h6>
+                </div>
+                <div class="card-body">
+                    <div class="user-list section">
+                        <h2>Teachers</h2>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Full Name</th>
+                                <th>Phone</th>
+                                <th>Date of Birth</th>
+                                <th>Last Login</th>
+                                <th>Created At</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach items="${teachers}" var="teacher">
+                                <tr>
+                                    <td>${teacher.id}</td>
+                                    <td>${teacher.username}</td>
+                                    <td>${teacher.email}</td>
+                                    <td>${teacher.firstName} ${teacher.lastName}</td>
+                                    <td>${teacher.phoneNumber}</td>
+                                    <td>${teacher.dateOfBirth}</td>
+                                    <td>${teacher.lastLogin}</td>
+                                    <td>${teacher.createdAt}</td>
+                                    <td>Active</td>
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/admin/users/edit/${teacher.id}" class="btn btn-primary btn-sm">Edit</a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

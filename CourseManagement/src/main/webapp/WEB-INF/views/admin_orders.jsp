@@ -6,8 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Order Management</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/admincss.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
             --primary-blue: #6a5acd; /* A shade of blue/purple inspired by the image */
@@ -170,46 +170,27 @@
     </style>
 </head>
 <body>
-<div class="container-fluid">
-    <button class="navbar-toggler-custom d-md-none" type="button" id="sidebarToggle">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <div class="row">
-        <nav class="col-md-2 d-md-block sidebar min-vh-100" id="sidebar">
-            <div class="position-sticky pt-3">
-                <h3 class="text-white text-center mb-4">Admin Panel</h3>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/admin/dashboard">
-                            <i class="fas fa-home"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/admin/courses">
-                            <i class="fas fa-book"></i> Courses
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="${pageContext.request.contextPath}/admin/orders">
-                            <i class="fas fa-shopping-cart"></i> Orders
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/admin/users">
-                            <i class="fas fa-users"></i> Users
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/admin/revenue-analytics">
-                            <i class="fas fa-chart-bar"></i> Revenue Analytics
-                        </a>
-                    </li>
-                </ul>
+<div class="wrapper">
+    <nav id="sidebar" class="">
+        <div class="sidebar-header">
+            <h3>Admin Panel</h3>
+        </div>
+        <ul class="components">
+            <li><a href="${pageContext.request.contextPath}/admin/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/courses"><i class="fas fa-book"></i> Courses</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/admin/orders"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/users"><i class="fas fa-users"></i> Users</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/revenue-analytics"><i class="fas fa-chart-bar"></i> Revenue Analytics</a></li>
+            <li><a href="${pageContext.request.contextPath}/teacher-performance"><i class="fas fa-chart-line"></i> Teacher Performance</a></li>
+        </ul>
+    </nav>
+    <div id="content">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Order Management</a>
             </div>
         </nav>
-
-        <main class="col-md-10 ms-sm-auto px-md-4 main-content-wrapper" id="mainContentWrapper">
+        <div class="container-fluid py-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Order Management</h1>
                 <div class="btn-group" role="group">
@@ -407,7 +388,7 @@
                     </c:if>
                 </ul>
             </nav>
-        </main>
+        </div>
     </div>
 </div>
 
