@@ -1,4 +1,4 @@
-<%--
+<%@ page import="project.demo.coursemanagement.utils.SessionUtil" %><%--
   Created by IntelliJ IDEA.
   User: hoang
   Date: 5/24/2025
@@ -24,40 +24,45 @@
             <input type="text" placeholder="Search..." class="search-input">
             <span class="search-icon"><i class="fas fa-search"></i></span>
         </div>
-        <div class="home-header-login"><a href="login" style="text-decoration: none; color: white">Login</a></div>
-        <div class="home-header-register"><a href="register" style="text-decoration: none; color: white">Register</a></div>
-        <div class="home-header-profile"><a href="profile" style="text-decoration: none; color: white">Profile</a></div>
+            <%if(SessionUtil.isUserLoggedIn(request)){ %>
+                    <div><a href="CartServlet" style="text-decoration: none; color: white">Cart</a></div>
+            <% } else { %>
+                <div class="home-header-login"><a href="login" style="text-decoration: none; color: white">Login</a></div>
+                <div class="home-header-register"><a href="register" style="text-decoration: none; color: white">Register</a></div>
+                <div class="home-header-profile"><a href="profile" style="text-decoration: none; color: white">Profile</a></div>
+           <%}%>
+
 
     </div>
     <%-- Content container --%>
     <div class="home-content">
         <%-- Most Popular Courses --%>
         <div class="home-most-views">
-            <h2>Most Popular Courses</h2>
+            <h2>Highest Rating Courses</h2>
             <ul class="course-list">
-                <c:forEach var="course" items="${mostPopularCourses}">
+                <c:forEach var="course" items="${highestRatedCourses}">
                     <li class="course-card col-3">
                         <div class="card-header">
-                            <span class="course-code">${course.courseCode}</span>
-                            <h3 class="course-title">${course.title}</h3>
-                            <p class="course-teacher">${course.teacherUsername}</p>
+                            <span class="course-code">${course.courseID}</span>
+                            <h3 class="course-title">${course.courseTitle}</h3>
+                            <p class="course-teacher">${course.teacherName}</p>
                         </div>
                         <div class="card-body">
-                            <p class="course-desc">${course.shortDescription}</p>
+                            <p class="course-desc">${course.courseDescription}</p>
                             <div class="course-detail">
                                 <p><strong>Price:</strong> $${course.price}</p>
-                                <p><strong>Duration:</strong> ${course.durationHours} hours</p>
-                                <p><strong>Max Students:</strong> ${course.maxStudents}</p>
-                                <p><strong>Start Date:</strong>
-                                    <fmt:formatDate value="${course.startDateAsDate}" pattern="dd/MM/yyyy" type="date"/>
-                                </p>
-                                <p><strong>End Date:</strong>
-                                    <fmt:formatDate value="${course.endDateAsDate}" pattern="dd/MM/yyyy" type="date"/>
-                                </p>
+                                <p><strong>Rating:</strong> ${course.rating}</p>
+                                <p><strong>Category:</strong> ${course.categories}</p>
+                                <p><strong>Status:</strong> ${course.courseStatus}</p>
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button class="join-btn">JOIN</button>
+                            <form action="CartServlet" method="post">
+                                <input type="hidden" name="action" value="add">
+                                <input type="hidden" name="courseId" value="${course.courseID}" />
+
+                                <button type="submit" class="join-btn">Add to card</button>
+                            </form>
                         </div>
                     </li>
                 </c:forEach>
@@ -70,26 +75,26 @@
                 <c:forEach var="course" items="${paidCourses}">
                     <li class="course-card col-3">
                         <div class="card-header">
-                            <span class="course-code">${course.courseCode}</span>
-                            <h3 class="course-title">${course.title}</h3>
-                            <p class="course-teacher">${course.teacherUsername}</p>
+                            <span class="course-code">${course.courseID}</span>
+                            <h3 class="course-title">${course.courseTitle}</h3>
+                            <p class="course-teacher">${course.teacherName}</p>
                         </div>
                         <div class="card-body">
-                            <p class="course-desc">${course.shortDescription}</p>
+                            <p class="course-desc">${course.courseDescription}</p>
                             <div class="course-detail">
                                 <p><strong>Price:</strong> $${course.price}</p>
-                                <p><strong>Duration:</strong> ${course.durationHours} hours</p>
-                                <p><strong>Max Students:</strong> ${course.maxStudents}</p>
-                                <p><strong>Start Date:</strong>
-                                    <fmt:formatDate value="${course.startDateAsDate}" pattern="yyyy-MM-dd" type="date" />
-                                </p>
-                                <p><strong>End Date:</strong>
-                                    <fmt:formatDate value="${course.endDateAsDate}" pattern="yyyy-MM-dd" type="date" />
-                                </p>
+                                <p><strong>Rating:</strong> ${course.rating}</p>
+                                <p><strong>Category:</strong> ${course.categories}</p>
+                                <p><strong>Status:</strong> ${course.courseStatus}</p>
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button class="join-btn">JOIN</button>
+                            <form action="CartServlet" method="post">
+                                <input type="hidden" name="action" value="add">
+                                <input type="hidden" name="courseId" value="${course.courseID}" />
+
+                                <button type="submit" class="join-btn">Add to card</button>
+                            </form>
                         </div>
                     </li>
                 </c:forEach>
@@ -102,26 +107,26 @@
                 <c:forEach var="course" items="${freeCourses}">
                     <li class="course-card col-3">
                         <div class="card-header">
-                            <span class="course-code">${course.courseCode}</span>
-                            <h3 class="course-title">${course.title}</h3>
-                            <p class="course-teacher">${course.teacherUsername}</p>
+                            <span class="course-code">${course.courseID}</span>
+                            <h3 class="course-title">${course.courseTitle}</h3>
+                            <p class="course-teacher">${course.teacherName}</p>
                         </div>
                         <div class="card-body">
-                            <p class="course-desc">${course.shortDescription}</p>
+                            <p class="course-desc">${course.courseDescription}</p>
                             <div class="course-detail">
                                 <p><strong>Price:</strong> $${course.price}</p>
-                                <p><strong>Duration:</strong> ${course.durationHours} hours</p>
-                                <p><strong>Max Students:</strong> ${course.maxStudents}</p>
-                                <p><strong>Start Date:</strong>
-                                    <fmt:formatDate value="${course.startDateAsDate}" pattern="yyyy-MM-dd" type="date" />
-                                </p>
-                                <p><strong>End Date:</strong>
-                                    <fmt:formatDate value="${course.endDateAsDate}" pattern="yyyy-MM-dd" type="date" />
-                                </p>
+                                <p><strong>Rating:</strong> ${course.rating}</p>
+                                <p><strong>Category:</strong> ${course.categories}</p>
+                                <p><strong>Status:</strong> ${course.courseStatus}</p>
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button class="join-btn">JOIN</button>
+                            <form action="CartServlet" method="post">
+                                <input type="hidden" name="action" value="add">
+                                <input type="hidden" name="courseId" value="${course.courseID}" />
+
+                                <button type="submit" class="join-btn">Add to card</button>
+                            </form>
                         </div>
                     </li>
                 </c:forEach>

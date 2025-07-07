@@ -147,7 +147,7 @@ public class UpdateCourseServlet extends HttpServlet {
         cours.setInstructorID(instructor);
         // Gán category
         Category category = new Category();
-        category.setId(categoryId);
+        category.setId(Integer.parseInt(categoryIdStr));
         cours.setCategory(category);
         cours.setStatus("active");
         // Lưu DB

@@ -42,6 +42,11 @@
         </a>
       </li>
       <li>
+        <a href="${pageContext.request.contextPath}/admin/orders">
+          <i class="fas fa-shopping-cart"></i> Order Management
+        </a>
+      </li>
+      <li>
         <a href="${pageContext.request.contextPath}/admin/categories">
           <i class="fas fa-tags"></i> Categories
         </a>
@@ -207,8 +212,45 @@
       <div class="row">
         <div class="col-12">
           <div class="card shadow mb-4">
-            <div class="card-header py-3">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h6 class="m-0 font-weight-bold text-primary">Recent Activities</h6>
+              <div class="d-flex gap-2">
+                <!-- Search Form -->
+                <form action="${pageContext.request.contextPath}/admin" method="GET" class="d-flex gap-2">
+                  <input type="hidden" name="courseSearch" value="${param.courseSearch}">
+                  <input type="hidden" name="courseLimit" value="${param.courseLimit}">
+                  <input type="hidden" name="activityLimit" value="${param.activityLimit}">
+                  <input type="hidden" name="activityRole" value="${param.activityRole}">
+                  
+                  <input type="text" name="activitySearch" class="form-control form-control-sm" 
+                         placeholder="Search users..." value="${param.activitySearch}" style="width: 200px;">
+                  <button type="submit" class="btn btn-sm btn-primary">
+                    <i class="fas fa-search"></i>
+                  </button>
+                  <c:if test="${not empty param.activitySearch}">
+                    <a href="${pageContext.request.contextPath}/admin?courseSearch=${param.courseSearch}&courseLimit=${param.courseLimit}&activityLimit=${param.activityLimit}&activityRole=${param.activityRole}" 
+                       class="btn btn-sm btn-outline-secondary">
+                      <i class="fas fa-times"></i>
+                    </a>
+                  </c:if>
+                </form>
+                
+                <!-- Role Filter -->
+                <div class="btn-group btn-group-sm" role="group">
+                  <a href="${pageContext.request.contextPath}/admin?activitySearch=${param.activitySearch}&courseSearch=${param.courseSearch}&courseLimit=${param.courseLimit}&activityLimit=${param.activityLimit}&activityRole=student" 
+                     class="btn btn-outline-primary ${param.activityRole == 'student' || empty param.activityRole ? 'active' : ''}">Student</a>
+                  <a href="${pageContext.request.contextPath}/admin?activitySearch=${param.activitySearch}&courseSearch=${param.courseSearch}&courseLimit=${param.courseLimit}&activityLimit=${param.activityLimit}&activityRole=teacher" 
+                     class="btn btn-outline-primary ${param.activityRole == 'teacher' ? 'active' : ''}">Teacher</a>
+                </div>
+                
+                <!-- Limit Toggle -->
+                <div class="btn-group btn-group-sm" role="group">
+                  <a href="${pageContext.request.contextPath}/admin?activitySearch=${param.activitySearch}&courseSearch=${param.courseSearch}&courseLimit=${param.courseLimit}&activityLimit=5&activityRole=${param.activityRole}" 
+                     class="btn btn-outline-info ${param.activityLimit == 5 || empty param.activityLimit ? 'active' : ''}">5</a>
+                  <a href="${pageContext.request.contextPath}/admin?activitySearch=${param.activitySearch}&courseSearch=${param.courseSearch}&courseLimit=${param.courseLimit}&activityLimit=10&activityRole=${param.activityRole}" 
+                     class="btn btn-outline-info ${param.activityLimit == 10 ? 'active' : ''}">10</a>
+                </div>
+              </div>
             </div>
             <div class="card-body">
               <c:choose>
@@ -250,7 +292,16 @@
                 <c:otherwise>
                   <div class="text-center py-4">
                     <i class="fas fa-inbox fa-3x text-gray-300 mb-3"></i>
-                    <p class="text-muted">No recent activities found</p>
+                    <p class="text-muted">
+                      <c:choose>
+                        <c:when test="${not empty param.activitySearch}">
+                          No recent activities found for "${param.activitySearch}"
+                        </c:when>
+                        <c:otherwise>
+                          No recent activities found
+                        </c:otherwise>
+                      </c:choose>
+                    </p>
                   </div>
                 </c:otherwise>
               </c:choose>
@@ -263,8 +314,37 @@
       <div class="row">
         <div class="col-12">
           <div class="card shadow mb-4">
-            <div class="card-header py-3">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h6 class="m-0 font-weight-bold text-primary">Recent Created Courses</h6>
+              <div class="d-flex gap-2">
+                <!-- Search Form -->
+                <form action="${pageContext.request.contextPath}/admin" method="GET" class="d-flex gap-2">
+                  <input type="hidden" name="activitySearch" value="${param.activitySearch}">
+                  <input type="hidden" name="activityLimit" value="${param.activityLimit}">
+                  <input type="hidden" name="activityRole" value="${param.activityRole}">
+                  <input type="hidden" name="courseLimit" value="${param.courseLimit}">
+                  
+                  <input type="text" name="courseSearch" class="form-control form-control-sm" 
+                         placeholder="Search courses..." value="${param.courseSearch}" style="width: 200px;">
+                  <button type="submit" class="btn btn-sm btn-primary">
+                    <i class="fas fa-search"></i>
+                  </button>
+                  <c:if test="${not empty param.courseSearch}">
+                    <a href="${pageContext.request.contextPath}/admin?activitySearch=${param.activitySearch}&activityLimit=${param.activityLimit}&activityRole=${param.activityRole}&courseLimit=${param.courseLimit}" 
+                       class="btn btn-sm btn-outline-secondary">
+                      <i class="fas fa-times"></i>
+                    </a>
+                  </c:if>
+                </form>
+                
+                <!-- Limit Toggle -->
+                <div class="btn-group btn-group-sm" role="group">
+                  <a href="${pageContext.request.contextPath}/admin?activitySearch=${param.activitySearch}&courseSearch=${param.courseSearch}&activityLimit=${param.activityLimit}&activityRole=${param.activityRole}&courseLimit=5" 
+                     class="btn btn-outline-info ${param.courseLimit == 5 || empty param.courseLimit ? 'active' : ''}">5</a>
+                  <a href="${pageContext.request.contextPath}/admin?activitySearch=${param.activitySearch}&courseSearch=${param.courseSearch}&activityLimit=${param.activityLimit}&activityRole=${param.activityRole}&courseLimit=10" 
+                     class="btn btn-outline-info ${param.courseLimit == 10 ? 'active' : ''}">10</a>
+                </div>
+              </div>
             </div>
             <div class="card-body">
               <c:choose>
@@ -304,7 +384,16 @@
                 <c:otherwise>
                   <div class="text-center py-4">
                     <i class="fas fa-book fa-3x text-gray-300 mb-3"></i>
-                    <p class="text-muted">No recent courses created</p>
+                    <p class="text-muted">
+                      <c:choose>
+                        <c:when test="${not empty param.courseSearch}">
+                          No recent courses found for "${param.courseSearch}"
+                        </c:when>
+                        <c:otherwise>
+                          No recent courses created
+                        </c:otherwise>
+                      </c:choose>
+                    </p>
                   </div>
                 </c:otherwise>
               </c:choose>
@@ -329,7 +418,7 @@
                         <h6 class="mb-1">${course.title}</h6>
                         <small class="text-muted">${course.enrollmentCount} students</small>
                       </div>
-                      <span class="badge badge-primary">${course.category.name}</span>
+                      <span class="badge badge-primary">Category ${course.categoryId}</span>
                     </div>
                   </c:forEach>
                 </c:when>
@@ -361,9 +450,7 @@
                           <fmt:formatDate value="${user.createdAtDate}" pattern="MMM dd, yyyy HH:mm" />
                         </small>
                       </div>
-                      <span class="badge badge-${user.role.roleName == 'TEACHER' ? 'success' : 'info'} ms-auto">
-                          ${user.role.roleName}
-                      </span>
+                      <span class="badge badge-info ms-auto">User</span>
                     </div>
                   </c:forEach>
                 </c:when>

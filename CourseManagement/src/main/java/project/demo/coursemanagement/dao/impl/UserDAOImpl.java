@@ -2,14 +2,16 @@ package project.demo.coursemanagement.dao.impl;
 
 import project.demo.coursemanagement.dao.UserDAO;
 import project.demo.coursemanagement.entities.User;
-import project.demo.coursemanagement.utils.DatabaseConnection;
 import project.demo.coursemanagement.entities.Role;
+import project.demo.coursemanagement.utils.DatabaseConnection;
 
 import java.sql.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.text.Normalizer;
+import java.util.regex.Pattern;
 
 public class UserDAOImpl implements UserDAO {
 
@@ -97,11 +99,8 @@ public class UserDAOImpl implements UserDAO {
         String sql = """
                     SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName,
                            u.LastName, u.PhoneNumber, u.DateOfBirth, u.AvatarURL,
-                           u.LastLogin, u.CreatedAt,
-                           r.RoleID, r.RoleName
+                           u.LastLogin, u.CreatedAt
                     FROM users u
-                    INNER JOIN user_roles ur ON u.UserID = ur.UserID
-                    INNER JOIN roles r ON ur.RoleID = r.RoleID
                 """;
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -122,11 +121,8 @@ public class UserDAOImpl implements UserDAO {
         String sql = """
                     SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName,
                            u.LastName, u.PhoneNumber, u.DateOfBirth, u.AvatarURL,
-                           u.LastLogin, u.CreatedAt,
-                           r.RoleID, r.RoleName
+                           u.LastLogin, u.CreatedAt
                     FROM users u
-                    INNER JOIN user_roles ur ON u.UserID = ur.UserID
-                    INNER JOIN roles r ON ur.RoleID = r.RoleID
                     WHERE u.FirstName LIKE ? OR u.LastName LIKE ? OR u.Username LIKE ?
                 """;
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -155,13 +151,9 @@ public class UserDAOImpl implements UserDAO {
         List<User> users = new ArrayList<>();
         String sql = """
             SELECT TOP (?) u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName,
-                   u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt,
-                   r.RoleID, r.RoleName
+                   u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt
             FROM users u
-            INNER JOIN user_roles ur ON u.UserID = ur.UserID
-            INNER JOIN roles r ON ur.RoleID = r.RoleID
-            WHERE u.LastLogin IS NOT NULL
-            ORDER BY u.LastLogin DESC
+            ORDER BY u.CreatedAt DESC
         """;
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -183,15 +175,28 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> findUsers(String search, String roleName, int offset, int limit) {
         List<User> users = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("""
-            SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName,
-                   u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt,
-                   r.RoleID, r.RoleName
-            FROM users u
-            INNER JOIN user_roles ur ON u.UserID = ur.UserID
-            INNER JOIN roles r ON ur.RoleID = r.RoleID
-            WHERE 1=1
-        """);
+        StringBuilder sql = new StringBuilder();
+        
+        if (roleName != null && !roleName.trim().isEmpty()) {
+            // Include role filter
+            sql.append("""
+                SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName,
+                       u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt
+                FROM users u
+                INNER JOIN user_roles ur ON u.UserID = ur.UserID
+                INNER JOIN roles r ON ur.RoleID = r.RoleID
+                WHERE 1=1
+            """);
+        } else {
+            // No role filter
+            sql.append("""
+                SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName,
+                       u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt
+                FROM users u
+                WHERE 1=1
+            """);
+        }
+        
         List<Object> params = new ArrayList<>();
 
         if (search != null && !search.trim().isEmpty()) {
@@ -235,13 +240,26 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public int countUsers(String search, String roleName) {
-        StringBuilder sql = new StringBuilder("""
-            SELECT COUNT(*) 
-            FROM users u 
-            INNER JOIN user_roles ur ON u.UserID = ur.UserID 
-            INNER JOIN roles r ON ur.RoleID = r.RoleID 
-            WHERE 1=1
-        """);
+        StringBuilder sql = new StringBuilder();
+        
+        if (roleName != null && !roleName.trim().isEmpty()) {
+            // Include role filter
+            sql.append("""
+                SELECT COUNT(*) 
+                FROM users u 
+                INNER JOIN user_roles ur ON u.UserID = ur.UserID 
+                INNER JOIN roles r ON ur.RoleID = r.RoleID 
+                WHERE 1=1
+            """);
+        } else {
+            // No role filter
+            sql.append("""
+                SELECT COUNT(*) 
+                FROM users u 
+                WHERE 1=1
+            """);
+        }
+        
         List<Object> params = new ArrayList<>();
 
         if (search != null && !search.trim().isEmpty()) {
@@ -367,11 +385,13 @@ public class UserDAOImpl implements UserDAO {
         Timestamp lastLoginTs = rs.getTimestamp("LastLogin");
         if (lastLoginTs != null) {
             user.setLastLogin(lastLoginTs.toInstant());
+            user.setLastLoginDate(new java.util.Date(lastLoginTs.getTime()));
         }
 
         Timestamp createdAtTs = rs.getTimestamp("CreatedAt");
         if (createdAtTs != null) {
             user.setCreatedAt(createdAtTs.toInstant());
+            user.setCreatedAtDate(new java.util.Date(createdAtTs.getTime()));
         }
 
         return user;
@@ -406,5 +426,92 @@ public class UserDAOImpl implements UserDAO {
             System.err.println("Error updating and uploading avatar: " + e.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public List<User> searchRecentActivities(String keyword, int limit, String role) {
+        List<User> result = new ArrayList<>();
+        String sql = "SELECT TOP (?) u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName, " +
+                     "u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt, r.RoleName " +
+                     "FROM users u " +
+                     "JOIN user_roles ur ON u.UserID = ur.UserID " +
+                     "JOIN roles r ON ur.RoleID = r.RoleID " +
+                     "WHERE (u.Username LIKE ? OR u.Email LIKE ? OR u.FirstName LIKE ? OR u.LastName LIKE ?) " +
+                     "AND LOWER(r.RoleName) = ? " +
+                     "ORDER BY u.LastLogin DESC";
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            String searchPattern = "%" + keyword + "%";
+            String roleName = role.toLowerCase();
+            
+            stmt.setInt(1, limit);
+            stmt.setString(2, searchPattern);
+            stmt.setString(3, searchPattern);
+            stmt.setString(4, searchPattern);
+            stmt.setString(5, searchPattern);
+            stmt.setString(6, roleName);
+            
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                User user = mapResultSetToUserWithRole(rs);
+                // Additional filtering for diacritics
+                if (removeDiacritics(user.getFirstName().toLowerCase()).contains(removeDiacritics(keyword.toLowerCase())) ||
+                    removeDiacritics(user.getLastName().toLowerCase()).contains(removeDiacritics(keyword.toLowerCase())) ||
+                    user.getUsername().toLowerCase().contains(keyword.toLowerCase())) {
+                    result.add(user);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public List<User> getRecentUsersByRole(int limit, String role) {
+        List<User> result = new ArrayList<>();
+        String sql = "SELECT TOP (?) u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName, " +
+                     "u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt, r.RoleName " +
+                     "FROM users u " +
+                     "JOIN user_roles ur ON u.UserID = ur.UserID " +
+                     "JOIN roles r ON ur.RoleID = r.RoleID " +
+                     "WHERE LOWER(r.RoleName) = ? " +
+                     "ORDER BY CASE WHEN u.LastLogin IS NULL THEN 1 ELSE 0 END, u.LastLogin DESC, u.CreatedAt DESC";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, limit);
+            stmt.setString(2, role.toLowerCase());
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                User user = mapResultSetToUserWithRole(rs);
+                result.add(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    // Helper method to map ResultSet to User with role information
+    private User mapResultSetToUserWithRole(ResultSet rs) throws SQLException {
+        User user = mapResultSetToUser(rs);
+        // Set role information
+        String roleName = rs.getString("RoleName");
+        if (roleName != null) {
+            // Role role = new Role();
+            // role.setRoleName(roleName);
+            // user.setRole(role); // Xóa dòng này vì User không có setRole
+            // Nếu cần, có thể trả về roleName ngoài entity
+        }
+        return user;
+    }
+
+    // Helper method to remove diacritics from a string
+    private String removeDiacritics(String str) {
+        String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD); 
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(nfdNormalizedString).replaceAll("");
     }
 }

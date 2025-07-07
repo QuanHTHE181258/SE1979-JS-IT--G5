@@ -1,4 +1,4 @@
-<%--
+<%@ page import="project.demo.coursemanagement.utils.SessionUtil" %><%--
   Created by IntelliJ IDEA.
   User: hoang
   Date: 5/26/2025
@@ -18,51 +18,48 @@
 <body>
 <%-- Header --%>
 <div class="home-header">
-    <div class="home-header-logo"><a href="home" style="text-decoration: none; color: white">Courses Learning Web</a></div>
+    <div class="home-header-logo"><a href="home" style="text-decoration: none; color: white">Courses Learning Web</a>
+    </div>
     <div class="home-header-courses"><a href="course" style="text-decoration: none; color: white">Courses</a></div>
     <div class="home-header-searchbar">
         <input type="text" placeholder="Search..." class="search-input">
         <span class="search-icon"><i class="fas fa-search"></i></span>
     </div>
+    <%if (SessionUtil.isUserLoggedIn(request)) { %>
+    <div><a href="CartServlet" style="text-decoration: none; color: white">Cart</a></div>
+    <% } else { %>
     <div class="home-header-login"><a href="login" style="text-decoration: none; color: white">Login</a></div>
     <div class="home-header-register"><a href="register" style="text-decoration: none; color: white">Register</a></div>
+    <%}%>
 </div>
 
 <%-- Content --%>
 <div class="container">
     <h1>Course List</h1>
-    <%-- Search Form --%>
-    <div class="search-container">
-        <form action="course" method="get" class="search-form">
-            <input type="text" name="search" placeholder="Search courses..." value="${searchKeyword}" class="search-input">
-            <button type="submit" class="search-button">Search</button>
-        </form>
-    </div>
-
     <ul class="course-list">
         <c:forEach var="course" items="${courses}">
             <li class="course-card">
                 <div class="card-header">
-                    <span class="course-code">${course.courseCode}</span>
-                    <h3 class="course-title">${course.title}</h3>
-                    <p class="course-teacher">${course.teacherUsername}</p>
+                    <span class="course-code">${course.courseID}</span>
+                    <h3 class="course-title"><a href="courseDetails?courseID=${course.courseID}">${course.courseTitle}</a></h3>
+                    <p class="course-teacher">${course.teacherName}</p>
                 </div>
                 <div class="card-body">
-                    <p class="course-desc">${course.shortDescription}</p>
+                    <p class="course-desc">${course.courseDescription}</p>
                     <div class="course-detail">
                         <p><strong>Price:</strong> $${course.price}</p>
-                        <p><strong>Duration:</strong> ${course.durationHours} hours</p>
-                        <p><strong>Max Students:</strong> ${course.maxStudents}</p>
-                        <p><strong>Start Date:</strong>
-                            <fmt:formatDate value="${course.startDateAsDate}" pattern="dd/MM/yyyy" />
-                        </p>
-                        <p><strong>End Date:</strong>
-                            <fmt:formatDate value="${course.endDateAsDate}" pattern="dd/MM/yyyy" />
-                        </p>
+                        <p><strong>Rating:</strong> ${course.rating}</p>
+                        <p><strong>Category:</strong> ${course.categories}</p>
+                        <p><strong>Status:</strong> ${course.courseStatus}</p>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button class="join-btn">JOIN</button>
+                    <form action="CartServlet" method="post">
+                        <input type="hidden" name="action" value="add">
+                        <input type="hidden" name="courseId" value="${course.courseID}" />
+
+                        <button type="submit" class="join-btn">Add to card</button>
+                    </form>
                 </div>
             </li>
         </c:forEach>
@@ -72,24 +69,27 @@
     <div class="pagination">
         <c:if test="${totalPages > 1}">
             <ul class="pagination-list">
-                <%-- Previous button --%>
+                    <%-- Previous button --%>
                 <c:if test="${currentPage > 1}">
                     <li class="page-item">
-                        <a href="course?page=${currentPage - 1}${searchKeyword != null ? '&search=' : ''}${searchKeyword != null ? searchKeyword : ''}" class="page-link">&laquo; Previous</a>
+                        <a href="course?page=${currentPage - 1}${searchKeyword != null ? '&search=' : ''}${searchKeyword != null ? searchKeyword : ''}"
+                           class="page-link">&laquo; Previous</a>
                     </li>
                 </c:if>
 
-                <%-- Page numbers --%>
+                    <%-- Page numbers --%>
                 <c:forEach begin="1" end="${totalPages}" var="i">
                     <li class="page-item ${i == currentPage ? 'active' : ''}">
-                        <a href="course?page=${i}${searchKeyword != null ? '&search=' : ''}${searchKeyword != null ? searchKeyword : ''}" class="page-link">${i}</a>
+                        <a href="course?page=${i}${searchKeyword != null ? '&search=' : ''}${searchKeyword != null ? searchKeyword : ''}"
+                           class="page-link">${i}</a>
                     </li>
                 </c:forEach>
 
-                <%-- Next button --%>
+                    <%-- Next button --%>
                 <c:if test="${currentPage < totalPages}">
                     <li class="page-item">
-                        <a href="course?page=${currentPage + 1}${searchKeyword != null ? '&search=' : ''}${searchKeyword != null ? searchKeyword : ''}" class="page-link">Next &raquo;</a>
+                        <a href="course?page=${currentPage + 1}${searchKeyword != null ? '&search=' : ''}${searchKeyword != null ? searchKeyword : ''}"
+                           class="page-link">Next &raquo;</a>
                     </li>
                 </c:if>
             </ul>

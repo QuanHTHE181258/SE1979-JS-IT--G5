@@ -111,25 +111,9 @@
                     <td>${student.id}</td>
                     <td>${student.username}</td>
                     <td>${student.email}</td>
-                    <td>${student.phone}</td>
-                    <td><c:out value="${student.isActive ? 'Active' : 'Inactive'}"/></td>
+                    <td>${student.phoneNumber}</td>
+                    <td>Active</td>
                     <td>
-                        <c:choose>
-                            <c:when test="${student.isActive}">
-                                <form action="${pageContext.request.contextPath}/admin/user-management/${student.id}/deactivate" method="post" style="display: inline;">
-                                    <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('Are you sure you want to deactivate this user?');">
-                                        Deactivate
-                                    </button>
-                                </form>
-                            </c:when>
-                            <c:otherwise>
-                                <form action="${pageContext.request.contextPath}/admin/user-management/${student.id}/activate" method="post" style="display: inline;">
-                                    <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Are you sure you want to activate this user?');">
-                                        Activate
-                                    </button>
-                                </form>
-                            </c:otherwise>
-                        </c:choose>
                         <a href="${pageContext.request.contextPath}/admin/users/edit/${student.id}" class="btn btn-primary btn-sm">Edit</a>
                     </td>
                 </tr>
@@ -157,25 +141,9 @@
                     <td>${teacher.id}</td>
                     <td>${teacher.username}</td>
                     <td>${teacher.email}</td>
-                    <td>${teacher.phone}</td>
-                    <td><c:out value="${teacher.isActive ? 'Active' : 'Inactive'}"/></td>
+                    <td>${teacher.phoneNumber}</td>
+                    <td>Active</td>
                     <td>
-                        <c:choose>
-                            <c:when test="${teacher.isActive}">
-                                <form action="${pageContext.request.contextPath}/admin/user-management/${teacher.id}/deactivate" method="post" style="display: inline;">
-                                    <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('Are you sure you want to deactivate this user?');">
-                                        Deactivate
-                                    </button>
-                                </form>
-                            </c:when>
-                            <c:otherwise>
-                                <form action="${pageContext.request.contextPath}/admin/user-management/${teacher.id}/activate" method="post" style="display: inline;">
-                                    <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Are you sure you want to activate this user?');">
-                                        Activate
-                                    </button>
-                                </form>
-                            </c:otherwise>
-                        </c:choose>
                         <a href="${pageContext.request.contextPath}/admin/users/edit/${teacher.id}" class="btn btn-primary btn-sm">Edit</a>
                     </td>
                 </tr>
