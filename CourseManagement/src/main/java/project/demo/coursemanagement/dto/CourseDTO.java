@@ -29,7 +29,6 @@ public class CourseDTO {
     private Instant createdAt;
     private java.util.Date createdAtDate;
     private int enrollmentCount;
-    private BigDecimal rating;
     private String status;
 
     private int courseID;

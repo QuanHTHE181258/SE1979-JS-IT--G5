@@ -180,7 +180,7 @@ public class OrderDAOImpl implements OrderDAO {
                     course.setCourseCode(String.valueOf(rs.getInt("CourseID")));
                     course.setTitle(rs.getString("CourseTitle"));
                     course.setDescription(rs.getString("Description"));
-                    course.setRating(rs.getBigDecimal("Rating"));
+                    course.setRating(rs.getDouble("Rating"));
                     java.sql.Timestamp createdAt = rs.getTimestamp("CreatedAt");
                     if (createdAt != null) {
                         course.setCreatedAt(createdAt.toInstant());
