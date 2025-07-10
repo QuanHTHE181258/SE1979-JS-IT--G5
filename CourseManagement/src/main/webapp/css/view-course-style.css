@@ -100,10 +100,6 @@ body {
     padding: 0;
 }
 
-.course-card {
-
-}
-
 .course-list li {
     margin: 10px 0;
     font-size: 16px;
@@ -130,6 +126,10 @@ body {
     justify-content: space-between;
     width: 400px;
     flex-shrink: 0;
+}
+
+.course-card:hover {
+    cursor: pointer;
 }
 
 .card-header {

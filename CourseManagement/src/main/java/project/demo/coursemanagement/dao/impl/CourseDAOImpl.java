@@ -1,14 +1,203 @@
 package project.demo.coursemanagement.dao.impl;
 
 import project.demo.coursemanagement.dao.CourseDAO;
+import project.demo.coursemanagement.dto.CourseStatsDTO;
 import project.demo.coursemanagement.dto.CourseDTO;
+import project.demo.coursemanagement.entities.Cours;
+import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.utils.DatabaseConnection;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CourseDAOImpl implements CourseDAO {
     DatabaseConnection dbConn = DatabaseConnection.getInstance();
+
+
+    @Override
+    public List<CourseStatsDTO> getAllCoursesWithStats() {
+        List<CourseStatsDTO> courses = new ArrayList<>();
+
+        String sql = """
+        SELECT c.CourseID, c.Title, c.Description, c.Price, c.Rating, c.CreatedAt, c.ImageURL,
+            cat.CategoryID, cat.Name as CategoryName,
+            u.UserID as InstructorID, u.FirstName as InstructorFirstName, u.LastName as InstructorLastName,
+            (SELECT COUNT(*) FROM feedback f WHERE f.CourseID = c.CourseID) AS FeedbackCount,
+            (SELECT COUNT(*) FROM materials m
+                JOIN lessons l ON m.LessonID = l.LessonID
+                WHERE l.CourseID = c.CourseID) AS MaterialCount,
+            (SELECT COUNT(*) FROM quizzes q
+                JOIN lessons l ON q.LessonID = l.LessonID
+                WHERE l.CourseID = c.CourseID) AS QuizCount,
+            (SELECT COUNT(*) FROM enrollments e WHERE e.course_id = c.CourseID) AS EnrollmentCount
+        FROM Courses c
+        LEFT JOIN categories cat ON c.CategoryID = cat.CategoryID
+        LEFT JOIN users u ON c.InstructorID = u.UserID
+        ORDER BY c.CreatedAt DESC
+    """;
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                CourseStatsDTO course = new CourseStatsDTO(
+                        rs.getLong("CourseID"),
+                        rs.getString("Title"),
+                        rs.getString("Description"),
+                        rs.getBigDecimal("Price"),
+                        rs.getDouble("Rating"),
+                        rs.getTimestamp("CreatedAt").toInstant(),
+                        rs.getString("ImageURL"),
+                        rs.getLong("FeedbackCount"),
+                        rs.getLong("MaterialCount"),
+                        rs.getLong("QuizCount"),
+                        rs.getLong("EnrollmentCount"),
+                        rs.getLong("CategoryID"),
+                        rs.getString("CategoryName"),
+                        rs.getLong("InstructorID"),
+                        rs.getString("InstructorFirstName"),
+                        rs.getString("InstructorLastName")
+                );
+                courses.add(course);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error in getAllCoursesWithStats: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return courses;
+    }
+
+    @Override
+    public List<CourseStatsDTO> getCoursesByCategory(Long categoryId) {
+        List<CourseStatsDTO> courses = new ArrayList<>();
+
+        String sql = """
+        SELECT c.CourseID, c.Title, c.Description, c.Price, c.Rating, c.CreatedAt, c.ImageURL,
+            cat.CategoryID, cat.Name as CategoryName,
+            u.UserID as InstructorID, u.FirstName as InstructorFirstName, u.LastName as InstructorLastName,
+            (SELECT COUNT(*) FROM feedback f WHERE f.CourseID = c.CourseID) AS FeedbackCount,
+            (SELECT COUNT(*) FROM materials m
+                JOIN lessons l ON m.LessonID = l.LessonID
+                WHERE l.CourseID = c.CourseID) AS MaterialCount,
+            (SELECT COUNT(*) FROM quizzes q
+                JOIN lessons l ON q.LessonID = l.LessonID
+                WHERE l.CourseID = c.CourseID) AS QuizCount,
+            (SELECT COUNT(*) FROM enrollments e WHERE e.course_id = c.CourseID) AS EnrollmentCount
+        FROM Courses c
+        LEFT JOIN categories cat ON c.CategoryID = cat.CategoryID
+        LEFT JOIN users u ON c.InstructorID = u.UserID
+        WHERE c.CategoryID = ?
+        ORDER BY c.CreatedAt DESC
+        """;
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, categoryId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    CourseStatsDTO course = new CourseStatsDTO(
+                            rs.getLong("CourseID"),
+                            rs.getString("Title"),
+                            rs.getString("Description"),
+                            rs.getBigDecimal("Price"),
+                            rs.getDouble("Rating"),
+                            rs.getTimestamp("CreatedAt").toInstant(),
+                            rs.getString("ImageURL"),
+                            rs.getLong("FeedbackCount"),
+                            rs.getLong("MaterialCount"),
+                            rs.getLong("QuizCount"),
+                            rs.getLong("EnrollmentCount"),
+                            rs.getLong("CategoryID"),
+                            rs.getString("CategoryName"),
+                            rs.getLong("InstructorID"),
+                            rs.getString("InstructorFirstName"),
+                            rs.getString("InstructorLastName")
+                    );
+                    courses.add(course);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error in getCoursesByCategory: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return courses;
+    }
+
+    @Override
+    public boolean insertCourse(Cours course) {
+        String sql = "INSERT INTO courses (Title, Description, Price, ImageURL, InstructorID, CategoryID, Status, CreatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, GETDATE())";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, course.getTitle());
+            stmt.setString(2, course.getDescription());
+            stmt.setBigDecimal(3, course.getPrice());
+            stmt.setString(4, course.getImageURL());
+            stmt.setLong(5, course.getInstructorID() != null ? course.getInstructorID().getId() : null);
+            stmt.setLong(6, course.getCategory() != null ? course.getCategory().getId() : null);
+            stmt.setString(7, course.getStatus() == null ? "active" : course.getStatus());
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateCourse(Cours course) {
+        String sql = "UPDATE courses SET Title=?, Description=?, Price=?, ImageURL=?, InstructorID=?, CategoryID=?, Status=? WHERE CourseID=?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, course.getTitle());
+            stmt.setString(2, course.getDescription());
+            stmt.setBigDecimal(3, course.getPrice());
+            stmt.setString(4, course.getImageURL());
+            stmt.setLong(5, course.getInstructorID() != null ? course.getInstructorID().getId() : null);
+            stmt.setLong(6, course.getCategory() != null ? course.getCategory().getId() : null);
+            stmt.setString(7, course.getStatus() == null ? "active" : course.getStatus());
+            stmt.setInt(8, course.getId());
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<Cours> getCoursesByInstructorId(Integer instructorId) {
+        List<Cours> list = new ArrayList<>();
+        String sql = "SELECT CourseID, Title, Description, Price, Rating, CreatedAt, ImageURL, InstructorID, CategoryID, Status FROM courses WHERE InstructorID = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, instructorId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Cours c = new Cours();
+                    c.setId(rs.getInt("CourseID"));
+                    c.setTitle(rs.getString("Title"));
+                    c.setDescription(rs.getString("Description"));
+                    c.setPrice(rs.getBigDecimal("Price"));
+                    c.setRating(rs.getDouble("Rating"));
+                    c.setCreatedAt(rs.getTimestamp("CreatedAt").toInstant());
+                    c.setImageURL(rs.getString("ImageURL"));
+                    c.setStatus(rs.getString("Status"));
+                    list.add(c);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 
     @Override
     public void deleteCourseByCode(String courseCode) {
@@ -152,15 +341,15 @@ public class CourseDAOImpl implements CourseDAO {
     @Override
     public CourseDTO getCourseByCode(String courseCode) {
         String sql = """
-        SELECT c.course_code, c.title, c.description, c.short_description, 
-               c.teacher_id, u.username AS teacher_username,
-               c.category_id, c.image_url, c.price, c.duration_hours,
-               c.level, c.is_published, c.is_active, c.max_students,
-               c.enrollment_start_date, c.enrollment_end_date,
-               c.start_date, c.end_date
+        SELECT c.CourseID as course_code, c.Title as title, c.Description as description, c.Description as short_description, 
+               c.InstructorID as teacher_id, u.Username AS teacher_username,
+               c.CategoryID as category_id, c.ImageURL as image_url, c.Price as price, 0 as duration_hours,
+               'Beginner' as level, 1 as is_published, 1 as is_active, 100 as max_students,
+               c.CreatedAt as enrollment_start_date, c.CreatedAt as enrollment_end_date,
+               c.CreatedAt as start_date, c.CreatedAt as end_date
         FROM Courses c
-        JOIN Users u ON c.teacher_id = u.user_id
-        WHERE c.course_code = ?
+        JOIN Users u ON c.InstructorID = u.UserID
+        WHERE c.CourseID = ?
     """;
         try (Connection conn = dbConn.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -212,47 +401,18 @@ public class CourseDAOImpl implements CourseDAO {
     public boolean updateCourse(CourseDTO course) {
         String sql = """
         UPDATE Courses
-        SET title = ?, description = ?, short_description = ?, teacher_id = ?, category_id = ?,
-            image_url = ?, price = ?, duration_hours = ?, level = ?, is_published = ?, is_active = ?,
-            max_students = ?, enrollment_start_date = ?, enrollment_end_date = ?,
-            start_date = ?, end_date = ?, updated_at = GETDATE()
-        WHERE course_code = ?
+        SET Title = ?, Description = ?, Price = ?, ImageURL = ?, InstructorID = ?, CategoryID = ?
+        WHERE CourseID = ?
     """;
         try (Connection conn = dbConn.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, course.getTitle());
             ps.setString(2, course.getDescription());
-            ps.setString(3, course.getShortDescription());
-            ps.setInt(4, course.getTeacherId());
-            ps.setInt(5, course.getCategoryId());
-            ps.setString(6, course.getImageUrl());
-            ps.setBigDecimal(7, course.getPrice());
-            ps.setInt(8, course.getDurationHours());
-            ps.setString(9, course.getLevel());
-            ps.setBoolean(10, course.isPublished());
-            ps.setBoolean(11, course.isActive());
-            ps.setInt(12, course.getMaxStudents());
-            if (course.getEnrollmentStartDate() != null) {
-                ps.setTimestamp(13, Timestamp.from(course.getEnrollmentStartDate()));
-            } else {
-                ps.setNull(13, Types.TIMESTAMP);
-            }
-            if (course.getEnrollmentEndDate() != null) {
-                ps.setTimestamp(14, Timestamp.from(course.getEnrollmentEndDate()));
-            } else {
-                ps.setNull(14, Types.TIMESTAMP);
-            }
-            if (course.getStartDate() != null) {
-                ps.setTimestamp(15, Timestamp.from(course.getStartDate()));
-            } else {
-                ps.setNull(15, Types.TIMESTAMP);
-            }
-            if (course.getEndDate() != null) {
-                ps.setTimestamp(16, Timestamp.from(course.getEndDate()));
-            } else {
-                ps.setNull(16, Types.TIMESTAMP);
-            }
-            ps.setString(17, course.getCourseCode());
+            ps.setBigDecimal(3, course.getPrice());
+            ps.setString(4, course.getImageUrl());
+            ps.setInt(5, course.getTeacherId());
+            ps.setInt(6, course.getCategoryId());
+            ps.setString(7, course.getCourseCode());
             int rowsUpdated = ps.executeUpdate();
             return rowsUpdated > 0;
         } catch (SQLException e) {
@@ -333,4 +493,4 @@ public class CourseDAOImpl implements CourseDAO {
         }
         return topCourses;
     }
-} 
+}

@@ -51,4 +51,11 @@ public class Cours {
     @JoinColumn(name = "InstructorID")
     private User instructorID;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CategoryID")
+    private Category category;
+
+    @Column(name = "Status")
+    private String status;
+
 }

@@ -11,94 +11,40 @@ import java.util.List;
  */
 public interface ProfileDAO {
 
-    /**
-     * Get user profile by ID
-     */
     User getUserProfile(Integer userId);
 
-    /**
-     * Update user profile
-     */
     boolean updateProfile(ProfileUpdateRequest updateRequest);
 
-    /**
-     * Update user password
-     */
     boolean updatePassword(Integer userId, String newPasswordHash);
 
-    /**
-     * Update user avatar URL
-     */
-    boolean updateAvatarUrl(Integer userId, String avatarUrl);
-
-    /**
-     * Remove user avatar
-     */
     boolean removeAvatar(Integer userId);
 
-    /**
-     * Save user avatar record
-     */
     boolean saveUserAvatar(UserAvatar userAvatar);
 
-    /**
-     * Get user avatars
-     */
     List<UserAvatar> getUserAvatars(Integer userId);
 
-    /**
-     * Get default user avatar
-     */
-    UserAvatar getDefaultUserAvatar(Integer userId);
 
-    /**
-     * Set default user avatar
-     */
     boolean setDefaultUserAvatar(Integer userId, Integer avatarId);
 
-    /**
-     * Delete user avatar
-     */
-    boolean deleteUserAvatar(Integer avatarId);
-
-    /**
-     * Check if username exists for other users
-     */
     boolean isUsernameExistsForOthers(String username, Integer excludeUserId);
 
-    /**
-     * Check if email exists for other users
-     */
     boolean isEmailExistsForOthers(String email, Integer excludeUserId);
 
-    /**
-     * Get user's current password hash
-     */
-    String getUserPasswordHash(Integer userId);
-
-    /**
-     * Update user's last updated timestamp
-     */
-    boolean updateLastUpdatedTime(Integer userId);
-
-    /**
-     * Get profile completion percentage
-     */
     int getProfileCompletionPercentage(Integer userId);
 
-    /**
-     * Log profile update activity
-     */
     boolean logProfileActivity(Integer userId, String activityType, String details);
 
-    /**
-     * Get recent profile activities
-     */
     List<ProfileActivity> getRecentProfileActivities(Integer userId, int limit);
 
-    /**
-     * Inner class for profile activity
-     */
+    // New methods for enrollment statistics
+    int getEnrolledCoursesCount(Integer userId);
+
+    int getCompletedCoursesCount(Integer userId);
+
+    int getCertificatesIssuedCount(Integer userId);
+
+    List<EnrollmentSummary> getRecentEnrollments(Integer userId, int limit);
+
     class ProfileActivity {
         private Integer activityId;
         private Integer userId;
@@ -131,5 +77,63 @@ public interface ProfileDAO {
 
         public java.time.Instant getActivityTime() { return activityTime; }
         public void setActivityTime(java.time.Instant activityTime) { this.activityTime = activityTime; }
+    }
+
+    class EnrollmentSummary {
+        private Integer enrollmentId;
+        private Integer courseId;
+        private String courseTitle;
+        private String status;
+        private java.math.BigDecimal progressPercentage;
+        private java.math.BigDecimal grade;
+        private boolean certificateIssued;
+        private java.time.Instant enrollmentDate;
+        private java.time.Instant completionDate;
+
+        // Constructors
+        public EnrollmentSummary() {}
+
+        public EnrollmentSummary(Integer enrollmentId, Integer courseId, String courseTitle,
+                                 String status, java.math.BigDecimal progressPercentage,
+                                 java.math.BigDecimal grade, boolean certificateIssued,
+                                 java.time.Instant enrollmentDate, java.time.Instant completionDate) {
+            this.enrollmentId = enrollmentId;
+            this.courseId = courseId;
+            this.courseTitle = courseTitle;
+            this.status = status;
+            this.progressPercentage = progressPercentage;
+            this.grade = grade;
+            this.certificateIssued = certificateIssued;
+            this.enrollmentDate = enrollmentDate;
+            this.completionDate = completionDate;
+        }
+
+        // Getters and setters
+        public Integer getEnrollmentId() { return enrollmentId; }
+        public void setEnrollmentId(Integer enrollmentId) { this.enrollmentId = enrollmentId; }
+
+        public Integer getCourseId() { return courseId; }
+        public void setCourseId(Integer courseId) { this.courseId = courseId; }
+
+        public String getCourseTitle() { return courseTitle; }
+        public void setCourseTitle(String courseTitle) { this.courseTitle = courseTitle; }
+
+        public String getStatus() { return status; }
+        public void setStatus(String status) { this.status = status; }
+
+        public java.math.BigDecimal getProgressPercentage() { return progressPercentage; }
+        public void setProgressPercentage(java.math.BigDecimal progressPercentage) { this.progressPercentage = progressPercentage; }
+
+        public java.math.BigDecimal getGrade() { return grade; }
+        public void setGrade(java.math.BigDecimal grade) { this.grade = grade; }
+
+        public boolean isCertificateIssued() { return certificateIssued; }
+        public void setCertificateIssued(boolean certificateIssued) { this.certificateIssued = certificateIssued; }
+
+        public java.time.Instant getEnrollmentDate() { return enrollmentDate; }
+        public void setEnrollmentDate(java.time.Instant enrollmentDate) { this.enrollmentDate = enrollmentDate; }
+
+        public java.time.Instant getCompletionDate() { return completionDate; }
+        public void setCompletionDate(java.time.Instant completionDate) { this.completionDate = completionDate; }
     }
 }

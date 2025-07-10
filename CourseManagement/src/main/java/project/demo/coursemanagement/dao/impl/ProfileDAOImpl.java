@@ -162,30 +162,7 @@ public class ProfileDAOImpl implements ProfileDAO {
         return false;
     }
 
-    @Override
-    public boolean updateAvatarUrl(Integer userId, String avatarUrl) {
-        String sql = "UPDATE users SET AvatarURL = ? WHERE UserID = ?";
 
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, avatarUrl);
-            stmt.setInt(2, userId);
-
-            int rowsAffected = stmt.executeUpdate();
-
-            if (rowsAffected > 0) {
-                logProfileActivity(userId, "AVATAR_UPDATE", "Avatar image updated");
-                return true;
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Error updating avatar URL: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return false;
-    }
 
     @Override
     public boolean removeAvatar(Integer userId) {
@@ -275,33 +252,6 @@ public class ProfileDAOImpl implements ProfileDAO {
     }
 
     @Override
-    public UserAvatar getDefaultUserAvatar(Integer userId) {
-        String sql = """
-            SELECT AvatarID, UserID, ImageURL, IsDefault, UploadedAt
-            FROM user_avatars
-            WHERE UserID = ? AND IsDefault = 1
-        """;
-
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, userId);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return mapResultSetToUserAvatar(rs);
-                }
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Error getting default user avatar: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    @Override
     public boolean setDefaultUserAvatar(Integer userId, Integer avatarId) {
         Connection conn = null;
 
@@ -374,25 +324,6 @@ public class ProfileDAOImpl implements ProfileDAO {
     }
 
     @Override
-    public boolean deleteUserAvatar(Integer avatarId) {
-        String sql = "DELETE FROM user_avatars WHERE AvatarID = ?";
-
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, avatarId);
-
-            return stmt.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            System.err.println("Error deleting user avatar: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
-    @Override
     public boolean isUsernameExistsForOthers(String username, Integer excludeUserId) {
         String sql = "SELECT COUNT(*) FROM users WHERE Username = ? AND UserID != ?";
 
@@ -438,36 +369,6 @@ public class ProfileDAOImpl implements ProfileDAO {
         }
 
         return false;
-    }
-
-    @Override
-    public String getUserPasswordHash(Integer userId) {
-        String sql = "SELECT PasswordHash FROM users WHERE UserID = ?";
-
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, userId);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("PasswordHash");
-                }
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Error getting user password hash: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    @Override
-    public boolean updateLastUpdatedTime(Integer userId) {
-        // Note: updated_at field no longer exists in the database schema
-        // This method is kept for backward compatibility but doesn't do anything
-        return true;
     }
 
     @Override
@@ -580,5 +481,134 @@ public class ProfileDAOImpl implements ProfileDAO {
         }
 
         return avatar;
+    }
+
+
+    @Override
+    public List<EnrollmentSummary> getRecentEnrollments(Integer userId, int limit) {
+        String sql = """
+        SELECT TOP (?) e.enrollment_id, e.course_id, c.Title as course_title, 
+               e.status, e.progress_percentage, e.grade, e.certificate_issued,
+               e.enrollment_date, e.completion_date
+        FROM enrollments e
+        INNER JOIN courses c ON e.course_id = c.CourseID
+        WHERE e.student_id = ?
+        ORDER BY e.enrollment_date DESC
+    """;
+
+        List<EnrollmentSummary> enrollments = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, limit);
+            stmt.setInt(2, userId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    enrollments.add(mapResultSetToEnrollmentSummary(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error getting recent enrollments: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return enrollments;
+    }
+
+
+    @Override
+    public int getEnrolledCoursesCount(Integer userId) {
+        String sql = "SELECT COUNT(*) FROM enrollments WHERE student_id = ? AND status = 'ACTIVE'";
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error getting enrolled courses count: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    @Override
+    public int getCompletedCoursesCount(Integer userId) {
+        String sql = "SELECT COUNT(*) FROM enrollments WHERE student_id = ? AND status = 'COMPLETED'";
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error getting completed courses count: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    @Override
+    public int getCertificatesIssuedCount(Integer userId) {
+        String sql = "SELECT COUNT(*) FROM enrollments WHERE student_id = ? AND certificate_issued = 1";
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error getting certificates count: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    // Helper method to map ResultSet to EnrollmentSummary
+    private EnrollmentSummary mapResultSetToEnrollmentSummary(ResultSet rs) throws SQLException {
+        EnrollmentSummary summary = new EnrollmentSummary();
+        summary.setEnrollmentId(rs.getInt("enrollment_id"));
+        summary.setCourseId(rs.getInt("course_id"));
+        summary.setCourseTitle(rs.getString("course_title"));
+        summary.setStatus(rs.getString("status"));
+        summary.setProgressPercentage(rs.getBigDecimal("progress_percentage"));
+        summary.setGrade(rs.getBigDecimal("grade"));
+        summary.setCertificateIssued(rs.getBoolean("certificate_issued"));
+
+        Timestamp enrollmentDate = rs.getTimestamp("enrollment_date");
+        if (enrollmentDate != null) {
+            summary.setEnrollmentDate(enrollmentDate.toInstant());
+        }
+
+        Timestamp completionDate = rs.getTimestamp("completion_date");
+        if (completionDate != null) {
+            summary.setCompletionDate(completionDate.toInstant());
+        }
+
+        return summary;
     }
 }

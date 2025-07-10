@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.*" %>
 <%@ page import="java.math.BigDecimal" %>
-<%@ page import="project.demo.coursemanagement.dto.EnrolledCourse" %>
+<%--<%@ page import="project.demo.coursemanagement.dto.EnrolledCourse" %>--%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -258,99 +258,99 @@
         </div>
     </div>
 
-    <div class="course-container">
-        <%
-            List<EnrolledCourse> enrolledCourses = (List<EnrolledCourse>) request.getAttribute("enrolledCourses");
-            if (enrolledCourses != null && !enrolledCourses.isEmpty()) {
-                for (EnrolledCourse course : enrolledCourses) {
-                    String formattedDate = course.getEnrollmentStartDate() != null ?
-                            course.getEnrollmentStartDate().toLocalDate().toString() : "N/A";
-                    BigDecimal progress = course.getProgressPercentage() != null ? course.getProgressPercentage() : BigDecimal.ZERO;
-                    BigDecimal grade = course.getGrade() != null ? course.getGrade() : BigDecimal.ZERO;
-                    String status = course.getStatus() != null ? course.getStatus() : "ACTIVE";
-                    
-                    // Determine grade class
-                    String gradeClass = "";
-                    if (grade.compareTo(new BigDecimal("8.5")) >= 0) {
-                        gradeClass = "grade-excellent";
-                    } else if (grade.compareTo(new BigDecimal("7.0")) >= 0) {
-                        gradeClass = "grade-good";
-                    } else if (grade.compareTo(new BigDecimal("5.0")) >= 0) {
-                        gradeClass = "grade-average";
-                    } else {
-                        gradeClass = "grade-poor";
-                    }
-                    
-                    // Determine status class
-                    String statusClass = "";
-                    switch(status.toUpperCase()) {
-                        case "COMPLETED":
-                            statusClass = "status-completed";
-                            break;
-                        case "ACTIVE":
-                            statusClass = "status-active";
-                            break;
-                        case "DROPPED":
-                            statusClass = "status-dropped";
-                            break;
-                        default:
-                            statusClass = "status-active";
-                    }
-        %>
-        <div class="course-card">
-            <img src="<%= course.getImageUrl() != null ? course.getImageUrl() : "https://via.placeholder.com/200" %>" 
-                 alt="<%= course.getTitle() %>" 
-                 class="course-image">
-            <div class="course-info">
-                <div class="course-header">
-                    <h2 class="course-title"><%= course.getTitle() %></h2>
-                    <div class="course-status-grade">
-                        <span class="status-badge <%= statusClass %>"><%= status %></span>
-                        <span class="grade-badge <%= gradeClass %>">Grade: <%= grade %>/10</span>
-                    </div>
-                </div>
-                
-                <p class="course-meta"><strong>Course Code:</strong> <%= course.getCourseCode() %></p>
-                <p class="course-meta"><strong>Category:</strong> <%= course.getCategory() != null ? course.getCategory().getCategoryName() : "N/A" %></p>
-                <p class="course-meta"><strong>Duration:</strong> <%= course.getDurationHours() %> hours</p>
-                <p class="course-meta"><strong>Enrolled on:</strong> <%= formattedDate %></p>
-                
-                <div class="progress-container">
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" 
-                             style="width: <%= progress %>%" 
-                             aria-valuenow="<%= progress %>" 
-                             aria-valuemin="0" 
-                             aria-valuemax="100">
-                        </div>
-                    </div>
-                    <p class="progress-text">Progress: <%= progress %>%</p>
-                </div>
+<%--    <div class="course-container">--%>
+<%--        <%--%>
+<%--            List<EnrolledCourse> enrolledCourses = (List<EnrolledCourse>) request.getAttribute("enrolledCourses");--%>
+<%--            if (enrolledCourses != null && !enrolledCourses.isEmpty()) {--%>
+<%--                for (EnrolledCourse course : enrolledCourses) {--%>
+<%--                    String formattedDate = course.getEnrollmentStartDate() != null ?--%>
+<%--                            course.getEnrollmentStartDate().toLocalDate().toString() : "N/A";--%>
+<%--                    BigDecimal progress = course.getProgressPercentage() != null ? course.getProgressPercentage() : BigDecimal.ZERO;--%>
+<%--                    BigDecimal grade = course.getGrade() != null ? course.getGrade() : BigDecimal.ZERO;--%>
+<%--                    String status = course.getStatus() != null ? course.getStatus() : "ACTIVE";--%>
+<%--                    --%>
+<%--                    // Determine grade class--%>
+<%--                    String gradeClass = "";--%>
+<%--                    if (grade.compareTo(new BigDecimal("8.5")) >= 0) {--%>
+<%--                        gradeClass = "grade-excellent";--%>
+<%--                    } else if (grade.compareTo(new BigDecimal("7.0")) >= 0) {--%>
+<%--                        gradeClass = "grade-good";--%>
+<%--                    } else if (grade.compareTo(new BigDecimal("5.0")) >= 0) {--%>
+<%--                        gradeClass = "grade-average";--%>
+<%--                    } else {--%>
+<%--                        gradeClass = "grade-poor";--%>
+<%--                    }--%>
+<%--                    --%>
+<%--                    // Determine status class--%>
+<%--                    String statusClass = "";--%>
+<%--                    switch(status.toUpperCase()) {--%>
+<%--                        case "COMPLETED":--%>
+<%--                            statusClass = "status-completed";--%>
+<%--                            break;--%>
+<%--                        case "ACTIVE":--%>
+<%--                            statusClass = "status-active";--%>
+<%--                            break;--%>
+<%--                        case "DROPPED":--%>
+<%--                            statusClass = "status-dropped";--%>
+<%--                            break;--%>
+<%--                        default:--%>
+<%--                            statusClass = "status-active";--%>
+<%--                    }--%>
+<%--        %>--%>
+<%--        <div class="course-card">--%>
+<%--            <img src="<%= course.getImageUrl() != null ? course.getImageUrl() : "https://via.placeholder.com/200" %>" --%>
+<%--                 alt="<%= course.getTitle() %>" --%>
+<%--                 class="course-image">--%>
+<%--            <div class="course-info">--%>
+<%--                <div class="course-header">--%>
+<%--                    <h2 class="course-title"><%= course.getTitle() %></h2>--%>
+<%--                    <div class="course-status-grade">--%>
+<%--                        <span class="status-badge <%= statusClass %>"><%= status %></span>--%>
+<%--                        <span class="grade-badge <%= gradeClass %>">Grade: <%= grade %>/10</span>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+<%--                --%>
+<%--                <p class="course-meta"><strong>Course Code:</strong> <%= course.getCourseCode() %></p>--%>
+<%--                <p class="course-meta"><strong>Category:</strong> <%= course.getCategory() != null ? course.getCategory().getCategoryName() : "N/A" %></p>--%>
+<%--                <p class="course-meta"><strong>Duration:</strong> <%= course.getDurationHours() %> hours</p>--%>
+<%--                <p class="course-meta"><strong>Enrolled on:</strong> <%= formattedDate %></p>--%>
+<%--                --%>
+<%--                <div class="progress-container">--%>
+<%--                    <div class="progress">--%>
+<%--                        <div class="progress-bar" role="progressbar" --%>
+<%--                             style="width: <%= progress %>%" --%>
+<%--                             aria-valuenow="<%= progress %>" --%>
+<%--                             aria-valuemin="0" --%>
+<%--                             aria-valuemax="100">--%>
+<%--                        </div>--%>
+<%--                    </div>--%>
+<%--                    <p class="progress-text">Progress: <%= progress %>%</p>--%>
+<%--                </div>--%>
 
-                <div class="course-actions">
-                    <a href="${pageContext.request.contextPath}/course/details?id=<%= course.getId() %>" class="btn-course">
-                        <i class="fas fa-book-open"></i>
-                        Go to Course
-                    </a>
-                </div>
-            </div>
-        </div>
-        <%
-            }
-        } else {
-        %>
-        <div class="no-courses">
-            <h3>No enrolled courses found</h3>
-            <p>Start your learning journey by enrolling in a course!</p>
-            <a href="${pageContext.request.contextPath}/course" class="btn-course mt-3">
-                <i class="fas fa-search"></i>
-                Browse Available Courses
-            </a>
-        </div>
-        <%
-            }
-        %>
-    </div>
+<%--                <div class="course-actions">--%>
+<%--                    <a href="${pageContext.request.contextPath}/course/details?id=<%= course.getId() %>" class="btn-course">--%>
+<%--                        <i class="fas fa-book-open"></i>--%>
+<%--                        Go to Course--%>
+<%--                    </a>--%>
+<%--                </div>--%>
+<%--            </div>--%>
+<%--        </div>--%>
+<%--        <%--%>
+<%--            }--%>
+<%--        } else {--%>
+<%--        %>--%>
+<%--        <div class="no-courses">--%>
+<%--            <h3>No enrolled courses found</h3>--%>
+<%--            <p>Start your learning journey by enrolling in a course!</p>--%>
+<%--            <a href="${pageContext.request.contextPath}/course" class="btn-course mt-3">--%>
+<%--                <i class="fas fa-search"></i>--%>
+<%--                Browse Available Courses--%>
+<%--            </a>--%>
+<%--        </div>--%>
+<%--        <%--%>
+<%--            }--%>
+<%--        %>--%>
+<%--    </div>--%>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

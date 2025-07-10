@@ -2,11 +2,39 @@ package project.demo.coursemanagement.service;
 
 import project.demo.coursemanagement.dao.CourseDAO;
 import project.demo.coursemanagement.dao.impl.CourseDAOImpl;
+import project.demo.coursemanagement.dao.CourseViewDAO;
+import project.demo.coursemanagement.dao.impl.CourseViewDAOimp;
+import project.demo.coursemanagement.dto.CourseStatsDTO;
 import project.demo.coursemanagement.dto.CourseDTO;
+import project.demo.coursemanagement.entities.Cours;
+
 import java.util.List;
 
 public class CourseService {
-    private final CourseDAO courseDAO = new CourseDAOImpl();
+
+    private static CourseService instance;
+    private final CourseDAO courseDAO;
+    private final CourseViewDAO courseViewDAO;
+
+    public CourseService() {
+        this.courseDAO = new CourseDAOImpl();
+        this.courseViewDAO = new CourseViewDAOimp();
+    }
+
+    public static CourseService getInstance() {
+        if (instance == null) {
+            instance = new CourseService();
+        }
+        return instance;
+    }
+
+    public List<CourseStatsDTO> getAllCoursesWithStats() {
+        return courseDAO.getAllCoursesWithStats();
+    }
+
+    public List<CourseStatsDTO> getCoursesByCategory(Long categoryId) {
+        return courseDAO.getCoursesByCategory(categoryId);
+    }
 
     public void deleteCourseByCode(String courseCode) {
         courseDAO.deleteCourseByCode(courseCode);
@@ -36,7 +64,20 @@ public class CourseService {
         return courseDAO.searchRecentCourses(keyword, limit);
     }
 
+    // HoangQL's Commit
     public List<CourseDTO> getTopCourses(int limit) {
         return courseDAO.getTopCourses(limit);
     }
-} 
+
+    public List<CourseDTO> getAllCourses() {
+        return courseViewDAO.getAllCourses();
+    }
+
+    public List<CourseDTO> getCoursesByPage(int page, int size) {
+        return courseViewDAO.getCoursesByPage(page, size);
+    }
+
+    public int getTotalCourseCount() {
+        return courseViewDAO.getTotalCourseCount();
+    }
+}
