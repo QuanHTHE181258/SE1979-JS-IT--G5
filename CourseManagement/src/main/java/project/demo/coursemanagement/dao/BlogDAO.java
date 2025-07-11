@@ -5,4 +5,5 @@ import java.util.List;
 
 public interface BlogDAO {
     List<Blog> getAllBlogs();
+    Blog getBlogById(int id);
 } 
