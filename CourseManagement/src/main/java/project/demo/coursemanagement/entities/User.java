@@ -18,7 +18,8 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "users")
-public class User {
+public class
+User {
     @Id
     @Column(name = "UserID", nullable = false)
     private Integer id;

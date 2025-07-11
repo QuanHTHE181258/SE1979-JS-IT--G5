@@ -6,6 +6,7 @@
     <title>Course Details</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-RvQxD1xVB3LHsb6sSrFyeCxoUAREci8hPbgGacXRKrKaQjgr3+0pmSOriBGobgoa6qX3OyUrqGzivfqvbtvU6FQ==">
     <link rel="stylesheet" href="css/course-details-style.css">
+    <meta charset="UTF-8">
 </head>
 <body>
 <div class="home-header">
