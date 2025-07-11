@@ -3,6 +3,7 @@ import java.util.List;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.entities.Role;
 
+
 public interface UserDAO {
 
     User findUserByUsernameOrEmail(String identifier);
@@ -14,6 +15,7 @@ public interface UserDAO {
     boolean UpdateLastLogin(Integer userId);
 
     List<User> getAllUsers();
+    List<User> getRecentUsersByRole(int limit, String role);
 
     List<User> searchUsersByName(String searchTerm);
 
@@ -31,6 +33,4 @@ public interface UserDAO {
     boolean deleteUser(int userId);
     
     List<User> searchRecentActivities(String keyword, int limit, String role);
-    
-    List<User> getRecentUsersByRole(int limit, String role);
 }

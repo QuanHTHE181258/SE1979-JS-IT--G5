@@ -124,8 +124,16 @@
                                 </c:if>
                             </c:when>
                             <c:otherwise>
-                                <%-- When creating, allow selecting any role, default to roleName from request --%>
-                                <option value="${role.roleName}" ${roleName == role.roleName ? 'selected' : ''}>${role.roleName}</option>
+                                <%-- When creating from a specific link (e.g., Create User Manager), only show that role --%>
+                                <c:if test="${not empty roleName}">
+                                    <c:if test="${role.roleName == roleName}">
+                                        <option value="${role.roleName}" selected>${role.roleName}</option>
+                                    </c:if>
+                                </c:if>
+                                <%-- When creating from a generic link, allow selecting any role --%>
+                                <c:if test="${empty roleName}">
+                                    <option value="${role.roleName}">${role.roleName}</option>
+                                </c:if>
                             </c:otherwise>
                         </c:choose>
                     </c:forEach>

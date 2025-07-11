@@ -68,4 +68,8 @@ public class OrderService {
     public List<OrderDTO> getOrdersByDateRange(String startDate, String endDate) {
         return orderDAO.getOrdersByDateRange(startDate, endDate);
     }
+
+    public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueDetails() {
+        return orderDAO.getRevenueDetails();
+    }
 } 

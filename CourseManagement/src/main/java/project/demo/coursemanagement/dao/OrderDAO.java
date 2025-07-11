@@ -22,4 +22,5 @@ public interface OrderDAO {
     BigDecimal getTotalRevenue();
     Map<String, Integer> getOrdersCountByStatus();
     Map<String, BigDecimal> getRevenueByMonth();
+    List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueDetails();
 }

@@ -75,7 +75,7 @@ public class AdminUserController extends HttpServlet {
                     // Handle invalid user ID format specifically for the edit action
                     response.sendRedirect(request.getContextPath() + "/admin/user-management?error=Invalid user ID format"); // Redirect to user management list on error
                 } catch (Exception e) { // Catch potential exceptions from service/DAO calls
-                    response.sendRedirect(request.getContextPath() + "/admin/user-management?error=" + e.getMessage()); // Redirect to user management list on error
+                    response.sendRedirect(request.getContextPath() + "/admin/user-management?error=edit_fail"); // Redirect to user management list on error
                 }
 
             } else if (pathParts.length == 2 && "new".equals(pathParts[1])) {
@@ -100,7 +100,7 @@ public class AdminUserController extends HttpServlet {
                 } catch (NumberFormatException e) {
                     response.sendRedirect(request.getContextPath() + "/admin/user-management?error=Invalid user ID format in action URL");
                 } catch (Exception e) {
-                    response.sendRedirect(request.getContextPath() + "/admin/user-management?error=" + e.getMessage());
+                    response.sendRedirect(request.getContextPath() + "/admin/user-management?error=edit_fail");
                 }
 
             } else { // Handle invalid /admin/users/* patterns with less than 2 parts after /admin/users
@@ -135,19 +135,31 @@ public class AdminUserController extends HttpServlet {
                 boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
 
                 // Call UserService to update the user
-                // The updateUser method in UserService.java should handle fetching the Role object
                 userService.updateUser(userId, username, email, phone, roleName);
 
                 // Redirect back to user management page with success message
                 response.sendRedirect(request.getContextPath() + "/admin/user-management?message=User updated successfully");
 
             } catch (NumberFormatException e) {
-                // If userId is not a valid integer
-                response.sendRedirect(request.getContextPath() + "/admin/user-management?error=Invalid user ID format for update"); // Redirect to user management list on error
+                // Nếu userId không hợp lệ, forward lại form chỉnh sửa với thông báo lỗi
+                request.setAttribute("errorMessage", "User ID không hợp lệ.");
+                int userId = -1;
+                try { userId = Integer.parseInt(request.getParameter("userId")); } catch (Exception ex) {}
+                User user = userService.getUserById(userId);
+                List<Role> roles = userService.getAllRoles();
+                request.setAttribute("user", user);
+                request.setAttribute("roles", roles);
+                request.getRequestDispatcher("/WEB-INF/views/edit_user.jsp").forward(request, response);
             } catch (Exception e) {
-                // Catch exceptions from userService.updateUser (e.g., validation errors, DB errors)
-                // Set error message and redirect back to edit page, or user list
-                response.sendRedirect(request.getContextPath() + "/admin/user-management?error=" + e.getMessage()); // Redirect to user management list on error
+                // Nếu lỗi khi update, forward lại form chỉnh sửa với thông báo lỗi
+                request.setAttribute("errorMessage", "Có lỗi xảy ra khi cập nhật user.");
+                int userId = -1;
+                try { userId = Integer.parseInt(request.getParameter("userId")); } catch (Exception ex) {}
+                User user = userService.getUserById(userId);
+                List<Role> roles = userService.getAllRoles();
+                request.setAttribute("user", user);
+                request.setAttribute("roles", roles);
+                request.getRequestDispatcher("/WEB-INF/views/edit_user.jsp").forward(request, response);
             }
 
         } else if (pathParts.length == 2 && "create".equals(pathParts[1])) {
@@ -229,7 +241,7 @@ public class AdminUserController extends HttpServlet {
             } catch (NumberFormatException e) {
                 response.sendRedirect(request.getContextPath() + "/admin/user-management?error=Invalid user ID format");
             } catch (Exception e) {
-                response.sendRedirect(request.getContextPath() + "/admin/user-management?error=" + e.getMessage());
+                response.sendRedirect(request.getContextPath() + "/admin/user-management?error=edit_fail");
             }
 
         } else {

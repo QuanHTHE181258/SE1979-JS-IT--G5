@@ -8,6 +8,7 @@ public class OrderDetailDTO {
     private Integer courseId;
     private String courseTitle;
     private BigDecimal price;
+    private CourseDTO course;
 
     // Getters and Setters
     public Integer getOrderDetailId() {
@@ -48,5 +49,13 @@ public class OrderDetailDTO {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public CourseDTO getCourse() {
+        return course;
+    }
+
+    public void setCourse(CourseDTO course) {
+        this.course = course;
     }
 }

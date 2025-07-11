@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import project.demo.coursemanagement.dto.CourseDTO;
 import project.demo.coursemanagement.service.CourseService;
+import project.demo.coursemanagement.service.UserService;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 })
 public class AdminCourseController extends HttpServlet {
     private final CourseService courseService = new CourseService();
+    private final UserService userService = new UserService();
     private static final int PAGE_SIZE = 3;
 
     @Override
@@ -79,8 +81,30 @@ public class AdminCourseController extends HttpServlet {
         String path = request.getServletPath();
 
         if ("/admin/courses/new".equals(path)) {
-            // TODO: Implement course manager creation logic
-            response.sendRedirect(request.getContextPath() + "/admin/courses");
+            String username = request.getParameter("username");
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            String fullName = request.getParameter("fullName");
+            String roleName = request.getParameter("role"); // Should be "COURSE_MANAGER"
+
+            try {
+                // Assuming fullname is "firstname lastname"
+                String firstName = "";
+                String lastName = "";
+                if (fullName != null && !fullName.trim().isEmpty()) {
+                    String[] names = fullName.trim().split("\\s+", 2);
+                    firstName = names.length > 0 ? names[0] : "";
+                    lastName = names.length > 1 ? names[1] : "";
+                }
+
+                userService.createUser(username, email, password, firstName, lastName, null, roleName);
+                request.getSession().setAttribute("successMessage", "Course Manager account created successfully!");
+                response.sendRedirect(request.getContextPath() + "/admin/courses");
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.setAttribute("errorMessage", "Error creating account: " + e.getMessage());
+                request.getRequestDispatcher("/WEB-INF/views/admin_course_new.jsp").forward(request, response);
+            }
         } else {
             response.sendRedirect(request.getContextPath() + "/admin");
         }

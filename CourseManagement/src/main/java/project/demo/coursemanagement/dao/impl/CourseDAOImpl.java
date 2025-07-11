@@ -306,10 +306,10 @@ public class CourseDAOImpl implements CourseDAO {
     public List<CourseDTO> getRecentCourses(int limit) {
         List<CourseDTO> recentCourses = new ArrayList<>();
         String sql = """
-        SELECT TOP (?) c.CourseID, c.Title, c.InstructorID, u.Username AS teacher_username, c.CreatedAt
+        SELECT TOP (?) c.CourseID, c.Title, c.InstructorID, u.Username AS teacher_username, c.CreatedAt, c.Status
         FROM courses c
         JOIN users u ON c.InstructorID = u.UserID
-        WHERE c.Status = 'active'
+        WHERE c.Status IN ('active', 'draft', 'inactive', 'published')
         ORDER BY c.CreatedAt DESC
         """;
         try (Connection conn = dbConn.getConnection();
@@ -322,6 +322,7 @@ public class CourseDAOImpl implements CourseDAO {
                     course.setTitle(rs.getString("Title"));
                     course.setTeacherId(rs.getInt("InstructorID"));
                     course.setTeacherUsername(rs.getString("teacher_username"));
+                    course.setStatus(rs.getString("Status"));
                     Timestamp createdAt = rs.getTimestamp("CreatedAt");
                     if (createdAt != null) {
                         course.setCreatedAt(createdAt.toInstant());
