@@ -3,6 +3,7 @@ package project.demo.coursemanagement.dao.impl;
 import project.demo.coursemanagement.dao.LessonDAO;
 import project.demo.coursemanagement.entities.Lesson;
 import project.demo.coursemanagement.dto.LessonStats;
+
 import java.sql.*;
 import java.util.*;
 
@@ -93,5 +94,23 @@ public class LessonDAOImpl implements LessonDAO {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public boolean addLesson(Lesson lesson) {
+        String sql = "INSERT INTO lessons (Title, Content, Status, IsFreePreview, CreatedAt, CourseID) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection conn = project.demo.coursemanagement.utils.DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, lesson.getTitle());
+            stmt.setString(2, lesson.getContent());
+            stmt.setString(3, lesson.getStatus());
+            stmt.setBoolean(4, lesson.getIsFreePreview());
+            stmt.setTimestamp(5, Timestamp.from(lesson.getCreatedAt()));
+            stmt.setInt(6, lesson.getCourseID().getId());
+            int affected = stmt.executeUpdate();
+            return affected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

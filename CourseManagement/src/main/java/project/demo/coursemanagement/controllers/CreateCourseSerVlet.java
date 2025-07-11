@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -14,6 +15,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import project.demo.coursemanagement.dao.CourseDAO;
 import project.demo.coursemanagement.dao.impl.CourseDAOImpl;
 import project.demo.coursemanagement.entities.Cours;
@@ -119,7 +121,7 @@ public class CreateCourseSerVlet extends HttpServlet {
         cours.setInstructorID(instructor);
         // Gán category
         Category category = new Category();
-        category.setId(categoryId);
+        category.setId(Integer.parseInt(categoryIdStr));
         cours.setCategory(category);
         cours.setStatus("active");
         // Lưu DB
