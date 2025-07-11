@@ -138,7 +138,7 @@
                                     <td>${student.createdAt}</td>
                                     <td>Active</td>
                                     <td>
-                                        <a href="${pageContext.request.contextPath}/admin/users/edit/${student.id}" class="btn btn-primary btn-sm">Edit</a>
+                                        <a href="${pageContext.request.contextPath}/admin/users/edit/${student.id}" class="btn btn-primary btn-sm keyword">Edit</a>
                                     </td>
                                 </tr>
                             </c:forEach>

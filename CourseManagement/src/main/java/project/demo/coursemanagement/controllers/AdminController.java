@@ -91,7 +91,6 @@ public class AdminController extends HttpServlet {
         request.setAttribute("recentCourses", recentCourses);
         request.setAttribute("topCourses", courseService.getTopCourses(5));
 
-        request.getRequestDispatcher("/WEB-INF/views/admin.jsp")
-                .forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/admin.jsp").forward(request, response);
     }
 }

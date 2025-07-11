@@ -25,6 +25,7 @@ public class UserManagementController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String keyword = request.getParameter("keyword");
+        System.out.println("line 28"+ keyword);
         request.setAttribute("keyword", keyword);
 
         // Lấy danh sách học sinh
