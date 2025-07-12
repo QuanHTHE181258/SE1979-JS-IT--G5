@@ -73,4 +73,38 @@ public class BlogDAOImpl implements BlogDAO {
         }
         return null;
     }
+
+    @Override
+    public boolean createBlog(Blog blog) {
+        String sql = "INSERT INTO blogs (Title, Content, ImageURL, AuthorID, CreatedAt, Status) VALUES (?, ?, ?, ?, GETDATE(), ?)";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, blog.getTitle());
+            ps.setString(2, blog.getContent());
+            ps.setString(3, blog.getImageURL());
+            ps.setInt(4, blog.getAuthorID().getId());
+            ps.setString(5, blog.getStatus());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateBlog(Blog blog) {
+        String sql = "UPDATE blogs SET Title = ?, Content = ?, ImageURL = ?, Status = ?, UpdatedAt = GETDATE() WHERE BlogID = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, blog.getTitle());
+            ps.setString(2, blog.getContent());
+            ps.setString(3, blog.getImageURL());
+            ps.setString(4, blog.getStatus());
+            ps.setInt(5, blog.getId());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 } 

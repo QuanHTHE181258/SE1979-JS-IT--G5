@@ -19,4 +19,12 @@ public class BlogService {
     public Blog getBlogById(int id) {
         return blogDAO.getBlogById(id);
     }
+
+    public boolean createBlog(Blog blog) {
+        return blogDAO.createBlog(blog);
+    }
+
+    public boolean updateBlog(Blog blog) {
+        return blogDAO.updateBlog(blog);
+    }
 } 
