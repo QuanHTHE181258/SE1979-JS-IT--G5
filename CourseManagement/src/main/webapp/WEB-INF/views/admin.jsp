@@ -266,7 +266,7 @@
                           <td>
                             <fmt:formatDate value="${user.createdAtDate}" pattern="MMM dd, yyyy HH:mm" />
                           </td>
-                          <td>${user.phoneNumber}</td>
+                          <td>${userRoles[user.id].roleName}</td>
                         </tr>
                       </c:forEach>
                       </tbody>
@@ -296,7 +296,6 @@
 
       <!-- Recent Created Courses -->
       <div class="row">
-        <div>uahsdyfugdfouasgffysfoysduofg</div>
         <div class="col-12">
           <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
@@ -449,8 +448,8 @@
           </div>
         </div>
       </div>
+          </div>
     </div>
   </div>
-</div>
 </body>
 </html>

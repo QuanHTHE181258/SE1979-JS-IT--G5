@@ -1,122 +1,92 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Blog List</title>
+    <link href="${pageContext.request.contextPath}/css/admincss.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            margin: 40px auto;
-            max-width: 1100px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-            padding: 32px 24px;
-        }
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 24px;
-        }
-        .btn {
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 4px;
-            border: none;
-            background: #6a5acd;
-            color: #fff;
-            text-decoration: none;
-            font-size: 1rem;
-            margin-bottom: 16px;
-            transition: background 0.2s;
-        }
-        .btn:hover {
-            background: #4a3a9a;
-        }
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 0;
-        }
-        .table th, .table td {
-            padding: 12px 10px;
-            border-bottom: 1px solid #e9ecef;
-            text-align: left;
-        }
-        .table th {
-            background: #f1f3f6;
-            font-weight: bold;
-        }
-        .table tr:last-child td {
-            border-bottom: none;
-        }
-        .action-btn {
-            margin-right: 6px;
-            padding: 4px 10px;
-            font-size: 0.95rem;
-            border-radius: 3px;
-            border: none;
-            color: #fff;
-            background: #6a5acd;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-        .action-btn.edit { background: #28a745; }
-        .action-btn.delete { background: #dc3545; }
-        .action-btn:hover { opacity: 0.85; }
-        .status {
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.95em;
-            color: #fff;
-        }
-        .status.published { background: #28a745; }
-        .status.draft { background: #ffc107; color: #333; }
-        .status.hidden { background: #6c757d; }
+        .wrapper { display: flex; }
+        #sidebar { min-width: 250px; max-width: 250px; min-height: 100vh; }
+        #content { width: 100%; }
+        .table-responsive { margin-top: 1rem; }
+        .btn-group { margin-bottom: 1rem; }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>Blog List</h1>
-    <c:if test="${not empty sessionScope.currentUser && (sessionScope.currentUser.role eq 'INSTRUCTOR' || sessionScope.currentUser.role eq 'ADMIN')}">
-        <a href="blog/create" class="btn">Create New Blog</a>
-    </c:if>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Created At</th>
-                <th>Status</th>
-                <th style="width: 180px;">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="blog" items="${blogList}">
-                <tr>
-                    <td>${blog.title}</td>
-                    <td>${blog.authorID.username}</td>
-                    <td>${blog.createdAt}</td>
-                    <td>
-                        <span class="status ${blog.status}">
-                            ${blog.status}
-                        </span>
-                    </td>
-                    <td>
-                        <a href="blog/detail?id=${blog.id}" class="action-btn">View</a>
-                        <c:if test="${sessionScope.currentUser.id == blog.authorID.id || sessionScope.currentUser.role eq 'ADMIN'}">
-                            <a href="blog/edit?id=${blog.id}" class="action-btn edit">Edit</a>
-                            <a href="blog/delete?id=${blog.id}" class="action-btn delete"
-                               onclick="return confirm('Are you sure you want to delete?')">Delete</a>
-                        </c:if>
-                    </td>
-                </tr>
-            </c:forEach>
-        </tbody>
-    </table>
+<div class="wrapper">
+    <nav id="sidebar" class="">
+        <div class="sidebar-header">
+            <h3>Admin Panel</h3>
+        </div>
+        <ul class="components">
+            <li><a href="${pageContext.request.contextPath}/admin/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/courses"><i class="fas fa-book"></i> Courses</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/orders"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/users"><i class="fas fa-users"></i> Users</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/blog/list"><i class="fas fa-blog"></i> Blog Management</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/revenue-analytics"><i class="fas fa-chart-bar"></i> Revenue Analytics</a></li>
+        </ul>
+    </nav>
+    <div id="content">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Blog Management</a>
+            </div>
+        </nav>
+        <div class="container-fluid py-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Blog List</h1>
+                <c:if test="${not empty sessionScope.currentUser && (sessionScope.currentUser.role eq 'INSTRUCTOR' || sessionScope.currentUser.role eq 'ADMIN')}">
+                    <a href="create" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Create New Blog
+                    </a>
+                </c:if>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Created At</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="blog" items="${blogList}">
+                            <tr>
+                                <td>${blog.title}</td>
+                                <td>${blog.authorID.username}</td>
+                                <td>${blog.createdAt}</td>
+                                <td>
+                                    <span class="badge bg-${blog.status == 'published' ? 'success' : blog.status == 'draft' ? 'warning' : 'secondary'}">
+                                        ${blog.status}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="detail?id=${blog.id}" class="btn btn-sm btn-info">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <c:if test="${sessionScope.currentUser.id == blog.authorID.id || sessionScope.currentUser.role eq 'ADMIN'}">
+                                        <a href="edit?id=${blog.id}" class="btn btn-sm btn-warning">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="delete?id=${blog.id}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </c:if>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html> 

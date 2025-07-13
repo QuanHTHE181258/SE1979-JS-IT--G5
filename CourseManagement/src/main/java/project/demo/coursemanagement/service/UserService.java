@@ -217,4 +217,9 @@ public class UserService {
     public List<User> getRecentUsersByRole(int limit, String role) {
         return userDAO.getRecentUsersByRole(limit, role);
     }
+
+    public Role getPrimaryRoleByUserId(int userId) {
+        return userRoleDAO.findPrimaryRoleByUserId(userId);
+    }
+
 }

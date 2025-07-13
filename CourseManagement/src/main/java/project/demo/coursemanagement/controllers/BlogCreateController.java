@@ -37,7 +37,7 @@ public class BlogCreateController extends HttpServlet {
         // Lấy user hiện tại từ session
         User currentUser = (User) request.getSession().getAttribute("currentUser");
         if (currentUser == null) {
-            response.sendRedirect("login");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 

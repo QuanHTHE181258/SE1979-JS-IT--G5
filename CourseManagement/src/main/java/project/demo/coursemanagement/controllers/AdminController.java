@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import project.demo.coursemanagement.entities.Role;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.dto.CourseDTO;
 import project.demo.coursemanagement.service.UserService;
@@ -90,6 +91,13 @@ public class AdminController extends HttpServlet {
         request.setAttribute("recentActivities", recentActivities);
         request.setAttribute("recentCourses", recentCourses);
         request.setAttribute("topCourses", courseService.getTopCourses(5));
+        Map<Integer, Role> userRoles = new HashMap<>();
+        for (User user : recentActivities) {
+            Role role = userService.getPrimaryRoleByUserId(user.getId());
+            userRoles.put(user.getId(), role);
+        }
+
+        request.setAttribute("userRoles", userRoles);
 
         request.getRequestDispatcher("/WEB-INF/views/admin.jsp").forward(request, response);
     }

@@ -1,50 +1,83 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Blog Detail</title>
+    <link href="${pageContext.request.contextPath}/css/admincss.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background: #f8f9fa; font-family: Arial, sans-serif; }
-        .container {
-            margin: 40px auto; max-width: 800px; background: #fff;
-            border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 32px 24px;
-        }
-        .blog-title { font-size: 2rem; font-weight: bold; margin-bottom: 12px; }
-        .blog-meta { color: #888; margin-bottom: 18px; }
-        .blog-image { max-width: 100%; margin-bottom: 18px; border-radius: 6px; }
-        .blog-content { font-size: 1.1rem; margin-bottom: 24px; }
-        .status { padding: 3px 10px; border-radius: 12px; font-size: 0.95em; color: #fff; }
-        .status.published { background: #28a745; }
-        .status.draft { background: #ffc107; color: #333; }
-        .status.hidden { background: #6c757d; }
-        .action-btn { margin-right: 8px; padding: 6px 16px; border-radius: 4px; border: none; color: #fff; background: #6a5acd; text-decoration: none; transition: background 0.2s; }
-        .action-btn.edit { background: #28a745; }
-        .action-btn.delete { background: #dc3545; }
-        .action-btn:hover { opacity: 0.85; }
+        .wrapper { display: flex; }
+        #sidebar { min-width: 250px; max-width: 250px; min-height: 100vh; }
+        #content { width: 100%; }
+        .blog-content { margin-top: 1rem; }
+        .blog-meta { color: #6c757d; margin-bottom: 1rem; }
+        .blog-image { max-width: 100%; margin: 1rem 0; border-radius: 8px; }
     </style>
 </head>
 <body>
-<div class="container">
-    <c:if test="${not empty blog}">
-        <div class="blog-title">${blog.title}</div>
-        <div class="blog-meta">
-            By <b>${blog.authorID.username}</b> | 
-            <fmt:formatDate value="${blog.createdAt}" pattern="yyyy-MM-dd HH:mm"/>
-            <span class="status ${blog.status}">${blog.status}</span>
+<div class="wrapper">
+    <nav id="sidebar" class="">
+        <div class="sidebar-header">
+            <h3>Admin Panel</h3>
         </div>
-        <c:if test="${not empty blog.imageURL}">
-            <img src="${blog.imageURL}" alt="Blog Image" class="blog-image"/>
-        </c:if>
-        <div class="blog-content">${blog.content}</div>
-        <c:if test="${sessionScope.currentUser.id == blog.authorID.id || sessionScope.currentUser.role eq 'ADMIN'}">
-            <a href="edit?id=${blog.id}" class="action-btn edit">Edit</a>
-            <a href="delete?id=${blog.id}" class="action-btn delete" onclick="return confirm('Are you sure you want to delete?')">Delete</a>
-        </c:if>
-    </c:if>
-    <c:if test="${empty blog}">
-        <div>Blog not found.</div>
-    </c:if>
+        <ul class="components">
+            <li><a href="${pageContext.request.contextPath}/admin/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/courses"><i class="fas fa-book"></i> Courses</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/orders"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/users"><i class="fas fa-users"></i> Users</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/blog/list"><i class="fas fa-blog"></i> Blog Management</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/revenue-analytics"><i class="fas fa-chart-bar"></i> Revenue Analytics</a></li>
+        </ul>
+    </nav>
+    <div id="content">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Blog Detail</a>
+            </div>
+        </nav>
+        <div class="container-fluid py-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h2 class="m-0 font-weight-bold">${blog.title}</h2>
+                </div>
+                <div class="card-body">
+                    <c:if test="${not empty blog}">
+                        <div class="blog-meta">
+                            <i class="fas fa-user"></i> By <b>${blog.authorID.username}</b> | 
+                            <i class="fas fa-calendar"></i> ${blog.createdAt} |
+                            <span class="badge bg-${blog.status == 'published' ? 'success' : blog.status == 'draft' ? 'warning' : 'secondary'}">
+                                ${blog.status}
+                            </span>
+                        </div>
+                        <c:if test="${not empty blog.imageURL}">
+                            <img src="${blog.imageURL}" alt="Blog Image" class="blog-image"/>
+                        </c:if>
+                        <div class="blog-content">
+                            ${blog.content}
+                        </div>
+                        <div class="mt-3">
+                            <c:if test="${sessionScope.currentUser.id == blog.authorID.id || sessionScope.currentUser.role eq 'ADMIN'}">
+                                <a href="edit?id=${blog.id}" class="btn btn-warning">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a href="delete?id=${blog.id}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete?')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </a>
+                            </c:if>
+                            <a href="list" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to List
+                            </a>
+                        </div>
+                    </c:if>
+                    <c:if test="${empty blog}">
+                        <div class="alert alert-warning">Blog not found.</div>
+                    </c:if>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html> 

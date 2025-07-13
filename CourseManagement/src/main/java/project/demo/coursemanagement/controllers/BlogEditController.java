@@ -3,6 +3,7 @@ package project.demo.coursemanagement.controllers;
 import project.demo.coursemanagement.service.BlogService;
 import project.demo.coursemanagement.entities.Blog;
 import project.demo.coursemanagement.entities.User;
+import project.demo.coursemanagement.utils.SessionUtil;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -30,7 +31,8 @@ public class BlogEditController extends HttpServlet {
                 if (blog != null) {
                     // Kiểm tra quyền chỉnh sửa
                     User currentUser = (User) request.getSession().getAttribute("currentUser");
-                    if (currentUser != null && (currentUser.getId() == blog.getAuthorID().getId() || "ADMIN".equals(currentUser.getRole()))) {
+                    String userRole = SessionUtil.getUserRole(request);
+                    if (currentUser != null && (currentUser.getId() == blog.getAuthorID().getId() || "ADMIN".equals(userRole))) {
                         request.setAttribute("blog", blog);
                         request.getRequestDispatcher("/WEB-INF/views/blog_edit.jsp").forward(request, response);
                         return;
@@ -58,7 +60,8 @@ public class BlogEditController extends HttpServlet {
                 if (blog != null) {
                     // Kiểm tra quyền chỉnh sửa
                     User currentUser = (User) request.getSession().getAttribute("currentUser");
-                    if (currentUser != null && (currentUser.getId() == blog.getAuthorID().getId() || "ADMIN".equals(currentUser.getRole()))) {
+                    String userRole = SessionUtil.getUserRole(request);
+                    if (currentUser != null && (currentUser.getId() == blog.getAuthorID().getId() || "ADMIN".equals(userRole))) {
                         blog.setTitle(title);
                         blog.setContent(content);
                         blog.setImageURL(imageURL);
