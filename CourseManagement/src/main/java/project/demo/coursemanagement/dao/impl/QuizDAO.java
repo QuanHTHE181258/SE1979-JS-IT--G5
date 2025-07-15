@@ -1,4 +1,3 @@
-
 package project.demo.coursemanagement.dao.impl;
 
 import project.demo.coursemanagement.entities.*;
@@ -315,7 +314,9 @@ public class QuizDAO {
                 instructor.setId(rs.getInt("InstructorID"));
                 course.setInstructorID(instructor);
 
-                course.setCategoryID(rs.getInt("CategoryID"));
+                Category category = new Category();
+                category.setId(rs.getInt("CategoryID"));
+                course.setCategory(category);
                 course.setStatus(rs.getString("Status"));
                 courses.add(course);
             }
@@ -336,15 +337,17 @@ public class QuizDAO {
             ps.setInt(1, courseId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                lessons.add(Lesson.builder()
-                        .id(rs.getInt("LessonID"))
-                        .courseID(Cours.builder().id(rs.getInt("CourseID")).build())
-                        .title(rs.getString("Title"))
-                        .content(rs.getString("Content"))
-                        .status(rs.getString("Status"))
-                        .isFreePreview(rs.getBoolean("IsFreePreview"))
-                        .createdAt(rs.getTimestamp("CreatedAt").toInstant())
-                        .build());
+                Lesson lesson = new Lesson();
+                lesson.setId(rs.getInt("LessonID"));
+                Cours course = new Cours();
+                course.setId(rs.getInt("CourseID"));
+                lesson.setCourseID(course);
+                lesson.setTitle(rs.getString("Title"));
+                lesson.setContent(rs.getString("Content"));
+                lesson.setStatus(rs.getString("Status"));
+                lesson.setIsFreePreview(rs.getBoolean("IsFreePreview"));
+                lesson.setCreatedAt(rs.getTimestamp("CreatedAt").toInstant());
+                lessons.add(lesson);
             }
         } catch (SQLException e) {
             e.printStackTrace();

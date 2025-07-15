@@ -5,6 +5,7 @@
 package project.demo.coursemanagement.dao.impl;
 
 
+import project.demo.coursemanagement.entities.Category;
 import project.demo.coursemanagement.entities.Cours;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.utils.DatabaseConnection;
@@ -444,18 +445,20 @@ public class CourseDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    list.add(Cours.builder()
-                                    .id(rs.getInt("CourseID"))
-                            .title(rs.getString("Title"))
-                            .description(rs.getString("Description"))
-                                    .price(rs.getBigDecimal("Price"))
-                                    .rating(rs.getDouble("Rating"))
-                                    .createdAt(rs.getTimestamp("CreatedAt").toInstant())
-                                    .imageURL(rs.getString("ImageURL"))
-                                    .instructorID(User.builder().id(rs.getInt("InstructorID")).build())
-                                    .categoryID(rs.getInt("CategoryID"))
-                                    .status(rs.getString("Status"))
-                            .build());
+                    Cours course = new Cours();
+                    course.setId(rs.getInt("CourseID"));
+                    course.setTitle(rs.getString("Title"));
+                    course.setDescription(rs.getString("Description"));
+                    course.setPrice(rs.getBigDecimal("Price"));
+                    course.setRating(rs.getDouble("Rating"));
+                    course.setCreatedAt(rs.getTimestamp("CreatedAt").toInstant());
+                    course.setImageURL(rs.getString("ImageURL"));
+                    course.setInstructorID(User.builder().id(rs.getInt("InstructorID")).build());
+                    Category category = new Category();
+                    category.setId(rs.getInt("CategoryID"));
+                    course.setCategory(category);
+                    course.setStatus(rs.getString("Status"));
+                    list.add(course);
                 }
             }
         } catch (SQLException ex) {
