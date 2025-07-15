@@ -1,2 +1,4 @@
 
 CourseManagement/.idea/
+/CourseManagement/.idea
+CourseManagement/src/main/resources/database.properties

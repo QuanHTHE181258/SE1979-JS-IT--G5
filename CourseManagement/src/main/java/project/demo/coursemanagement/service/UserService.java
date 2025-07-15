@@ -69,6 +69,17 @@ public class UserService {
         return userDAO.findUserById(userId); 
     }
 
+    public User getUserByIdWithRole(int userId) {
+        User user = userDAO.findUserById(userId);
+        if (user != null) {
+            // Get user's role
+            List<Role> userRoles = userRoleDAO.findRolesByUserId(userId);
+            // Không setRole vào entity User nữa
+            // Nếu cần, có thể trả về userRoles.get(0) hoặc roleName ngoài entity
+        }
+        return user;
+    }
+
     public void createUser(String username, String email, String password, String firstName, String lastName, String phoneNumber, String roleName) throws Exception {
         // Basic validation - only require username, email, password, and roleName for creation
         if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty() || roleName == null || roleName.trim().isEmpty()) {
@@ -111,13 +122,13 @@ public class UserService {
         }
     }
 
-    public void updateUser(int userId, String username, String email, String phoneNumber, String roleName, boolean isActive) throws Exception {
+    public void updateUser(int userId, String username, String email, String phoneNumber, String roleName) throws Exception {
         // Basic validation
          if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty() || phoneNumber == null || phoneNumber.trim().isEmpty() || roleName == null || roleName.trim().isEmpty()) {
             throw new IllegalArgumentException("Username, email, phone, and role are required.");
         }
 
-        User existingUser = userDAO.findUserByIdIncludeInactive(userId); // Use IncludeInactive to update status
+        User existingUser = userDAO.findUserById(userId); // Use findUserById since no isActive field
         if (existingUser == null) {
             throw new Exception("User not found.");
         }
@@ -185,4 +196,25 @@ public class UserService {
       public List<Role> getAllRoles() {
           return roleDAO.findAll(); // Assuming RoleDAO has findAll
       }
+
+    public List<User> getAllUsers() {
+        return userDAO.getAllUsers();
+    }
+
+    public User findUserByIdIncludeInactive(int userId) {
+        return userDAO.findUserByIdIncludeInactive(userId);
+    }
+
+    public boolean updateUserActiveStatus(int userId, boolean active) {
+        project.demo.coursemanagement.dao.RegisterDAO registerDAO = new project.demo.coursemanagement.dao.impl.RegisterDAOImpl();
+        return registerDAO.updateUserActiveStatus(userId, active);
+    }
+
+    public List<User> searchRecentActivities(String keyword, int limit, String role) {
+        return userDAO.searchRecentActivities(keyword, limit, role);
+    }
+
+    public List<User> getRecentUsersByRole(int limit, String role) {
+        return userDAO.getRecentUsersByRole(limit, role);
+    }
 }

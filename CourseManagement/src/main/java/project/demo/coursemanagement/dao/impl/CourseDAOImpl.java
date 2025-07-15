@@ -492,34 +492,4 @@ public class CourseDAOImpl implements CourseDAO {
         }
         return topCourses;
     }
-
-    @Override
-    public Cours getCourseById(int courseId) {
-        String sql = "SELECT [CourseID], [Title], [Description], [Price], [Rating], [CreatedAt], [ImageURL], [InstructorID], [CategoryID], [Status] FROM Courses WHERE CourseID = ?";
-        try (Connection conn = dbConn.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, courseId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    Cours course = new Cours();
-                    course.setId(rs.getInt("CourseID"));
-                    course.setTitle(rs.getString("Title"));
-                    course.setDescription(rs.getString("Description"));
-                    course.setPrice(rs.getBigDecimal("Price"));
-                    course.setRating(rs.getDouble("Rating"));
-                    course.setCreatedAt(rs.getTimestamp("CreatedAt").toInstant());
-                    course.setImageURL(rs.getString("ImageURL"));
-                    // You may need to set Instructor and Category objects if needed
-                    // course.setInstructorID(...)
-                    // course.setCategory(...)
-                    course.setStatus(rs.getString("Status"));
-                    return course;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
-}
-
