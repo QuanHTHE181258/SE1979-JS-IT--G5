@@ -58,12 +58,9 @@
                             ${blog.content}
                         </div>
                         <div class="mt-3">
-                            <c:if test="${sessionScope.currentUser.id == blog.authorID.id || sessionScope.currentUser.role eq 'ADMIN'}">
+                            <c:if test="${sessionScope.loggedInUser != null && sessionScope.loggedInUser.id == blog.authorID.id}">
                                 <a href="edit?id=${blog.id}" class="btn btn-warning">
                                     <i class="fas fa-edit"></i> Edit
-                                </a>
-                                <a href="delete?id=${blog.id}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete?')">
-                                    <i class="fas fa-trash"></i> Delete
                                 </a>
                             </c:if>
                             <a href="list" class="btn btn-secondary">

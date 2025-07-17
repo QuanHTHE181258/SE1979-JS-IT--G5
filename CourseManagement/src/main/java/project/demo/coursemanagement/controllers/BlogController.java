@@ -21,7 +21,16 @@ public class BlogController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Blog> blogList = blogService.getAllBlogs();
+        project.demo.coursemanagement.entities.User currentUser = project.demo.coursemanagement.utils.SessionUtil.getUserFromSession(request);
+        String userRole = project.demo.coursemanagement.utils.SessionUtil.getUserRole(request);
+        java.util.List<project.demo.coursemanagement.entities.Blog> blogList;
+        if (project.demo.coursemanagement.utils.SessionUtil.isAdmin(request)) {
+            blogList = blogService.getAllBlogs();
+        } else if (currentUser != null) {
+            blogList = blogService.getBlogsForUser(currentUser.getId());
+        } else {
+            blogList = blogService.getPublishedBlogs();
+        }
         request.setAttribute("blogList", blogList);
         request.getRequestDispatcher("/WEB-INF/views/blog_list.jsp").forward(request, response);
     }

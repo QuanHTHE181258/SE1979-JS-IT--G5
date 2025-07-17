@@ -107,4 +107,63 @@ public class BlogDAOImpl implements BlogDAO {
             return false;
         }
     }
+
+    public List<Blog> getPublishedBlogs() {
+        List<Blog> blogs = new ArrayList<>();
+        String sql = "SELECT b.BlogID, b.Title, b.Content, b.ImageURL, b.AuthorID, b.CreatedAt, b.UpdatedAt, b.Status, u.Username " +
+                     "FROM blogs b JOIN users u ON b.AuthorID = u.UserID WHERE b.Status = 'published'";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Blog blog = new Blog();
+                blog.setId(rs.getInt("BlogID"));
+                blog.setTitle(rs.getString("Title"));
+                blog.setContent(rs.getString("Content"));
+                blog.setImageURL(rs.getString("ImageURL"));
+                blog.setCreatedAt(rs.getTimestamp("CreatedAt") != null ? rs.getTimestamp("CreatedAt").toInstant() : null);
+                blog.setUpdatedAt(rs.getTimestamp("UpdatedAt") != null ? rs.getTimestamp("UpdatedAt").toInstant() : null);
+                blog.setStatus(rs.getString("Status"));
+                User author = new User();
+                author.setId(rs.getInt("AuthorID"));
+                author.setUsername(rs.getString("Username"));
+                blog.setAuthorID(author);
+                blogs.add(blog);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return blogs;
+    }
+
+    public List<Blog> getBlogsForUser(int userId) {
+        List<Blog> blogs = new ArrayList<>();
+        String sql = "SELECT b.BlogID, b.Title, b.Content, b.ImageURL, b.AuthorID, b.CreatedAt, b.UpdatedAt, b.Status, u.Username " +
+                     "FROM blogs b JOIN users u ON b.AuthorID = u.UserID " +
+                     "WHERE b.Status = 'published' OR b.AuthorID = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Blog blog = new Blog();
+                    blog.setId(rs.getInt("BlogID"));
+                    blog.setTitle(rs.getString("Title"));
+                    blog.setContent(rs.getString("Content"));
+                    blog.setImageURL(rs.getString("ImageURL"));
+                    blog.setCreatedAt(rs.getTimestamp("CreatedAt") != null ? rs.getTimestamp("CreatedAt").toInstant() : null);
+                    blog.setUpdatedAt(rs.getTimestamp("UpdatedAt") != null ? rs.getTimestamp("UpdatedAt").toInstant() : null);
+                    blog.setStatus(rs.getString("Status"));
+                    User author = new User();
+                    author.setId(rs.getInt("AuthorID"));
+                    author.setUsername(rs.getString("Username"));
+                    blog.setAuthorID(author);
+                    blogs.add(blog);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return blogs;
+    }
 } 

@@ -27,4 +27,11 @@ public class BlogService {
     public boolean updateBlog(Blog blog) {
         return blogDAO.updateBlog(blog);
     }
+
+    public List<Blog> getPublishedBlogs() {
+        return blogDAO.getPublishedBlogs();
+    }
+    public List<Blog> getBlogsForUser(int userId) {
+        return blogDAO.getBlogsForUser(userId);
+    }
 } 

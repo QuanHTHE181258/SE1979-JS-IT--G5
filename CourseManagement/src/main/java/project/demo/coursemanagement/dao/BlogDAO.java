@@ -8,4 +8,6 @@ public interface BlogDAO {
     Blog getBlogById(int id);
     boolean createBlog(Blog blog);
     boolean updateBlog(Blog blog);
+    List<Blog> getPublishedBlogs();
+    List<Blog> getBlogsForUser(int userId);
 } 
