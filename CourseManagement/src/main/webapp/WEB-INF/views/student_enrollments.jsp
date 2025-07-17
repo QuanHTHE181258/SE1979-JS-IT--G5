@@ -115,7 +115,7 @@
                     <td colspan="8" class="text-center">
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle me-2"></i>No enrolled courses found.
-                        </div>
+                        </div> add
                     </td>
                 </tr>
                 <%
