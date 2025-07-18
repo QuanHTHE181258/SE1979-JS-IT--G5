@@ -22,7 +22,7 @@ public class CoursePreviewDAOimp implements CoursePreviewDAO {
     public CourseDTO getCourseInfoById(int id) {
         CourseDTO courseDTO = null;
         String sql = """
-            SELECT c.CourseID, c.Title, c.Description, c.Price, c.Rating, c.CreatedAt, c.ImageURL,  
+                            SELECT c.CourseID, c.Title, c.Description, c.Price, c.Rating, c.CreatedAt, c.ImageURL,  
                             ct.Name AS Categories, c.Status, u.Username AS TeacherName  
                             FROM courses c
                             JOIN users u ON c.InstructorID = u.UserID
@@ -58,8 +58,10 @@ public class CoursePreviewDAOimp implements CoursePreviewDAO {
     @Override
     public List<LessonDTO> getLessonsByCourseId(int courseId) {
         List<LessonDTO> lessons = new ArrayList<>();
-        String sql = "SELECT LessonID, Title, Content, Status, IsFreePreview, CreatedAt " +
-                "FROM lessons WHERE CourseID = ?";
+        String sql = """
+                SELECT LessonID, Title, Content, Status, IsFreePreview, CreatedAt 
+                FROM lessons WHERE CourseID = ?
+        """;
         try (Connection conn = dbConn.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, courseId);
