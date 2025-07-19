@@ -72,8 +72,15 @@
                                 <td>${status.index + 1}</td>
                                 <td>${quiz.title}</td>
                                 <td>
-                                    <a href="edit-quiz?id=${quiz.id}" class="btn btn-outline-warning btn-sm"><i class="fas fa-edit me-1"></i>Edit</a>
-                                    <button class="btn btn-outline-danger btn-sm" onclick="deleteQuiz(${quiz.id})"><i class="fas fa-trash me-1"></i>Delete</button>
+                                    <a href="quiz-details?id=${quiz.id}" class="btn btn-info btn-sm">
+                                        <i class="fas fa-eye me-1"></i>View Details
+                                    </a>
+                                    <a href="edit-quiz?id=${quiz.id}" class="btn btn-outline-warning btn-sm">
+                                        <i class="fas fa-edit me-1"></i>Edit
+                                    </a>
+                                    <button class="btn btn-outline-danger btn-sm" onclick="deleteQuiz(${quiz.id})">
+                                        <i class="fas fa-trash me-1"></i>Delete
+                                    </button>
                                 </td>
                             </tr>
                         </c:forEach>
