@@ -10,12 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="add new feature view teaching courses list for teacher">
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/AddLessonServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/add-lesson.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/CreateCourseSerVlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/CreateCourseSerVlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/LessonDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/LessonDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/list-lesson.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/list-lesson.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -213,7 +208,7 @@
       <workItem from="1750578641532" duration="10254000" />
       <workItem from="1750745077735" duration="5692000" />
       <workItem from="1751857856423" duration="1987000" />
-      <workItem from="1752245485843" duration="756000" />
+      <workItem from="1752245485843" duration="2068000" />
     </task>
     <task id="LOCAL-00001" summary="Merge remote-tracking branch 'origin/main' into KhiemNB">
       <option name="closed" value="true" />
