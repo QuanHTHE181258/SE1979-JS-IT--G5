@@ -12,4 +12,8 @@ public interface InstructorInfoDAO {
 
     List<CourseDTO> getCoursesByInstructorUsername(String username);
 
+    List<CourseDTO> getCoursesByInstructorUsernameAndPage(String username, int page, int size);
+
+    int countCoursesByInstructor(String username);
+
 }

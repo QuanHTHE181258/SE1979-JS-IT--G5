@@ -31,4 +31,13 @@ public class InstructorInfoService {
         return instructorInfoDAO.getCoursesByInstructorUsername(username);
     }
 
+    public List<CourseDTO> getCoursesByInstructorUsernameAndPage(String username, int page, int size) {
+        return instructorInfoDAO.getCoursesByInstructorUsernameAndPage(username, page, size);
+    }
+
+    public int countCoursesByInstructor(String username) {
+        return instructorInfoDAO.countCoursesByInstructor(username);
+    }
+
+
 }

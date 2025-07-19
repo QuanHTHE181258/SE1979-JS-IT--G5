@@ -69,4 +69,64 @@ public class InstructorInfoDAOimp implements InstructorInfoDAO {
         return courses;
     }
 
+    public List<CourseDTO> getCoursesByInstructorUsernameAndPage(String username, int page, int size) {
+        List<CourseDTO> courses = new ArrayList<>();
+        String sql = """
+            SELECT c.CourseID, c.Title, c.Description, c.Price, c.Rating, c.Status, c.CreatedAt
+            FROM courses c
+            JOIN users u ON c.InstructorID = u.UserID
+            WHERE u.Username = ?
+            ORDER BY c.CourseID
+            OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
+        """;
+
+        try (Connection conn = dbConn.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, username);
+            ps.setInt(2, (page - 1) * size);
+            ps.setInt(3, size);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    CourseDTO course = new CourseDTO();
+                    course.setCourseID(rs.getInt("CourseID"));
+                    course.setCourseTitle(rs.getString("Title"));
+                    course.setCourseDescription(rs.getString("Description"));
+                    course.setPrice(rs.getBigDecimal("Price"));
+                    course.setRating(rs.getDouble("Rating"));
+                    course.setCourseStatus(rs.getString("Status"));
+                    Timestamp createdAt = rs.getTimestamp("CreatedAt");
+                    course.setCreatedAt(createdAt != null ? createdAt.toInstant() : null);
+                    courses.add(course);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return courses;
+    }
+
+    public int countCoursesByInstructor(String username) {
+        int count = 0;
+        try {
+            conn = dbConn.getConnection();
+            String sql = """
+            SELECT COUNT(*) FROM courses c
+            JOIN users u ON c.InstructorID = u.UserID
+            WHERE u.Username = ?
+        """;
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, username);
+            rs = ps.executeQuery();
+            if (rs.next()) count = rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+        }
+        return count;
+    }
+
+
 }

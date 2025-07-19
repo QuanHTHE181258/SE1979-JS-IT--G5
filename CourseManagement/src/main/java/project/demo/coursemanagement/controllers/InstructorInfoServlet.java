@@ -22,14 +22,30 @@ public class InstructorInfoServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String username = request.getParameter("username");
+        int page = 1;
+        int size = 5;
+
+        String pageParam = request.getParameter("page");
+        if (pageParam != null) {
+            try {
+                page = Integer.parseInt(pageParam);
+            } catch (NumberFormatException ignored) {}
+        }
 
         if (username != null && !username.isEmpty()) {
             UserDTO instructor = instructorService.getInstructorInfo(username);
             request.setAttribute("instructor", instructor);
-            List<CourseDTO> courses = instructorService.getCoursesByInstructorUsername(username);
+
+            List<CourseDTO> courses = instructorService.getCoursesByInstructorUsernameAndPage(username, page, size);
+            int totalCourses = instructorService.countCoursesByInstructor(username);
+            int totalPages = (int) Math.ceil((double) totalCourses / size);
+
             request.setAttribute("courses", courses);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("totalPages", totalPages);
         }
 
         request.getRequestDispatcher("WEB-INF/views/instructorInfo.jsp").forward(request, response);
     }
+
 }

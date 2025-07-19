@@ -55,7 +55,7 @@
                         <ul class="lesson-list">
                             <c:forEach var="lesson" items="${lessons}">
                                 <li class="lesson-item">
-                                    <strong> Title:</strong> ${lesson.title}
+                                    <strong> Title:</strong> <a href="lessonPreview?lessonID=${lesson.lessonID}">${lesson.title}</a>
                                     <c:if test="${not empty lesson.status}">
                                         <span class="lesson-status"> (Status: ${lesson.status})</span>
                                     </c:if>
