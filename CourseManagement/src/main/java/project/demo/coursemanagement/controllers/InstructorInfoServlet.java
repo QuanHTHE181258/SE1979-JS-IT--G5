@@ -45,7 +45,7 @@ public class InstructorInfoServlet extends HttpServlet {
             request.setAttribute("totalPages", totalPages);
         }
 
-        request.getRequestDispatcher("WEB-INF/views/instructorInfo.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/views/instructor-info.jsp").forward(request, response);
     }
 
 }
