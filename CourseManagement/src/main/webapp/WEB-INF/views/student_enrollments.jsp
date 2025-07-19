@@ -10,17 +10,60 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+        .card-header {
+            border-radius: 10px 10px 0 0 !important;
+            background: linear-gradient(45deg, #4e73df, #36b9cc);
+        }
         .progress {
             height: 20px;
+            border-radius: 10px;
+            background-color: #e9ecef;
+        }
+        .progress-bar {
+            background: linear-gradient(45deg, #4e73df, #36b9cc);
         }
         .badge {
             font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 6px;
         }
         .btn-action {
             margin: 2px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         .table > tbody > tr > td {
             vertical-align: middle;
+            padding: 15px;
+        }
+        .table > thead > tr > th {
+            background-color: #f8f9fc;
+            color: #4e73df;
+            font-weight: 600;
+            border-bottom: 2px solid #e3e6f0;
+        }
+        .table > tbody > tr:hover {
+            background-color: #f8f9fc;
+            transition: all 0.3s;
+        }
+        .alert {
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .container {
+            padding: 30px 15px;
         }
     </style>
 </head>
@@ -120,104 +163,107 @@
 </nav>
 <div class="container mt-5">
     <div class="card">
-        <div class="card-header bg-primary text-white">
-            <h2 class="mb-0"><i class="fas fa-graduation-cap me-2"></i>My Enrolled Courses</h2>
+        <div class="card-header">
+            <h2 class="mb-0 text-white"><i class="fas fa-graduation-cap me-2"></i>My Enrolled Courses</h2>
+            <p class="text-white-50 mb-0">Track your learning progress and achievements</p>
         </div>
-        <div class="card-body">
-            <table class="table table-striped table-hover">
-                <thead class="table-primary">
-                <tr>
-                    <th>Course Name</th>
-                    <th>Start Date</th>
-                    <th>Completion Date</th>
-                    <th>Progress</th>
-                    <th>Status</th>
-                    <th>Score</th>
-                    <th>Certificate</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <%
-                    List<Enrollment> enrollments = (List<Enrollment>) request.getAttribute("enrollments");
-                    if (enrollments != null && !enrollments.isEmpty()) {
-                        for (Enrollment e : enrollments) {
-                            Cours c = e.getCourse();
-                %>
-                <tr>
-                    <td><strong><%= c != null ? c.getTitle() : "" %></strong></td>
-                    <td><%= e.getEnrollmentDate() != null ? e.getEnrollmentDate().toString().substring(0, 10) : "N/A" %></td>
-                    <td>
-                        <% if (e.getCompletionDate() != null) { %>
-                            <span class="badge bg-success">
-                                <%= e.getCompletionDate().toString().substring(0, 10) %>
-                            </span>
-                        <% } else { %>
-                            <span class="badge bg-warning">Chưa hoàn thành</span>
-                        <% } %>
-                    </td>
-                    <td>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped"
-                                 role="progressbar"
-                                 style="width: <%= e.getProgressPercentage() != null ? e.getProgressPercentage() : 0 %>%"
-                                 aria-valuenow="<%= e.getProgressPercentage() != null ? e.getProgressPercentage() : 0 %>"
-                                 aria-valuemin="0"
-                                 aria-valuemax="100">
-                                <%= e.getProgressPercentage() != null ? e.getProgressPercentage() : 0 %>%
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-primary">
+                    <tr>
+                        <th>Course Name</th>
+                        <th>Start Date</th>
+                        <th>Completion Date</th>
+                        <th>Progress</th>
+                        <th>Status</th>
+                        <th>Score</th>
+                        <th>Certificate</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%
+                        List<Enrollment> enrollments = (List<Enrollment>) request.getAttribute("enrollments");
+                        if (enrollments != null && !enrollments.isEmpty()) {
+                            for (Enrollment e : enrollments) {
+                                Cours c = e.getCourse();
+                    %>
+                    <tr>
+                        <td><strong><%= c != null ? c.getTitle() : "" %></strong></td>
+                        <td><%= e.getEnrollmentDate() != null ? e.getEnrollmentDate().toString().substring(0, 10) : "N/A" %></td>
+                        <td>
+                            <% if (e.getCompletionDate() != null) { %>
+                                <span class="badge bg-success">
+                                    <%= e.getCompletionDate().toString().substring(0, 10) %>
+                                </span>
+                            <% } else { %>
+                                <span class="badge bg-warning">Chưa hoàn thành</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped"
+                                     role="progressbar"
+                                     style="width: <%= e.getProgressPercentage() != null ? e.getProgressPercentage() : 0 %>%"
+                                     aria-valuenow="<%= e.getProgressPercentage() != null ? e.getProgressPercentage() : 0 %>"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">
+                                    <%= e.getProgressPercentage() != null ? e.getProgressPercentage() : 0 %>%
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                    <td>
-                        <% if ("COMPLETED".equals(e.getStatus())) { %>
-                            <span class="badge bg-success"><%= e.getStatus() %></span>
-                        <% } else if ("ACTIVE".equals(e.getStatus())) { %>
-                            <span class="badge bg-primary"><%= e.getStatus() %></span>
-                        <% } else { %>
-                            <span class="badge bg-secondary"><%= e.getStatus() %></span>
-                        <% } %>
-                    </td>
-                    <td>
-                        <% if (e.getGrade() != null) { %>
-                            <span class="badge bg-info"><%= e.getGrade() %></span>
-                        <% } else { %>
-                            <span class="text-muted">Chưa có điểm</span>
-                        <% } %>
-                    </td>
-                    <td>
-                        <% if (Boolean.TRUE.equals(e.getCertificateIssued())) { %>
-                            <span class="badge bg-success"><i class="fas fa-certificate"></i> Available</span>
-                        <% } else { %>
-                            <span class="badge bg-secondary">Not Available</span>
-                        <% } %>
-                    </td>
-                    <td>
-                        <a href="course-details?id=<%= c.getId() %>" class="btn btn-primary btn-sm btn-action">
-                            <i class="fas fa-eye"></i> View Details
-                        </a>
-                        <% if ("COMPLETED".equals(e.getStatus())) { %>
-                            <a href="feedback?courseId=<%= c.getId() %>" class="btn btn-warning btn-sm btn-action">
-                                <i class="fas fa-comment"></i> Feedback
+                        </td>
+                        <td>
+                            <% if ("COMPLETED".equals(e.getStatus())) { %>
+                                <span class="badge bg-success"><%= e.getStatus() %></span>
+                            <% } else if ("ACTIVE".equals(e.getStatus())) { %>
+                                <span class="badge bg-primary"><%= e.getStatus() %></span>
+                            <% } else { %>
+                                <span class="badge bg-secondary"><%= e.getStatus() %></span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <% if (e.getGrade() != null) { %>
+                                <span class="badge bg-info"><%= e.getGrade() %></span>
+                            <% } else { %>
+                                <span class="text-muted">Chưa có điểm</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <% if (Boolean.TRUE.equals(e.getCertificateIssued())) { %>
+                                <span class="badge bg-success"><i class="fas fa-certificate"></i> Available</span>
+                            <% } else { %>
+                                <span class="badge bg-secondary">Not Available</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <a href="course-details?id=<%= c.getId() %>" class="btn btn-primary btn-sm btn-action">
+                                <i class="fas fa-eye"></i> View Details
                             </a>
-                        <% } %>
-                    </td>
-                </tr>
-                <%
+                            <% if ("COMPLETED".equals(e.getStatus())) { %>
+                                <a href="feedback?courseId=<%= c.getId() %>" class="btn btn-warning btn-sm btn-action">
+                                    <i class="fas fa-comment"></i> Feedback
+                                </a>
+                            <% } %>
+                        </td>
+                    </tr>
+                    <%
+                            }
+                        } else {
+                    %>
+                    <tr>
+                        <td colspan="8" class="text-center">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>No enrolled courses found.
+                            </div> add
+                        </td>
+                    </tr>
+                    <%
                         }
-                    } else {
-                %>
-                <tr>
-                    <td colspan="8" class="text-center">
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle me-2"></i>No enrolled courses found.
-                        </div> add
-                    </td>
-                </tr>
-                <%
-                    }
-                %>
-                </tbody>
-            </table>
+                    %>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
