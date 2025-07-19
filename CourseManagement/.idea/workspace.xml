@@ -9,8 +9,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="add new feature view teaching courses list for teacher">
+    <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="add button add lesson">
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/EditLessonServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/edit-lesson.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/LessonDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/LessonDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/LessonDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/LessonDAOImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/list-lesson.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/list-lesson.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -210,7 +214,7 @@
       <workItem from="1750745077735" duration="5692000" />
       <workItem from="1751857856423" duration="1987000" />
       <workItem from="1752245485843" duration="2068000" />
-      <workItem from="1752914923161" duration="2087000" />
+      <workItem from="1752914923161" duration="3662000" />
     </task>
     <task id="LOCAL-00001" summary="Merge remote-tracking branch 'origin/main' into KhiemNB">
       <option name="closed" value="true" />
@@ -244,7 +248,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750609176299</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="add button add lesson">
+      <option name="closed" value="true" />
+      <created>1752918646605</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1752918646605</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -273,6 +285,7 @@
     <MESSAGE value="Merge remote-tracking branch 'origin/main' into KhiemNB" />
     <MESSAGE value="fix bug" />
     <MESSAGE value="refactor update course, validation" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor update course, validation" />
+    <MESSAGE value="add button add lesson" />
+    <option name="LAST_COMMIT_MESSAGE" value="add button add lesson" />
   </component>
 </project>

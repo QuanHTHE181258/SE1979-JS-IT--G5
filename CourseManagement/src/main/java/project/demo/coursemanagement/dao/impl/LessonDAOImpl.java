@@ -113,4 +113,24 @@ public class LessonDAOImpl implements LessonDAO {
         }
         return false;
     }
+
+    @Override
+    public boolean updateLesson(Lesson lesson) {
+        String sql = "UPDATE lessons SET Title = ?, Content = ?, Status = ?, IsFreePreview = ?, CourseID = ? WHERE LessonID = ?";
+        try (Connection conn = project.demo.coursemanagement.utils.DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, lesson.getTitle());
+            stmt.setString(2, lesson.getContent());
+            stmt.setString(3, lesson.getStatus());
+            stmt.setBoolean(4, lesson.getIsFreePreview());
+            stmt.setInt(5, lesson.getCourseID().getId());
+            stmt.setInt(6, lesson.getId());
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

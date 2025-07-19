@@ -67,6 +67,7 @@
                             </td>
                             <td>
                                 <a href="lesson-details?id=${ls.lesson.id}" class="btn btn-outline-info btn-sm mb-1"><i class="fas fa-eye me-1"></i>View Details</a>
+                                <a href="edit-lesson?id=${ls.lesson.id}" class="btn btn-outline-warning btn-sm mb-1"><i class="fas fa-edit me-1"></i>Edit</a>
                                 <button class="btn btn-outline-danger btn-sm mb-1" onclick="deleteLesson(${ls.lesson.id})"><i class="fas fa-trash me-1"></i>Delete</button>
                             </td>
                         </tr>
@@ -81,12 +82,7 @@
         </c:when>
         <c:otherwise>
             <div class="text-center mb-4">
-                <form action="add-lesson" method="get">
-                    <input type="hidden" name="courseId" value="${courseId}" />
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Add Lesson
-                    </button>
-                </form>
+                <h3> Not found lessons</h3>
             </div>
         </c:otherwise>
     </c:choose>

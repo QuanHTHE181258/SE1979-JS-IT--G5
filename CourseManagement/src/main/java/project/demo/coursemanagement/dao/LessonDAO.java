@@ -8,4 +8,5 @@ public interface LessonDAO {
     List<LessonStats> getLessonsWithStatsByCourseId(int courseId);
     Lesson getLessonById(int lessonId);
     List<Lesson> getLessonsByCourseId(int courseId);
+    boolean updateLesson(Lesson lesson);
 }
