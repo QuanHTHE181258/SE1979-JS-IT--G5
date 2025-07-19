@@ -28,6 +28,11 @@
                 <option value="published">published</option>
             </select>
         </div>
+        <div class="col-md-5 mb-2 d-flex justify-content-end">
+            <a href="add-lesson?courseId=${courseId}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i> Add Lesson
+            </a>
+        </div>
     </div>
     <c:choose>
         <c:when test="${not empty lessons}">
@@ -85,6 +90,7 @@
             </div>
         </c:otherwise>
     </c:choose>
+
 </div>
 <!-- FontAwesome for icon -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
