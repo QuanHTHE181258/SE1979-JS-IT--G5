@@ -31,7 +31,7 @@
             <p><strong>Description:</strong> ${course.courseDescription}</p>
             <p><strong>Price:</strong> $<fmt:formatNumber value="${course.price}" type="number" maxFractionDigits="2"/></p>
             <p><strong>Rating:</strong> ${course.rating}</p>
-            <p><strong>Teacher:</strong> <a href="instructorInfo">${course.teacherName}</a></p>
+            <p><strong>Teacher:</strong> <a href="instructorInfo?username=${course.teacherName}">${course.teacherName}</a></p>
             <c:if test="${not empty course.categories}">
                 <p><strong>Categories:</strong> ${course.categories}</p>
             </c:if>
@@ -40,7 +40,7 @@
             </c:if>
             <c:set var="createdAtInstant" value="${course.createdAt}" />
             <fmt:parseDate value="${createdAtInstant}" pattern="yyyy-MM-dd'T'HH:mm:ss.SSSX" var="parsedDate" type="both" />
-            <p><strong>Created At:</strong> <fmt:formatDate value="${parsedDate}" pattern="HH:mm dd-MM-yyyy"/></p>
+            <p><strong>Created At:</strong> <fmt:formatDate value="${parsedDate}" pattern="dd-MM-yyyy"/></p>
             <div class="card-footer">
                 <a href="login">
                     <button class="join-btn">JOIN</button>
