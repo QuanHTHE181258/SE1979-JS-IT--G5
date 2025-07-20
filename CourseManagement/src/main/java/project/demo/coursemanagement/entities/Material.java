@@ -34,4 +34,9 @@ public class Material {
     @Column(name = "FileURL")
     private String fileURL;
 
+    public void setLessonId(int lessonId) {
+        Lesson lesson = new Lesson();
+        lesson.setId(lessonId);
+        this.lessonID = lesson;
+    }
 }

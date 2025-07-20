@@ -8,8 +8,10 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import project.demo.coursemanagement.dto.LessonStats;
 
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -52,4 +54,19 @@ public class Lesson {
     @Column(name = "CreatedAt")
     private Instant createdAt;
 
+    // Add for navigation sidebar
+    @Transient
+    private List<LessonStats> lessonStatsList;
+
+    public Integer getCourseId() {
+        return courseID != null ? courseID.getId() : null;
+    }
+
+    public List<LessonStats> getLessonStatsList() {
+        return lessonStatsList;
+    }
+
+    public void setLessonStatsList(List<LessonStats> lessonStatsList) {
+        this.lessonStatsList = lessonStatsList;
+    }
 }

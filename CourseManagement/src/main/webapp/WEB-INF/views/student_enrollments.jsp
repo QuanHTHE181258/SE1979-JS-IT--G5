@@ -226,7 +226,7 @@
                             <% if (e.getGrade() != null) { %>
                                 <span class="badge bg-info"><%= e.getGrade() %></span>
                             <% } else { %>
-                                <span class="text-muted">Chưa có điểm</span>
+                                <span class="text-muted">Not found score</span>
                             <% } %>
                         </td>
                         <td>

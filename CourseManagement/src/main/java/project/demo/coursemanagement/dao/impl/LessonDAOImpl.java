@@ -3,6 +3,8 @@ package project.demo.coursemanagement.dao.impl;
 import project.demo.coursemanagement.dao.LessonDAO;
 import project.demo.coursemanagement.entities.Lesson;
 import project.demo.coursemanagement.dto.LessonStats;
+import project.demo.coursemanagement.entities.Quiz;
+import project.demo.coursemanagement.entities.Material;
 import java.sql.*;
 import java.util.*;
 
@@ -83,5 +85,75 @@ public class LessonDAOImpl implements LessonDAO {
         }
 
         return list;
+    }
+
+    public Lesson getLessonById(int lessonId) {
+        String sql = "SELECT LessonID, Title, Content, Status, IsFreePreview, CreatedAt, CourseID FROM lessons WHERE LessonID = ?";
+        try (Connection conn = project.demo.coursemanagement.utils.DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, lessonId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Lesson lesson = new Lesson();
+                    lesson.setId(rs.getInt("LessonID"));
+                    lesson.setTitle(rs.getString("Title"));
+                    lesson.setContent(rs.getString("Content"));
+                    lesson.setStatus(rs.getString("Status"));
+                    lesson.setIsFreePreview(rs.getBoolean("IsFreePreview"));
+                    lesson.setCreatedAt(rs.getTimestamp("CreatedAt").toInstant());
+                    // Set courseID
+                    project.demo.coursemanagement.entities.Cours course = new project.demo.coursemanagement.entities.Cours();
+                    course.setId(rs.getInt("CourseID"));
+                    lesson.setCourseID(course);
+                    return lesson;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Quiz> getQuizzesByLessonId(int lessonId) {
+        List<Quiz> quizzes = new ArrayList<>();
+        String sql = "SELECT QuizID, LessonID, Title FROM quizzes WHERE LessonID = ?";
+        try (Connection conn = project.demo.coursemanagement.utils.DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, lessonId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Quiz quiz = new Quiz();
+                    quiz.setId(rs.getInt("QuizID"));
+                    quiz.setLessonId(rs.getInt("LessonID"));
+                    quiz.setTitle(rs.getString("Title"));
+                    quizzes.add(quiz);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return quizzes;
+    }
+
+    public List<Material> getMaterialsByLessonId(int lessonId) {
+        List<Material> materials = new ArrayList<>();
+        String sql = "SELECT MaterialID, LessonID, Title, FileURL FROM materials WHERE LessonID = ?";
+        try (Connection conn = project.demo.coursemanagement.utils.DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, lessonId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Material material = new Material();
+                    material.setId(rs.getInt("MaterialID"));
+                    material.setLessonId(rs.getInt("LessonID"));
+                    material.setTitle(rs.getString("Title"));
+                    material.setFileURL(rs.getString("FileURL"));
+                    materials.add(material);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return materials;
     }
 }

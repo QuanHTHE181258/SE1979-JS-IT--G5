@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Danh sách bài học</title>
+    <title>Lesson List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <style>
@@ -57,11 +57,11 @@
     <div class="container mt-4">
         <div class="row mb-4">
             <div class="col">
-                <h2 class="mb-3">Danh sách bài học</h2>
+                <h2 class="mb-3">Course Lessons</h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/" class="text-decoration-none">Trang chủ</a></li>
-                        <li class="breadcrumb-item active">Danh sách bài học</li>
+                        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/" class="text-decoration-none">Home</a></li>
+                        <li class="breadcrumb-item active">Lesson List</li>
                     </ol>
                 </nav>
             </div>
@@ -70,7 +70,7 @@
         <c:if test="${empty lessons}">
             <div class="alert alert-info">
                 <i class="bi bi-info-circle me-2"></i>
-                Không có bài học nào trong khóa học này
+                No lessons found in this course
             </div>
         </c:if>
 
@@ -80,17 +80,17 @@
                     <div class="lesson-card">
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
                             <div class="d-flex align-items-center mb-2 mb-md-0">
-                                <span class="lesson-number">Bài ${lessonStat.getOrder()}</span>
-                                <span class="h5 mb-0">${lessonStat.getLesson().getTitle()}</span>
+                                <span class="lesson-number">Lesson ${lessonStat.order}</span>
+                                <a href="${pageContext.request.contextPath}/learning?lessonId=${lessonStat.lesson.id}" class="h5 mb-0 text-decoration-none text-dark">${lessonStat.lesson.title}</a>
                             </div>
                             <div>
                                 <span class="stat-badge">
                                     <i class="bi bi-question-circle-fill"></i>
-                                    ${lessonStat.getTotalQuizzes()} bài kiểm tra
+                                    ${lessonStat.totalQuizzes} quizzes
                                 </span>
                                 <span class="stat-badge">
                                     <i class="bi bi-file-earmark-text-fill"></i>
-                                    ${lessonStat.getTotalMaterials()} tài liệu
+                                    ${lessonStat.totalMaterials} materials
                                 </span>
                             </div>
                         </div>

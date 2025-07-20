@@ -45,4 +45,10 @@ public class Quiz {
         this.title = title;
         this.durationMinutes = durationMinutes;
     }
+
+    public void setLessonId(int lessonId) {
+        Lesson lesson = new Lesson();
+        lesson.setId(lessonId);
+        this.lessonID = lesson;
+    }
 }
