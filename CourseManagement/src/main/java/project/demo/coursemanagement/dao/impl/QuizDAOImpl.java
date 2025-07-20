@@ -137,4 +137,76 @@ public class QuizDAOImpl implements QuizDAO {
         }
         return answers;
     }
+
+    @Override
+    public boolean addQuiz(Quiz quiz) {
+        String sql = "INSERT INTO quizzes (LessonID, Title) VALUES (?, ?)";
+        try (Connection conn = project.demo.coursemanagement.utils.DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, quiz.getLessonID().getId());
+            stmt.setString(2, quiz.getTitle());
+
+            int result = stmt.executeUpdate();
+            if (result > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        quiz.setId(rs.getInt(1)); // Set the generated ID back to the quiz object
+                    }
+                }
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean addQuestion(Question question) {
+        String sql = "INSERT INTO questions (QuizID, QuestionText) VALUES (?, ?)";
+        try (Connection conn = project.demo.coursemanagement.utils.DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, question.getQuiz().getId());
+            stmt.setString(2, question.getQuestionText());
+
+            int result = stmt.executeUpdate();
+            if (result > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        question.setId(rs.getInt(1)); // Set the generated ID back to the question object
+                    }
+                }
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean addAnswer(Answer answer) {
+        String sql = "INSERT INTO answers (QuestionID, AnswerText, IsCorrect) VALUES (?, ?, ?)";
+        try (Connection conn = project.demo.coursemanagement.utils.DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, answer.getQuestion().getId());
+            stmt.setString(2, answer.getAnswerText());
+            stmt.setBoolean(3, answer.getIsCorrect());
+
+            int result = stmt.executeUpdate();
+            if (result > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        answer.setId(rs.getInt(1)); // Set the generated ID back to the answer object
+                    }
+                }
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Remove the getNext...Id methods as they are no longer needed
 }

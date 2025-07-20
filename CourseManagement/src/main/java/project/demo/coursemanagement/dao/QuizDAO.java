@@ -12,4 +12,9 @@ public interface QuizDAO {
     List<QuizAttempt> getAttemptsByQuizId(int quizId);
     List<Quiz> getQuizzesByLessonId(int lessonId);
     List<Answer> getAnswersByQuestionId(int questionId);
+
+    // New methods for add quiz functionality
+    boolean addQuiz(Quiz quiz);
+    boolean addQuestion(Question question);
+    boolean addAnswer(Answer answer);
 }

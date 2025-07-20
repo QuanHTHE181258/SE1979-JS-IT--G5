@@ -9,7 +9,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="add feature view quizz details" />
+    <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="add feature view quizz details">
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/AddQuizServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/add-quiz.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/QuizDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/QuizDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/QuizDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/QuizDAOImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/entities/Answer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/entities/Answer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/entities/Question.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/entities/Question.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/entities/Quiz.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/entities/Quiz.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/QuizService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/QuizService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

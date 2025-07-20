@@ -15,6 +15,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "quizzes")
 public class Quiz {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "QuizID", nullable = false)
     private Integer id;
 
@@ -28,5 +29,4 @@ public class Quiz {
     @Nationalized
     @Column(name = "Title")
     private String title;
-
 }
