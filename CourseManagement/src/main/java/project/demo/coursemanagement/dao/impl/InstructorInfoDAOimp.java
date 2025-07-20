@@ -44,31 +44,6 @@ public class InstructorInfoDAOimp implements InstructorInfoDAO {
         return user;
     }
 
-    public List<CourseDTO> getCoursesByInstructorUsername(String username) {
-        List<CourseDTO> courses = new ArrayList<>();
-        String sql = "SELECT c.CourseID, c.Title, c.Description, c.Price, c.Rating, c.Status " +
-                "FROM Courses c JOIN Users u ON c.InstructorID = u.UserID " +
-                "WHERE u.Username = ?";
-        try (Connection con = dbConn.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, username);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                CourseDTO course = new CourseDTO();
-                course.setCourseID(rs.getInt("CourseID"));
-                course.setCourseTitle(rs.getString("Title"));
-                course.setCourseDescription(rs.getString("Description"));
-                course.setPrice(rs.getBigDecimal("Price"));
-                course.setRating(rs.getDouble("Rating"));
-                course.setCourseStatus(rs.getString("Status"));
-                courses.add(course);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return courses;
-    }
-
     public List<CourseDTO> getCoursesByInstructorUsernameAndPage(String username, int page, int size) {
         List<CourseDTO> courses = new ArrayList<>();
         String sql = """
