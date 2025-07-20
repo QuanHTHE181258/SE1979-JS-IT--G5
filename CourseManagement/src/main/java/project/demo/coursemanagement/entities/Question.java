@@ -31,7 +31,8 @@ public class Question {
     @Column(name = "QuestionText")
     private String questionText;
 
-    private List<Answer> answerOptions;
+    @Transient
+    private List<Answer> answers;
 
     public Question() {
     }
@@ -40,5 +41,13 @@ public class Question {
         this.id = id;
         this.quizID = quizID;
         this.questionText = questionText;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
     }
 }

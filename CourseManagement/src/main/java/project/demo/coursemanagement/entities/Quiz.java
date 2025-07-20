@@ -51,4 +51,8 @@ public class Quiz {
         lesson.setId(lessonId);
         this.lessonID = lesson;
     }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
 }
