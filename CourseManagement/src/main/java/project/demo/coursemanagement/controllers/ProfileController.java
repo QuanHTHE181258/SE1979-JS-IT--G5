@@ -31,7 +31,7 @@ import java.util.HashMap;
         maxFileSize = 1024 * 1024 * 5,      // 5 MB
         maxRequestSize = 1024 * 1024 * 10   // 10 MB
 )
-public class ProfileServlet extends HttpServlet {
+public class ProfileController extends HttpServlet {
 
     private ProfileService profileService;
 

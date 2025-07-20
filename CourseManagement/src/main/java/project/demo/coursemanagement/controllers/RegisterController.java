@@ -2,7 +2,6 @@ package project.demo.coursemanagement.controllers
         ;
 
 import project.demo.coursemanagement.entities.User;
-import project.demo.coursemanagement.entities.Role;
 import project.demo.coursemanagement.service.RegisterService;
 import project.demo.coursemanagement.utils.SessionUtil;
 import project.demo.coursemanagement.utils.ValidationUtil;
@@ -24,7 +23,7 @@ import java.time.format.DateTimeParseException;
  * Servlet for handling user registration
  */
 @WebServlet(name = "RegisterServlet", urlPatterns = {"/register"})
-public class RegisterServlet extends HttpServlet {
+public class RegisterController extends HttpServlet {
 
     private RegisterService registerService;
 

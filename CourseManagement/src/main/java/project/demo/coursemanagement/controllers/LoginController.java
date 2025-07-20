@@ -18,7 +18,7 @@ import java.io.IOException;
 
 //Test account: admin / admin123
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
-public class LoginServlet extends HttpServlet {
+public class LoginController extends HttpServlet {
 
     private UserService userService;
 

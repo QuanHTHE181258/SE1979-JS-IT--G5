@@ -14,7 +14,7 @@ import java.io.IOException;
  * Servlet for handling user logout
  */
 @WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"})
-public class LogoutServlet extends HttpServlet {
+public class LogoutController extends HttpServlet {
 
     @Override
     public void init() throws ServletException {

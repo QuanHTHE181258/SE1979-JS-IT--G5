@@ -27,7 +27,7 @@
 
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>project.demo.coursemanagement.controllers.LoginServlet</servlet-class>
+        <servlet-class>project.demo.coursemanagement.controllers.LoginController</servlet-class>
     </servlet>
 
     <servlet>
