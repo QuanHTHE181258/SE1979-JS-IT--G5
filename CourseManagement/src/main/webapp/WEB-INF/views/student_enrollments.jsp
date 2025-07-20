@@ -237,7 +237,7 @@
                             <% } %>
                         </td>
                         <td>
-                            <a href="course-details?id=<%= c.getId() %>" class="btn btn-primary btn-sm btn-action">
+                            <a href="lessons?courseId=<%= c.getId() %>" class="btn btn-primary btn-sm btn-action">
                                 <i class="fas fa-eye"></i> View Details
                             </a>
                             <% if ("COMPLETED".equals(e.getStatus())) { %>

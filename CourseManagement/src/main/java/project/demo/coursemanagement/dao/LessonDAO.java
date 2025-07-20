@@ -5,4 +5,5 @@ import java.util.List;
 
 public interface LessonDAO {
     List<LessonStats> getLessonsWithStatsByCourseId(int courseId);
+    List<LessonStats> getLessonSummaryByCourseId(int courseId);
 }
