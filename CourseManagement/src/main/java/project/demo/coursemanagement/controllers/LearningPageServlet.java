@@ -45,6 +45,21 @@ public class LearningPageServlet extends HttpServlet {
             // Load all lessons for the course for navigation
             List<LessonStats> lessons = lessonDAO.getLessonSummaryByCourseId(lesson.getCourseId());
             request.setAttribute("lessons", lessons);
+            // Also set lessonList for sidebar compatibility
+            List<Lesson> lessonList = lessonDAO.getLessonsByCourseId(lesson.getCourseId());
+            request.setAttribute("lessonList", lessonList);
+            // Find previous and next lessonId
+            Integer prevLessonId = null;
+            Integer nextLessonId = null;
+            for (int i = 0; i < lessonList.size(); i++) {
+                if (lessonList.get(i).getId() == lessonId) {
+                    if (i > 0) prevLessonId = lessonList.get(i - 1).getId();
+                    if (i < lessonList.size() - 1) nextLessonId = lessonList.get(i + 1).getId();
+                    break;
+                }
+            }
+            request.setAttribute("prevLessonId", prevLessonId);
+            request.setAttribute("nextLessonId", nextLessonId);
             request.getRequestDispatcher("/WEB-INF/views/learning-page.jsp").forward(request, response);
         } catch (NumberFormatException e) {
             request.setAttribute("errorMessage", "Invalid lesson ID format.");

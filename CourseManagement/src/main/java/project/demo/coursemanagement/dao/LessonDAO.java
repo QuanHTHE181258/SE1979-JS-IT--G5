@@ -13,4 +13,5 @@ public interface LessonDAO {
     Lesson getLessonById(int lessonId);
     List<Quiz> getQuizzesByLessonId(int lessonId);
     List<Material> getMaterialsByLessonId(int lessonId);
+    List<Lesson> getLessonsByCourseId(int courseId);
 }
