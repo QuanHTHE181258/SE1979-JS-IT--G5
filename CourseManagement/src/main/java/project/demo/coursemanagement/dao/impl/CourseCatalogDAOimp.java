@@ -30,7 +30,7 @@ public class CourseCatalogDAOimp implements CourseCatalogDAO {
         List<Object> params = new ArrayList<>();
 
         if (category != null && !category.isEmpty()) {
-            sql.append(" AND cat.Name = ?");
+            sql.append(" AND cat.Name COLLATE Latin1_General_CI_AI LIKE ?");
             params.add(category);
         }
 
@@ -52,7 +52,7 @@ public class CourseCatalogDAOimp implements CourseCatalogDAO {
         }
 
         if (status != null && !status.isEmpty()) {
-            sql.append(" AND c.Status = ?");
+            sql.append(" AND c.Status COLLATE Latin1_General_CI_AI LIKE ?");
             params.add(status);
         }
 

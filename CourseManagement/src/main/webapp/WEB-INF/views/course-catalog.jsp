@@ -147,35 +147,31 @@
 <form action="courseCatalog" method="get">
     <select name="category">
         <option value="">--Category--</option>
-        <option value="Lập trình">Lập trình</option>
-        <option value="Thiết kế web">Thiết kế web</option>
-        <option value="Cơ sở dữ liệu">Cơ sở dữ liệu</option>
+        <option value="Lập trình" <c:if test="${category == 'Lập trình'}">selected</c:if>>Lập trình</option>
+        <option value="Thiết kế web" <c:if test="${category == 'Thiết kế web'}">selected</c:if>>Thiết kế web</option>
+        <option value="Cơ sở dữ liệu" <c:if test="${category == 'Cơ sở dữ liệu'}">selected</c:if>>Cơ sở dữ liệu</option>
     </select>
 
     <select name="priceRange">
         <option value="">--Price--</option>
-        <option value="0-100000">0 - 100,000</option>
-        <option value="100000-200000">100,000 - 200,000</option>
-        <option value="200000-300000">200,000 - 300,000</option>
-        <option value="300000-400000">300,000 - 400,000</option>
-        <option value="400000-500000">400,000 - 500,000</option>
-        <option value="500000-">500,000+</option>
+        <option value="Free" <c:if test="${priceRange == 'Free'}">selected</c:if>>Miễn phí</option>
+        <option value="Under100000" <c:if test="${priceRange == 'Under100000'}">selected</c:if>>Dưới 100,000</option>
+        <option value="100000to500000" <c:if test="${priceRange == '100000to500000'}">selected</c:if>>100,000 - 500,000</option>
+        <option value="Above500000" <c:if test="${priceRange == 'Above500000'}">selected</c:if>>Trên 500,000</option>
     </select>
 
     <select name="ratingRange">
         <option value="">--Rating--</option>
-        <option value="0-1">0 - 1</option>
-        <option value="1-2">1 - 2</option>
-        <option value="2-3">2 - 3</option>
-        <option value="3-4">3 - 4</option>
-        <option value="4-5">4 - 5</option>
+        <option value="Under2" <c:if test="${ratingRange == 'Under2'}">selected</c:if>>Dưới 2</option>
+        <option value="2to4" <c:if test="${ratingRange == '2to4'}">selected</c:if>>2 - 4</option>
+        <option value="Above4" <c:if test="${ratingRange == 'Above4'}">selected</c:if>>Trên 4</option>
     </select>
 
     <select name="status">
         <option value="">--Status--</option>
-        <option value="active">Active</option>
-        <option value="inactive">Inactive</option>
-        <option value="draft">Draft</option>
+        <option value="active" <c:if test="${status == 'active'}">selected</c:if>>Active</option>
+        <option value="inactive" <c:if test="${status == 'inactive'}">selected</c:if>>Inactive</option>
+        <option value="draft" <c:if test="${status == 'draft'}">selected</c:if>>Draft</option>
     </select>
 
     <button type="submit">Filter</button>
@@ -220,11 +216,7 @@
                         <a class="current">${i}</a>
                     </c:when>
                     <c:otherwise>
-                        <a href="courseCatalog?page=${i}
-                        &category=${category}
-                        &priceRange=${priceRange}
-                        &ratingRange=${ratingRange}
-                        &status=${status}">
+                        <a href="courseCatalog?page=${i}&category=${category}&priceRange=${priceRange}&ratingRange=${ratingRange}&status=${status}">
                                 ${i}
                         </a>
                     </c:otherwise>
