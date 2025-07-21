@@ -33,13 +33,16 @@ public class QuizAttempt {
     @JoinColumn(name = "QuizID", nullable = false)
     private Quiz quiz;
 
-    @Column(name = "AttemptDate")
-    private Date attemptDate;
+    @Column(name = "StartTime")
+    private Date startTime;
+
+    @Column(name = "EndTime")
+    private Date endTime;
+
+
 
     @ColumnDefault("0")
     @Column(name = "Score")
     private Double score;
 
-    @Column(name = "completion_time_minutes")
-    private int completionTimeMinutes;
 }

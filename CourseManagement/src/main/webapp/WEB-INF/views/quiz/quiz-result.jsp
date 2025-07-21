@@ -571,7 +571,8 @@
                             <i class="fas fa-clock"></i>
                         </div>
                         <div class="stat-value text-warning">
-                            <fmt:formatNumber value="${attempt.completionTimeMinutes}" maxFractionDigits="1"/>
+                            <c:set var="completionMins" value="${(attempt.endTime.time - attempt.startTime.time) / 60000}" />
+                            <fmt:formatNumber value="${completionMins}" maxFractionDigits="1"/>
                         </div>
                         <div class="stat-label">Phút hoàn thành</div>
                     </div>
@@ -619,6 +620,14 @@
                                     <span class="text-warning">Thận trọng</span>
                                 </c:otherwise>
                             </c:choose>
+                        </strong>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-between">
+                        <span>Thời gian làm bài:</span>
+                        <strong>
+                            <fmt:formatNumber value="${(attempt.endTime.time - attempt.startTime.time) / 60000}" maxFractionDigits="1"/> phút
                         </strong>
                     </div>
                 </div>
@@ -1021,3 +1030,4 @@
 </script>
 </body>
 </html>
+

@@ -83,16 +83,13 @@ public class QuizDAO {
     // 4. Lưu một lần làm quiz (Quiz_Attempt)
     public int saveQuizAttempt(QuizAttempt attempt) {
         int generatedId = -1;
-        String sql = "INSERT INTO quiz_attempts (AttemptID, UserID, QuizID, AttemptDate, Score, completion_time_minutes) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO quiz_attempts (QuizID, UserID, StartTime, Score) VALUES (?, ?, GETDATE(), ?)";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setInt(1, attempt.getId());
+            ps.setInt(1, attempt.getQuiz().getId());
             ps.setInt(2, attempt.getUser().getId());
-            ps.setInt(3, attempt.getQuiz().getId());
-            ps.setDate(4, new java.sql.Date(attempt.getAttemptDate().getTime()));
-            ps.setDouble(5, attempt.getScore());
-            ps.setInt(6, attempt.getCompletionTimeMinutes());
+            ps.setDouble(3, attempt.getScore());
 
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
@@ -107,13 +104,13 @@ public class QuizDAO {
 
     // 5. Lưu câu trả lời của user (User_Answer)
     public void saveQuestionAttempt(QuestionAttempt aq) {
-        String sql = "INSERT INTO question_attempts (AttemptID, QuestionID, OptionID, IsCorrect) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO question_attempts (AttemptID, QuestionID, SelectedAnswerID, IsCorrect) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, aq.getId().getAttemptID());
             ps.setInt(2, aq.getId().getQuestionID());
-            ps.setInt(3, aq.getAnswer().getId());
+            ps.setInt(3, aq.getAnswer().getId());  // Changed from OptionID to SelectedAnswerID
             ps.setBoolean(4, aq.getIsCorrect());
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -142,15 +139,14 @@ public class QuizDAO {
         return null;
     }
 
-    // 7. Cập nhật điểm (score) và thời gian hoàn thành của lần làm quiz
+    // 7. Cập nhật điểm quiz attempt
     public void updateQuizAttemptScore(QuizAttempt attempt) {
-        String sql = "UPDATE quiz_attempts SET Score = ?, completion_time_minutes = ? WHERE AttemptID = ?";
+        String sql = "UPDATE quiz_attempts SET EndTime = GETDATE(), Score = ? WHERE AttemptID = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setDouble(1, attempt.getScore());
-            ps.setInt(2, attempt.getCompletionTimeMinutes());
-            ps.setInt(3, attempt.getId());
+            ps.setInt(2, attempt.getId());
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -170,9 +166,9 @@ public class QuizDAO {
                         .id(rs.getInt("AttemptID"))
                         .user(User.builder().id(rs.getInt("UserID")).build())
                         .quiz(Quiz.builder().id(rs.getInt("QuizID")).build())
-                        .attemptDate(rs.getDate("AttemptDate"))
+                        .startTime(rs.getTimestamp("StartTime"))
+                        .endTime(rs.getTimestamp("EndTime"))
                         .score(rs.getDouble("Score"))
-                        .completionTimeMinutes(rs.getInt("completion_time_minutes"))
                         .build();
             }
         } catch (SQLException e) {
@@ -184,12 +180,27 @@ public class QuizDAO {
     // 9. Lấy toàn bộ đáp án user chọn trong một lần làm quiz (User_Answer)
     public List<QuestionAttempt> getQuestionAttempt(int attemptId) {
         List<QuestionAttempt> list = new ArrayList<>();
-        String sql = "SELECT * FROM question_attempts WHERE AttemptID = ?";
+        String sql = "SELECT qa.*, q.QuestionText, a.AnswerText " +
+                "FROM question_attempts qa " +
+                "JOIN questions q ON qa.QuestionID = q.QuestionID " +
+                "JOIN answers a ON qa.SelectedAnswerID = a.AnswerID " +
+                "WHERE qa.AttemptID = ?";
+
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, attemptId);
             ResultSet rs = ps.executeQuery();
+
             while (rs.next()) {
+                Question question = Question.builder()
+                        .id(rs.getInt("QuestionID"))
+                        .questionText(rs.getString("QuestionText"))
+                        .build();
+
+                Answer answer = Answer.builder()
+                        .id(rs.getInt("SelectedAnswerID"))
+                        .answerText(rs.getString("AnswerText"))
+                        .build();
 
                 list.add(QuestionAttempt.builder()
                         .id(QuestionAttemptId.builder()
@@ -197,7 +208,9 @@ public class QuizDAO {
                                 .questionID(rs.getInt("QuestionID"))
                                 .build())
                         .attemptID(QuizAttempt.builder().id(rs.getInt("AttemptID")).build())
-                        .questionID(Question.builder().id(rs.getInt("QuestionID")).build())
+                        .questionID(question)
+                        .answer(answer)
+                        .isCorrect(rs.getBoolean("IsCorrect"))
                         .build());
             }
         } catch (SQLException e) {
@@ -276,9 +289,9 @@ public class QuizDAO {
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setInt(2, answer.getQuestionID().getId());
-            ps.setString(3, answer.getAnswerText());
-            ps.setBoolean(4, answer.getIsCorrect());
+            ps.setInt(1, answer.getQuestionID().getId());
+            ps.setString(2, answer.getAnswerText());
+            ps.setBoolean(3, answer.getIsCorrect());
 
             ps.executeUpdate();
 
@@ -623,13 +636,13 @@ public class QuizDAO {
 
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
-                QuizAttempt attempt = new QuizAttempt();
-                attempt.setId(rs.getInt(1));
-                attempt.setQuiz(Quiz.builder().id(quizId).build());
-                attempt.setUser(User.builder().id(userId).build());
-                attempt.setAttemptDate(new Date());
-                attempt.setScore(0.0);
-                return attempt;
+                return QuizAttempt.builder()
+                        .id(rs.getInt(1))
+                        .quiz(Quiz.builder().id(quizId).build())
+                        .user(User.builder().id(userId).build())
+                        .startTime(new Date())
+                        .score(0.0)
+                        .build();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -638,14 +651,12 @@ public class QuizDAO {
     }
 
     // Kết thúc bài thi và cập nhật điểm
-    public void finishAttempt(int attemptId, double score, int completionTime) {
-        String sql = "UPDATE quiz_attempts SET EndTime = GETDATE(), Score = ?, completion_time_minutes = ? WHERE AttemptID = ?";
+    public void finishAttempt(int attemptId, double score) {
+        String sql = "UPDATE quiz_attempts SET EndTime = GETDATE(), Score = ? WHERE AttemptID = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-
             ps.setDouble(1, score);
-            ps.setInt(2, completionTime);
-            ps.setInt(3, attemptId);
+            ps.setInt(2, attemptId);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -654,7 +665,7 @@ public class QuizDAO {
 
     // Lưu câu trả lời của user cho một câu hỏi
     public void saveQuestionAnswer(int attemptId, int questionId, int selectedAnswerId, boolean isCorrect) {
-        String sql = "INSERT INTO question_attempts (AttemptID, QuestionID, SelectedAnswerID, IsCorrect) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO question_attempts (AttemptID, QuestionID, AnswerID, IsCorrect) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -668,53 +679,13 @@ public class QuizDAO {
         }
     }
 
-    // Lấy chi tiết một lần thi
-    public QuizAttempt getAttemptDetails(int attemptId) {
-        String sql = "SELECT a.*, q.Title as QuizTitle, u.Username " +
-                "FROM quiz_attempts a " +
-                "JOIN quizzes q ON a.QuizID = q.QuizID " +
-                "JOIN users u ON a.UserID = u.UserID " +
-                "WHERE a.AttemptID = ?";
-
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, attemptId);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                Quiz quiz = Quiz.builder()
-                        .id(rs.getInt("QuizID"))
-                        .title(rs.getString("QuizTitle"))
-                        .build();
-
-                User user = User.builder()
-                        .id(rs.getInt("UserID"))
-                        .username(rs.getString("Username"))
-                        .build();
-
-                return QuizAttempt.builder()
-                        .id(attemptId)
-                        .quiz(quiz)
-                        .user(user)
-                        .attemptDate(rs.getTimestamp("StartTime"))
-                        .score(rs.getDouble("Score"))
-                        .completionTimeMinutes(rs.getInt("completion_time_minutes"))
-                        .build();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     // Lấy danh sách câu trả lời của user trong một lần thi
     public List<QuestionAttempt> getAttemptAnswers(int attemptId) {
         List<QuestionAttempt> answers = new ArrayList<>();
         String sql = "SELECT qa.*, q.QuestionText, a.AnswerText " +
                 "FROM question_attempts qa " +
                 "JOIN questions q ON qa.QuestionID = q.QuestionID " +
-                "JOIN answers a ON qa.SelectedAnswerID = a.AnswerID " +
+                "JOIN answers a ON qa.AnswerID = a.AnswerID " +
                 "WHERE qa.AttemptID = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -730,7 +701,7 @@ public class QuizDAO {
                         .build();
 
                 Answer answer = Answer.builder()
-                        .id(rs.getInt("SelectedAnswerID"))
+                        .id(rs.getInt("AnswerID"))
                         .answerText(rs.getString("AnswerText"))
                         .build();
 

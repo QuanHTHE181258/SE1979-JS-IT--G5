@@ -79,9 +79,9 @@ public class TakeQuizController extends HttpServlet {
                 return;
             }
 
-            // Create new quiz attempt
+            // Create new quiz attempt with StartTime
             QuizAttempt attempt = quizDAO.createAttempt(quiz.getId(), user.getId());
-
+            System.out.println("[DEBUG] Created new quiz attempt: " + attempt.getId() + " QuizID : " + quiz.getId() + " for user: " + user.getUsername());
             // Get questions and answers
             List<Question> questions = quizDAO.getQuestionsByQuizId(quiz.getId());
             for (Question question : questions) {
@@ -93,9 +93,8 @@ public class TakeQuizController extends HttpServlet {
             // Store in session
             session.setAttribute("currentQuiz", quiz);
             session.setAttribute("currentAttempt", attempt);
-            session.setAttribute("startTime", System.currentTimeMillis());
-            request.setAttribute("quiz", quiz);
 
+            request.setAttribute("quiz", quiz);
             request.getRequestDispatcher("/WEB-INF/views/quiz/take-quiz.jsp").forward(request, response);
 
         } catch (NumberFormatException e) {
@@ -108,15 +107,11 @@ public class TakeQuizController extends HttpServlet {
         HttpSession session = request.getSession();
         QuizAttempt attempt = (QuizAttempt) session.getAttribute("currentAttempt");
         Quiz quiz = (Quiz) session.getAttribute("currentQuiz");
-        Long startTime = (Long) session.getAttribute("startTime");
 
-        if (attempt == null || quiz == null || startTime == null) {
+        if (attempt == null || quiz == null) {
             response.sendRedirect("learning-page");
             return;
         }
-
-        // Calculate completion time
-        int completionTimeMinutes = (int) ((System.currentTimeMillis() - startTime) / (1000 * 60));
 
         try {
             // Get questions and process answers
@@ -145,13 +140,12 @@ public class TakeQuizController extends HttpServlet {
 
             // Calculate and update score
             double score = ((double) correctAnswers / questions.size()) * 100;
-            quizDAO.finishAttempt(attempt.getId(), score, completionTimeMinutes);
+            quizDAO.finishAttempt(attempt.getId(), score);
 
             // Clean up session
             session.removeAttribute("currentQuiz");
             session.removeAttribute("currentAttempt");
-            session.removeAttribute("startTime");
-
+            System.out.println("successfully submitted quiz attempt: " + attempt.getId() + " with score: " + score);
             // Redirect to result page
             response.sendRedirect("take-quiz?action=result&attemptId=" + attempt.getId());
 

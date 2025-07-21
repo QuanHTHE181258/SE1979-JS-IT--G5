@@ -112,17 +112,10 @@
 </head>
 <body class="bg-light">
 <div class="container-fluid">
-    <!-- Timer -->
-    <div class="timer">
-        <i class="fas fa-clock text-primary me-2"></i>
-        <span id="timer">00:00</span>
-    </div>
-
     <div class="quiz-container">
         <!-- Quiz Header -->
         <div class="quiz-header">
             <h1><i class="fas fa-question-circle me-3"></i>${quiz.title}</h1>
-            <p class="mb-0 fs-5">${quiz.description}</p>
         </div>
 
         <!-- Quiz Progress -->
@@ -130,8 +123,8 @@
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <h6 class="mb-0">Tiến độ làm bài</h6>
                 <span class="badge bg-primary fs-6">
-                        <span id="answered">0</span>/<c:out value="${quiz.questions.size()}"/> câu hỏi
-                    </span>
+                    <span id="answered">0</span>/<c:out value="${quiz.questions.size()}"/> câu hỏi
+                </span>
             </div>
             <div class="progress">
                 <div class="progress-bar bg-primary" id="progress" role="progressbar" style="width: 0%"></div>
@@ -151,19 +144,6 @@
                                 <span class="badge bg-primary me-2">${status.index + 1}</span>
                                 Câu hỏi ${status.index + 1}
                             </h5>
-                            <span class="text-muted">
-                                    <c:choose>
-                                        <c:when test="${question.type == 'MULTIPLE_CHOICE'}">
-                                            <i class="fas fa-list-ul"></i> Trắc nghiệm
-                                        </c:when>
-                                        <c:when test="${question.type == 'TRUE_FALSE'}">
-                                            <i class="fas fa-check-double"></i> Đúng/Sai
-                                        </c:when>
-                                        <c:otherwise>
-                                            <i class="fas fa-question"></i>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </span>
                         </div>
                     </div>
                     <div class="question-body">
@@ -217,7 +197,6 @@
                 <p>Bạn có chắc chắn muốn nộp bài không?</p>
                 <p class="text-muted">
                     <strong>Đã trả lời:</strong> <span id="confirmedAnswered">0</span>/<c:out value="${quiz.questions.size()}"/> câu hỏi<br>
-                    <strong>Thời gian:</strong> <span id="confirmedTime">00:00</span>
                 </p>
                 <div class="alert alert-warning">
                     <i class="fas fa-exclamation-circle me-2"></i>
@@ -236,21 +215,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    let startTime = new Date().getTime();
     let totalQuestions = ${quiz.questions.size()};
-
-    // Timer functionality
-    function updateTimer() {
-        const now = new Date().getTime();
-        const elapsed = now - startTime;
-        const minutes = Math.floor(elapsed / 60000);
-        const seconds = Math.floor((elapsed % 60000) / 1000);
-
-        document.getElementById('timer').textContent =
-            String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
-    }
-
-    setInterval(updateTimer, 1000);
 
     // Answer selection
     function selectAnswer(element, questionId, answerId) {
@@ -280,10 +245,8 @@
     // Confirmation modal
     function confirmSubmit() {
         const answeredCount = document.querySelectorAll('input[type="radio"]:checked').length;
-        const currentTime = document.getElementById('timer').textContent;
 
         document.getElementById('confirmedAnswered').textContent = answeredCount;
-        document.getElementById('confirmedTime').textContent = currentTime;
 
         const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
         modal.show();
