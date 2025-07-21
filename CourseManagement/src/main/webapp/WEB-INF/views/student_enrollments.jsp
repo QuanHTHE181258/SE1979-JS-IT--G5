@@ -266,7 +266,39 @@
             </div>
         </div>
     </div>
-</div>
+
+    <!-- Feedback Messages -->
+    <c:if test="${param.message == 'feedback_added'}">
+        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+            <i class="fas fa-check-circle me-2"></i>Thank you for your feedback!
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </c:if>
+
+    <c:if test="${param.error != null}">
+        <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <c:choose>
+                <c:when test="${param.error == 'not_completed'}">
+                    You can only provide feedback for completed courses.
+                </c:when>
+                <c:when test="${param.error == 'already_feedback'}">
+                    You have already provided feedback for this course.
+                </c:when>
+                <c:when test="${param.error == 'feedback_failed'}">
+                    Failed to submit feedback. Please try again.
+                </c:when>
+                <c:when test="${param.error == 'invalid_parameters'}">
+                    Invalid input parameters. Please try again.
+                </c:when>
+                <c:otherwise>
+                    An error occurred. Please try again later.
+                </c:otherwise>
+            </c:choose>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </c:if>
+</div> <!-- Close container -->
 
 <!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
