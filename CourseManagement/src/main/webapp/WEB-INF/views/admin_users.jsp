@@ -81,7 +81,7 @@
                             <i class="fas fa-users-cog fa-3x text-info mb-3"></i>
                             <h5 class="card-title">Manage Users</h5>
                             <p class="card-text text-muted">Go to the user management interface to manage all users in the system</p>
-                            <a href="${pageContext.request.contextPath}/admin/user-management" class="btn btn-info">
+                            <a href="${pageContext.request.contextPath}/admin/user-management/list" class="btn btn-info">
                                 <i class="fas fa-users-cog"></i> Go to User Management
                             </a>
                         </div>

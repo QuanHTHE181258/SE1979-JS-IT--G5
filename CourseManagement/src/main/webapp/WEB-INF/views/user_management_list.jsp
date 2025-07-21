@@ -31,7 +31,7 @@
         </nav>
         <div class="table-container">
             <div class="search-form">
-                <form action="${pageContext.request.contextPath}/admin/user-management" method="get" class="form-inline">
+                <form action="${pageContext.request.contextPath}/admin/user-management/list" method="get" class="form-inline">
                     <input type="text" name="keyword" class="form-control mr-sm-2" placeholder="Search by name or email" value="${keyword}">
                     <button type="submit" class="btn btn-primary">Search</button>
                 </form>
@@ -104,4 +104,4 @@
     </div>
 </div>
 </body>
-</html>
+</html> 

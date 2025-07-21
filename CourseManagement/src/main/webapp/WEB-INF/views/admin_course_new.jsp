@@ -69,30 +69,48 @@
                             </div>
                         </c:if>
 
-                        <form action="${pageContext.request.contextPath}/admin/courses/new" method="POST">
-                            <input type="hidden" name="role" value="COURSE_MANAGER">
-                            
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
-                            </div>
-                             <div class="mb-3">
-                                <label for="fullName" class="form-label">Full Name</label>
-                                <input type="text" class="form-control" id="fullName" name="fullName" required>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary">Create Account</button>
-                                <a href="${pageContext.request.contextPath}/admin/courses" class="btn btn-secondary">Cancel</a>
-                            </div>
-                        </form>
+                        <div class="form-container">
+                            <h2>Create New Course Manager</h2>
+                            <c:if test="${not empty errorMessage}">
+                                <p style="color:red;">${errorMessage}</p>
+                            </c:if>
+                            <form action="${pageContext.request.contextPath}/admin/courses/new" method="post">
+                                <div class="form-group">
+                                    <label for="username">Username:</label>
+                                    <input type="text" id="username" name="username" value="${username}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input type="email" id="email" name="email" value="${email}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password:</label>
+                                    <input type="password" id="password" name="password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="firstName">First Name:</label>
+                                    <input type="text" id="firstName" name="firstName" value="${firstName}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name:</label>
+                                    <input type="text" id="lastName" name="lastName" value="${lastName}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone:</label>
+                                    <input type="text" id="phone" name="phone" value="${phone}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="role">Role:</label>
+                                    <select id="role" name="roleName">
+                                        <option value="CourseManager" selected>Course Manager</option>
+                                    </select>
+                                </div>
+                                <div class="form-actions">
+                                    <a href="${pageContext.request.contextPath}/admin/courses" class="btn btn-secondary">Cancel</a>
+                                    <button type="submit" class="btn btn-primary">Create Account</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

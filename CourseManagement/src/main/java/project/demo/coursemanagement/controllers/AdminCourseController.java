@@ -84,20 +84,13 @@ public class AdminCourseController extends HttpServlet {
             String username = request.getParameter("username");
             String email = request.getParameter("email");
             String password = request.getParameter("password");
-            String fullName = request.getParameter("fullName");
-            String roleName = request.getParameter("role"); // Should be "COURSE_MANAGER"
+            String firstName = request.getParameter("firstName");
+            String lastName = request.getParameter("lastName");
+            String phone = request.getParameter("phone");
+            String roleName = request.getParameter("roleName"); // Đúng với form mới
 
             try {
-                // Assuming fullname is "firstname lastname"
-                String firstName = "";
-                String lastName = "";
-                if (fullName != null && !fullName.trim().isEmpty()) {
-                    String[] names = fullName.trim().split("\\s+", 2);
-                    firstName = names.length > 0 ? names[0] : "";
-                    lastName = names.length > 1 ? names[1] : "";
-                }
-
-                userService.createUser(username, email, password, firstName, lastName, null, roleName);
+                userService.createUser(username, email, password, firstName, lastName, phone, roleName);
                 request.getSession().setAttribute("successMessage", "Course Manager account created successfully!");
                 response.sendRedirect(request.getContextPath() + "/admin/courses");
             } catch (Exception e) {
