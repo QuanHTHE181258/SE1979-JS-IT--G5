@@ -102,15 +102,15 @@ public class UpdateCourseServlet extends HttpServlet {
         } catch (Exception e) {
             errors.put("price", "Invalid price.");
         }
-        Long categoryId = null;
+        Integer categoryId = null;
         try {
-            categoryId = Long.parseLong(categoryIdStr);
+            categoryId = Integer.parseInt(categoryIdStr);
         } catch (Exception e) {
             errors.put("categoryId", "Category is required.");
         }
-        Long instructorId = null;
+        Integer instructorId = null;
         try {
-            instructorId = Long.parseLong(instructorIdStr);
+            instructorId = Integer.parseInt(instructorIdStr);
         } catch (Exception e) {
             errors.put("instructorId", "Instructor is required.");
         }
@@ -162,4 +162,3 @@ public class UpdateCourseServlet extends HttpServlet {
         resp.sendRedirect("view-all");
     }
 }
-

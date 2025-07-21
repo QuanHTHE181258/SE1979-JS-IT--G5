@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 
@@ -21,25 +18,20 @@ public class QuizAttempt {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "QuizID", nullable = false)
-    private Quiz quizID;
+    private Quiz quiz;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "UserID", nullable = false)
-    private User userID;
+    private User user;
 
-    @ColumnDefault("getdate()")
     @Column(name = "StartTime")
     private Instant startTime;
 
     @Column(name = "EndTime")
     private Instant endTime;
 
-    @ColumnDefault("0")
     @Column(name = "Score")
-    private Double score;
-
+    private Integer score;
 }
