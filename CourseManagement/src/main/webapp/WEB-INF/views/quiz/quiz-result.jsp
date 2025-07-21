@@ -667,16 +667,16 @@
 
             <div class="d-flex flex-wrap justify-content-center gap-3">
                 <a href="take-quiz?action=review&attemptId=${attempt.id}"
-                   class="btn btn-custom btn-review">
-                    <i class="fas fa-eye me-2"></i>View answer details
+                   class="btn btn-outline-primary">
+                    <i class="fas fa-search me-2"></i>Review Answers
                 </a>
 
-                <a href="take-quiz?id=${quiz.id}" class="btn btn-custom btn-retake">
-                    <i class="fas fa-redo me-2"></i>Retake quiz
+                <a href="take-quiz?id=${quiz.id}" class="btn btn-outline-warning">
+                    <i class="fas fa-redo me-2"></i>Retake Quiz
                 </a>
 
-                <a href="learning-page" class="btn btn-custom btn-continue">
-                    <i class="fas fa-arrow-right me-2"></i>Continue learning
+                <a href="learning-page" class="btn btn-outline-success">
+                    <i class="fas fa-graduation-cap me-2"></i>Continue Learning
                 </a>
             </div>
         </div>

@@ -38,6 +38,9 @@ public class TakeQuizController extends HttpServlet {
                 case "result":
                     viewResult(request, response);
                     break;
+                case "review":
+                    reviewQuiz(request, response);
+                    break;
                 default:
                     response.sendRedirect("learning-page");
                     break;
@@ -188,6 +191,43 @@ public class TakeQuizController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error in TakeQuizController.viewResult: " + e.getMessage());
+        }
+    }
+
+    private void reviewQuiz(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int attemptId = Integer.parseInt(request.getParameter("attemptId"));
+            QuizAttempt attempt = quizDAO.getQuizAttempt(attemptId);
+
+            if (attempt == null) {
+                response.sendRedirect("learning-page");
+                return;
+            }
+
+            // Get quiz details
+            Quiz quiz = quizDAO.getQuizById(attempt.getQuiz().getId());
+            List<QuestionAttempt> questionAttempts = quizDAO.getAttemptAnswers(attemptId);
+
+            // Get all possible answers for each question to show correct answers
+            for (QuestionAttempt qa : questionAttempts) {
+                List<Answer> allAnswers = quizDAO.getAnswersByQuestionId(qa.getQuestionID().getId());
+                qa.getQuestionID().setAnswers(allAnswers);
+            }
+
+            // Calculate completion time in minutes
+            double completionTimeMinutes = (attempt.getEndTime().getTime() - attempt.getStartTime().getTime()) / (60.0 * 1000);
+
+            request.setAttribute("attempt", attempt);
+            request.setAttribute("quiz", quiz);
+            request.setAttribute("questionAttempts", questionAttempts);
+            request.setAttribute("completionTimeMinutes", completionTimeMinutes);
+            request.getRequestDispatcher("/WEB-INF/views/quiz/review-quiz.jsp").forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error in TakeQuizController.reviewQuiz: " + e.getMessage());
+            response.sendRedirect("learning-page");
         }
     }
 }
