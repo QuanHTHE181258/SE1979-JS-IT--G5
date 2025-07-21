@@ -580,26 +580,26 @@
         </div>
 
         <!-- Time Analysis -->
-        <div class="time-analysis animate__animated animate__fadeInLeft">
-            <h5><i class="fas fa-stopwatch me-2"></i>Time Analysis</h5>
-            <div class="row mt-3">
+        <div class="time-analysis bg-white rounded-3 p-4 mb-4 animate__animated animate__fadeInLeft">
+            <h5 class="text-dark mb-4"><i class="fas fa-stopwatch me-2"></i>Time Analysis</h5>
+            <div class="row g-4">
                 <div class="col-md-6">
-                    <div class="d-flex justify-content-between">
-                        <span>Average time per question:</span>
-                        <strong>
-                            <fmt:formatNumber value="${attempt.completionTimeMinutes * 60 / questionAttempts.size()}" maxFractionDigits="0"/> seconds
+                    <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded">
+                        <span class="fw-medium">Average time per question:</span>
+                        <strong class="text-dark">
+                            <fmt:formatNumber value="${completionTimeMinutes * 60 / questionAttempts.size()}" maxFractionDigits="0"/> seconds
                         </strong>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="d-flex justify-content-between">
-                        <span>Quiz speed:</span>
+                    <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded">
+                        <span class="fw-medium">Quiz speed:</span>
                         <strong>
                             <c:choose>
-                                <c:when test="${attempt.completionTimeMinutes <= 5}">
+                                <c:when test="${completionTimeMinutes <= 5}">
                                     <span class="text-success">Very fast</span>
                                 </c:when>
-                                <c:when test="${attempt.completionTimeMinutes <= 10}">
+                                <c:when test="${completionTimeMinutes <= 10}">
                                     <span class="text-info">Normal</span>
                                 </c:when>
                                 <c:otherwise>
@@ -610,10 +610,10 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="d-flex justify-content-between">
-                        <span>Total quiz time:</span>
-                        <strong>
-                            <fmt:formatNumber value="${(attempt.endTime.time - attempt.startTime.time) / 60000}" maxFractionDigits="1"/> minutes
+                    <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded">
+                        <span class="fw-medium">Total quiz time:</span>
+                        <strong class="text-dark">
+                            <fmt:formatNumber value="${completionTimeMinutes}" maxFractionDigits="1"/> minutes
                         </strong>
                     </div>
                 </div>
@@ -621,56 +621,51 @@
         </div>
 
         <!-- Question Summary -->
-        <div class="question-summary animate__animated animate__fadeInRight">
-            <div class="question-summary-header">
-                <h5 class="mb-0">
+        <div class="question-summary bg-white rounded-3 overflow-hidden mb-4 animate__animated animate__fadeInRight">
+            <div class="question-summary-header bg-light p-4 border-bottom">
+                <h5 class="mb-0 text-dark">
                     <i class="fas fa-list-check me-2"></i>
                     Answer Overview
                     <span class="badge bg-secondary ms-2">${questionAttempts.size()} questions</span>
                 </h5>
             </div>
             <c:forEach var="qa" items="${questionAttempts}" varStatus="status">
-                <div class="question-item">
-                    <div class="question-number ${qa.isCorrect ? 'correct' : 'incorrect'}">
-                        <c:choose>
-                            <c:when test="${qa.isCorrect}">
-                                <i class="fas fa-check"></i>
-                            </c:when>
-                            <c:otherwise>
-                                <i class="fas fa-times"></i>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                    <div class="question-content">
-                        <div class="question-title">Question ${status.index + 1}</div>
-                        <p class="question-text">${qa.question.questionText}</p>
-                    </div>
-                    <div class="text-end">
-                        <c:choose>
-                            <c:when test="${qa.isCorrect}">
-                                    <span class="badge bg-success fs-6 px-3 py-2">
+                <div class="question-item p-4 border-bottom">
+                    <div class="d-flex align-items-center">
+                        <div class="question-number rounded-circle d-flex align-items-center justify-content-center me-4 ${qa.isCorrect ? 'bg-success' : 'bg-danger'} text-white">
+                            ${status.index + 1}
+                        </div>
+                        <div class="question-content flex-grow-1">
+                            <h6 class="mb-2 text-dark">Question ${status.index + 1}</h6>
+                            <p class="mb-0 text-secondary">${qa.questionID.questionText}</p>
+                        </div>
+                        <div class="ms-3">
+                            <c:choose>
+                                <c:when test="${qa.isCorrect}">
+                                    <span class="badge bg-success px-3 py-2">
                                         <i class="fas fa-check me-1"></i>Correct
                                     </span>
-                            </c:when>
-                            <c:otherwise>
-                                    <span class="badge bg-danger fs-6 px-3 py-2">
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="badge bg-danger px-3 py-2">
                                         <i class="fas fa-times me-1"></i>Incorrect
                                     </span>
-                            </c:otherwise>
-                        </c:choose>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
                     </div>
                 </div>
             </c:forEach>
         </div>
 
         <!-- Action Buttons -->
-        <div class="action-buttons animate__animated animate__fadeInUp">
+        <div class="action-buttons bg-white rounded-3 p-5 text-center animate__animated animate__fadeInUp">
             <div class="mb-4">
                 <i class="fas fa-lightbulb text-warning me-2"></i>
                 <strong>Next step:</strong> You can review details, retake the quiz, or continue learning
             </div>
 
-            <div class="d-flex flex-wrap justify-content-center">
+            <div class="d-flex flex-wrap justify-content-center gap-3">
                 <a href="take-quiz?action=review&attemptId=${attempt.id}"
                    class="btn btn-custom btn-review">
                     <i class="fas fa-eye me-2"></i>View answer details
@@ -683,38 +678,34 @@
                 <a href="learning-page" class="btn btn-custom btn-continue">
                     <i class="fas fa-arrow-right me-2"></i>Continue learning
                 </a>
-
-                <button class="btn btn-custom btn-share" onclick="shareResult()">
-                    <i class="fas fa-share me-2"></i>Share result
-                </button>
             </div>
         </div>
 
         <!-- Motivational Message -->
-        <div class="text-center">
+        <div class="text-center mt-4">
             <c:choose>
                 <c:when test="${attempt.score >= 90}">
                     <div class="alert alert-excellent motivational-message animate__animated animate__bounceIn">
                         <i class="fas fa-crown me-2"></i>
-                        <strong>Excellent!</strong> You have demonstrated outstanding knowledge! Keep it up and challenge yourself with harder topics!
+                        <strong>Excellent!</strong> You have demonstrated outstanding knowledge! Keep it up!
                     </div>
                 </c:when>
                 <c:when test="${attempt.score >= 70}">
                     <div class="alert alert-good motivational-message animate__animated animate__bounceIn">
                         <i class="fas fa-star me-2"></i>
-                        <strong>Great!</strong> You have mastered the basics and can confidently move forward! Try harder quizzes!
+                        <strong>Great!</strong> You've mastered the basics! Try harder quizzes!
                     </div>
                 </c:when>
                 <c:when test="${attempt.score >= 50}">
                     <div class="alert alert-average motivational-message animate__animated animate__bounceIn">
                         <i class="fas fa-book-open me-2"></i>
-                        <strong>Almost there!</strong> You have understood most of the content. Review the missing parts and try again!
+                        <strong>Almost there!</strong> Review and try again!
                     </div>
                 </c:when>
                 <c:otherwise>
                     <div class="alert alert-poor motivational-message animate__animated animate__bounceIn">
                         <i class="fas fa-heart me-2"></i>
-                        <strong>Don't give up!</strong> Every failure is an opportunity to learn. Review the lessons, do more exercises, and try again! You will succeed!
+                        <strong>Don't give up!</strong> Every attempt is a learning opportunity!
                     </div>
                 </c:otherwise>
             </c:choose>
@@ -1016,4 +1007,3 @@
 </script>
 </body>
 </html>
-

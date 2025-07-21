@@ -157,7 +157,7 @@ public class TakeQuizController extends HttpServlet {
             throws ServletException, IOException {
         try {
             int attemptId = Integer.parseInt(request.getParameter("attemptId"));
-            QuizAttempt attempt = quizDAO.getQuizAttempt(attemptId); // Sửa lại đúng hàm lấy attempt
+            QuizAttempt attempt = quizDAO.getQuizAttempt(attemptId);
 
             if (attempt == null) {
                 int lessonId = Integer.parseInt(request.getParameter("lessonId"));
@@ -169,9 +169,20 @@ public class TakeQuizController extends HttpServlet {
             Quiz quiz = quizDAO.getQuizById(attempt.getQuiz().getId());
             List<QuestionAttempt> questionAttempts = quizDAO.getAttemptAnswers(attemptId);
 
+            // Calculate completion time in minutes for time analysis
+            double completionTimeMinutes = (attempt.getEndTime().getTime() - attempt.getStartTime().getTime()) / (60.0 * 1000);
+            attempt.setCompletionTimeMinutes(completionTimeMinutes);
+
+            System.out.println("Debug - Time Analysis Data:");
+            System.out.println("Start Time: " + attempt.getStartTime());
+            System.out.println("End Time: " + attempt.getEndTime());
+            System.out.println("Completion Time (minutes): " + completionTimeMinutes);
+            System.out.println("Questions Count: " + questionAttempts.size());
+
             request.setAttribute("attempt", attempt);
             request.setAttribute("quiz", quiz);
             request.setAttribute("questionAttempts", questionAttempts);
+            request.setAttribute("completionTimeMinutes", completionTimeMinutes);
             request.getRequestDispatcher("/WEB-INF/views/quiz/quiz-result.jsp").forward(request, response);
 
         } catch (Exception e) {

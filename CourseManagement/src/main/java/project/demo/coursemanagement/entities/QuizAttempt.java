@@ -39,7 +39,8 @@ public class QuizAttempt {
     @Column(name = "EndTime")
     private Date endTime;
 
-
+    @Transient
+    private Double completionTimeMinutes;
 
     @ColumnDefault("0")
     @Column(name = "Score")
