@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Làm bài quiz - ${quiz.title}</title>
+    <title>Take Quiz - ${quiz.title}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -121,9 +121,9 @@
         <!-- Quiz Progress -->
         <div class="quiz-progress">
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <h6 class="mb-0">Tiến độ làm bài</h6>
+                <h6 class="mb-0">Quiz Progress</h6>
                 <span class="badge bg-primary fs-6">
-                    <span id="answered">0</span>/<c:out value="${quiz.questions.size()}"/> câu hỏi
+                    <span id="answered">0</span>/<c:out value="${quiz.questions.size()}"/> questions
                 </span>
             </div>
             <div class="progress">
@@ -142,7 +142,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">
                                 <span class="badge bg-primary me-2">${status.index + 1}</span>
-                                Câu hỏi ${status.index + 1}
+                                Question ${status.index + 1}
                             </h5>
                         </div>
                     </div>
@@ -172,10 +172,10 @@
             <div class="submit-section">
                 <div class="mb-4">
                     <i class="fas fa-info-circle text-info me-2"></i>
-                    <span class="text-muted">Vui lòng kiểm tra lại các câu trả lời trước khi nộp bài</span>
+                    <span class="text-muted">Please review your answers before submitting.</span>
                 </div>
                 <button type="button" class="btn btn-submit" onclick="confirmSubmit()">
-                    <i class="fas fa-paper-plane me-2"></i>Nộp bài
+                    <i class="fas fa-paper-plane me-2"></i>Submit
                 </button>
             </div>
         </form>
@@ -189,24 +189,24 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="fas fa-exclamation-triangle text-warning me-2"></i>
-                    Xác nhận nộp bài
+                    Confirm Submission
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>Bạn có chắc chắn muốn nộp bài không?</p>
+                <p>Are you sure you want to submit your quiz?</p>
                 <p class="text-muted">
-                    <strong>Đã trả lời:</strong> <span id="confirmedAnswered">0</span>/<c:out value="${quiz.questions.size()}"/> câu hỏi<br>
+                    <strong>Answered:</strong> <span id="confirmedAnswered">0</span>/<c:out value="${quiz.questions.size()}"/> questions<br>
                 </p>
                 <div class="alert alert-warning">
                     <i class="fas fa-exclamation-circle me-2"></i>
-                    Sau khi nộp bài, bạn không thể thay đổi câu trả lời!
+                    After submitting, you cannot change your answers!
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary" onclick="submitQuiz()">
-                    <i class="fas fa-paper-plane me-2"></i>Nộp bài
+                    <i class="fas fa-paper-plane me-2"></i>Submit
                 </button>
             </div>
         </div>
@@ -260,7 +260,7 @@
     // Prevent accidental page refresh
     window.addEventListener('beforeunload', function(e) {
         e.preventDefault();
-        e.returnValue = 'Bạn có chắc muốn rời khỏi trang? Dữ liệu làm bài có thể bị mất.';
+        e.returnValue = 'Are you sure you want to leave this page? Your quiz data may be lost.';
     });
 
     // Initialize progress on page load

@@ -665,7 +665,7 @@ public class QuizDAO {
 
     // Lưu câu trả lời của user cho một câu hỏi
     public void saveQuestionAnswer(int attemptId, int questionId, int selectedAnswerId, boolean isCorrect) {
-        String sql = "INSERT INTO question_attempts (AttemptID, QuestionID, AnswerID, IsCorrect) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO question_attempts (AttemptID, QuestionID, SelectedAnswerID, IsCorrect) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -685,7 +685,7 @@ public class QuizDAO {
         String sql = "SELECT qa.*, q.QuestionText, a.AnswerText " +
                 "FROM question_attempts qa " +
                 "JOIN questions q ON qa.QuestionID = q.QuestionID " +
-                "JOIN answers a ON qa.AnswerID = a.AnswerID " +
+                "JOIN answers a ON qa.SelectedAnswerID = a.AnswerID " +
                 "WHERE qa.AttemptID = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -701,7 +701,7 @@ public class QuizDAO {
                         .build();
 
                 Answer answer = Answer.builder()
-                        .id(rs.getInt("AnswerID"))
+                        .id(rs.getInt("SelectedAnswerID"))
                         .answerText(rs.getString("AnswerText"))
                         .build();
 

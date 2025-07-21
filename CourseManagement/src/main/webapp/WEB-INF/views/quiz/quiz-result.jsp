@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kết quả quiz - ${quiz.title}</title>
+    <title>Quiz Result - ${quiz.title}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
@@ -470,7 +470,7 @@
     <div class="result-container">
         <!-- Result Header -->
         <div class="result-header animate__animated animate__fadeInDown">
-            <h1 class="mb-4"><i class="fas fa-trophy me-3"></i>Kết quả Quiz</h1>
+            <h1 class="mb-4"><i class="fas fa-trophy me-3"></i>Quiz Result</h1>
             <h3 class="mb-4">${quiz.title}</h3>
 
             <!-- Score Display -->
@@ -507,16 +507,16 @@
                     </c:choose>">
                 <c:choose>
                     <c:when test="${attempt.score >= 90}">
-                        <i class="fas fa-crown me-2"></i>Xuất sắc!
+                        <i class="fas fa-crown me-2"></i>Excellent!
                     </c:when>
                     <c:when test="${attempt.score >= 70}">
-                        <i class="fas fa-thumbs-up me-2"></i>Tốt lắm!
+                        <i class="fas fa-thumbs-up me-2"></i>Great!
                     </c:when>
                     <c:when test="${attempt.score >= 50}">
-                        <i class="fas fa-hand-paper me-2"></i>Khá ổn
+                        <i class="fas fa-hand-paper me-2"></i>Almost there!
                     </c:when>
                     <c:otherwise>
-                        <i class="fas fa-redo me-2"></i>Cần cố gắng thêm
+                        <i class="fas fa-redo me-2"></i>Don't give up!
                     </c:otherwise>
                 </c:choose>
             </div>
@@ -524,7 +524,7 @@
 
         <!-- Statistics -->
         <div class="stats-card animate__animated animate__fadeInUp">
-            <h5 class="text-center mb-4"><i class="fas fa-chart-bar me-2"></i>Thống kê chi tiết</h5>
+            <h5 class="text-center mb-4"><i class="fas fa-chart-bar me-2"></i>Detailed Statistics</h5>
             <div class="row">
                 <div class="col-md-3 col-6">
                     <div class="stat-item">
@@ -540,7 +540,7 @@
                             </c:forEach>
                             ${correctCount}
                         </div>
-                        <div class="stat-label">Trả lời đúng</div>
+                        <div class="stat-label">Correct Answers</div>
                     </div>
                 </div>
                 <div class="col-md-3 col-6">
@@ -551,7 +551,7 @@
                         <div class="stat-value text-danger">
                             ${questionAttempts.size() - correctCount}
                         </div>
-                        <div class="stat-label">Trả lời sai</div>
+                        <div class="stat-label">Incorrect Answers</div>
                     </div>
                 </div>
                 <div class="col-md-3 col-6">
@@ -562,7 +562,7 @@
                         <div class="stat-value text-info">
                             ${questionAttempts.size()}
                         </div>
-                        <div class="stat-label">Tổng câu hỏi</div>
+                        <div class="stat-label">Total Questions</div>
                     </div>
                 </div>
                 <div class="col-md-3 col-6">
@@ -574,14 +574,14 @@
                             <c:set var="completionMins" value="${(attempt.endTime.time - attempt.startTime.time) / 60000}" />
                             <fmt:formatNumber value="${completionMins}" maxFractionDigits="1"/>
                         </div>
-                        <div class="stat-label">Phút hoàn thành</div>
+                        <div class="stat-label">Completion Minutes</div>
                     </div>
                 </div>
             </div>
 
             <!-- Accuracy percentage -->
             <div class="text-center mt-4">
-                <h6 class="text-muted mb-2">Tỷ lệ chính xác</h6>
+                <h6 class="text-muted mb-2">Accuracy Rate</h6>
                 <div class="display-6 fw-bold
                         <c:choose>
                             <c:when test="${attempt.score >= 70}">text-success</c:when>
@@ -595,29 +595,29 @@
 
         <!-- Time Analysis -->
         <div class="time-analysis animate__animated animate__fadeInLeft">
-            <h5><i class="fas fa-stopwatch me-2"></i>Phân tích thời gian</h5>
+            <h5><i class="fas fa-stopwatch me-2"></i>Time Analysis</h5>
             <div class="row mt-3">
                 <div class="col-md-6">
                     <div class="d-flex justify-content-between">
-                        <span>Thời gian trung bình mỗi câu:</span>
+                        <span>Average time per question:</span>
                         <strong>
-                            <fmt:formatNumber value="${attempt.completionTimeMinutes * 60 / questionAttempts.size()}" maxFractionDigits="0"/> giây
+                            <fmt:formatNumber value="${attempt.completionTimeMinutes * 60 / questionAttempts.size()}" maxFractionDigits="0"/> seconds
                         </strong>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="d-flex justify-content-between">
-                        <span>Tốc độ làm bài:</span>
+                        <span>Quiz speed:</span>
                         <strong>
                             <c:choose>
                                 <c:when test="${attempt.completionTimeMinutes <= 5}">
-                                    <span class="text-success">Rất nhanh</span>
+                                    <span class="text-success">Very fast</span>
                                 </c:when>
                                 <c:when test="${attempt.completionTimeMinutes <= 10}">
-                                    <span class="text-info">Bình thường</span>
+                                    <span class="text-info">Normal</span>
                                 </c:when>
                                 <c:otherwise>
-                                    <span class="text-warning">Thận trọng</span>
+                                    <span class="text-warning">Careful</span>
                                 </c:otherwise>
                             </c:choose>
                         </strong>
@@ -625,9 +625,9 @@
                 </div>
                 <div class="col-md-6">
                     <div class="d-flex justify-content-between">
-                        <span>Thời gian làm bài:</span>
+                        <span>Total quiz time:</span>
                         <strong>
-                            <fmt:formatNumber value="${(attempt.endTime.time - attempt.startTime.time) / 60000}" maxFractionDigits="1"/> phút
+                            <fmt:formatNumber value="${(attempt.endTime.time - attempt.startTime.time) / 60000}" maxFractionDigits="1"/> minutes
                         </strong>
                     </div>
                 </div>
@@ -639,8 +639,8 @@
             <div class="question-summary-header">
                 <h5 class="mb-0">
                     <i class="fas fa-list-check me-2"></i>
-                    Tổng quan câu trả lời
-                    <span class="badge bg-secondary ms-2">${questionAttempts.size()} câu</span>
+                    Answer Overview
+                    <span class="badge bg-secondary ms-2">${questionAttempts.size()} questions</span>
                 </h5>
             </div>
             <c:forEach var="qa" items="${questionAttempts}" varStatus="status">
@@ -656,19 +656,19 @@
                         </c:choose>
                     </div>
                     <div class="question-content">
-                        <div class="question-title">Câu ${status.index + 1}</div>
+                        <div class="question-title">Question ${status.index + 1}</div>
                         <p class="question-text">${qa.question.questionText}</p>
                     </div>
                     <div class="text-end">
                         <c:choose>
                             <c:when test="${qa.isCorrect}">
                                     <span class="badge bg-success fs-6 px-3 py-2">
-                                        <i class="fas fa-check me-1"></i>Đúng
+                                        <i class="fas fa-check me-1"></i>Correct
                                     </span>
                             </c:when>
                             <c:otherwise>
                                     <span class="badge bg-danger fs-6 px-3 py-2">
-                                        <i class="fas fa-times me-1"></i>Sai
+                                        <i class="fas fa-times me-1"></i>Incorrect
                                     </span>
                             </c:otherwise>
                         </c:choose>
@@ -681,25 +681,25 @@
         <div class="action-buttons animate__animated animate__fadeInUp">
             <div class="mb-4">
                 <i class="fas fa-lightbulb text-warning me-2"></i>
-                <strong>Bước tiếp theo:</strong> Bạn có thể xem lại chi tiết, làm lại bài quiz hoặc tiếp tục học tập
+                <strong>Next step:</strong> You can review details, retake the quiz, or continue learning
             </div>
 
             <div class="d-flex flex-wrap justify-content-center">
                 <a href="take-quiz?action=review&attemptId=${attempt.id}"
                    class="btn btn-custom btn-review">
-                    <i class="fas fa-eye me-2"></i>Xem chi tiết đáp án
+                    <i class="fas fa-eye me-2"></i>View answer details
                 </a>
 
                 <a href="take-quiz?id=${quiz.id}" class="btn btn-custom btn-retake">
-                    <i class="fas fa-redo me-2"></i>Làm lại bài quiz
+                    <i class="fas fa-redo me-2"></i>Retake quiz
                 </a>
 
                 <a href="learning-page" class="btn btn-custom btn-continue">
-                    <i class="fas fa-arrow-right me-2"></i>Tiếp tục học tập
+                    <i class="fas fa-arrow-right me-2"></i>Continue learning
                 </a>
 
                 <button class="btn btn-custom btn-share" onclick="shareResult()">
-                    <i class="fas fa-share me-2"></i>Chia sẻ kết quả
+                    <i class="fas fa-share me-2"></i>Share result
                 </button>
             </div>
         </div>
@@ -710,25 +710,25 @@
                 <c:when test="${attempt.score >= 90}">
                     <div class="alert alert-excellent motivational-message animate__animated animate__bounceIn">
                         <i class="fas fa-crown me-2"></i>
-                        <strong>Xuất sắc!</strong> Bạn đã thể hiện sự hiểu biết vượt trội! Hãy tiếp tục phát huy và thử thách bản thân với những chủ đề khó hơn!
+                        <strong>Excellent!</strong> You have demonstrated outstanding knowledge! Keep it up and challenge yourself with harder topics!
                     </div>
                 </c:when>
                 <c:when test="${attempt.score >= 70}">
                     <div class="alert alert-good motivational-message animate__animated animate__bounceIn">
                         <i class="fas fa-star me-2"></i>
-                        <strong>Tuyệt vời!</strong> Bạn đã nắm vững kiến thức cơ bản và có thể tự tin bước tiếp! Hãy thử những bài khó hơn nhé!
+                        <strong>Great!</strong> You have mastered the basics and can confidently move forward! Try harder quizzes!
                     </div>
                 </c:when>
                 <c:when test="${attempt.score >= 50}">
                     <div class="alert alert-average motivational-message animate__animated animate__bounceIn">
                         <i class="fas fa-book-open me-2"></i>
-                        <strong>Còn một chút nữa thôi!</strong> Bạn đã hiểu được phần lớn nội dung. Hãy ôn tập thêm các phần còn thiếu và thử lại nhé!
+                        <strong>Almost there!</strong> You have understood most of the content. Review the missing parts and try again!
                     </div>
                 </c:when>
                 <c:otherwise>
                     <div class="alert alert-poor motivational-message animate__animated animate__bounceIn">
                         <i class="fas fa-heart me-2"></i>
-                        <strong>Đừng bỏ cuộc!</strong> Mỗi lần thất bại đều là cơ hội để học hỏi. Hãy xem lại bài học, làm thêm bài tập và thử lại! Bạn sẽ thành công!
+                        <strong>Don't give up!</strong> Every failure is an opportunity to learn. Review the lessons, do more exercises, and try again! You will succeed!
                     </div>
                 </c:otherwise>
             </c:choose>
@@ -804,7 +804,7 @@
     // Toast notification
     function showToast(message, type) {
         const toast = document.createElement('div');
-        toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0`;
+        toast.className = `toast align-items-center text-white bg-${type == 'success' ? 'success' : 'danger'} border-0`;
         toast.style.position = 'fixed';
         toast.style.top = '20px';
         toast.style.right = '20px';
@@ -813,7 +813,7 @@
         toast.innerHTML = `
                 <div class="d-flex">
                     <div class="toast-body">
-                        <i class="fas fa-${type === 'success' ? 'check' : 'exclamation-triangle'} me-2"></i>
+                        <i class="fas fa-${type == 'success' ? 'check' : 'exclamation-triangle'} me-2"></i>
                         ${message}
                     </div>
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="this.parentElement.parentElement.remove()"></button>

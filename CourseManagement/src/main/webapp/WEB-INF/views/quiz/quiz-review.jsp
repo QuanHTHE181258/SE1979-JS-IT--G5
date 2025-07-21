@@ -296,38 +296,38 @@
 
     <!-- Questions Review -->
     <c:forEach var="question" items="${quiz.questions}" varStatus="questionStatus">
-      <c:set var="userAnswer" value="${null}" />
-      <c:set var="isCorrectAnswer" value="false" />
+                <c:set var="userAnswer" value="${null}" />
+                <c:set var="isCorrectAnswer" value="false" />
 
-      <!-- Find user's answer for this question -->
-      <c:forEach var="qa" items="${questionAttempts}">
-        <c:if test="${qa.question.id == question.id}">
-          <c:set var="userAnswer" value="${qa}" />
-          <c:set var="isCorrectAnswer" value="${qa.isCorrect}" />
-        </c:if>
-      </c:forEach>
+                <!-- Find user's answer for this question -->
+                <c:forEach var="qa" items="${questionAttempts}">
+                    <c:if test="${qa.questionID.id == question.id}">
+                        <c:set var="userAnswer" value="${qa}" />
+                        <c:set var="isCorrectAnswer" value="${qa.isCorrect}" />
+                    </c:if>
+                </c:forEach>
 
-      <div class="question-review ${isCorrectAnswer ? 'correct' : 'incorrect'}"
-           id="question${questionStatus.index + 1}">
-        <div class="question-header-review">
-          <div class="question-stats">
-            <h5 class="mb-0">
-              <span class="badge bg-primary me-2">${questionStatus.index + 1}</span>
-              Câu hỏi ${questionStatus.index + 1}
-            </h5>
-            <c:choose>
-              <c:when test="${isCorrectAnswer}">
+                <div class="question-review ${isCorrectAnswer ? 'correct' : 'incorrect'}"
+                     id="question${questionStatus.index + 1}">
+                    <div class="question-header-review">
+                        <div class="question-stats">
+                            <h5 class="mb-0">
+                                <span class="badge bg-primary me-2">${questionStatus.index + 1}</span>
+                                Câu hỏi ${questionStatus.index + 1}
+                            </h5>
+                            <c:choose>
+                                <c:when test="${isCorrectAnswer}">
                                     <span class="stat-badge badge-correct">
                                         <i class="fas fa-check me-1"></i>Đúng
                                     </span>
-              </c:when>
-              <c:otherwise>
+                                </c:when>
+                                <c:otherwise>
                                     <span class="stat-badge badge-incorrect">
                                         <i class="fas fa-times me-1"></i>Sai
                                     </span>
-              </c:otherwise>
-            </c:choose>
-            <span class="text-muted">
+                                </c:otherwise>
+                            </c:choose>
+                            <span class="text-muted">
                                 <c:choose>
                                   <c:when test="${question.type == 'MULTIPLE_CHOICE'}">
                                     <i class="fas fa-list-ul me-1"></i>Trắc nghiệm
@@ -337,54 +337,54 @@
                                   </c:when>
                                 </c:choose>
                             </span>
-          </div>
-        </div>
+                        </div>
+                    </div>
 
-        <div class="question-body-review">
-          <h6 class="question-text mb-4">${question.questionText}</h6>
+                    <div class="question-body-review">
+                        <h6 class="question-text mb-4">${question.questionText}</h6>
 
-          <div class="answers">
-            <c:forEach var="answer" items="${question.answers}" varStatus="answerStatus">
-              <div class="answer-review
+                        <div class="answers">
+                            <c:forEach var="answer" items="${question.answers}" varStatus="answerStatus">
+                                <div class="answer-review
                                     <c:if test="${answer.isCorrect}">correct-answer</c:if>
-                                    <c:if test="${userAnswer != null && userAnswer.selectedAnswer.id == answer.id}">
+                                    <c:if test="${userAnswer != null && userAnswer.answer.id == answer.id}">
                                         user-answer ${userAnswer.isCorrect ? 'correct' : 'incorrect'}
                                     </c:if>">
 
                                     <span class="fw-semibold me-3">
                                         ${answerStatus.index == 0 ? 'A' : answerStatus.index == 1 ? 'B' : answerStatus.index == 2 ? 'C' : 'D'}.
                                     </span>
-                <span class="flex-grow-1">${answer.answerText}</span>
+                                    <span class="flex-grow-1">${answer.answerText}</span>
 
-                <div class="answer-icon">
-                  <c:choose>
-                    <c:when test="${answer.isCorrect}">
-                      <i class="fas fa-check-circle text-success" title="Đáp án đúng"></i>
-                    </c:when>
-                    <c:when test="${userAnswer != null && userAnswer.selectedAnswer.id == answer.id && !userAnswer.isCorrect}">
-                      <i class="fas fa-times-circle text-danger" title="Câu trả lời của bạn"></i>
-                    </c:when>
-                    <c:when test="${userAnswer != null && userAnswer.selectedAnswer.id == answer.id && userAnswer.isCorrect}">
-                      <i class="fas fa-user-check text-success" title="Câu trả lời đúng của bạn"></i>
-                    </c:when>
-                  </c:choose>
+                                    <div class="answer-icon">
+                                        <c:choose>
+                                            <c:when test="${answer.isCorrect}">
+                                                <i class="fas fa-check-circle text-success" title="Đáp án đúng"></i>
+                                            </c:when>
+                                            <c:when test="${userAnswer != null && userAnswer.answer.id == answer.id && !userAnswer.isCorrect}">
+                                                <i class="fas fa-times-circle text-danger" title="Câu trả lời của bạn"></i>
+                                            </c:when>
+                                            <c:when test="${userAnswer != null && userAnswer.answer.id == answer.id && userAnswer.isCorrect}">
+                                                <i class="fas fa-user-check text-success" title="Câu trả lời đúng của bạn"></i>
+                                            </c:when>
+                                        </c:choose>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </div>
+
+                        <!-- Explanation (if available) -->
+                        <c:if test="${not empty question.explanation}">
+                            <div class="explanation-box">
+                                <h6 class="text-warning">
+                                    <i class="fas fa-lightbulb me-2"></i>Giải thích:
+                                </h6>
+                                <p class="mb-0">${question.explanation}</p>
+                            </div>
+                        </c:if>
+                    </div>
                 </div>
-              </div>
             </c:forEach>
-          </div>
-
-          <!-- Explanation (if available) -->
-          <c:if test="${not empty question.explanation}">
-            <div class="explanation-box">
-              <h6 class="text-warning">
-                <i class="fas fa-lightbulb me-2"></i>Giải thích:
-              </h6>
-              <p class="mb-0">${question.explanation}</p>
-            </div>
-          </c:if>
-        </div>
-      </div>
-    </c:forEach>
 
     <!-- Action Buttons -->
     <div class="action-buttons">
@@ -467,7 +467,7 @@
     });
 
     navLinks.forEach((link, index) => {
-      if (index === currentQuestion) {
+      if (index == currentQuestion) {
         link.classList.add('active');
       } else {
         link.classList.remove('active');

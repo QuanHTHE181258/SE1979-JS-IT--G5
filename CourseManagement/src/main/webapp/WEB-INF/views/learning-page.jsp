@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f8f9fa;
+            background-color: #f5f5f5;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .main-container {
@@ -21,8 +21,8 @@
             overflow: visible;
         }
         .lesson-header {
-            background: #FF7F7F;
-            color: white;
+            background: #e0e0e0;
+            color: #222;
             padding: 2rem;
             text-align: center;
             border-radius: 0;
@@ -37,14 +37,14 @@
             font-size: 1rem;
         }
         .sidebar {
-            background: #f3f6fb;
-            border-right: 1px solid #e3e6f0;
+            background: #f5f5f5;
+            border-right: 1px solid #e0e0e0;
             min-height: 600px;
             border-radius: 0;
         }
         .sidebar-header {
-            background: #6c63ff;
-            color: white;
+            background: #bdbdbd;
+            color: #222;
             padding: 1rem;
             font-weight: 600;
             border-radius: 0;
@@ -58,29 +58,29 @@
             display: block;
             padding: 0.75rem 1rem;
             margin-bottom: 0.5rem;
-            color: #6c63ff;
+            color: #333;
             text-decoration: none;
             border-radius: 0;
-            border: 1px solid #e3e6f0;
-            background: #eaf0fb;
+            border: 1px solid #e0e0e0;
+            background: #f7f7f7;
             transition: all 0.3s ease;
         }
         .lesson-nav-item:hover {
-            background: #d1e2fa;
-            color: #2d9cdb;
+            background: #ededed;
+            color: #111;
             transform: none;
         }
         .lesson-nav-item.active {
-            background: #2d9cdb;
-            color: white;
-            border-color: #2d9cdb;
+            background: #bdbdbd;
+            color: #222;
+            border-color: #bdbdbd;
         }
         .content-area {
             padding: 2rem;
         }
         .lesson-content {
-            background: #f8f9fa;
-            border: 1px solid #e3e6f0;
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
             border-radius: 0;
             padding: 2rem;
             margin-bottom: 2rem;
@@ -89,18 +89,18 @@
         }
         .section-card {
             background: white;
-            border: 1px solid #e3e6f0;
+            border: 1px solid #e0e0e0;
             border-radius: 0;
             margin-bottom: 1.5rem;
             overflow: hidden;
             box-shadow: none;
         }
         .section-header {
-            background: #6c63ff;
+            background: #bdbdbd;
             padding: 1rem 1.5rem;
             font-weight: 600;
-            color: #fff;
-            border-bottom: 1px solid #e3e6f0;
+            color: #222;
+            border-bottom: 1px solid #e0e0e0;
             border-radius: 0;
         }
         .section-body {
@@ -112,19 +112,19 @@
             justify-content: between;
             padding: 1rem;
             margin-bottom: 0.75rem;
-            background: #f8f9fa;
-            border: 1px solid #e3e6f0;
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
             border-radius: 0;
             transition: all 0.3s ease;
         }
         .quiz-item:hover, .material-item:hover {
-            background: #e9ecef;
+            background: #ededed;
             transform: none;
             box-shadow: none;
         }
         .quiz-btn {
-            background: #2d9cdb;
-            color: white;
+            background: #bdbdbd;
+            color: #222;
             border: none;
             padding: 0.5rem 1rem;
             border-radius: 0;
@@ -133,10 +133,12 @@
         }
         .quiz-btn:hover {
             box-shadow: none;
+            background: #9e9e9e;
+            color: #fff;
         }
         .material-link {
-            background: #6c63ff;
-            color: white;
+            background: #bdbdbd;
+            color: #222;
             padding: 0.5rem 1rem;
             border-radius: 0;
             text-decoration: none;
@@ -144,7 +146,8 @@
             transition: all 0.3s ease;
         }
         .material-link:hover {
-            color: white;
+            color: #fff;
+            background: #9e9e9e;
             box-shadow: none;
         }
         .navigation-buttons {
@@ -153,11 +156,11 @@
             align-items: center;
             margin-top: 2rem;
             padding-top: 2rem;
-            border-top: 1px solid #e3e6f0;
+            border-top: 1px solid #e0e0e0;
         }
         .nav-btn {
-            background: #2d9cdb;
-            color: white;
+            background: #bdbdbd;
+            color: #222;
             border: none;
             padding: 0.75rem 1.5rem;
             border-radius: 0;
@@ -169,7 +172,8 @@
             transition: all 0.3s ease;
         }
         .nav-btn:hover {
-            color: white;
+            color: #fff;
+            background: #9e9e9e;
             box-shadow: none;
         }
         .badge-custom {
@@ -179,12 +183,12 @@
             font-size: 0.9rem;
         }
         .badge-free {
-            background: #84fab0;
-            color: #2d3748;
+            background: #e0e0e0;
+            color: #222;
         }
         .badge-premium {
-            background: #ffecd2;
-            color: #2d3748;
+            background: #eeeeee;
+            color: #222;
         }
         .empty-state {
             text-align: center;
@@ -279,7 +283,7 @@
                                             <h6 class="mb-1 fw-semibold">${quiz.title}</h6>
                                             <small class="text-muted">Quiz ${status.index + 1}</small>
                                         </div>
-                                        <a href="quiz-details?id=${quiz.id}" class="quiz-btn">
+                                        <a href="take-quiz?action=start&lessonId=${lesson.id}" class="quiz-btn">
                                             <i class="fas fa-play me-1"></i>Start Quiz
                                         </a>
                                     </div>

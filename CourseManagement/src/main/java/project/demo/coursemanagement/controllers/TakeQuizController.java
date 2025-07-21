@@ -47,7 +47,7 @@ public class TakeQuizController extends HttpServlet {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("error.jsp");
+            System.out.println("Error in TakeQuizController.doGet: " + e.getMessage());
         }
     }
 
@@ -98,7 +98,7 @@ public class TakeQuizController extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/views/quiz/take-quiz.jsp").forward(request, response);
 
         } catch (NumberFormatException e) {
-            response.sendRedirect("learning-page");
+            System.out.println("Invalid lesson ID format: " + request.getParameter("lessonId"));
         }
     }
 
@@ -109,7 +109,7 @@ public class TakeQuizController extends HttpServlet {
         Quiz quiz = (Quiz) session.getAttribute("currentQuiz");
 
         if (attempt == null || quiz == null) {
-            response.sendRedirect("learning-page");
+            response.sendRedirect("learning");
             return;
         }
 
@@ -151,7 +151,7 @@ public class TakeQuizController extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("error.jsp");
+            System.out.println("Error in TakeQuizController.submitQuiz: " + e.getMessage());
         }
     }
 
@@ -159,10 +159,10 @@ public class TakeQuizController extends HttpServlet {
             throws ServletException, IOException {
         try {
             int attemptId = Integer.parseInt(request.getParameter("attemptId"));
-            QuizAttempt attempt = quizDAO.getAttemptDetails(attemptId);
+            QuizAttempt attempt = quizDAO.getQuizAttempt(attemptId); // Sửa lại đúng hàm lấy attempt
 
             if (attempt == null) {
-                response.sendRedirect("learning-page");
+                response.sendRedirect("learning");
                 return;
             }
 
@@ -177,7 +177,7 @@ public class TakeQuizController extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("error.jsp");
+            System.out.println("Error in TakeQuizController.viewResult: " + e.getMessage());
         }
     }
 
@@ -187,9 +187,9 @@ public class TakeQuizController extends HttpServlet {
             int attemptId = Integer.parseInt(request.getParameter("attemptId"));
 
             // Get attempt details
-            QuizAttempt attempt = quizDAO.getAttemptDetails(attemptId);
+            QuizAttempt attempt = quizDAO.getQuizAttempt(attemptId);
             if (attempt == null) {
-                response.sendRedirect("learning-page");
+                response.sendRedirect("learning");
                 return;
             }
 
@@ -212,7 +212,7 @@ public class TakeQuizController extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("error.jsp");
+            System.out.println("Error in TakeQuizController.reviewQuiz: " + e.getMessage());
         }
     }
 }
