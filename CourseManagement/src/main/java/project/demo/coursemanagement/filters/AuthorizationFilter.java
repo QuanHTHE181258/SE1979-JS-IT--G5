@@ -10,9 +10,7 @@ import java.io.IOException;
 
 @WebFilter(urlPatterns = {
     "/admin/*",
-    "/teacher/*", 
-    "/course-manager/*",
-    "/user-manager/*"
+    "/teacher/*"
 })
 public class AuthorizationFilter implements Filter {
 
@@ -28,6 +26,11 @@ public class AuthorizationFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         
+        // Prevent browser caching for dynamic admin pages
+        httpResponse.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+        httpResponse.setHeader("Pragma", "no-cache"); // HTTP 1.0
+        httpResponse.setDateHeader("Expires", 0); // Proxies
+
         String requestURI = httpRequest.getRequestURI();
         String contextPath = httpRequest.getContextPath();
         
@@ -38,24 +41,17 @@ public class AuthorizationFilter implements Filter {
         }
         
         // Check authorization based on URL pattern
-        if (requestURI.startsWith(contextPath + "/admin/")) {
-            if (!SessionUtil.isAdmin(httpRequest)) {
-                httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied. Admin role required.");
+        if (requestURI.startsWith(contextPath + "/admin")) { // Check for /admin as well
+            boolean isAdmin = SessionUtil.isAdmin(httpRequest);
+            boolean isUserManager = SessionUtil.isUserManager(httpRequest);
+
+            if (!isAdmin && !isUserManager) {
+                httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied. Admin or User Manager role required.");
                 return;
             }
         } else if (requestURI.startsWith(contextPath + "/teacher/")) {
             if (!SessionUtil.isTeacher(httpRequest)) {
                 httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied. Teacher role required.");
-                return;
-            }
-        } else if (requestURI.startsWith(contextPath + "/course-manager/")) {
-            if (!SessionUtil.isCourseManager(httpRequest)) {
-                httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied. Course Manager role required.");
-                return;
-            }
-        } else if (requestURI.startsWith(contextPath + "/user-manager/")) {
-            if (!SessionUtil.isUserManager(httpRequest)) {
-                httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied. User Manager role required.");
                 return;
             }
         }

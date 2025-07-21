@@ -93,9 +93,9 @@ public class UserService {
 
         // Find Role by name
         Role role = roleDAO.findByRoleName(roleName);
-//        if (role == null) {
-//            throw new IllegalArgumentException("Invalid role specified.");
-//        }
+        if (role == null) {
+            throw new IllegalArgumentException("Invalid role specified.");
+        }
 
         // Create User object
         User user = new User();
@@ -114,7 +114,7 @@ public class UserService {
         }
 
         // Then assign the role to the user
-        success = userRoleDAO.assignRoleToUser(user.getId(), 3);
+        success = userRoleDAO.assignRoleToUser(user.getId(), role.getId());
         System.out.println("User created successfully"+ success);
         if (!success) {
             // If role assignment fails, delete the user to maintain consistency

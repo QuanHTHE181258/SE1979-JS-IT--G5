@@ -171,19 +171,7 @@
 </head>
 <body>
 <div class="wrapper">
-    <nav id="sidebar" class="">
-        <div class="sidebar-header">
-            <h3>Admin Panel</h3>
-        </div>
-        <ul class="components">
-            <li><a href="${pageContext.request.contextPath}/admin/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/courses"><i class="fas fa-book"></i> Courses</a></li>
-            <li class="active"><a href="${pageContext.request.contextPath}/admin/orders"><i class="fas fa-shopping-cart"></i> Orders</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/users"><i class="fas fa-users"></i> Users</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/revenue-analytics"><i class="fas fa-chart-bar"></i> Revenue Analytics</a></li>
-            <li><a href="${pageContext.request.contextPath}/teacher-performance"><i class="fas fa-chart-line"></i> Teacher Performance</a></li>
-        </ul>
-    </nav>
+    <jsp:include page="_admin_sidebar.jsp" />
     <div id="content">
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">

@@ -39,6 +39,13 @@ public class SessionUtil {
         List<Role> roles = userRoleDAO.findRolesByUserId(user.getId());
         Role primaryRole = userRoleDAO.findPrimaryRoleByUserId(user.getId());
 
+        // DEBUGGING: Print the found primary role
+        if (primaryRole != null) {
+            System.out.println("DEBUG: Found primary role for user '" + user.getUsername() + "' -> RoleID: " + primaryRole.getId() + ", RoleName: " + primaryRole.getRoleName());
+        } else {
+            System.out.println("DEBUG: No primary role found for user: " + user.getUsername());
+        }
+
         // Store user information in session
         session.setAttribute(USER_SESSION_KEY, user);
         session.setAttribute(USER_ID_SESSION_KEY, user.getId());

@@ -16,58 +16,69 @@
   <title>Admin Dashboard - Course Management System</title>
 
   <link href="${pageContext.request.contextPath}/css/admincss.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-<div class="wrapper">
+<div class="d-flex">
   <!-- Sidebar -->
-  <nav class="col-md-2 d-md-block sidebar min-vh-100" id="sidebar">
-    <div class="position-sticky pt-3">
-      <h3 class="text-white text-center mb-4">Admin Panel</h3>
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link active" href="${pageContext.request.contextPath}/admin/dashboard">
-            <i class="fas fa-home"></i> Dashboard
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/admin/courses">
-            <i class="fas fa-book"></i> Courses
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/admin/orders">
-            <i class="fas fa-shopping-cart"></i> Orders
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/admin/users">
-            <i class="fas fa-users"></i> Users
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/admin/revenue-analytics">
-            <i class="fas fa-chart-bar"></i> Revenue Analytics
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/teacher-performance">
-            <i class="fas fa-chart-line"></i> Teacher Performance
-          </a>
-        </li>
-      </ul>
+  <nav id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <h3>Admin Panel</h3>
     </div>
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link <c:if test='${request.servletPath == "/admin"}'>active</c:if>" href="${pageContext.request.contextPath}/admin">
+          <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link <c:if test='${request.servletPath == "/admin/user-management"}'>active</c:if>" href="${pageContext.request.contextPath}/admin/user-management">
+          <i class="fas fa-users"></i> User Management
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link <c:if test='${request.servletPath == "/admin/courses"}'>active</c:if>" href="${pageContext.request.contextPath}/admin/courses">
+          <i class="fas fa-book"></i> Courses Management
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link <c:if test='${request.servletPath == "/admin/orders"}'>active</c:if>" href="${pageContext.request.contextPath}/admin/orders">
+          <i class="fas fa-shopping-cart"></i> Order Management
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link <c:if test='${request.servletPath == "/admin/revenue-analytics"}'>active</c:if>" href="${pageContext.request.contextPath}/admin/revenue-analytics">
+          <i class="fas fa-chart-bar"></i> Revenue Analytics
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link <c:if test='${request.servletPath == "/teacher-performance"}'>active</c:if>" href="${pageContext.request.contextPath}/teacher-performance">
+          <i class="fas fa-chart-line"></i> Teacher Performance
+        </a>
+      </li>
+    </ul>
   </nav>
 
   <!-- Page Content -->
-  <div id="content">
+  <div id="content" class="flex-grow-1">
     <!-- Top Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
+        <button type="button" id="sidebarCollapse" class="btn btn-info">
+          <i class="fas fa-align-left"></i>
+        </button>
         <a class="navbar-brand" href="#">Course Management System</a>
         <div class="ms-auto d-flex align-items-center">
           <a href="${pageContext.request.contextPath}/admin/profile" class="btn btn-link">
-            <img src="${pageContext.request.contextPath}/assets/images/avatars/admin.jpg" class="rounded-circle" width="32" height="32">
-            <span class="ms-2">${sessionScope.admin.name != null ? sessionScope.admin.name : 'Admin User'}</span>
+            <c:choose>
+              <c:when test="${not empty sessionScope.user.avatar.url}">
+                <img src="${pageContext.request.contextPath}/assets/avatar/${sessionScope.user.avatar.url}" class="rounded-circle" width="32" height="32" alt="User Avatar">
+              </c:when>
+              <c:otherwise>
+                <img src="${pageContext.request.contextPath}/assets/avatar/default_avatar.png" class="rounded-circle" width="32" height="32" alt="Default Avatar">
+              </c:otherwise>
+            </c:choose>
+            <span class="ms-2">${sessionScope.user.username}</span>
           </a>
           <a href="${pageContext.request.contextPath}/logout" class="btn btn-outline-danger ms-3">
             <i class="fas fa-sign-out-alt"></i> Logout
@@ -75,7 +86,6 @@
         </div>
       </div>
     </nav>
-
     <!-- Main Content -->
     <div class="container-fluid py-4">
       <!-- Dashboard Cards -->
@@ -451,5 +461,6 @@
           </div>
     </div>
   </div>
+</div>
 </body>
 </html>

@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.service.UserService;
 import project.demo.coursemanagement.entities.Role;
+import project.demo.coursemanagement.annotations.RequireRole;
 
 import java.io.IOException;
 import java.util.Date;
@@ -68,25 +69,28 @@ public class AdminUserController extends HttpServlet {
                         request.setAttribute("roles", roles);
                         request.getRequestDispatcher("/WEB-INF/views/edit_user.jsp").forward(request, response);
                     } else {
-                        response.sendRedirect(request.getContextPath() + "/admin/user-management?error=User not found"); // Redirect to user management list on error
+                        response.sendRedirect(request.getContextPath() + "/admin/users?error=User not found"); // Redirect to user management list on error
                     }
 
                 } catch (NumberFormatException e) {
                     // Handle invalid user ID format specifically for the edit action
-                    response.sendRedirect(request.getContextPath() + "/admin/user-management?error=Invalid user ID format"); // Redirect to user management list on error
+                    response.sendRedirect(request.getContextPath() + "/admin/users?error=Invalid user ID format"); // Redirect to user management list on error
                 } catch (Exception e) { // Catch potential exceptions from service/DAO calls
-                    response.sendRedirect(request.getContextPath() + "/admin/user-management?error=edit_fail"); // Redirect to user management list on error
+                    response.sendRedirect(request.getContextPath() + "/admin/users?error=edit_fail"); // Redirect to user management list on error
                 }
 
             } else if (pathParts.length == 2 && "new".equals(pathParts[1])) {
                 // Handle GET request for creating a new user
                 String roleName = request.getParameter("role");
-                // You might want to validate the roleName here if necessary
-
-                List<Role> roles = userService.getAllRoles(); // Get all roles to populate dropdown
-                request.setAttribute("roleName", roleName); // Set the default role
-                request.setAttribute("roles", roles);
-                request.getRequestDispatcher("/WEB-INF/views/edit_user.jsp").forward(request, response); // Forward to the create/edit user JSP
+                
+                if ("USER_MANAGER".equals(roleName)) {
+                    request.getRequestDispatcher("/WEB-INF/views/create_user_manager.jsp").forward(request, response);
+                } else {
+                    List<Role> roles = userService.getAllRoles(); 
+                    request.setAttribute("roleName", roleName); 
+                    request.setAttribute("roles", roles);
+                    request.getRequestDispatcher("/WEB-INF/views/edit_user.jsp").forward(request, response);
+                }
 
             } else if (pathParts.length >= 3) { // Handle other actions like /activate or /deactivate (though these should ideally be POST)
                 String userIdString = pathParts[1]; // Assuming userId is at index 1 for these old GET patterns
@@ -95,16 +99,16 @@ public class AdminUserController extends HttpServlet {
                 try {
                     int userId = Integer.parseInt(userIdString); // This might still fail if userIdString is not a number
                     // Redirect any old GET /admin/users/{userId}/action patterns to user management list
-                    response.sendRedirect(request.getContextPath() + "/admin/user-management?error=Invalid action or GET request not supported");
+                    response.sendRedirect(request.getContextPath() + "/admin/users?error=Invalid action or GET request not supported");
 
                 } catch (NumberFormatException e) {
-                    response.sendRedirect(request.getContextPath() + "/admin/user-management?error=Invalid user ID format in action URL");
+                    response.sendRedirect(request.getContextPath() + "/admin/users?error=Invalid user ID format in action URL");
                 } catch (Exception e) {
-                    response.sendRedirect(request.getContextPath() + "/admin/user-management?error=edit_fail");
+                    response.sendRedirect(request.getContextPath() + "/admin/users?error=edit_fail");
                 }
 
             } else { // Handle invalid /admin/users/* patterns with less than 2 parts after /admin/users
-                response.sendRedirect(request.getContextPath() + "/admin/user-management?error=Invalid request format");
+                response.sendRedirect(request.getContextPath() + "/admin/users?error=Invalid request format");
             }
         }
     }
@@ -115,7 +119,7 @@ public class AdminUserController extends HttpServlet {
         String pathInfo = request.getPathInfo();
 
         if (pathInfo == null || pathInfo.equals("/")) {
-            response.sendRedirect(request.getContextPath() + "/admin/user-management"); // Redirect to user management list
+            response.sendRedirect(request.getContextPath() + "/admin/users"); // Redirect to user management list
             return;
         }
 
@@ -138,7 +142,7 @@ public class AdminUserController extends HttpServlet {
                 userService.updateUser(userId, username, email, phone, roleName);
 
                 // Redirect back to user management page with success message
-                response.sendRedirect(request.getContextPath() + "/admin/user-management?message=User updated successfully");
+                response.sendRedirect(request.getContextPath() + "/admin/users?message=User updated successfully");
 
             } catch (NumberFormatException e) {
                 // Nếu userId không hợp lệ, forward lại form chỉnh sửa với thông báo lỗi
@@ -178,7 +182,7 @@ public class AdminUserController extends HttpServlet {
                 userService.createUser(username, email, password, firstName, lastName, phone, roleName);
 
                 // Redirect back to user management page with success message
-                response.sendRedirect(request.getContextPath() + "/admin/user-management?message=User created successfully");
+                response.sendRedirect(request.getContextPath() + "/admin/users?message=User created successfully");
 
             } catch (IllegalArgumentException e) {
                 // Handle validation errors (e.g., missing fields)
@@ -190,8 +194,13 @@ public class AdminUserController extends HttpServlet {
                 request.setAttribute("lastName", request.getParameter("lastName"));
                 request.setAttribute("phone", request.getParameter("phone"));
                 request.setAttribute("roleName", request.getParameter("roleName"));
-                request.setAttribute("roles", userService.getAllRoles()); // Need roles for the dropdown
-                request.getRequestDispatcher("/WEB-INF/views/edit_user.jsp").forward(request, response);
+                
+                if ("USER_MANAGER".equals(request.getParameter("roleName"))) {
+                    request.getRequestDispatcher("/WEB-INF/views/create_user_manager.jsp").forward(request, response);
+                } else {
+                    request.setAttribute("roles", userService.getAllRoles()); // Need roles for the dropdown
+                    request.getRequestDispatcher("/WEB-INF/views/edit_user.jsp").forward(request, response);
+                }
 
             } catch (Exception e) {
                 // Catch other exceptions (e.g., duplicate user)
@@ -202,8 +211,13 @@ public class AdminUserController extends HttpServlet {
                 request.setAttribute("lastName", request.getParameter("lastName"));
                 request.setAttribute("phone", request.getParameter("phone"));
                 request.setAttribute("roleName", request.getParameter("roleName"));
-                request.setAttribute("roles", userService.getAllRoles()); // Need roles for the dropdown
-                request.getRequestDispatcher("/WEB-INF/views/edit_user.jsp").forward(request, response);
+
+                if ("USER_MANAGER".equals(request.getParameter("roleName"))) {
+                    request.getRequestDispatcher("/WEB-INF/views/create_user_manager.jsp").forward(request, response);
+                } else {
+                    request.setAttribute("roles", userService.getAllRoles()); // Need roles for the dropdown
+                    request.getRequestDispatcher("/WEB-INF/views/edit_user.jsp").forward(request, response);
+                }
             }
 
         } else if (pathParts.length >= 3) { // Handle activate/deactivate which should ideally be POST
@@ -218,34 +232,34 @@ public class AdminUserController extends HttpServlet {
                         case "deactivate":
                             if (userService.updateUserActiveStatus(userId, false)) {
                                 // Redirect back to user management page
-                                response.sendRedirect(request.getContextPath() + "/admin/user-management?message=User deactivated successfully");
+                                response.sendRedirect(request.getContextPath() + "/admin/users?message=User deactivated successfully");
                             } else {
-                                response.sendRedirect(request.getContextPath() + "/admin/user-management?error=Failed to deactivate user");
+                                response.sendRedirect(request.getContextPath() + "/admin/users?error=Failed to deactivate user");
                             }
                             break;
                         case "activate":
                             if (userService.updateUserActiveStatus(userId, true)) {
                                 // Redirect back to user management page
-                                response.sendRedirect(request.getContextPath() + "/admin/user-management?message=User activated successfully");
+                                response.sendRedirect(request.getContextPath() + "/admin/users?message=User activated successfully");
                             } else {
                                 // Added error handling for activation failure
-                                response.sendRedirect(request.getContextPath() + "/admin/user-management?error=Failed to activate user");
+                                response.sendRedirect(request.getContextPath() + "/admin/users?error=Failed to activate user");
                             }
                             break;
                         default:
-                            response.sendRedirect(request.getContextPath() + "/admin/user-management?error=Invalid action");
+                            response.sendRedirect(request.getContextPath() + "/admin/users?error=Invalid action");
                     }
                 } else {
-                    response.sendRedirect(request.getContextPath() + "/admin/user-management?error=User not found");
+                    response.sendRedirect(request.getContextPath() + "/admin/users?error=User not found");
                 }
             } catch (NumberFormatException e) {
-                response.sendRedirect(request.getContextPath() + "/admin/user-management?error=Invalid user ID format");
+                response.sendRedirect(request.getContextPath() + "/admin/users?error=Invalid user ID format");
             } catch (Exception e) {
-                response.sendRedirect(request.getContextPath() + "/admin/user-management?error=edit_fail");
+                response.sendRedirect(request.getContextPath() + "/admin/users?error=edit_fail");
             }
 
         } else {
-            response.sendRedirect(request.getContextPath() + "/admin/user-management?error=Invalid POST request");
+            response.sendRedirect(request.getContextPath() + "/admin/users?error=Invalid POST request");
         }
     }
 }
