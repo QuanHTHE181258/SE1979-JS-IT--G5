@@ -34,6 +34,7 @@
     <div class="lesson-content">
         <c:out value="${lesson.content}" escapeXml="false"/>
     </div>
+    <a href="quizPreview?id=${lesson.lessonID}">Lesson quizzes</a>
 </div>
 
 </body>

@@ -13,6 +13,9 @@ import java.util.List;
 
 public class CourseCatalogDAOimp implements CourseCatalogDAO {
 
+    Connection conn = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
     DatabaseConnection dbConn = DatabaseConnection.getInstance();
 
     @Override
