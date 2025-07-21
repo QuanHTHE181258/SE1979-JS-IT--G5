@@ -38,9 +38,6 @@ public class TakeQuizController extends HttpServlet {
                 case "result":
                     viewResult(request, response);
                     break;
-                case "review":
-                    reviewQuiz(request, response);
-                    break;
                 default:
                     response.sendRedirect("learning-page");
                     break;
@@ -75,7 +72,7 @@ public class TakeQuizController extends HttpServlet {
             Quiz quiz = quizDAO.getQuizByLessonId(lessonId);
 
             if (quiz == null) {
-                response.sendRedirect("learning-page?lessonId=" + lessonId);
+                response.sendRedirect("learning?lessonId=" + lessonId);
                 return;
             }
 
@@ -109,7 +106,8 @@ public class TakeQuizController extends HttpServlet {
         Quiz quiz = (Quiz) session.getAttribute("currentQuiz");
 
         if (attempt == null || quiz == null) {
-            response.sendRedirect("learning");
+            int lessonId = Integer.parseInt(request.getParameter("lessonId"));
+            response.sendRedirect("learning?lessonId=" + lessonId);
             return;
         }
 
@@ -162,7 +160,8 @@ public class TakeQuizController extends HttpServlet {
             QuizAttempt attempt = quizDAO.getQuizAttempt(attemptId); // Sửa lại đúng hàm lấy attempt
 
             if (attempt == null) {
-                response.sendRedirect("learning");
+                int lessonId = Integer.parseInt(request.getParameter("lessonId"));
+                response.sendRedirect("learning?lessonId=" + lessonId);
                 return;
             }
 
@@ -178,41 +177,6 @@ public class TakeQuizController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error in TakeQuizController.viewResult: " + e.getMessage());
-        }
-    }
-
-    private void reviewQuiz(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            int attemptId = Integer.parseInt(request.getParameter("attemptId"));
-
-            // Get attempt details
-            QuizAttempt attempt = quizDAO.getQuizAttempt(attemptId);
-            if (attempt == null) {
-                response.sendRedirect("learning");
-                return;
-            }
-
-            // Get quiz and questions
-            Quiz quiz = quizDAO.getQuizById(attempt.getQuiz().getId());
-            List<Question> questions = quizDAO.getQuestionsByQuizId(quiz.getId());
-            for (Question question : questions) {
-                List<Answer> answers = quizDAO.getAnswerByQuestionId(question.getId());
-                question.setAnswers(answers);
-            }
-            quiz.setQuestions(questions);
-
-            // Get user's answers
-            List<QuestionAttempt> questionAttempts = quizDAO.getAttemptAnswers(attemptId);
-
-            request.setAttribute("attempt", attempt);
-            request.setAttribute("quiz", quiz);
-            request.setAttribute("questionAttempts", questionAttempts);
-            request.getRequestDispatcher("/WEB-INF/views/quiz/quiz-review.jsp").forward(request, response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error in TakeQuizController.reviewQuiz: " + e.getMessage());
         }
     }
 }

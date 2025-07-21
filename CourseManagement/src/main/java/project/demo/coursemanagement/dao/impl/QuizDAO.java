@@ -395,13 +395,12 @@ public class QuizDAO {
     }
 
     public void createQuiz(Quiz quiz) throws SQLException {
-        String sql = "INSERT INTO quizzes (LessonID, Title, duration_minutes) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO quizzes (LessonID, Title) VALUES (?, ?)";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, quiz.getLessonID().getId());
             ps.setString(2, quiz.getTitle());
-            ps.setInt(3, quiz.getDurationMinutes());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -409,13 +408,11 @@ public class QuizDAO {
     }
 
     public void updateQuiz(Quiz quiz) {
-        String sql = "UPDATE quizzes SET Title = ?, duration_minutes = ? WHERE QuizID = ?";
+        String sql = "UPDATE quizzes SET Title = ? WHERE QuizID = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, quiz.getTitle());
-
-            ps.setInt(2, quiz.getDurationMinutes());
-            ps.setInt(3, quiz.getId());
+            ps.setInt(2, quiz.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -719,6 +716,17 @@ public class QuizDAO {
             e.printStackTrace();
         }
         return answers;
+    }
+
+    // Update a question's text
+    public void updateQuestion(Question question) throws SQLException {
+        String sql = "UPDATE questions SET QuestionText = ? WHERE QuestionID = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, question.getQuestionText());
+            ps.setInt(2, question.getId());
+            ps.executeUpdate();
+        }
     }
 
     public static void main(String[] args) {
