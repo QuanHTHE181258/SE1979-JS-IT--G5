@@ -1,9 +1,7 @@
 package project.demo.coursemanagement.dao.impl;
 
 import project.demo.coursemanagement.dao.OrderDAO;
-import project.demo.coursemanagement.dto.OrderDTO;
-import project.demo.coursemanagement.dto.OrderDetailDTO;
-import project.demo.coursemanagement.dto.OrderAnalyticsDTO;
+import project.demo.coursemanagement.dto.*;
 import project.demo.coursemanagement.utils.DatabaseConnection;
 
 import java.sql.*;
@@ -398,5 +396,57 @@ public class OrderDAOImpl implements OrderDAO {
             e.printStackTrace();
         }
         return revenueByMonth;
+    }
+
+    @Override
+    public OrderDetailsViewDTO getOrderDetailView(int orderId) {
+        String sql = """
+            SELECT o.OrderID, o.Status, o.PaymentMethod, o.TotalAmount, o.CreatedAt,
+                   c.CourseID, c.Title as CourseName, od.Price
+            FROM orders o
+            JOIN orderdetails od ON o.OrderID = od.OrderID
+            JOIN courses c ON od.CourseID = c.CourseID
+            WHERE o.OrderID = ?
+        """;
+
+        try (Connection conn = dbConn.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, orderId);
+            ResultSet rs = stmt.executeQuery();
+
+            OrderDetailsViewDTO orderView = null;
+            List<OrderCourseDetailDTO> courseDetails = new ArrayList<>();
+
+            while (rs.next()) {
+                if (orderView == null) {
+                    orderView = OrderDetailsViewDTO.builder()
+                            .orderId(rs.getInt("OrderID"))
+                            .status(rs.getString("Status"))
+                            .paymentMethod(rs.getString("PaymentMethod"))
+                            .totalAmount(rs.getBigDecimal("TotalAmount"))
+                            .createdAt(rs.getTimestamp("CreatedAt"))
+                            .courseDetails(new ArrayList<>())
+                            .build();
+                }
+
+                OrderCourseDetailDTO courseDetail = OrderCourseDetailDTO.builder()
+                        .courseId(rs.getInt("CourseID"))
+                        .courseName(rs.getString("CourseName"))
+                        .price(rs.getBigDecimal("Price"))
+                        .build();
+
+                courseDetails.add(courseDetail);
+            }
+
+            if (orderView != null) {
+                orderView.setCourseDetails(courseDetails);
+            }
+
+            return orderView;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

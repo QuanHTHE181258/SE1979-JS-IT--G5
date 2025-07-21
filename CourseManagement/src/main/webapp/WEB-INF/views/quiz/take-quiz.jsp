@@ -10,29 +10,35 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        body {
+            background-color: #f8f9fa !important;
+        }
         .quiz-container {
             max-width: 900px;
             margin: 0 auto;
             padding: 20px;
         }
         .quiz-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+            color: #495057;
             border-radius: 15px;
             padding: 30px;
             margin-bottom: 30px;
             text-align: center;
+            border: 1px solid #ced4da;
         }
         .question-card {
             background: white;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             margin-bottom: 25px;
             overflow: hidden;
             transition: transform 0.2s;
+            border: 1px solid #e9ecef;
         }
         .question-card:hover {
             transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
         }
         .question-header {
             background: #f8f9fa;
@@ -51,30 +57,34 @@
             transition: all 0.3s;
             display: flex;
             align-items: center;
+            background-color: white;
         }
         .answer-option:hover {
-            border-color: #667eea;
-            background-color: #f8f9ff;
+            border-color: #adb5bd;
+            background-color: #f8f9fa;
         }
         .answer-option input[type="radio"] {
             margin-right: 12px;
             transform: scale(1.2);
+            accent-color: #6c757d;
         }
         .answer-option.selected {
-            border-color: #667eea;
-            background-color: #f8f9ff;
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+            border-color: #6c757d;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 8px rgba(108, 117, 125, 0.15);
         }
         .quiz-progress {
             background: white;
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #e9ecef;
         }
         .progress-bar {
             height: 8px;
             border-radius: 4px;
+            background-color: #6c757d !important;
         }
         .timer {
             position: fixed;
@@ -83,19 +93,21 @@
             background: #fff;
             padding: 15px 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
             z-index: 1000;
+            border: 1px solid #e9ecef;
         }
         .submit-section {
             background: white;
             border-radius: 15px;
             padding: 30px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             margin-top: 30px;
+            border: 1px solid #e9ecef;
         }
         .btn-submit {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
             border: none;
             padding: 15px 40px;
             font-size: 18px;
@@ -107,6 +119,29 @@
         .btn-submit:hover {
             transform: scale(1.05);
             color: white;
+            background: linear-gradient(135deg, #495057 0%, #343a40 100%);
+        }
+        .badge.bg-primary {
+            background-color: #6c757d !important;
+        }
+        .text-info {
+            color: #6c757d !important;
+        }
+        .btn-primary {
+            background-color: #6c757d !important;
+            border-color: #6c757d !important;
+        }
+        .btn-primary:hover {
+            background-color: #495057 !important;
+            border-color: #495057 !important;
+        }
+        .text-warning {
+            color: #6c757d !important;
+        }
+        .alert-warning {
+            background-color: #f8f9fa !important;
+            border-color: #dee2e6 !important;
+            color: #495057 !important;
         }
     </style>
 </head>

@@ -2,6 +2,7 @@ package project.demo.coursemanagement.dao;
 
 import project.demo.coursemanagement.dto.OrderDTO;
 import project.demo.coursemanagement.dto.OrderAnalyticsDTO;
+import project.demo.coursemanagement.dto.OrderDetailsViewDTO;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -22,4 +23,5 @@ public interface OrderDAO {
     BigDecimal getTotalRevenue();
     Map<String, Integer> getOrdersCountByStatus();
     Map<String, BigDecimal> getRevenueByMonth();
+    OrderDetailsViewDTO getOrderDetailView(int orderId);
 }

@@ -12,19 +12,20 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --success-gradient: linear-gradient(135deg, #4CAF50, #45a049);
-            --info-gradient: linear-gradient(135deg, #2196F3, #1976D2);
-            --warning-gradient: linear-gradient(135deg, #FF9800, #F57C00);
-            --danger-gradient: linear-gradient(135deg, #f44336, #d32f2f);
+            --primary-gradient: linear-gradient(135deg, #404040 0%, #2d2d2d 100%);
+            --success-gradient: linear-gradient(135deg, #2d2d2d, #404040);
+            --info-gradient: linear-gradient(135deg, #333333, #4d4d4d);
+            --warning-gradient: linear-gradient(135deg, #404040, #333333);
+            --danger-gradient: linear-gradient(135deg, #333333, #404040);
             --shadow: 0 5px 15px rgba(0,0,0,0.1);
             --shadow-hover: 0 8px 25px rgba(0,0,0,0.15);
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(120deg, #f6f9fc 0%, #e9ecef 100%);
+            background: linear-gradient(120deg, #ffffff 0%, #f8f9fa 100%);
             min-height: 100vh;
+            color: #4a4a4a;
         }
 
         .result-container {
@@ -45,62 +46,47 @@
             overflow: hidden;
         }
 
-        .result-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: shimmer 3s ease-in-out infinite;
+        .result-header h1 {
+            color: white;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
         }
 
-        @keyframes shimmer {
-            0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(0deg); }
-            50% { transform: translateX(-10%) translateY(-10%) rotate(180deg); }
+        .result-header h3 {
+            color: rgba(255,255,255,0.9);
+            font-weight: 500;
         }
 
         .score-circle {
-            width: 140px;
-            height: 140px;
+            width: 160px;
+            height: 160px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 20px auto;
-            font-size: 32px;
+            margin: 30px auto;
+            font-size: 38px;
             font-weight: bold;
             position: relative;
             box-shadow: var(--shadow);
             animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            border: 4px solid rgba(255,255,255,0.2);
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .score-excellent {
-            background: var(--success-gradient);
-            color: white;
-            border: 4px solid rgba(255,255,255,0.3);
+            background: linear-gradient(135deg, #2d2d2d 0%, #404040 100%);
         }
         .score-good {
-            background: var(--info-gradient);
-            color: white;
-            border: 4px solid rgba(255,255,255,0.3);
+            background: linear-gradient(135deg, #333333 0%, #4d4d4d 100%);
         }
         .score-average {
-            background: var(--warning-gradient);
-            color: white;
-            border: 4px solid rgba(255,255,255,0.3);
+            background: linear-gradient(135deg, #404040 0%, #595959 100%);
         }
         .score-poor {
-            background: var(--danger-gradient);
-            color: white;
-            border: 4px solid rgba(255,255,255,0.3);
+            background: linear-gradient(135deg, #4d4d4d 0%, #666666 100%);
         }
 
         .stats-card {
