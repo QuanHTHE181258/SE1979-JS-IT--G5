@@ -4,6 +4,8 @@ import project.demo.coursemanagement.dao.OrderDAO;
 import project.demo.coursemanagement.dao.impl.OrderDAOImpl;
 import project.demo.coursemanagement.dto.OrderDTO;
 import project.demo.coursemanagement.dto.OrderAnalyticsDTO;
+import project.demo.coursemanagement.dto.RevenueDetailDTO;
+
 import java.util.List;
 
 public class OrderService {
@@ -73,7 +75,7 @@ public class OrderService {
         return orderDAO.getOrdersByUserId(userId);
     }
     
-    public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueDetails() {
+    public List<RevenueDetailDTO> getRevenueDetails() {
         return orderDAO.getRevenueDetails();
     }
 }
