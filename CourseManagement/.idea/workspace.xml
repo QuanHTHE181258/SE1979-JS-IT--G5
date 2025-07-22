@@ -9,10 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="add feature add quizz with some bug">
+    <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="fix bug add quiz and update UI">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/AddQuizServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/AddQuizServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/addQuiz.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/addQuiz.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/LoginServlet.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -212,7 +211,7 @@
       <workItem from="1751857856423" duration="1987000" />
       <workItem from="1752245485843" duration="2068000" />
       <workItem from="1752914923161" duration="6748000" />
-      <workItem from="1753163799090" duration="5763000" />
+      <workItem from="1753163799090" duration="7606000" />
     </task>
     <task id="LOCAL-00001" summary="Merge remote-tracking branch 'origin/main' into KhiemNB">
       <option name="closed" value="true" />
@@ -278,7 +277,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752999881685</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="fix bug add quiz and update UI">
+      <option name="closed" value="true" />
+      <created>1753169697257</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1753169697257</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -311,6 +318,7 @@
     <MESSAGE value="add feature edit lesson" />
     <MESSAGE value="add feature view quizz details" />
     <MESSAGE value="add feature add quizz with some bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="add feature add quizz with some bug" />
+    <MESSAGE value="fix bug add quiz and update UI" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix bug add quiz and update UI" />
   </component>
 </project>

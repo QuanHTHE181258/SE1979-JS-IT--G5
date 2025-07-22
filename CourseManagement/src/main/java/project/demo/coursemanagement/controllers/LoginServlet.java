@@ -149,13 +149,13 @@ public class LoginServlet extends HttpServlet {
                         response.sendRedirect(contextPath + "/admin/dashboard");
                         break;
                     case 2: // Teacher
-                        response.sendRedirect(contextPath + "/teacher/dashboard");
+                        response.sendRedirect(contextPath + "/teaching-courses");
                         break;
                     case 1: // Student
                         response.sendRedirect(contextPath + "/student-dashboard");
                         break;
                     case 3: // CourseManager
-                        response.sendRedirect(contextPath + "/course-manager/dashboard");
+                        response.sendRedirect(contextPath + "/view-all");
                         break;
                     case 4: // UserManager
                         response.sendRedirect(contextPath + "/user-manager/dashboard");
