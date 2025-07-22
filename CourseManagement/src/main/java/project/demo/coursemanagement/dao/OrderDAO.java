@@ -3,7 +3,7 @@ package project.demo.coursemanagement.dao;
 import project.demo.coursemanagement.dto.OrderDTO;
 import project.demo.coursemanagement.dto.OrderAnalyticsDTO;
 import project.demo.coursemanagement.dto.RevenueDetailDTO;
-
+import project.demo.coursemanagement.dto.OrderDetailsViewDTO;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -28,4 +28,5 @@ public interface OrderDAO {
     // Method to get orders by user ID
     List<OrderDTO> getOrdersByUserId(Integer userId);
     List<RevenueDetailDTO> getRevenueDetails();
+    OrderDetailsViewDTO getOrderDetailView(int orderId);
 }

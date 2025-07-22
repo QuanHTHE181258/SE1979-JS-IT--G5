@@ -3,6 +3,7 @@ package project.demo.coursemanagement.dao.impl;
 import project.demo.coursemanagement.dao.CourseDAO;
 import project.demo.coursemanagement.dto.CourseStatsDTO;
 import project.demo.coursemanagement.dto.CourseDTO;
+import project.demo.coursemanagement.entities.Category;
 import project.demo.coursemanagement.entities.Cours;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.utils.DatabaseConnection;
@@ -141,7 +142,7 @@ public class CourseDAOImpl implements CourseDAO {
             stmt.setBigDecimal(3, course.getPrice());
             stmt.setString(4, course.getImageURL());
             stmt.setLong(5, course.getInstructorID() != null ? course.getInstructorID().getId() : null);
-            stmt.setLong(6, course.getCategory() != null ? course.getCategory().getId() : null);
+            stmt.setInt(6, course.getCategory() != null ? course.getCategory().getId() : null);
             stmt.setString(7, course.getStatus() == null ? "active" : course.getStatus());
             int rows = stmt.executeUpdate();
             return rows > 0;
@@ -493,4 +494,34 @@ public class CourseDAOImpl implements CourseDAO {
         }
         return topCourses;
     }
-}
+
+    public List<Cours> getEnrolledCoursesByStudentId(int studentId) {
+        List<Cours> courses = new ArrayList<>();
+        String sql = "SELECT c.CourseID, c.Title, c.Description, c.Price, c.Rating, c.CreatedAt, c.ImageURL, c.InstructorID, c.CategoryID, c.Status " +
+                "FROM enrollments e " +
+                "JOIN courses c ON e.CourseID = c.CourseID " +
+                "WHERE e.Student_ID = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, studentId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Cours course = new Cours();
+                    course.setId(rs.getInt("CourseID"));
+                    course.setTitle(rs.getString("Title"));
+                    course.setDescription(rs.getString("Description"));
+                    course.setPrice(rs.getBigDecimal("Price"));
+                    course.setRating(rs.getDouble("Rating"));
+                    course.setCreatedAt(rs.getTimestamp("CreatedAt").toInstant());
+                    course.setImageURL(rs.getString("ImageURL"));
+                    // InstructorID, CategoryID cần xử lý nếu cần lấy entity đầy đủ
+                    course.setStatus(rs.getString("Status"));
+                    courses.add(course);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return courses;
+    }
+    }

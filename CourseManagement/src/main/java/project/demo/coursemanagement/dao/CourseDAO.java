@@ -18,5 +18,4 @@ public interface CourseDAO {
     boolean updateCourse(CourseDTO course);
     List<CourseDTO> searchRecentCourses(String keyword, int limit);
     List<CourseDTO> getTopCourses(int limit);
-
 }
