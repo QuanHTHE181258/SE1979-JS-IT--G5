@@ -28,21 +28,26 @@
                 <option value="published">published</option>
             </select>
         </div>
+        <div class="col-md-5 mb-2 d-flex justify-content-end">
+            <a href="add-lesson?courseId=${courseId}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i> Add Lesson
+            </a>
+        </div>
     </div>
     <c:choose>
         <c:when test="${not empty lessons}">
             <div class="table-responsive">
                 <table class="table table-bordered align-middle">
                     <thead>
-                        <tr>
-                            <th>Lesson ID</th>
-                            <th>Title</th>
-                            <th>Total Quizzes</th>
-                            <th>Total Materials</th>
-                            <th>Status</th>
-                            <th>Is Preview</th>
-                            <th>Actions</th>
-                        </tr>
+                    <tr>
+                        <th>Lesson ID</th>
+                        <th>Title</th>
+                        <th>Total Quizzes</th>
+                        <th>Total Materials</th>
+                        <th>Status</th>
+                        <th>Is Preview</th>
+                        <th>Actions</th>
+                    </tr>
                     </thead>
                     <tbody id="lessonsTableBody">
                     <c:forEach var="ls" items="${lessons}">
@@ -55,13 +60,14 @@
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="badge ${ls.lesson.isFreePreview ? 'bg-success' : 'bg-danger'}">
-                                        ${ls.lesson.isFreePreview ? 'Yes' : 'No'}
+                                            ${ls.lesson.isFreePreview ? 'Yes' : 'No'}
                                     </span>
                                     <button class="btn btn-outline-primary btn-sm" onclick="changePreview(${ls.lesson.id})">Change</button>
                                 </div>
                             </td>
                             <td>
                                 <a href="lesson-details?id=${ls.lesson.id}" class="btn btn-outline-info btn-sm mb-1"><i class="fas fa-eye me-1"></i>View Details</a>
+                                <a href="edit-lesson?id=${ls.lesson.id}" class="btn btn-outline-warning btn-sm mb-1"><i class="fas fa-edit me-1"></i>Edit</a>
                                 <button class="btn btn-outline-danger btn-sm mb-1" onclick="deleteLesson(${ls.lesson.id})"><i class="fas fa-trash me-1"></i>Delete</button>
                             </td>
                         </tr>
@@ -70,74 +76,77 @@
                 </table>
                 <!-- Pagination Controls -->
                 <nav>
-                  <ul class="pagination justify-content-center" id="pagination"></ul>
+                    <ul class="pagination justify-content-center" id="pagination"></ul>
                 </nav>
             </div>
         </c:when>
         <c:otherwise>
-            <div class="alert alert-info">No lessons found for this course.</div>
+            <div class="text-center mb-4">
+                <h3> Not found lessons</h3>
+            </div>
         </c:otherwise>
     </c:choose>
+
 </div>
 <!-- FontAwesome for icon -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 <!-- Client-side Filter, Search, Pagination Script -->
 <script>
-const rowsPerPage = 5;
-let currentPage = 1;
+    const rowsPerPage = 5;
+    let currentPage = 1;
 
-function filterAndPaginate() {
-    const search = document.getElementById('searchInput').value.toLowerCase();
-    const status = document.getElementById('statusFilter').value;
-    const rows = Array.from(document.querySelectorAll('#lessonsTableBody tr'));
-    let filtered = rows.filter(row => {
-        const title = row.getAttribute('data-title').toLowerCase();
-        const stat = row.getAttribute('data-status');
-        const matchSearch = title.includes(search);
-        const matchStatus = !status || stat === status;
-        return matchSearch && matchStatus;
-    });
-    // Pagination
-    const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
-    if (currentPage > totalPages) currentPage = totalPages;
-    filtered.forEach((row, i) => {
-        row.style.display = (i >= (currentPage-1)*rowsPerPage && i < currentPage*rowsPerPage) ? '' : 'none';
-    });
-    rows.filter(r => !filtered.includes(r)).forEach(r => r.style.display = 'none');
-    renderPagination(totalPages);
-}
-
-function renderPagination(totalPages) {
-    const pag = document.getElementById('pagination');
-    pag.innerHTML = '';
-    for (let i = 1; i <= totalPages; i++) {
-        const li = document.createElement('li');
-        li.className = 'page-item' + (i === currentPage ? ' active' : '');
-        const a = document.createElement('a');
-        a.className = 'page-link';
-        a.href = '#';
-        a.textContent = i;
-        a.onclick = (e) => { e.preventDefault(); currentPage = i; filterAndPaginate(); };
-        li.appendChild(a);
-        pag.appendChild(li);
+    function filterAndPaginate() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const status = document.getElementById('statusFilter').value;
+        const rows = Array.from(document.querySelectorAll('#lessonsTableBody tr'));
+        let filtered = rows.filter(row => {
+            const title = row.getAttribute('data-title').toLowerCase();
+            const stat = row.getAttribute('data-status');
+            const matchSearch = title.includes(search);
+            const matchStatus = !status || stat === status;
+            return matchSearch && matchStatus;
+        });
+        // Pagination
+        const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+        filtered.forEach((row, i) => {
+            row.style.display = (i >= (currentPage-1)*rowsPerPage && i < currentPage*rowsPerPage) ? '' : 'none';
+        });
+        rows.filter(r => !filtered.includes(r)).forEach(r => r.style.display = 'none');
+        renderPagination(totalPages);
     }
-}
 
-document.getElementById('searchInput').addEventListener('input', () => { currentPage = 1; filterAndPaginate(); });
-document.getElementById('statusFilter').addEventListener('change', () => { currentPage = 1; filterAndPaginate(); });
-window.onload = filterAndPaginate;
-
-function deleteLesson(lessonId) {
-    if (confirm('Are you sure you want to delete this lesson?')) {
-        // TODO: Implement AJAX or redirect to delete servlet
-        alert('Delete lesson ' + lessonId + ' (implement backend logic)');
+    function renderPagination(totalPages) {
+        const pag = document.getElementById('pagination');
+        pag.innerHTML = '';
+        for (let i = 1; i <= totalPages; i++) {
+            const li = document.createElement('li');
+            li.className = 'page-item' + (i === currentPage ? ' active' : '');
+            const a = document.createElement('a');
+            a.className = 'page-link';
+            a.href = '#';
+            a.textContent = i;
+            a.onclick = (e) => { e.preventDefault(); currentPage = i; filterAndPaginate(); };
+            li.appendChild(a);
+            pag.appendChild(li);
+        }
     }
-}
 
-function changePreview(lessonId) {
-    // TODO: Implement AJAX or redirect to change preview servlet
-    alert('Change preview for lesson ' + lessonId + ' (implement backend logic)');
-}
+    document.getElementById('searchInput').addEventListener('input', () => { currentPage = 1; filterAndPaginate(); });
+    document.getElementById('statusFilter').addEventListener('change', () => { currentPage = 1; filterAndPaginate(); });
+    window.onload = filterAndPaginate;
+
+    function deleteLesson(lessonId) {
+        if (confirm('Are you sure you want to delete this lesson?')) {
+            // TODO: Implement AJAX or redirect to delete servlet
+            alert('Delete lesson ' + lessonId + ' (implement backend logic)');
+        }
+    }
+
+    function changePreview(lessonId) {
+        // TODO: Implement AJAX or redirect to change preview servlet
+        alert('Change preview for lesson ' + lessonId + ' (implement backend logic)');
+    }
 </script>
 </body>
 </html>
