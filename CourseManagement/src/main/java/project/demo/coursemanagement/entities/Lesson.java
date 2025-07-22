@@ -61,6 +61,11 @@ public class Lesson {
     public Integer getCourseId() {
         return courseID != null ? courseID.getId() : null;
     }
+    
+    // Compatibility method for existing code
+    public Cours getCourseID() {
+        return this.courseID;
+    }
 
     public List<LessonStats> getLessonStatsList() {
         return lessonStatsList;

@@ -43,11 +43,12 @@ public class QuizDAO {
             ps.setInt(1, quizId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Question q = Question.builder()
-                        .id(rs.getInt("QuestionID"))
-                        .quizID(Quiz.builder().id(rs.getInt("QuizID")).build())
-                        .questionText(rs.getString("QuestionText"))
-                        .build();
+                Question q = new Question();
+                q.setId(rs.getInt("QuestionID"));
+                Quiz quiz = new Quiz();
+                quiz.setId(rs.getInt("QuizID"));
+                q.setQuiz(quiz);
+                q.setQuestionText(rs.getString("QuestionText"));
                 questions.add(q);
             }
         } catch (SQLException e) {
@@ -66,12 +67,13 @@ public class QuizDAO {
             ps.setInt(1, questionId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Answer an = Answer.builder()
-                        .id(rs.getInt("AnswerID"))
-                        .questionID(Question.builder().id(rs.getInt("QuestionID")).build())
-                        .answerText(rs.getString("AnswerText"))
-                        .isCorrect(rs.getBoolean("IsCorrect"))
-                        .build();
+                Answer an = new Answer();
+                an.setId(rs.getInt("AnswerID"));
+                Question q = new Question();
+                q.setId(rs.getInt("QuestionID"));
+                an.setQuestion(q);
+                an.setAnswerText(rs.getString("AnswerText"));
+                an.setIsCorrect(rs.getBoolean("IsCorrect"));
                 list.add(an);
             }
         } catch (SQLException e) {
@@ -126,12 +128,14 @@ public class QuizDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return Answer.builder()
-                        .id(rs.getInt("AnswerID"))
-                        .questionID(Question.builder().id(rs.getInt("QuestionID")).build())
-                        .answerText(rs.getString("AnswerText"))
-                        .isCorrect(rs.getBoolean("IsCorrect"))
-                        .build();
+                Answer answer = new Answer();
+                answer.setId(rs.getInt("AnswerID"));
+                Question question = new Question();
+                question.setId(rs.getInt("QuestionID"));
+                answer.setQuestion(question);
+                answer.setAnswerText(rs.getString("AnswerText"));
+                answer.setIsCorrect(rs.getBoolean("IsCorrect"));
+                return answer;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -168,7 +172,7 @@ public class QuizDAO {
                         .quiz(Quiz.builder().id(rs.getInt("QuizID")).build())
                         .startTime(rs.getTimestamp("StartTime"))
                         .endTime(rs.getTimestamp("EndTime"))
-                        .score(rs.getDouble("Score"))
+                        .score((int)rs.getDouble("Score"))
                         .build();
             }
         } catch (SQLException e) {
@@ -265,7 +269,7 @@ public class QuizDAO {
     public int addQuestion(Question question) {
         String sql = "INSERT INTO questions (QuizID, QuestionText) VALUES (?, ?)";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, question.getQuizID().getId());
             ps.setString(2, question.getQuestionText());
 
@@ -573,11 +577,13 @@ public class QuizDAO {
             stmt.setInt(1, questionId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return Question.builder()
-                        .id(rs.getInt("QuestionID"))
-                        .quizID(Quiz.builder().id(rs.getInt("QuizID")).build())
-                        .questionText(rs.getString("QuestionText"))
-                        .build();
+                Question question = new Question();
+                question.setId(rs.getInt("QuestionID"));
+                Quiz quiz = new Quiz();
+                quiz.setId(rs.getInt("QuizID"));
+                question.setQuiz(quiz);
+                question.setQuestionText(rs.getString("QuestionText"));
+                return question;
             }
         }
         return null;
@@ -608,13 +614,14 @@ public class QuizDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    answers.add(Answer.builder()
-                            .id(rs.getInt("AnswerID"))
-                            .questionID(Question.builder().id(rs.getInt("QuestionID")).build())
-                            .answerText(rs.getString("AnswerText"))
-                            .isCorrect(rs.getBoolean("IsCorrect"))
-                            .build()
-                    );
+                    Answer answer = new Answer();
+                    answer.setId(rs.getInt("AnswerID"));
+                    Question question = new Question();
+                    question.setId(rs.getInt("QuestionID"));
+                    answer.setQuestion(question);
+                    answer.setAnswerText(rs.getString("AnswerText"));
+                    answer.setIsCorrect(rs.getBoolean("IsCorrect"));
+                    answers.add(answer);
                 }
             }
         }
@@ -638,7 +645,7 @@ public class QuizDAO {
                         .quiz(Quiz.builder().id(quizId).build())
                         .user(User.builder().id(userId).build())
                         .startTime(new Date())
-                        .score(0.0)
+                        .score(0)
                         .build();
             }
         } catch (SQLException e) {

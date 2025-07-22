@@ -74,10 +74,10 @@ public class QuizDAOImpl implements QuizDAO {
                     User user = new User();
                     user.setId(rs.getInt("UserID"));
                     attempt.setUser(user);
-                    attempt.setStartTime(rs.getTimestamp("StartTime").toInstant());
+                    attempt.setStartTime(java.util.Date.from(rs.getTimestamp("StartTime").toInstant()));
                     Timestamp endTime = rs.getTimestamp("EndTime");
                     if (endTime != null) {
-                        attempt.setEndTime(endTime.toInstant());
+                        attempt.setEndTime(java.util.Date.from(endTime.toInstant()));
                     }
                     attempt.setScore(rs.getInt("Score"));
                     attempts.add(attempt);

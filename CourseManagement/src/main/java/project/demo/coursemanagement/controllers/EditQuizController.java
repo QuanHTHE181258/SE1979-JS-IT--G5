@@ -128,7 +128,7 @@ public class EditQuizController extends HttpServlet {
                 String questionText = request.getParameter("newQuestionText");
                 logger.info("Adding new question to quiz " + quizId + ": " + questionText);
                 Question question = Question.builder()
-                        .quizID(Quiz.builder().id(quizId).build())
+                        .quiz(Quiz.builder().id(quizId).build())
                         .questionText(questionText)
                         .build();
                 int newQuestionId = quizDAO.addQuestion(question);
@@ -139,7 +139,7 @@ public class EditQuizController extends HttpServlet {
                 boolean isCorrect = "on".equals(request.getParameter("isCorrect"));
                 logger.info("Adding new answer to question " + questionId + ": " + answerText + ", isCorrect: " + isCorrect);
                 Answer answer = Answer.builder()
-                        .questionID(Question.builder().id(questionId).build())
+                        .question(Question.builder().id(questionId).build())
                         .answerText(answerText)
                         .isCorrect(isCorrect)
                         .build();

@@ -35,9 +35,19 @@ public class Quiz {
 
     private int durationMinutes;
 
+    @Transient
     private List<Question> questions;
 
     public Quiz() {}
+    
+    // Compatibility methods for existing code
+    public void setLessonID(Lesson lesson) {
+        this.lessonID = lesson;
+    }
+    
+    public Lesson getLessonID() {
+        return this.lessonID;
+    }
 
     public Quiz(Integer id, Lesson lessonID, String title, int durationMinutes) {
         this.id = id;

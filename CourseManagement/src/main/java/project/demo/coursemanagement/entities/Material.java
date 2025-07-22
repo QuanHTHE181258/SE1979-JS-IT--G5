@@ -39,4 +39,9 @@ public class Material {
         lesson.setId(lessonId);
         this.lessonID = lesson;
     }
+    
+    // Compatibility method for existing code
+    public void setLessonID(Lesson lesson) {
+        this.lessonID = lesson;
+    }
 }
