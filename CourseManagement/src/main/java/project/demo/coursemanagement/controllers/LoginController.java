@@ -155,10 +155,10 @@ public class LoginController extends HttpServlet {
                         response.sendRedirect(contextPath + "/student-dashboard");
                         break;
                     case 3: // CourseManager
-                        response.sendRedirect(contextPath + "/course-manager/dashboard");
+                        response.sendRedirect(contextPath + "/course-manager");
                         break;
                     case 4: // UserManager
-                        response.sendRedirect(contextPath + "/user-manager/dashboard");
+                        response.sendRedirect(contextPath + "/admin/user-management");
                         break;
                     case 0: // Guest
                     default:
@@ -173,6 +173,9 @@ public class LoginController extends HttpServlet {
                         break;
                     case "TEACHER":
                         response.sendRedirect(contextPath + "/teacher/dashboard");
+                        break;
+                    case "USER_MANAGER":
+                        response.sendRedirect(contextPath + "/admin/user-management");
                         break;
                     case "USER":
                     case "STUDENT":

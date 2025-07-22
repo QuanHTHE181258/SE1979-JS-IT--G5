@@ -10,6 +10,7 @@ import project.demo.coursemanagement.dto.OrderAnalyticsDTO;
 import project.demo.coursemanagement.service.OrderService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "OrderController", urlPatterns = {
@@ -20,7 +21,7 @@ import java.util.List;
 })
 public class OrderController extends HttpServlet {
     private final OrderService orderService = new OrderService();
-    private static final int PAGE_SIZE = 8;
+    private static final int PAGE_SIZE = 5;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -62,9 +63,18 @@ public class OrderController extends HttpServlet {
             totalOrders = orderService.countSearchResults(searchKeyword);
             request.setAttribute("searchKeyword", searchKeyword);
         } else if (status != null && !status.isEmpty()) {
-            // Filter by status
-            orders = orderService.getOrdersByStatus(status);
-            totalOrders = orders.size(); // For status filtering, we already have all orders
+            // Filter by status - cải thiện để hỗ trợ phân trang
+            List<OrderDTO> allOrdersByStatus = orderService.getOrdersByStatus(status);
+            totalOrders = allOrdersByStatus.size();
+            
+            // Phân trang cho status filter
+            int startIndex = offset;
+            int endIndex = Math.min(startIndex + PAGE_SIZE, totalOrders);
+            if (startIndex < totalOrders) {
+                orders = allOrdersByStatus.subList(startIndex, endIndex);
+            } else {
+                orders = new ArrayList<>();
+            }
         } else {
             // Default pagination
             orders = orderService.getOrdersWithPagination(offset, PAGE_SIZE);
@@ -76,7 +86,9 @@ public class OrderController extends HttpServlet {
         request.setAttribute("orders", orders);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("totalOrders", totalOrders); // Thêm tổng số bản ghi
         request.setAttribute("currentStatus", status);
+        request.setAttribute("pageSize", PAGE_SIZE); // Thêm kích thước trang
 
         request.getRequestDispatcher("/WEB-INF/views/admin_orders.jsp").forward(request, response);
     }

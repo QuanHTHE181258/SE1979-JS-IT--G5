@@ -7,16 +7,15 @@
     <meta charset="UTF-8">
     <title>User Management - Admin</title>
     <link href="${pageContext.request.contextPath}/css/admincss.css" rel="stylesheet">
-
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="wrapper">
-    <nav id="sidebar" class="bg-dark text-white">
+    <nav id="sidebar" class="">
         <div class="sidebar-header">
             <h3>Admin Panel</h3>
         </div>
-        <ul class="list-unstyled components">
+        <ul class="components">
             <li <c:if test="${request.servletPath == '/admin'}">class="active"</c:if>>
                 <a href="${pageContext.request.contextPath}/admin">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
@@ -37,48 +36,25 @@
                     <i class="fas fa-shopping-cart"></i> Order Management
                 </a>
             </li>
-            <li <c:if test="${request.servletPath == '/admin/categories'}">class="active"</c:if>>
-                <a href="${pageContext.request.contextPath}/admin/categories">
-                    <i class="fas fa-tags"></i> Categories
-                </a>
-            </li>
-             <li <c:if test="${request.servletPath == '/admin/enrollments'}">class="active"</c:if>>
-                <a href="${pageContext.request.contextPath}/admin/enrollments">
-                  <i class="fas fa-user-graduate"></i> Enrollments
-                </a>
-            </li>
-            <li <c:if test="${request.servletPath == '/admin/feedback'}">class="active"</c:if>>
-                 <a href="${pageContext.request.contextPath}/admin/feedback">
-                   <i class="fas fa-comments"></i> Feedback
-                 </a>
-            </li>
-            <li <c:if test="${request.servletPath == '/admin/reports'}">class="active"</c:if>>
-                <a href="${pageContext.request.contextPath}/admin/reports">
-                    <i class="fas fa-chart-bar"></i> Reports
-                </a>
-            </li>
-            <li <c:if test="${request.servletPath == '/admin/settings'}">class="active"</c:if>>
-                <a href="${pageContext.request.contextPath}/admin/settings">
-                    <i class="fas fa-cog"></i> Settings
+            <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/admin/revenue-analytics">
+                    <i class="fas fa-chart-bar"></i> Revenue Analytics
                 </a>
             </li>
         </ul>
     </nav>
-
     <div id="content">
-        <!-- Top Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">User Management</a>
             </div>
         </nav>
-
         <div class="container-fluid py-4">
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="card shadow">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Create User Manager Account</h6>
+                            <h6 class="m-0 font-weight-bold">Create User Manager Account</h6>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -97,16 +73,15 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="card shadow mt-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">User Management</h6>
+                            <h6 class="m-0 font-weight-bold">User Management</h6>
                         </div>
                         <div class="card-body text-center">
                             <i class="fas fa-users-cog fa-3x text-info mb-3"></i>
                             <h5 class="card-title">Manage Users</h5>
                             <p class="card-text text-muted">Go to the user management interface to manage all users in the system</p>
-                            <a href="${pageContext.request.contextPath}/admin/user-management" class="btn btn-info">
+                            <a href="${pageContext.request.contextPath}/admin/user-management/list" class="btn btn-info">
                                 <i class="fas fa-users-cog"></i> Go to User Management
                             </a>
                         </div>

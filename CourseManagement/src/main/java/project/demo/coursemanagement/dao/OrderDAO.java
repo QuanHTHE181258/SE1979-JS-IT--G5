@@ -25,4 +25,5 @@ public interface OrderDAO {
     
     // Method to get orders by user ID
     List<OrderDTO> getOrdersByUserId(Integer userId);
+    List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueDetails();
 }

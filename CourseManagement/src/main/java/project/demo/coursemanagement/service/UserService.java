@@ -115,6 +115,7 @@ public class UserService {
 
         // Then assign the role to the user
         success = userRoleDAO.assignRoleToUser(user.getId(), role.getId());
+        System.out.println("User created successfully"+ success);
         if (!success) {
             // If role assignment fails, delete the user to maintain consistency
             userDAO.deleteUser(user.getId());
@@ -149,7 +150,7 @@ public class UserService {
          }
 
         // Find Role by name
-        Role newRole = roleDAO.findByRoleName(roleName); 
+        Role newRole = roleDAO.findByRoleName(roleName);
         if (newRole == null) {
             throw new IllegalArgumentException("Invalid role specified.");
         }
@@ -217,4 +218,9 @@ public class UserService {
     public List<User> getRecentUsersByRole(int limit, String role) {
         return userDAO.getRecentUsersByRole(limit, role);
     }
+
+    public Role getPrimaryRoleByUserId(int userId) {
+        return userRoleDAO.findPrimaryRoleByUserId(userId);
+    }
+
 }

@@ -16,74 +16,69 @@
   <title>Admin Dashboard - Course Management System</title>
 
   <link href="${pageContext.request.contextPath}/css/admincss.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-<div class="wrapper">
+<div class="d-flex">
   <!-- Sidebar -->
-  <nav id="sidebar" class="bg-dark text-white">
+  <nav id="sidebar" class="sidebar">
     <div class="sidebar-header">
       <h3>Admin Panel</h3>
     </div>
-
-    <ul class="list-unstyled components">
-      <li class="active">
-        <a href="${pageContext.request.contextPath}/admin">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link <c:if test='${request.servletPath == "/admin"}'>active</c:if>" href="${pageContext.request.contextPath}/admin">
           <i class="fas fa-tachometer-alt"></i> Dashboard
         </a>
       </li>
-      <li>
-        <a href="${pageContext.request.contextPath}/admin/users">
+      <li class="nav-item">
+        <a class="nav-link <c:if test='${request.servletPath == "/admin/user-management"}'>active</c:if>" href="${pageContext.request.contextPath}/admin/user-management">
           <i class="fas fa-users"></i> User Management
         </a>
       </li>
-      <li>
-        <a href="${pageContext.request.contextPath}/admin/courses">
-          <i class="fas fa-book"></i> Course Management
+      <li class="nav-item">
+        <a class="nav-link <c:if test='${request.servletPath == "/admin/courses"}'>active</c:if>" href="${pageContext.request.contextPath}/admin/courses">
+          <i class="fas fa-book"></i> Courses Management
         </a>
       </li>
-      <li>
-        <a href="${pageContext.request.contextPath}/admin/orders">
+      <li class="nav-item">
+        <a class="nav-link <c:if test='${request.servletPath == "/admin/orders"}'>active</c:if>" href="${pageContext.request.contextPath}/admin/orders">
           <i class="fas fa-shopping-cart"></i> Order Management
         </a>
       </li>
-      <li>
-        <a href="${pageContext.request.contextPath}/admin/categories">
-          <i class="fas fa-tags"></i> Categories
+      <li class="nav-item">
+        <a class="nav-link <c:if test='${request.servletPath == "/admin/revenue-analytics"}'>active</c:if>" href="${pageContext.request.contextPath}/admin/revenue-analytics">
+          <i class="fas fa-chart-bar"></i> Revenue Analytics
         </a>
       </li>
-      <li>
-        <a href="${pageContext.request.contextPath}/admin/enrollments">
-          <i class="fas fa-user-graduate"></i> Enrollments
-        </a>
-      </li>
-      <li>
-        <a href="${pageContext.request.contextPath}/admin/feedback">
-          <i class="fas fa-comments"></i> Feedback
-        </a>
-      </li>
-      <li>
-        <a href="${pageContext.request.contextPath}/admin/reports">
-          <i class="fas fa-chart-bar"></i> Reports
-        </a>
-      </li>
-      <li>
-        <a href="${pageContext.request.contextPath}/admin/settings">
-          <i class="fas fa-cog"></i> Settings
+      <li class="nav-item">
+        <a class="nav-link <c:if test='${request.servletPath == "/teacher-performance"}'>active</c:if>" href="${pageContext.request.contextPath}/teacher-performance">
+          <i class="fas fa-chart-line"></i> Teacher Performance
         </a>
       </li>
     </ul>
   </nav>
 
   <!-- Page Content -->
-  <div id="content">
+  <div id="content" class="flex-grow-1">
     <!-- Top Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
+        <button type="button" id="sidebarCollapse" class="btn btn-info">
+          <i class="fas fa-align-left"></i>
+        </button>
         <a class="navbar-brand" href="#">Course Management System</a>
         <div class="ms-auto d-flex align-items-center">
           <a href="${pageContext.request.contextPath}/admin/profile" class="btn btn-link">
-            <img src="${pageContext.request.contextPath}/assets/images/avatars/admin.jpg" class="rounded-circle" width="32" height="32">
-            <span class="ms-2">${sessionScope.admin.name != null ? sessionScope.admin.name : 'Admin User'}</span>
+            <c:choose>
+              <c:when test="${not empty sessionScope.user.avatar.url}">
+                <img src="${pageContext.request.contextPath}/assets/avatar/${sessionScope.user.avatar.url}" class="rounded-circle" width="32" height="32" alt="User Avatar">
+              </c:when>
+              <c:otherwise>
+                <img src="${pageContext.request.contextPath}/assets/avatar/default_avatar.png" class="rounded-circle" width="32" height="32" alt="Default Avatar">
+              </c:otherwise>
+            </c:choose>
+            <span class="ms-2">${sessionScope.user.username}</span>
           </a>
           <a href="${pageContext.request.contextPath}/logout" class="btn btn-outline-danger ms-3">
             <i class="fas fa-sign-out-alt"></i> Logout
@@ -91,7 +86,6 @@
         </div>
       </div>
     </nav>
-
     <!-- Main Content -->
     <div class="container-fluid py-4">
       <!-- Dashboard Cards -->
@@ -282,7 +276,7 @@
                           <td>
                             <fmt:formatDate value="${user.createdAtDate}" pattern="MMM dd, yyyy HH:mm" />
                           </td>
-                          <td>${user.role.roleName}</td>
+                          <td>${userRoles[user.id].roleName}</td>
                         </tr>
                       </c:forEach>
                       </tbody>
@@ -432,38 +426,9 @@
           </div>
         </div>
 
-        <div class="col-lg-6">
-          <div class="card shadow mb-4">
-            <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Recent Registrations</h6>
-            </div>
-            <div class="card-body">
-              <c:choose>
-                <c:when test="${not empty recentUsers}">
-                  <c:forEach var="user" items="${recentUsers}">
-                    <div class="d-flex align-items-center mb-3">
-                      <img src="${pageContext.request.contextPath}/assets/images/avatars/default.jpg"
-                           class="rounded-circle me-3" width="40" height="40">
-                      <div>
-                        <h6 class="mb-1">${user.firstName} ${user.lastName}</h6>
-                        <small class="text-muted">
-                          <fmt:formatDate value="${user.createdAtDate}" pattern="MMM dd, yyyy HH:mm" />
-                        </small>
-                      </div>
-                      <span class="badge badge-info ms-auto">User</span>
-                    </div>
-                  </c:forEach>
-                </c:when>
-                <c:otherwise>
-                  <div class="text-center py-3">
-                    <p class="text-muted">No recent registrations</p>
-                  </div>
-                </c:otherwise>
-              </c:choose>
-            </div>
-          </div>
-        </div>
+
       </div>
+          </div>
     </div>
   </div>
 </div>

@@ -72,4 +72,8 @@ public class OrderService {
     public List<OrderDTO> getOrdersByUserId(Integer userId) {
         return orderDAO.getOrdersByUserId(userId);
     }
+    
+    public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueDetails() {
+        return orderDAO.getRevenueDetails();
+    }
 }

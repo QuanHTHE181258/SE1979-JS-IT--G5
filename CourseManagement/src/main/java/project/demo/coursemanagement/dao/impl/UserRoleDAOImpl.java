@@ -51,7 +51,7 @@ public class UserRoleDAOImpl implements UserRoleDAO {
         String sql = "SELECT r.RoleID, r.RoleName FROM roles r " +
                 "JOIN user_roles ur ON r.RoleID = ur.RoleID " +
                 "WHERE ur.UserID = ? " +
-                "ORDER BY r.RoleID";
+                "ORDER BY r.RoleID DESC";
         
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

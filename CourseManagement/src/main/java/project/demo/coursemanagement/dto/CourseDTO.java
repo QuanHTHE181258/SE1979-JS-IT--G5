@@ -29,6 +29,7 @@ public class CourseDTO {
     private Instant createdAt;
     private java.util.Date createdAtDate;
     private int enrollmentCount;
+    private String status;
 
     private int courseID;
     private String courseTitle;
@@ -217,6 +218,14 @@ public class CourseDTO {
         this.enrollmentCount = enrollmentCount;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
     public int getCourseID() {
         return courseID;
     }
