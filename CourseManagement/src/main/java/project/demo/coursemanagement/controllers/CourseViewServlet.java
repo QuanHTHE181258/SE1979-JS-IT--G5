@@ -20,12 +20,10 @@ public class CourseViewServlet extends HttpServlet {
             throws ServletException, IOException {
         System.out.println("CourseViewServlet: doGet() method called");
 
-        // Get optional search/filter parameters
         String searchKeyword = request.getParameter("search");
 
-        // Get pagination parameters
         int page = 1;
-        int size = 6; // number of courses per page
+        int size = 6;
         String pageParam = request.getParameter("page");
         if (pageParam != null) {
             try {
@@ -37,13 +35,10 @@ public class CourseViewServlet extends HttpServlet {
         int totalCourses;
         int totalPages;
 
-        // If search is provided, use search functionality
         if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
-            // Get full list first for searching
             List<CourseDTO> allCourses = courseService.getAllCourses();
             System.out.println("Total courses before filtering: " + allCourses.size());
 
-            // Filter based on search keyword
             String keywordLower = searchKeyword.trim().toLowerCase();
             courses = allCourses.stream()
                     .filter(
@@ -53,7 +48,6 @@ public class CourseViewServlet extends HttpServlet {
 
             totalCourses = courses.size();
 
-            // Apply pagination to filtered results
             int fromIndex = (page - 1) * size;
             int toIndex = Math.min(fromIndex + size, courses.size());
 
@@ -63,14 +57,12 @@ public class CourseViewServlet extends HttpServlet {
                 courses = new ArrayList<>();
             }
         } else {
-            // Use pagination directly from database if no search
             courses = courseService.getCoursesByPage(page, size);
             totalCourses = courseService.getTotalCourseCount();
         }
 
         totalPages = (int) Math.ceil((double) totalCourses / size);
 
-        // Set attributes for the view
         request.setAttribute("courses", courses);
         request.setAttribute("listCourseDto", courses);
         request.setAttribute("currentPage", page);

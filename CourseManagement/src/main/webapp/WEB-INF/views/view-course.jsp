@@ -36,6 +36,7 @@
 <%-- Content --%>
 <div class="container">
     <h1>Course List</h1>
+    <a href="courseCatalog">Filter</a>
     <ul class="course-list">
         <c:forEach var="course" items="${courses}">
             <li class="course-card">

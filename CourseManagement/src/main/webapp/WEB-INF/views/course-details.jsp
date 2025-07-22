@@ -6,6 +6,7 @@
     <title>Course Details</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-RvQxD1xVB3LHsb6sSrFyeCxoUAREci8hPbgGacXRKrKaQjgr3+0pmSOriBGobgoa6qX3OyUrqGzivfqvbtvU6FQ==">
     <link rel="stylesheet" href="css/course-details-style.css">
+    <meta charset="UTF-8">
 </head>
 <body>
 <div class="home-header">
@@ -30,7 +31,7 @@
             <p><strong>Description:</strong> ${course.courseDescription}</p>
             <p><strong>Price:</strong> $<fmt:formatNumber value="${course.price}" type="number" maxFractionDigits="2"/></p>
             <p><strong>Rating:</strong> ${course.rating}</p>
-            <p><strong>Teacher:</strong> <a href="instructorInfo">${course.teacherName}</a></p>
+            <p><strong>Teacher:</strong> <a href="instructorInfo?username=${course.teacherName}">${course.teacherName}</a></p>
             <c:if test="${not empty course.categories}">
                 <p><strong>Categories:</strong> ${course.categories}</p>
             </c:if>
@@ -39,7 +40,7 @@
             </c:if>
             <c:set var="createdAtInstant" value="${course.createdAt}" />
             <fmt:parseDate value="${createdAtInstant}" pattern="yyyy-MM-dd'T'HH:mm:ss.SSSX" var="parsedDate" type="both" />
-            <p><strong>Created At:</strong> <fmt:formatDate value="${parsedDate}" pattern="HH:mm dd-MM-yyyy"/></p>
+            <p><strong>Created At:</strong> <fmt:formatDate value="${parsedDate}" pattern="dd-MM-yyyy"/></p>
             <div class="card-footer">
                 <form action="CartServlet" method="post">
                     <input type="hidden" name="action" value="add">
@@ -57,7 +58,7 @@
                         <ul class="lesson-list">
                             <c:forEach var="lesson" items="${lessons}">
                                 <li class="lesson-item">
-                                    <strong> Title:</strong> ${lesson.title}
+                                    <strong> Title:</strong> <a href="lessonPreview?lessonID=${lesson.lessonID}">${lesson.title}</a>
                                     <c:if test="${not empty lesson.status}">
                                         <span class="lesson-status"> (Status: ${lesson.status})</span>
                                     </c:if>

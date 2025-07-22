@@ -21,12 +21,11 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Fetch course lists using HomeService
         request.setAttribute("highestRatedCourses", homeService.getHighestRatedCourses());
         request.setAttribute("paidCourses", homeService.getPaidCourses());
         request.setAttribute("freeCourses", homeService.getFreeCourses());
 
-        // Forward to JSP
+
         request.getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
     }
 }

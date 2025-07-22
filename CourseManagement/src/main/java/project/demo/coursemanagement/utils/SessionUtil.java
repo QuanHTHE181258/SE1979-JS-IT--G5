@@ -1,9 +1,9 @@
 package project.demo.coursemanagement.utils;
 
-import project.demo.coursemanagement.entities.User;
-import project.demo.coursemanagement.entities.Role;
 import project.demo.coursemanagement.dao.UserRoleDAO;
 import project.demo.coursemanagement.dao.impl.UserRoleDAOImpl;
+import project.demo.coursemanagement.entities.User;
+import project.demo.coursemanagement.entities.Role;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
