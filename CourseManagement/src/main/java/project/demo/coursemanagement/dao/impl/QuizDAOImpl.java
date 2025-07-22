@@ -8,6 +8,8 @@ import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.entities.Answer;
 import java.sql.*;
 import java.util.*;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class QuizDAOImpl implements QuizDAO {
     @Override
@@ -208,5 +210,49 @@ public class QuizDAOImpl implements QuizDAO {
         return false;
     }
 
-    // Remove the getNext...Id methods as they are no longer needed
+    public int addQuizAndGetId(Quiz quiz) {
+        String sql = "INSERT INTO quizzes (LessonID, Title) VALUES (?, ?)";
+        try (Connection conn = project.demo.coursemanagement.utils.DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, quiz.getLessonID().getId());
+            stmt.setString(2, quiz.getTitle());
+
+            int result = stmt.executeUpdate();
+            if (result > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        int id = rs.getInt(1);
+                        quiz.setId(id);
+                        return id;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int addQuestionAndGetId(Question question) {
+        String sql = "INSERT INTO questions (QuizID, QuestionText) VALUES (?, ?)";
+        try (Connection conn = project.demo.coursemanagement.utils.DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, question.getQuiz().getId());
+            stmt.setString(2, question.getQuestionText());
+
+            int result = stmt.executeUpdate();
+            if (result > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        int id = rs.getInt(1);
+                        question.setId(id);
+                        return id;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 }
