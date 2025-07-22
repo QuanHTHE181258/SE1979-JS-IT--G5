@@ -1,88 +1,94 @@
-package project.demo.coursemanagement.controller;
+package project.demo.coursemanagement.controllers;
 
-import project.demo.coursemanagement.service.QuizService;
-import project.demo.coursemanagement.service.QuizService.QuizQuestionData;
-import project.demo.coursemanagement.service.QuizService.QuizAnswerData;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-@WebServlet("/add-quiz")
+import project.demo.coursemanagement.dao.impl.QuizDAOImpl;
+import project.demo.coursemanagement.entities.Answer;
+import project.demo.coursemanagement.entities.Lesson;
+import project.demo.coursemanagement.entities.Question;
+import project.demo.coursemanagement.entities.Quiz;
+
+@WebServlet("/addQuiz")
 public class AddQuizServlet extends HttpServlet {
-    private QuizService quizService = new QuizService();
-
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String lessonId = request.getParameter("lessonId");
         request.setAttribute("lessonId", lessonId);
-        request.getRequestDispatcher("/WEB-INF/views/add-quiz.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/addQuiz.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int lessonId = Integer.parseInt(request.getParameter("lessonId"));
-            String title = request.getParameter("title");
+            String quizTitle = request.getParameter("quizTitle");
 
-            // Get questions data
-            String[] questionTexts = request.getParameterValues("questionText");
-            List<QuizQuestionData> questions = new ArrayList<>();
+            // Create and save Quiz
+            Quiz quiz = new Quiz();
+            Lesson lesson = new Lesson();
+            lesson.setId(lessonId);
+            quiz.setLessonID(lesson);
+            quiz.setTitle(quizTitle);
 
+            QuizDAOImpl quizDAO = new QuizDAOImpl();
+            int quizId = quizDAO.addQuizAndGetId(quiz); // Thêm method mới để lấy ID của quiz vừa thêm
+
+            if (quizId <= 0) {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to add quiz");
+                return;
+            }
+
+            // Set the generated ID back to the quiz object
+            quiz.setId(quizId);
+
+            // Process Questions
+            String[] questionTexts = request.getParameterValues("questionText[]");
             if (questionTexts != null) {
                 for (int i = 0; i < questionTexts.length; i++) {
-                    String questionText = questionTexts[i];
-                    if (questionText != null && !questionText.trim().isEmpty()) {
-                        // Get answers for this question
-                        String[] answers = request.getParameterValues("answers_" + i);
-                        String[] correctAnswers = request.getParameterValues("correctAnswer_" + i);
+                    // Create and save Question
+                    Question question = new Question();
+                    question.setQuiz(quiz);
+                    question.setQuestionText(questionTexts[i]);
+                    int questionId = quizDAO.addQuestionAndGetId(question); // Thêm method mới
 
-                        List<QuizAnswerData> answerList = new ArrayList<>();
-                        if (answers != null) {
-                            for (int j = 0; j < answers.length; j++) {
-                                if (answers[j] != null && !answers[j].trim().isEmpty()) {
-                                    boolean isCorrect = false;
-                                    if (correctAnswers != null) {
-                                        for (String correctIndex : correctAnswers) {
-                                            if (correctIndex.equals(String.valueOf(j))) {
-                                                isCorrect = true;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    answerList.add(new QuizAnswerData(answers[j], isCorrect));
+                    if (questionId > 0) {
+                        question.setId(questionId);
+
+                        // Process Answers for this question
+                        String[] answerTexts = request.getParameterValues("answerText_" + i + "[]");
+                        String[] isCorrects = request.getParameterValues("isCorrect_" + i + "[]");
+
+                        if (answerTexts != null) {
+                            for (int j = 0; j < answerTexts.length; j++) {
+                                Answer answer = new Answer();
+                                answer.setQuestion(question);
+                                answer.setAnswerText(answerTexts[j]);
+
+                                // Check if this answer is marked as correct
+                                boolean isCorrect = false;
+                                if (isCorrects != null && j < isCorrects.length) {
+                                    isCorrect = "true".equals(isCorrects[j]);
                                 }
+                                answer.setIsCorrect(isCorrect);
+                                quizDAO.addAnswer(answer);
                             }
-                        }
-
-                        if (!answerList.isEmpty()) {
-                            questions.add(new QuizQuestionData(questionText, answerList));
                         }
                     }
                 }
             }
 
-            boolean success = quizService.createQuiz(lessonId, title, questions);
-
-            if (success) {
-                response.sendRedirect("lesson-details?id=" + lessonId + "&success=Quiz created successfully!");
-            } else {
-                request.setAttribute("error", "Failed to create quiz. Please try again.");
-                request.setAttribute("lessonId", lessonId);
-                request.getRequestDispatcher("/WEB-INF/views/add-quiz.jsp").forward(request, response);
-            }
+            // Redirect back to the lesson page
+            response.sendRedirect(request.getContextPath() + "/lesson?id=" + lessonId);
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "An error occurred while creating the quiz.");
-            request.setAttribute("lessonId", request.getParameter("lessonId"));
-            request.getRequestDispatcher("/WEB-INF/views/add-quiz.jsp").forward(request, response);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error processing quiz: " + e.getMessage());
         }
     }
 }

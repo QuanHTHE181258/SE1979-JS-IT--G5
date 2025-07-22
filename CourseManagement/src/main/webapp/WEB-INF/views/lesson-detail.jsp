@@ -56,7 +56,7 @@
                 <div class="mb-4">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="label">Quizzes</span>
-                        <a href="add-quiz?lessonId=${lesson.id}" class="btn btn-success btn-sm"><i class="fas fa-plus me-1"></i>Add Quiz</a>
+                        <a href="addQuiz?lessonId=${lesson.id}" class="btn btn-success btn-sm"><i class="fas fa-plus me-1"></i>Add Quiz</a>
                     </div>
                     <table class="table table-bordered table-sm align-middle">
                         <thead class="table-light">
