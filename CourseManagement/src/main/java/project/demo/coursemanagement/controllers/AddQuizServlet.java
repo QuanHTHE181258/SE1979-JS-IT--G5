@@ -84,7 +84,7 @@ public class AddQuizServlet extends HttpServlet {
             }
 
             // Redirect back to the lesson page
-            response.sendRedirect(request.getContextPath() + "/lesson?id=" + lessonId);
+            response.sendRedirect(request.getContextPath() + "/lesson-details?id=" + lessonId);
 
         } catch (Exception e) {
             e.printStackTrace();
