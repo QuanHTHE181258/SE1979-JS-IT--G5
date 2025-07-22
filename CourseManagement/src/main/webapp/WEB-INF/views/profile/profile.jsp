@@ -677,7 +677,34 @@
                 <div class="enrollment-meta">
                   <span>
                     Enrolled:
-                    <fmt:formatDate value="${enrollment.enrollmentDate}" pattern="dd MMM yyyy" />
+                    <c:set var="enrollmentInstant" value="${enrollment.enrollmentDate}" />
+                    <c:if test="${not empty enrollmentInstant}">
+                      <c:set var="dateStr" value="${enrollmentInstant.toString()}" />
+                      <c:set var="year" value="${fn:substring(dateStr, 0, 4)}" />
+                      <c:set var="month" value="${fn:substring(dateStr, 5, 7)}" />
+                      <c:set var="day" value="${fn:substring(dateStr, 8, 10)}" />
+                      
+                      <c:set var="monthName" value="" />
+                      <c:choose>
+                        <c:when test="${month == '01'}"><c:set var="monthName" value="Jan" /></c:when>
+                        <c:when test="${month == '02'}"><c:set var="monthName" value="Feb" /></c:when>
+                        <c:when test="${month == '03'}"><c:set var="monthName" value="Mar" /></c:when>
+                        <c:when test="${month == '04'}"><c:set var="monthName" value="Apr" /></c:when>
+                        <c:when test="${month == '05'}"><c:set var="monthName" value="May" /></c:when>
+                        <c:when test="${month == '06'}"><c:set var="monthName" value="Jun" /></c:when>
+                        <c:when test="${month == '07'}"><c:set var="monthName" value="Jul" /></c:when>
+                        <c:when test="${month == '08'}"><c:set var="monthName" value="Aug" /></c:when>
+                        <c:when test="${month == '09'}"><c:set var="monthName" value="Sep" /></c:when>
+                        <c:when test="${month == '10'}"><c:set var="monthName" value="Oct" /></c:when>
+                        <c:when test="${month == '11'}"><c:set var="monthName" value="Nov" /></c:when>
+                        <c:when test="${month == '12'}"><c:set var="monthName" value="Dec" /></c:when>
+                      </c:choose>
+                      
+                      ${day} ${monthName} ${year}
+                    </c:if>
+                    <c:if test="${empty enrollmentInstant}">
+                      Unknown date
+                    </c:if>
                   </span>
                   <div>
                     <c:if test="${enrollment.grade != null}">
@@ -710,6 +737,11 @@
         <a href="${pageContext.request.contextPath}/profile/edit" class="btn btn-action btn-edit">
           <i class="fas fa-user-edit"></i>
           Edit Profile
+        </a>
+        
+        <a href="${pageContext.request.contextPath}/profile/orders" class="btn btn-action" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+          <i class="fas fa-shopping-cart"></i>
+          Order History
         </a>
 
         <a href="${pageContext.request.contextPath}/profile/password" class="btn btn-action btn-password">

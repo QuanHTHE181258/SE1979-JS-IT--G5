@@ -399,4 +399,36 @@ public class OrderDAOImpl implements OrderDAO {
         }
         return revenueByMonth;
     }
+    
+    @Override
+    public List<OrderDTO> getOrdersByUserId(Integer userId) {
+        List<OrderDTO> orders = new ArrayList<>();
+        String sql = """
+            SELECT o.OrderID, u.Username, o.Status, o.PaymentMethod, o.TotalAmount, 
+                   o.CreatedAt, u.FirstName, u.LastName, u.Email
+            FROM orders o
+            JOIN users u ON o.UserID = u.UserID
+            WHERE o.UserID = ?
+            ORDER BY o.CreatedAt DESC
+        """;
+
+        try (Connection conn = dbConn.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    OrderDTO order = mapResultSetToOrder(rs);
+                    order.setOrderDetails(getOrderDetails(order.getOrderId()));
+                    order.calculateTotalAmount(); // Calculate total amount based on order details
+                    orders.add(order);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting orders by user ID: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return orders;
+    }
 }

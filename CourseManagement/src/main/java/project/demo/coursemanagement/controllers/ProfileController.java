@@ -2,10 +2,12 @@ package project.demo.coursemanagement.controllers;
 
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.service.ProfileService;
+import project.demo.coursemanagement.service.OrderService;
 import project.demo.coursemanagement.utils.SessionUtil;
 import project.demo.coursemanagement.dto.ProfileUpdateRequest;
 import project.demo.coursemanagement.dto.ValidationResult;
 import project.demo.coursemanagement.utils.ValidationUtil;
+import project.demo.coursemanagement.dto.OrderDTO;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -21,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Servlet for handling user profile management
@@ -34,6 +37,7 @@ import java.util.HashMap;
 public class ProfileController extends HttpServlet {
 
     private ProfileService profileService;
+    private OrderService orderService;
 
     @Override
     public void init() throws ServletException {
@@ -45,6 +49,9 @@ public class ProfileController extends HttpServlet {
 
         // Pass the webapp path
         profileService = new ProfileService(webappPath);
+        
+        // Initialize OrderService
+        orderService = new OrderService();
 
         System.out.println("ProfileServlet initialized with webapp path");
     }
@@ -79,6 +86,9 @@ public class ProfileController extends HttpServlet {
         } else if (pathInfo.equals("/avatar")) {
             // Show avatar upload form
             showAvatarUploadForm(request, response);
+        } else if (pathInfo.equals("/orders")) {
+            // Show user's order history
+            showOrderHistory(request, response);
         } else if (pathInfo.startsWith("/view/")) {
             // View another user's profile (if allowed)
             viewUserProfile(request, response, pathInfo);
@@ -539,6 +549,56 @@ public class ProfileController extends HttpServlet {
         }
     }
 
+    /**
+     * Show user's order history
+     */
+    private void showOrderHistory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        Integer userId = SessionUtil.getUserId(request);
+        if (userId == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+        
+        try {
+            // Get user data from database
+            User user = profileService.getUserById(userId);
+            
+            if (user == null) {
+                SessionUtil.setFlashMessage(request, "error", "Unable to load profile. Please try again.");
+                response.sendRedirect(request.getContextPath() + "/student-dashboard");
+                return;
+            }
+            
+            // Get user's orders
+            List<OrderDTO> orders = orderService.getOrdersByUserId(userId);
+            
+            // Get any flash messages
+            String flashMessage = SessionUtil.getAndClearFlashMessage(request);
+            if (flashMessage != null) {
+                String[] parts = flashMessage.split(":", 2);
+                if (parts.length == 2) {
+                    request.setAttribute("messageType", parts[0]);
+                    request.setAttribute("message", parts[1]);
+                }
+            }
+            
+            // Set attributes for JSP
+            request.setAttribute("user", user);
+            request.setAttribute("orders", orders);
+            
+            // Forward to order history page
+            request.getRequestDispatcher("/WEB-INF/views/profile/order_history.jsp").forward(request, response);
+            
+        } catch (Exception e) {
+            System.err.println("Error showing order history: " + e.getMessage());
+            e.printStackTrace();
+            SessionUtil.setFlashMessage(request, "error", "An error occurred while loading your order history.");
+            response.sendRedirect(request.getContextPath() + "/profile");
+        }
+    }
+    
     /**
      * Create profile update request from form parameters
      */

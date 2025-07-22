@@ -68,4 +68,8 @@ public class OrderService {
     public List<OrderDTO> getOrdersByDateRange(String startDate, String endDate) {
         return orderDAO.getOrdersByDateRange(startDate, endDate);
     }
-} 
+
+    public List<OrderDTO> getOrdersByUserId(Integer userId) {
+        return orderDAO.getOrdersByUserId(userId);
+    }
+}

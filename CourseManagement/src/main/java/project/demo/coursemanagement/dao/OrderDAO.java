@@ -22,4 +22,7 @@ public interface OrderDAO {
     BigDecimal getTotalRevenue();
     Map<String, Integer> getOrdersCountByStatus();
     Map<String, BigDecimal> getRevenueByMonth();
+    
+    // Method to get orders by user ID
+    List<OrderDTO> getOrdersByUserId(Integer userId);
 }
