@@ -76,18 +76,18 @@
                     </div>
                 </div>
                 <!-- Revenue by Month Chart -->
-<%--                <div class="row">--%>
-<%--                    <div class="col-12">--%>
-<%--                        <div class="card shadow mb-4">--%>
-<%--                            <div class="card-header py-3">--%>
-<%--                                <h6 class="m-0 font-weight-bold text-primary">Revenue by Month</h6>--%>
-<%--                            </div>--%>
-<%--                            <div class="card-body">--%>
-<%--                                <canvas id="revenueByMonthChart"></canvas>--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Revenue by Month</h6>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="revenueByMonthChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Top 5 Courses by Revenue Chart -->
                 <div class="row">
@@ -250,131 +250,130 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Revenue by Month Chart
-    const revenueByMonthCtx = document.getElementById('revenueByMonthChart').getContext('2d');
-    const revenueByMonthChart = new Chart(revenueByMonthCtx, {
-        type: 'line',
-        data: {
-            labels: [
-                <c:forEach items="${revenueByMonth}" var="item" varStatus="loop">
-                '${item.year}-${item.month}'<c:if test="${!loop.last}">,</c:if>
-                </c:forEach>
-            ],
-            datasets: [{
-                label: 'Revenue ($)',
-                data: [
+    const revenueByMonthCanvas = document.getElementById('revenueByMonthChart');
+    if (revenueByMonthCanvas) {
+        const revenueByMonthCtx = revenueByMonthCanvas.getContext('2d');
+        new Chart(revenueByMonthCtx, {
+            type: 'line',
+            data: {
+                labels: [
                     <c:forEach items="${revenueByMonth}" var="item" varStatus="loop">
-                    ${item.revenue}<c:if test="${!loop.last}">,</c:if>
+                    '${item.year}-${item.month}'<c:if test="${!loop.last}">,</c:if>
                     </c:forEach>
                 ],
-                borderColor: '#4e73df',
-                backgroundColor: 'rgba(78, 115, 223, 0.1)',
-                tension: 0.1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+                datasets: [{
+                    label: 'Revenue ($)',
+                    data: [
+                        <c:forEach items="${revenueByMonth}" var="item" varStatus="loop">
+                        ${item.revenue}<c:if test="${!loop.last}">,</c:if>
+                        </c:forEach>
+                    ],
+                    borderColor: '#4e73df',
+                    backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true } }
             }
-        }
-    });
+        });
+    }
 
     // Revenue by Day Chart
-    const dayChartContainer = document.createElement('div');
-    dayChartContainer.innerHTML = '<canvas id="revenueByDayChart"></canvas>';
-    document.querySelector('.container-fluid').insertBefore(dayChartContainer, document.querySelector('.container-fluid').children[2]);
-    const revenueByDayCtx = document.getElementById('revenueByDayChart').getContext('2d');
-    new Chart(revenueByDayCtx, {
-        type: 'line',
-        data: {
-            labels: [
-                <c:forEach items="${revenueByDay}" var="item" varStatus="loop">
-                '${item.date}'<c:if test="${!loop.last}">,</c:if>
-                </c:forEach>
-            ],
-            datasets: [{
-                label: 'Revenue ($)',
-                data: [
+    const revenueByDayCanvas = document.getElementById('revenueByDayChart');
+    if (revenueByDayCanvas) {
+        const revenueByDayCtx = revenueByDayCanvas.getContext('2d');
+        new Chart(revenueByDayCtx, {
+            type: 'line',
+            data: {
+                labels: [
                     <c:forEach items="${revenueByDay}" var="item" varStatus="loop">
-                    ${item.revenue}<c:if test="${!loop.last}">,</c:if>
+                    '${item.date}'<c:if test="${!loop.last}">,</c:if>
                     </c:forEach>
                 ],
-                borderColor: '#28a745',
-                backgroundColor: 'rgba(40, 167, 69, 0.1)',
-                tension: 0.1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: { y: { beginAtZero: true } }
-        }
-    });
+                datasets: [{
+                    label: 'Revenue ($)',
+                    data: [
+                        <c:forEach items="${revenueByDay}" var="item" varStatus="loop">
+                        ${item.revenue}<c:if test="${!loop.last}">,</c:if>
+                        </c:forEach>
+                    ],
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+    }
 
     // Revenue by Week Chart
-    const weekChartContainer = document.createElement('div');
-    weekChartContainer.innerHTML = '<canvas id="revenueByWeekChart"></canvas>';
-    document.querySelector('.container-fluid').insertBefore(weekChartContainer, document.querySelector('.container-fluid').children[3]);
-    const revenueByWeekCtx = document.getElementById('revenueByWeekChart').getContext('2d');
-    new Chart(revenueByWeekCtx, {
-        type: 'line',
-        data: {
-            labels: [
-                <c:forEach items="${revenueByWeek}" var="item" varStatus="loop">
-                '${item.year}-W${item.week}'<c:if test="${!loop.last}">,</c:if>
-                </c:forEach>
-            ],
-            datasets: [{
-                label: 'Revenue ($)',
-                data: [
+    const revenueByWeekCanvas = document.getElementById('revenueByWeekChart');
+    if (revenueByWeekCanvas) {
+        const revenueByWeekCtx = revenueByWeekCanvas.getContext('2d');
+        new Chart(revenueByWeekCtx, {
+            type: 'line',
+            data: {
+                labels: [
                     <c:forEach items="${revenueByWeek}" var="item" varStatus="loop">
-                    ${item.revenue}<c:if test="${!loop.last}">,</c:if>
+                    '${item.year}-W${item.week}'<c:if test="${!loop.last}">,</c:if>
                     </c:forEach>
                 ],
-                borderColor: '#ffc107',
-                backgroundColor: 'rgba(255, 193, 7, 0.1)',
-                tension: 0.1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: { y: { beginAtZero: true } }
-        }
-    });
+                datasets: [{
+                    label: 'Revenue ($)',
+                    data: [
+                        <c:forEach items="${revenueByWeek}" var="item" varStatus="loop">
+                        ${item.revenue}<c:if test="${!loop.last}">,</c:if>
+                        </c:forEach>
+                    ],
+                    borderColor: '#ffc107',
+                    backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+    }
 
     // Revenue by Year Chart
-    const yearChartContainer = document.createElement('div');
-    yearChartContainer.innerHTML = '<canvas id="revenueByYearChart"></canvas>';
-    document.querySelector('.container-fluid').insertBefore(yearChartContainer, document.querySelector('.container-fluid').children[4]);
-    const revenueByYearCtx = document.getElementById('revenueByYearChart').getContext('2d');
-    new Chart(revenueByYearCtx, {
-        type: 'bar',
-        data: {
-            labels: [
-                <c:forEach items="${revenueByYear}" var="item" varStatus="loop">
-                '${item.year}'<c:if test="${!loop.last}">,</c:if>
-                </c:forEach>
-            ],
-            datasets: [{
-                label: 'Revenue ($)',
-                data: [
+    const revenueByYearCanvas = document.getElementById('revenueByYearChart');
+    if (revenueByYearCanvas) {
+        const revenueByYearCtx = revenueByYearCanvas.getContext('2d');
+        new Chart(revenueByYearCtx, {
+            type: 'bar',
+            data: {
+                labels: [
                     <c:forEach items="${revenueByYear}" var="item" varStatus="loop">
-                    ${item.revenue}<c:if test="${!loop.last}">,</c:if>
+                    '${item.year}'<c:if test="${!loop.last}">,</c:if>
                     </c:forEach>
                 ],
-                backgroundColor: '#dc3545'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: { y: { beginAtZero: true } }
-        }
-    });
+                datasets: [{
+                    label: 'Revenue ($)',
+                    data: [
+                        <c:forEach items="${revenueByYear}" var="item" varStatus="loop">
+                        ${item.revenue}<c:if test="${!loop.last}">,</c:if>
+                        </c:forEach>
+                    ],
+                    backgroundColor: '#dc3545'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+    }
 
     // Top 5 Courses by Revenue Chart
     (function() {
