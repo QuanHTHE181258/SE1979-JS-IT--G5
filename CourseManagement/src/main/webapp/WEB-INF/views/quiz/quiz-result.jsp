@@ -633,7 +633,7 @@
                 <div class="question-item p-4 border-bottom">
                     <div class="d-flex align-items-center">
                         <div class="question-number rounded-circle d-flex align-items-center justify-content-center me-4 ${qa.isCorrect ? 'bg-success' : 'bg-danger'} text-white">
-                            ${status.index + 1}
+                                ${status.index + 1}
                         </div>
                         <div class="question-content flex-grow-1">
                             <h6 class="mb-2 text-dark">Question ${status.index + 1}</h6>
@@ -671,11 +671,11 @@
                     <i class="fas fa-search me-2"></i>Review Answers
                 </a>
 
-                <a href="take-quiz?id=${quiz.id}" class="btn btn-outline-warning">
+                <a href="take-quiz?action=start&lessonId=${lessonId}" class="btn btn-outline-warning">
                     <i class="fas fa-redo me-2"></i>Retake Quiz
                 </a>
 
-                <a href="learning-page" class="btn btn-outline-success">
+                <a href="learning?lessonId=${lessonId}" class="btn btn-outline-success">
                     <i class="fas fa-graduation-cap me-2"></i>Continue Learning
                 </a>
             </div>

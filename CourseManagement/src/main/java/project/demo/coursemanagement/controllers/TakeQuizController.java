@@ -127,10 +127,10 @@ public class TakeQuizController extends HttpServlet {
 
                     // Save user's answer
                     quizDAO.saveQuestionAnswer(
-                        attempt.getId(),
-                        question.getId(),
-                        answerId,
-                        selectedAnswer.getIsCorrect()
+                            attempt.getId(),
+                            question.getId(),
+                            answerId,
+                            selectedAnswer.getIsCorrect()
                     );
 
                     if (selectedAnswer.getIsCorrect()) {
@@ -186,10 +186,13 @@ public class TakeQuizController extends HttpServlet {
             request.setAttribute("quiz", quiz);
             request.setAttribute("questionAttempts", questionAttempts);
             request.setAttribute("completionTimeMinutes", completionTimeMinutes);
+            // Add lessonId to request for JSP usage
+            request.setAttribute("lessonId", quiz.getLessonID().getId());
             request.getRequestDispatcher("/WEB-INF/views/quiz/quiz-result.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
+
             System.out.println("Error in TakeQuizController.viewResult: " + e.getMessage());
         }
     }
@@ -201,7 +204,7 @@ public class TakeQuizController extends HttpServlet {
             QuizAttempt attempt = quizDAO.getQuizAttempt(attemptId);
 
             if (attempt == null) {
-                response.sendRedirect("learning-page");
+                response.sendRedirect("learning");
                 return;
             }
 
@@ -222,12 +225,25 @@ public class TakeQuizController extends HttpServlet {
             request.setAttribute("quiz", quiz);
             request.setAttribute("questionAttempts", questionAttempts);
             request.setAttribute("completionTimeMinutes", completionTimeMinutes);
+            // Add lessonId to request for JSP usage
+            request.setAttribute("lessonId", quiz.getLessonID().getId());
             request.getRequestDispatcher("/WEB-INF/views/quiz/review-quiz.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
+            int lessonId = 0;
+            try {
+                lessonId = Integer.parseInt(request.getParameter("lessonId"));
+            } catch (Exception ex) {
+                // fallback: try to get lessonId from attempt/quiz if possible
+            }
+            if (lessonId > 0) {
+                response.sendRedirect("learning?lessonId=" + lessonId);
+            } else {
+                response.sendRedirect("learning");
+            }
             System.out.println("Error in TakeQuizController.reviewQuiz: " + e.getMessage());
-            response.sendRedirect("learning-page");
+
         }
     }
 }

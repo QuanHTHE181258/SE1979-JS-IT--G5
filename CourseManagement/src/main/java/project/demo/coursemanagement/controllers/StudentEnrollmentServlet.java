@@ -24,6 +24,8 @@ public class StudentEnrollmentServlet extends HttpServlet {
         Integer studentId = user.getId();
         EnrollmentDAOImpl enrollmentDAO = new EnrollmentDAOImpl();
         List<Enrollment> enrollments = enrollmentDAO.getEnrollmentsByStudentId(studentId);
+
+        // Pass all enrollments to JSP for client-side filtering
         req.setAttribute("enrollments", enrollments);
         req.getRequestDispatcher("/WEB-INF/views/student_enrollments.jsp").forward(req, resp);
 

@@ -101,8 +101,6 @@
                 </li>
 
                 <c:choose>
-
-
                     <c:when test="${not empty sessionScope.user}">
                         <!-- Avatar + Welcome + Dropdown -->
                         <li class="nav-item dropdown">
@@ -168,8 +166,43 @@
             <p class="text-white-50 mb-0">Track your learning progress and achievements</p>
         </div>
         <div class="card-body p-0">
+            <!-- Filter Form (React-style onchange) -->
+            <form id="filterForm" class="row g-2 align-items-center mb-4">
+                <div class="col-md-2">
+                    <input type="text" class="form-control" id="filterTitle" placeholder="Search by title">
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" id="filterStatus">
+                        <option value="">All Statuses</option>
+                        <option value="ACTIVE">Active</option>
+                        <option value="COMPLETED">Completed</option>
+                        <option value="CANCELLED">Cancelled</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control" id="filterMinScore" placeholder="Min Score">
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control" id="filterMaxScore" placeholder="Max Score">
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" id="filterCertificate">
+                        <option value="">All Certificates</option>
+                        <option value="yes">Has Certificate</option>
+                        <option value="no">No Certificate</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control" id="filterMinProgress" placeholder="Min Progress">
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control" id="filterMaxProgress" placeholder="Max Progress">
+                </div>
+            </form>
+            <!-- End Filter Form -->
+
             <div class="table-responsive">
-                <table class="table table-hover mb-0">
+                <table class="table table-hover mb-0" id="enrollmentsTable">
                     <thead class="table-primary">
                     <tr>
                         <th>Course Name</th>
@@ -182,88 +215,147 @@
                         <th>Actions</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <%
-                        List<Enrollment> enrollments = (List<Enrollment>) request.getAttribute("enrollments");
-                        if (enrollments != null && !enrollments.isEmpty()) {
-                            for (Enrollment e : enrollments) {
-                                Cours c = e.getCourse();
-                    %>
-                    <tr>
-                        <td><strong><%= c != null ? c.getTitle() : "" %></strong></td>
-                        <td><%= e.getEnrollmentDate() != null ? e.getEnrollmentDate().toString().substring(0, 10) : "N/A" %></td>
-                        <td>
-                            <% if (e.getCompletionDate() != null) { %>
-                                <span class="badge bg-success">
-                                    <%= e.getCompletionDate().toString().substring(0, 10) %>
-                                </span>
-                            <% } else { %>
-                                <span class="badge bg-warning">Chưa hoàn thành</span>
-                            <% } %>
-                        </td>
-                        <td>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-striped"
-                                     role="progressbar"
-                                     style="width: <%= e.getProgressPercentage() != null ? e.getProgressPercentage() : 0 %>%"
-                                     aria-valuenow="<%= e.getProgressPercentage() != null ? e.getProgressPercentage() : 0 %>"
-                                     aria-valuemin="0"
-                                     aria-valuemax="100">
-                                    <%= e.getProgressPercentage() != null ? e.getProgressPercentage() : 0 %>%
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <% if ("COMPLETED".equals(e.getStatus())) { %>
-                                <span class="badge bg-success"><%= e.getStatus() %></span>
-                            <% } else if ("ACTIVE".equals(e.getStatus())) { %>
-                                <span class="badge bg-primary"><%= e.getStatus() %></span>
-                            <% } else { %>
-                                <span class="badge bg-secondary"><%= e.getStatus() %></span>
-                            <% } %>
-                        </td>
-                        <td>
-                            <% if (e.getGrade() != null) { %>
-                                <span class="badge bg-info"><%= e.getGrade() %></span>
-                            <% } else { %>
-                                <span class="text-muted">Not found score</span>
-                            <% } %>
-                        </td>
-                        <td>
-                            <% if (Boolean.TRUE.equals(e.getCertificateIssued())) { %>
-                                <span class="badge bg-success"><i class="fas fa-certificate"></i> Available</span>
-                            <% } else { %>
-                                <span class="badge bg-secondary">Not Available</span>
-                            <% } %>
-                        </td>
-                        <td>
-                            <a href="lessons?courseId=<%= c.getId() %>" class="btn btn-primary btn-sm btn-action">
-                                <i class="fas fa-eye"></i> View Details
-                            </a>
-                            <% if ("COMPLETED".equals(e.getStatus())) { %>
-                                <a href="feedback?courseId=<%= c.getId() %>" class="btn btn-warning btn-sm btn-action">
-                                    <i class="fas fa-comment"></i> Feedback
-                                </a>
-                            <% } %>
-                        </td>
-                    </tr>
-                    <%
-                            }
-                        } else {
-                    %>
-                    <tr>
-                        <td colspan="8" class="text-center">
-                            <div class="alert alert-info">
-                                <i class="fas fa-info-circle me-2"></i>No enrolled courses found.
-                            </div> add
-                        </td>
-                    </tr>
-                    <%
-                        }
-                    %>
+                    <tbody id="enrollmentsBody">
                     </tbody>
                 </table>
             </div>
+            <nav>
+                <ul class="pagination justify-content-center mt-4" id="pagination"></ul>
+            </nav>
+
+            <script>
+                // Convert enrollments from server to JS array
+                var enrollments = [
+                        <% if (request.getAttribute("enrollments") != null) {
+                            List<Enrollment> enrollments = (List<Enrollment>) request.getAttribute("enrollments");
+                            if (!enrollments.isEmpty()) {
+                                for (int i = 0; i < enrollments.size(); i++) {
+                                    Enrollment e = enrollments.get(i);
+                                    Cours c = e.getCourse();
+                        %>{
+                        courseName: "<%= c != null ? c.getTitle().replace("\"", "\\\"") : "" %>",
+                        courseId: <%= c != null ? c.getId() : 0 %>,
+                        enrollmentDate: "<%= e.getEnrollmentDate() != null ? e.getEnrollmentDate().toString().substring(0, 10) : "" %>",
+                        completionDate: "<%= e.getCompletionDate() != null ? e.getCompletionDate().toString().substring(0, 10) : "" %>",
+                        progress: <%= e.getProgressPercentage() != null ? e.getProgressPercentage() : 0 %>,
+                        status: "<%= e.getStatus() %>",
+                        score: <%= e.getGrade() != null ? e.getGrade() : 0 %>,
+                        certificate: "<%= Boolean.TRUE.equals(e.getCertificateIssued()) ? "yes" : "no" %>",
+                        price: <%= c != null && c.getPrice() != null ? c.getPrice() : 0 %>
+                    }<%= (i < enrollments.size() - 1) ? "," : "" %>
+                    <%          }
+                        }
+                    } %>
+                ];
+
+                // Pagination and filter state
+                var currentPage = 1;
+                var pageSize = 5;
+
+                function filterAndRender() {
+                    // Get filter values
+                    var title = document.getElementById('filterTitle').value.toLowerCase();
+                    var status = document.getElementById('filterStatus').value;
+                    var minScore = parseFloat(document.getElementById('filterMinScore').value) || null;
+                    var maxScore = parseFloat(document.getElementById('filterMaxScore').value) || null;
+                    var certificate = document.getElementById('filterCertificate').value;
+                    var minProgress = parseFloat(document.getElementById('filterMinProgress').value) || null;
+                    var maxProgress = parseFloat(document.getElementById('filterMaxProgress').value) || null;
+                    var minPrice = null;
+                    var maxPrice = null;
+
+                    var filtered = enrollments.filter(function(e) {
+                        if (title && e.courseName.toLowerCase().indexOf(title) === -1) return false;
+                        if (status && e.status !== status) return false;
+                        if (certificate && e.certificate !== certificate) return false;
+                        if (minScore !== null && e.score < minScore) return false;
+                        if (maxScore !== null && e.score > maxScore) return false;
+                        if (minProgress !== null && e.progress < minProgress) return false;
+                        if (maxProgress !== null && e.progress > maxProgress) return false;
+                        if (minPrice !== null && e.price < minPrice) return false;
+                        if (maxPrice !== null && e.price > maxPrice) return false;
+                        return true;
+                    });
+
+                    // Pagination
+                    var totalPages = Math.ceil(filtered.length / pageSize) || 1;
+                    if (currentPage > totalPages) currentPage = totalPages;
+                    var start = (currentPage - 1) * pageSize;
+                    var end = start + pageSize;
+                    var pageData = filtered.slice(start, end);
+
+                    // Render table
+                    var tbody = document.getElementById('enrollmentsBody');
+                    var htmlRows = pageData.map(function(e) {
+                        var completionDateHtml = e.completionDate && e.completionDate !== 'null' && e.completionDate !== ''
+                            ? '<span class="badge bg-success">' + e.completionDate + '</span>'
+                            : '<span class="badge bg-warning">Chưa hoàn thành</span>';
+
+                        var statusHtml = '';
+                        if (e.status === 'COMPLETED') {
+                            statusHtml = '<span class="badge bg-success">COMPLETED</span>';
+                        } else if (e.status === 'ACTIVE') {
+                            statusHtml = '<span class="badge bg-primary">ACTIVE</span>';
+                        } else {
+                            statusHtml = '<span class="badge bg-secondary">' + e.status + '</span>';
+                        }
+
+                        var scoreHtml = e.score ? '<span class="badge bg-info">' + e.score + '</span>' : '<span class="text-muted">Not found score</span>';
+
+                        var certificateHtml = e.certificate === 'yes'
+                            ? '<span class="badge bg-success"><i class="fas fa-certificate"></i> Available</span>'
+                            : '<span class="badge bg-secondary">Not Available</span>';
+
+                        var actionsHtml = '<a href="lessons?courseId=' + e.courseId + '" class="btn btn-primary btn-sm btn-action"><i class="fas fa-eye"></i> View Details</a>';
+                        if (e.status === 'COMPLETED') {
+                            actionsHtml += '<a href="feedback?courseId=' + e.courseId + '" class="btn btn-warning btn-sm btn-action"><i class="fas fa-comment"></i> Feedback</a>';
+                        }
+
+                        return '<tr>' +
+                            '<td><strong>' + e.courseName + '</strong></td>' +
+                            '<td>' + (e.enrollmentDate || 'N/A') + '</td>' +
+                            '<td>' + completionDateHtml + '</td>' +
+                            '<td><div class="progress"><div class="progress-bar progress-bar-striped" role="progressbar" style="width: ' + e.progress + '%" aria-valuenow="' + e.progress + '" aria-valuemin="0" aria-valuemax="100">' + e.progress + '%</div></div></td>' +
+                            '<td>' + statusHtml + '</td>' +
+                            '<td>' + scoreHtml + '</td>' +
+                            '<td>' + certificateHtml + '</td>' +
+                            '<td>' + actionsHtml + '</td>' +
+                            '</tr>';
+                    }).join('');
+                    tbody.innerHTML = htmlRows;
+
+                    // Render pagination
+                    var pagination = document.getElementById('pagination');
+                    var pagHtml = '';
+                    for (var i = 1; i <= totalPages; i++) {
+                        pagHtml += '<li class="page-item' + (i === currentPage ? ' active' : '') + '"><a class="page-link" href="#" onclick="gotoPage(' + i + ');return false;">' + i + '</a></li>';
+                    }
+                    pagination.innerHTML = '<li class="page-item' + (currentPage === 1 ? ' disabled' : '') + '"><a class="page-link" href="#" onclick="gotoPage(' + (currentPage - 1) + ');return false;">Previous</a></li>' +
+                        pagHtml +
+                        '<li class="page-item' + (currentPage === totalPages ? ' disabled' : '') + '"><a class="page-link" href="#" onclick="gotoPage(' + (currentPage + 1) + ');return false;">Next</a></li>';
+                }
+
+                function gotoPage(page) {
+                    currentPage = page;
+                    filterAndRender();
+                }
+
+                // Attach onchange handlers
+                var filterElements = document.querySelectorAll('#filterForm input, #filterForm select');
+                for (var i = 0; i < filterElements.length; i++) {
+                    filterElements[i].addEventListener('input', function() {
+                        currentPage = 1;
+                        filterAndRender();
+                    });
+                    filterElements[i].addEventListener('change', function() {
+                        currentPage = 1;
+                        filterAndRender();
+                    });
+                }
+
+                // Initial render
+                filterAndRender();
+            </script>
         </div>
     </div>
 
@@ -305,3 +397,4 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

@@ -101,93 +101,93 @@
     </style>
 </head>
 <body>
-    <div class="review-container">
-        <!-- Back button -->
-        <a href="javascript:history.back()" class="back-to-results mb-4 d-inline-block">
-            <i class="fas fa-arrow-left me-2"></i>Back to Results
-        </a>
+<div class="review-container">
+    <!-- Back button -->
+    <a href="javascript:history.back()" class="back-to-results mb-4 d-inline-block">
+        <i class="fas fa-arrow-left me-2"></i>Back to Results
+    </a>
 
-        <!-- Quiz Header -->
-        <div class="quiz-header">
-            <h2 class="mb-0">${quiz.title}</h2>
-            <p class="text-muted mb-0">Review Mode</p>
-        </div>
+    <!-- Quiz Header -->
+    <div class="quiz-header">
+        <h2 class="mb-0">${quiz.title}</h2>
+        <p class="text-muted mb-0">Review Mode</p>
+    </div>
 
-        <!-- Score Summary -->
-        <div class="score-summary">
-            <h3 class="mb-2">Your Score</h3>
-            <h2><fmt:formatNumber value="${attempt.score}" pattern="#,##0.0"/>%</h2>
-            <div class="completion-time">
-                Completed in <fmt:formatNumber value="${completionTimeMinutes}" maxFractionDigits="1"/> minutes
-            </div>
-        </div>
-
-        <!-- Questions Review -->
-        <c:forEach var="qa" items="${questionAttempts}" varStatus="status">
-            <div class="question-card">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="mb-0">Question ${status.index + 1}</h5>
-                    <span class="badge ${qa.isCorrect ? 'bg-success' : 'bg-danger'}">
-                        ${qa.isCorrect ? 'Correct' : 'Incorrect'}
-                    </span>
-                </div>
-
-                <p class="question-text mb-4">${qa.questionID.questionText}</p>
-
-                <div class="answers">
-                    <c:forEach var="answer" items="${qa.questionID.answers}">
-                        <div class="answer-option
-                            ${answer.isCorrect ? 'correct-answer' : ''}
-                            ${answer.id == qa.answer.id ? 'selected-answer' : ''}">
-
-                            <c:choose>
-                                <c:when test="${answer.id == qa.answer.id && answer.isCorrect}">
-                                    <div class="answer-icon correct">
-                                        <i class="fas fa-check"></i>
-                                    </div>
-                                </c:when>
-                                <c:when test="${answer.id == qa.answer.id && !answer.isCorrect}">
-                                    <div class="answer-icon incorrect">
-                                        <i class="fas fa-times"></i>
-                                    </div>
-                                </c:when>
-                                <c:when test="${answer.isCorrect}">
-                                    <div class="answer-icon correct">
-                                        <i class="fas fa-check"></i>
-                                    </div>
-                                </c:when>
-                                <c:otherwise>
-                                    <div class="answer-icon" style="background-color: #e9ecef;">
-                                        <i class="fas fa-circle"></i>
-                                    </div>
-                                </c:otherwise>
-                            </c:choose>
-
-                            <span class="answer-text">${answer.answerText}</span>
-
-                            <c:if test="${answer.id == qa.answer.id}">
-                                <span class="ms-auto badge bg-secondary">Your answer</span>
-                            </c:if>
-                            <c:if test="${answer.isCorrect}">
-                                <span class="ms-auto badge bg-success">Correct answer</span>
-                            </c:if>
-                        </div>
-                    </c:forEach>
-                </div>
-            </div>
-        </c:forEach>
-
-        <!-- Action Buttons -->
-        <div class="text-center mt-4 mb-5">
-            <a href="learning-page" class="btn btn-primary me-2">
-                <i class="fas fa-graduation-cap me-2"></i>Continue Learning
-            </a>
-            <a href="take-quiz?id=${quiz.id}" class="btn btn-outline-primary">
-                <i class="fas fa-redo me-2"></i>Retake Quiz
-            </a>
+    <!-- Score Summary -->
+    <div class="score-summary">
+        <h3 class="mb-2">Your Score</h3>
+        <h2><fmt:formatNumber value="${attempt.score}" pattern="#,##0.0"/>%</h2>
+        <div class="completion-time">
+            Completed in <fmt:formatNumber value="${completionTimeMinutes}" maxFractionDigits="1"/> minutes
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Questions Review -->
+    <c:forEach var="qa" items="${questionAttempts}" varStatus="status">
+        <div class="question-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Question ${status.index + 1}</h5>
+                <span class="badge ${qa.isCorrect ? 'bg-success' : 'bg-danger'}">
+                        ${qa.isCorrect ? 'Correct' : 'Incorrect'}
+                </span>
+            </div>
+
+            <p class="question-text mb-4">${qa.questionID.questionText}</p>
+
+            <div class="answers">
+                <c:forEach var="answer" items="${qa.questionID.answers}">
+                    <div class="answer-option
+                            ${answer.isCorrect ? 'correct-answer' : ''}
+                            ${answer.id == qa.answer.id ? 'selected-answer' : ''}">
+
+                        <c:choose>
+                            <c:when test="${answer.id == qa.answer.id && answer.isCorrect}">
+                                <div class="answer-icon correct">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </c:when>
+                            <c:when test="${answer.id == qa.answer.id && !answer.isCorrect}">
+                                <div class="answer-icon incorrect">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                            </c:when>
+                            <c:when test="${answer.isCorrect}">
+                                <div class="answer-icon correct">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="answer-icon" style="background-color: #e9ecef;">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <span class="answer-text">${answer.answerText}</span>
+
+                        <c:if test="${answer.id == qa.answer.id}">
+                            <span class="ms-auto badge bg-secondary">Your answer</span>
+                        </c:if>
+                        <c:if test="${answer.isCorrect}">
+                            <span class="ms-auto badge bg-success">Correct answer</span>
+                        </c:if>
+                    </div>
+                </c:forEach>
+            </div>
+        </div>
+    </c:forEach>
+
+    <!-- Action Buttons -->
+    <div class="text-center mt-4 mb-5">
+        <a href="learning?lessonId=${lessonId}" class="btn btn-primary me-2">
+            <i class="fas fa-graduation-cap me-2"></i>Continue Learning
+        </a>
+        <a href="take-quiz?action=start&lessonId=${lessonId}" class="btn btn-outline-primary">
+            <i class="fas fa-redo me-2"></i>Retake Quiz
+        </a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

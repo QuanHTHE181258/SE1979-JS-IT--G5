@@ -60,11 +60,11 @@
                     </div>
                     <table class="table table-bordered table-sm align-middle">
                         <thead class="table-light">
-                            <tr>
-                                <th>#</th>
-                                <th>Title</th>
-                                <th>Actions</th>
-                            </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Actions</th>
+                        </tr>
                         </thead>
                         <tbody>
                         <c:forEach var="quiz" items="${quizzes}" varStatus="status">
@@ -75,7 +75,7 @@
                                     <a href="quiz-details?id=${quiz.id}" class="btn btn-info btn-sm">
                                         <i class="fas fa-eye me-1"></i>View Details
                                     </a>
-                                    <a href="edit-quiz?id=${quiz.id}" class="btn btn-outline-warning btn-sm">
+                                    <a href="edit-quiz?quizId=${quiz.id}" class="btn btn-outline-warning btn-sm">
                                         <i class="fas fa-edit me-1"></i>Edit
                                     </a>
                                     <button class="btn btn-outline-danger btn-sm" onclick="deleteQuiz(${quiz.id})">
@@ -98,12 +98,12 @@
                     </div>
                     <table class="table table-bordered table-sm align-middle">
                         <thead class="table-light">
-                            <tr>
-                                <th>#</th>
-                                <th>Title</th>
-                                <th>File</th>
-                                <th>Actions</th>
-                            </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>File</th>
+                            <th>Actions</th>
+                        </tr>
                         </thead>
                         <tbody>
                         <c:forEach var="material" items="${materials}" varStatus="status">
@@ -149,21 +149,21 @@
 <!-- FontAwesome for icon -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 <script>
-function deleteLesson(id) {
-    if(confirm('Are you sure you want to delete this lesson?')) {
-        alert('Delete lesson ' + id);
+    function deleteLesson(id) {
+        if(confirm('Are you sure you want to delete this lesson?')) {
+            alert('Delete lesson ' + id);
+        }
     }
-}
-function deleteQuiz(id) {
-    if(confirm('Are you sure you want to delete this quiz?')) {
-        alert('Delete quiz ' + id);
+    function deleteQuiz(id) {
+        if(confirm('Are you sure you want to delete this quiz?')) {
+            alert('Delete quiz ' + id);
+        }
     }
-}
-function deleteMaterial(id) {
-    if(confirm('Are you sure you want to delete this material?')) {
-        alert('Delete material ' + id);
+    function deleteMaterial(id) {
+        if(confirm('Are you sure you want to delete this material?')) {
+            alert('Delete material ' + id);
+        }
     }
-}
 </script>
 </body>
 </html>

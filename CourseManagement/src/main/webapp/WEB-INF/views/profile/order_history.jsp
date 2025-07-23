@@ -180,128 +180,131 @@
   </style>
 </head>
 <body>
-  <div class="profile-container">
-    <div class="profile-card">
-      <div class="profile-header">
-        <a href="${pageContext.request.contextPath}/profile" class="back-button">
-          <i class="fas fa-arrow-left"></i>
-        </a>
-        <h2>My Order History</h2>
-        <p>View all your course purchases</p>
-      </div>
+<div class="profile-container">
+  <div class="profile-card">
+    <div class="profile-header">
+      <a href="${pageContext.request.contextPath}/profile" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <h2>My Order History</h2>
+      <p>View all your course purchases</p>
+    </div>
 
-      <div class="profile-body">
-        <c:if test="${not empty message}">
-          <div class="alert alert-${messageType} alert-dismissible fade show" role="alert">
+    <div class="profile-body">
+      <c:if test="${not empty message}">
+        <div class="alert alert-${messageType} alert-dismissible fade show" role="alert">
             ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        </c:if>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </c:if>
 
-        <c:choose>
-          <c:when test="${empty orders}">
-            <div class="empty-orders">
-              <i class="fas fa-shopping-cart"></i>
-              <h4>No Orders Found</h4>
-              <p>You haven't purchased any courses yet.</p>
-              <a href="${pageContext.request.contextPath}/courses" class="btn btn-primary mt-3">
-                <i class="fas fa-book-open me-2"></i>Browse Courses
-              </a>
-            </div>
-          </c:when>
-          <c:otherwise>
-            <table class="order-table">
-              <thead>
-                <tr>
-                  <th>Order ID</th>
-                  <th>Date</th>
-                  <th>Courses</th>
-                  <th>Total</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <c:forEach var="order" items="${orders}">
-                  <tr>
-                    <td>#${order.orderId}</td>
-                    <td>
-                      <c:set var="createdAtInstant" value="${order.createdAt}" />
-                      <c:if test="${not empty createdAtInstant}">
-                        <c:set var="dateStr" value="${createdAtInstant.toString()}" />
-                        <c:set var="year" value="${fn:substring(dateStr, 0, 4)}" />
-                        <c:set var="month" value="${fn:substring(dateStr, 5, 7)}" />
-                        <c:set var="day" value="${fn:substring(dateStr, 8, 10)}" />
-                        
-                        <c:set var="monthName" value="" />
-                        <c:choose>
-                          <c:when test="${month == '01'}"><c:set var="monthName" value="Jan" /></c:when>
-                          <c:when test="${month == '02'}"><c:set var="monthName" value="Feb" /></c:when>
-                          <c:when test="${month == '03'}"><c:set var="monthName" value="Mar" /></c:when>
-                          <c:when test="${month == '04'}"><c:set var="monthName" value="Apr" /></c:when>
-                          <c:when test="${month == '05'}"><c:set var="monthName" value="May" /></c:when>
-                          <c:when test="${month == '06'}"><c:set var="monthName" value="Jun" /></c:when>
-                          <c:when test="${month == '07'}"><c:set var="monthName" value="Jul" /></c:when>
-                          <c:when test="${month == '08'}"><c:set var="monthName" value="Aug" /></c:when>
-                          <c:when test="${month == '09'}"><c:set var="monthName" value="Sep" /></c:when>
-                          <c:when test="${month == '10'}"><c:set var="monthName" value="Oct" /></c:when>
-                          <c:when test="${month == '11'}"><c:set var="monthName" value="Nov" /></c:when>
-                          <c:when test="${month == '12'}"><c:set var="monthName" value="Dec" /></c:when>
-                        </c:choose>
-                        
-                        ${monthName} ${day}, ${year}
-                      </c:if>
-                      <c:if test="${empty createdAtInstant}">
-                        N/A
-                      </c:if>
-                    </td>
-                    <td>
-                      <c:forEach var="detail" items="${order.orderDetails}" varStatus="status">
-                        ${detail.courseTitle}
-                        <c:if test="${!status.last}">, </c:if>
-                      </c:forEach>
-                    </td>
-                    <td><fmt:formatNumber value="${order.totalAmount}" type="currency" /></td>
-                    <td>
+      <c:choose>
+        <c:when test="${empty orders}">
+          <div class="empty-orders">
+            <i class="fas fa-shopping-cart"></i>
+            <h4>No Orders Found</h4>
+            <p>You haven't purchased any courses yet.</p>
+            <a href="${pageContext.request.contextPath}/courses" class="btn btn-primary mt-3">
+              <i class="fas fa-book-open me-2"></i>Browse Courses
+            </a>
+          </div>
+        </c:when>
+        <c:otherwise>
+          <table class="order-table">
+            <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Courses</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="order" items="${orders}">
+              <tr>
+                <td>#${order.orderId}</td>
+                <td>
+                  <c:set var="createdAtInstant" value="${order.createdAt}" />
+                  <c:if test="${not empty createdAtInstant}">
+                    <c:set var="dateStr" value="${createdAtInstant.toString()}" />
+                    <c:set var="year" value="${fn:substring(dateStr, 0, 4)}" />
+                    <c:set var="month" value="${fn:substring(dateStr, 5, 7)}" />
+                    <c:set var="day" value="${fn:substring(dateStr, 8, 10)}" />
+                    <c:set var="monthName" value="" />
+                    <c:choose>
+                      <c:when test="${month == '01'}"><c:set var="monthName" value="Jan" /></c:when>
+                      <c:when test="${month == '02'}"><c:set var="monthName" value="Feb" /></c:when>
+                      <c:when test="${month == '03'}"><c:set var="monthName" value="Mar" /></c:when>
+                      <c:when test="${month == '04'}"><c:set var="monthName" value="Apr" /></c:when>
+                      <c:when test="${month == '05'}"><c:set var="monthName" value="May" /></c:when>
+                      <c:when test="${month == '06'}"><c:set var="monthName" value="Jun" /></c:when>
+                      <c:when test="${month == '07'}"><c:set var="monthName" value="Jul" /></c:when>
+                      <c:when test="${month == '08'}"><c:set var="monthName" value="Aug" /></c:when>
+                      <c:when test="${month == '09'}"><c:set var="monthName" value="Sep" /></c:when>
+                      <c:when test="${month == '10'}"><c:set var="monthName" value="Oct" /></c:when>
+                      <c:when test="${month == '11'}"><c:set var="monthName" value="Nov" /></c:when>
+                      <c:when test="${month == '12'}"><c:set var="monthName" value="Dec" /></c:when>
+                    </c:choose>
+                    ${monthName} ${day}, ${year}
+                  </c:if>
+                  <c:if test="${empty createdAtInstant}">
+                    N/A
+                  </c:if>
+                </td>
+                <td>
+                  <c:forEach var="detail" items="${order.orderDetails}" varStatus="status">
+                    ${detail.courseTitle}
+                    <c:if test="${!status.last}">, </c:if>
+                  </c:forEach>
+                </td>
+                <td><fmt:formatNumber value="${order.totalAmount}" type="currency" /></td>
+                <td>
                       <span class="order-status status-${fn:toLowerCase(order.status)}">
-                        ${order.status}
+                          ${order.status}
                       </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="5">
-                      <div class="order-details">
-                        <h6>Order Details</h6>
-                        <c:forEach var="detail" items="${order.orderDetails}">
-                          <div class="order-details-item">
-                            <div>
-                              <strong>${detail.courseTitle}</strong>
-                              <div class="text-muted small">Course ID: ${detail.courseId}</div>
-                            </div>
-                            <div>
-                              <fmt:formatNumber value="${detail.price}" type="currency" />
-                            </div>
-                          </div>
-                        </c:forEach>
-                        <div class="order-details-item mt-2">
-                          <div><strong>Payment Method</strong></div>
-                          <div>${order.paymentMethod}</div>
+                </td>
+                <td>
+                  <a href="${pageContext.request.contextPath}/order-details?orderId=${order.orderId}" class="btn btn-sm btn-info">
+                    <i class="fas fa-eye"></i> View Details
+                </td>
+              </tr>
+              <tr>
+                <td colspan="5">
+                  <div class="order-details">
+                    <h6>Order Details</h6>
+                    <c:forEach var="detail" items="${order.orderDetails}">
+                      <div class="order-details-item">
+                        <div>
+                          <strong>${detail.courseTitle}</strong>
+                          <div class="text-muted small">Course ID: ${detail.courseId}</div>
                         </div>
-                        <div class="order-details-item">
-                          <div><strong>Total</strong></div>
-                          <div><strong><fmt:formatNumber value="${order.totalAmount}" type="currency" /></strong></div>
+                        <div>
+                          <fmt:formatNumber value="${detail.price}" type="currency" />
                         </div>
                       </div>
-                    </td>
-                  </tr>
-                </c:forEach>
-              </tbody>
-            </table>
-          </c:otherwise>
-        </c:choose>
-      </div>
+                    </c:forEach>
+                    <div class="order-details-item mt-2">
+                      <div><strong>Payment Method</strong></div>
+                      <div>${order.paymentMethod}</div>
+                    </div>
+                    <div class="order-details-item">
+                      <div><strong>Total</strong></div>
+                      <div><strong><fmt:formatNumber value="${order.totalAmount}" type="currency" /></strong></div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </c:forEach>
+            </tbody>
+          </table>
+        </c:otherwise>
+      </c:choose>
     </div>
   </div>
+</div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -24,7 +24,6 @@ public class QuizDAO {
                         .id(rs.getInt("QuizID"))
                         .lessonID(Lesson.builder().id(rs.getInt("LessonID")).build())
                         .title(rs.getString("Title"))
-                        .durationMinutes(rs.getInt("duration_minutes"))
                         .build();
             }
         } catch (SQLException e) {
@@ -562,7 +561,6 @@ public class QuizDAO {
                         .id(rs.getInt("QuizID"))
                         .lessonID(Lesson.builder().id(rs.getInt("LessonID")).build())
                         .title(rs.getString("Title"))
-                        .durationMinutes(rs.getInt("duration_minutes"))
                         .build();
             }
         }
