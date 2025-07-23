@@ -56,6 +56,11 @@
           <i class="fas fa-chart-line"></i> Teacher Performance
         </a>
       </li>
+      <li>
+      <a href="${pageContext.request.contextPath}/logout" class="btn btn-outline-danger ms-3">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </a>
+      </li>
     </ul>
   </nav>
 
@@ -98,7 +103,7 @@
                   <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                     Total Users</div>
                   <div class="h5 mb-0 font-weight-bold text-gray-800">
-                    <fmt:formatNumber value="${dashboardStats.totalUsers}" />
+                    ${dashboardStats.totalUsers}
                   </div>
                 </div>
                 <div class="col-auto">
@@ -136,7 +141,7 @@
                   <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                     Active Enrollments</div>
                   <div class="h5 mb-0 font-weight-bold text-gray-800">
-                    <fmt:formatNumber value="${dashboardStats.activeEnrollments}" />
+                    <formatNumber value="${dashboardStats.activeEnrollments}" />
                   </div>
                 </div>
                 <div class="col-auto">

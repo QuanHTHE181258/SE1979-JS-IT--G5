@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import project.demo.coursemanagement.service.HomeService;
+import project.demo.coursemanagement.utils.SessionUtil;
 
 @WebServlet(name = "HomeServlet",urlPatterns = {"/home"})
 public class HomeServlet extends HttpServlet {
@@ -22,6 +23,13 @@ public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Fetch course lists using HomeService
+        if(SessionUtil.getUserRole(request)!=null){
+            if(SessionUtil.getUserRole(request).equals("5") || SessionUtil.getUserRole(request).equals("4")
+            || SessionUtil.getUserRole(request).equals("3") || SessionUtil.getUserRole(request).equals("2")){
+                request.getRequestDispatcher("/WEB-INF/views/errol.html").forward(request, response);
+            }
+        }
+
         request.setAttribute("highestRatedCourses", homeService.getHighestRatedCourses());
         request.setAttribute("paidCourses", homeService.getPaidCourses());
         request.setAttribute("freeCourses", homeService.getFreeCourses());

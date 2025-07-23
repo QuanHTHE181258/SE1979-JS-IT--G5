@@ -141,6 +141,7 @@ public class LoginServlet extends HttpServlet {
         String userRole = SessionUtil.getUserRole(request);
 
         if (userRole != null) {
+            System.out.println("Session user role: "+SessionUtil.getUserRole(request));
             try {
                 // Try to parse as role ID
                 int roleId = Integer.parseInt(userRole);

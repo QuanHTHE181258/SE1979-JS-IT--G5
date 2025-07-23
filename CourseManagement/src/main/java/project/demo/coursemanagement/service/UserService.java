@@ -59,10 +59,10 @@ public class UserService {
         return userDAO.findUsers(search, roleName, offset, USERS_PER_PAGE);
     }
 
-    public int getTotalPages(String search, String roleName) {
-        int totalUsers = userDAO.countUsers(search, roleName);
-        return (int) Math.ceil((double) totalUsers / USERS_PER_PAGE);
-    }
+//    public int getTotalPages(String search, String roleName) {
+//        int totalUsers = userDAO.total(search, roleName);
+//        return (int) Math.ceil((double) totalUsers / USERS_PER_PAGE);
+//    }
 
     public User getUserById(int userId) {
          // Use findUserByIdIncludeInactive if you need to edit inactive users
@@ -122,7 +122,9 @@ public class UserService {
             throw new Exception("Failed to assign role to user.");
         }
     }
-
+    public int countUsers(String search, String roleName){
+        return userDAO.countUsers(search, roleName);
+    }
     public void updateUser(int userId, String username, String email, String phoneNumber, String roleName) throws Exception {
         // Basic validation
          if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty() || phoneNumber == null || phoneNumber.trim().isEmpty() || roleName == null || roleName.trim().isEmpty()) {
@@ -154,6 +156,7 @@ public class UserService {
         if (newRole == null) {
             throw new IllegalArgumentException("Invalid role specified.");
         }
+
 
         // Update user object
         existingUser.setUsername(username);

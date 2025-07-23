@@ -10,21 +10,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="add feature view quizz details">
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/errol.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/MaterialDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/MaterialDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/MaterialDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/MaterialDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/MaterialService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/MaterialService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/AddMaterialServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/AddMaterialServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/HomeServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/HomeServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/LoginServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/UserDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/UserDAOImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/admin.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/admin_revenue_analytics.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/admin_revenue_analytics.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/edit_user.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/edit_user.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/user_management_list.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/user_management_list.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CompilerWorkspaceConfiguration">
+    <option name="MAKE_PROJECT_ON_SAVE" value="true" />
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Jsp File" />
+        <option value="Class" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -69,26 +82,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Tomcat Server.Tomcat 10.1.29.executor": "Run",
-    "Tomcat Server.Tomcat 10.1.34.executor": "Run",
-    "git-widget-placeholder": "Minhdd",
-    "junie.onboarding.icon.badge.shown": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Tomcat Server.Tomcat 10.1.29.executor&quot;: &quot;Run&quot;,
+    &quot;Tomcat Server.Tomcat 10.1.34.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Minhdd&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propCompiler&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;sqlserver&quot;,
+      &quot;sqlserver.localdb&quot;
+    ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\FULearnig\SUMMER2025\SWP391\SWP391_Git\SE1979-JS-IT--G5\CourseManagement\src\main\java\project\demo\coursemanagement\controllers" />
@@ -214,7 +235,11 @@
       <workItem from="1751857856423" duration="1987000" />
       <workItem from="1752245485843" duration="2068000" />
       <workItem from="1752914923161" duration="6748000" />
-      <workItem from="1753127293135" duration="4911000" />
+      <workItem from="1753127293135" duration="5192000" />
+      <workItem from="1753167606091" duration="5973000" />
+      <workItem from="1753203517467" duration="16520000" />
+      <workItem from="1753221950622" duration="3379000" />
+      <workItem from="1753258290752" duration="12145000" />
     </task>
     <task id="LOCAL-00001" summary="Merge remote-tracking branch 'origin/main' into KhiemNB">
       <option name="closed" value="true" />
@@ -305,5 +330,16 @@
     <MESSAGE value="add feature edit lesson" />
     <MESSAGE value="add feature view quizz details" />
     <option name="LAST_COMMIT_MESSAGE" value="add feature view quizz details" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/AddQuizServlet.java</url>
+          <line>14</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
