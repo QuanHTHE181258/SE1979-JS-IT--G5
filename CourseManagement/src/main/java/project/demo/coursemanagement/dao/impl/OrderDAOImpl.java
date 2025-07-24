@@ -297,17 +297,15 @@ public class OrderDAOImpl implements OrderDAO {
         int totalOrders = countOrders();
         BigDecimal totalRevenue = getTotalRevenue();
         Map<String, Integer> ordersByStatus = getOrdersCountByStatus();
-        Map<String, BigDecimal> revenueByMonth = getRevenueByMonth();
-        
+        // Đã bỏ revenueByMonth kiểu Map, truyền null hoặc new HashMap<>() nếu cần
+        Map<String, BigDecimal> revenueByMonth = null; // hoặc new HashMap<>()
         int pendingOrders = ordersByStatus.getOrDefault("pending", 0);
         int completedOrders = ordersByStatus.getOrDefault("paid", 0);
         int cancelledOrders = ordersByStatus.getOrDefault("cancelled", 0);
-        
         BigDecimal averageOrderValue = BigDecimal.ZERO;
         if (completedOrders > 0) {
             averageOrderValue = totalRevenue.divide(BigDecimal.valueOf(completedOrders), 2, BigDecimal.ROUND_HALF_UP);
         }
-        
         return new OrderAnalyticsDTO(
             totalOrders, totalRevenue, ordersByStatus, revenueByMonth,
             pendingOrders, completedOrders, cancelledOrders, averageOrderValue
@@ -386,34 +384,34 @@ public class OrderDAOImpl implements OrderDAO {
         return statusCount;
     }
 
-    @Override
-    public Map<String, BigDecimal> getRevenueByMonth() {
-        Map<String, BigDecimal> revenueByMonth = new HashMap<>();
-        String sql = """
-            SELECT DATE_FORMAT(CreatedAt, '%Y-%m') as month, SUM(TotalAmount) as revenue
-            FROM orders 
-            WHERE Status = 'paid'
-            GROUP BY DATE_FORMAT(CreatedAt, '%Y-%m')
-            ORDER BY month
-        """;
-        
-        try (Connection conn = dbConn.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                String month = rs.getString("month");
-                BigDecimal revenue = rs.getBigDecimal("revenue");
-                if (revenue != null) {
-                    revenueByMonth.put(month, revenue);
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error getting revenue by month: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return revenueByMonth;
-    }
+//    @Override
+//    public Map<String, BigDecimal> getRevenueByMonth() {
+//        Map<String, BigDecimal> revenueByMonth = new HashMap<>();
+//        String sql = """
+//            SELECT DATE_FORMAT(CreatedAt, '%Y-%m') as month, SUM(TotalAmount) as revenue
+//            FROM orders
+//            WHERE Status = 'paid'
+//            GROUP BY DATE_FORMAT(CreatedAt, '%Y-%m')
+//            ORDER BY month
+//        """;
+//
+//        try (Connection conn = dbConn.getConnection();
+//             PreparedStatement stmt = conn.prepareStatement(sql);
+//             ResultSet rs = stmt.executeQuery()) {
+//
+//            while (rs.next()) {
+//                String month = rs.getString("month");
+//                BigDecimal revenue = rs.getBigDecimal("revenue");
+//                if (revenue != null) {
+//                    revenueByMonth.put(month, revenue);
+//                }
+//            }
+//        } catch (SQLException e) {
+//            System.err.println("Error getting revenue by month: " + e.getMessage());
+//            e.printStackTrace();
+//        }
+//        return revenueByMonth;
+//    }
 
     public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueDetails() {
         List<project.demo.coursemanagement.dto.RevenueDetailDTO> details = new ArrayList<>();
@@ -447,5 +445,83 @@ public class OrderDAOImpl implements OrderDAO {
             e.printStackTrace();
         }
         return details;
+    }
+
+    public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByDay() {
+        List<project.demo.coursemanagement.dto.RevenueDetailDTO> list = new ArrayList<>();
+        String sql = "SELECT CONVERT(date, CreatedAt) as date, SUM(TotalAmount) as revenue " +
+                     "FROM orders WHERE Status = 'paid' GROUP BY CONVERT(date, CreatedAt) ORDER BY date";
+        try (Connection conn = dbConn.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                project.demo.coursemanagement.dto.RevenueDetailDTO dto = new project.demo.coursemanagement.dto.RevenueDetailDTO();
+                dto.setDate(rs.getString("date"));
+                dto.setRevenue(rs.getBigDecimal("revenue"));
+                list.add(dto);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByWeek() {
+        List<project.demo.coursemanagement.dto.RevenueDetailDTO> list = new ArrayList<>();
+        String sql = "SELECT YEAR(CreatedAt) as year, DATEPART(week, CreatedAt) as week, SUM(TotalAmount) as revenue " +
+                     "FROM orders WHERE Status = 'paid' GROUP BY YEAR(CreatedAt), DATEPART(week, CreatedAt) ORDER BY year, week";
+        try (Connection conn = dbConn.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                project.demo.coursemanagement.dto.RevenueDetailDTO dto = new project.demo.coursemanagement.dto.RevenueDetailDTO();
+                dto.setYear(rs.getInt("year"));
+                dto.setWeek(rs.getInt("week"));
+                dto.setRevenue(rs.getBigDecimal("revenue"));
+                list.add(dto);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByMonth() {
+        List<project.demo.coursemanagement.dto.RevenueDetailDTO> list = new ArrayList<>();
+        String sql = "SELECT YEAR(CreatedAt) as year, MONTH(CreatedAt) as month, SUM(TotalAmount) as revenue " +
+                     "FROM orders WHERE Status = 'paid' GROUP BY YEAR(CreatedAt), MONTH(CreatedAt) ORDER BY year, month";
+        try (Connection conn = dbConn.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                project.demo.coursemanagement.dto.RevenueDetailDTO dto = new project.demo.coursemanagement.dto.RevenueDetailDTO();
+                dto.setYear(rs.getInt("year"));
+                dto.setMonth(rs.getInt("month"));
+                dto.setRevenue(rs.getBigDecimal("revenue"));
+                list.add(dto);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByYear() {
+        List<project.demo.coursemanagement.dto.RevenueDetailDTO> list = new ArrayList<>();
+        String sql = "SELECT YEAR(CreatedAt) as year, SUM(TotalAmount) as revenue " +
+                     "FROM orders WHERE Status = 'paid' GROUP BY YEAR(CreatedAt) ORDER BY year";
+        try (Connection conn = dbConn.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                project.demo.coursemanagement.dto.RevenueDetailDTO dto = new project.demo.coursemanagement.dto.RevenueDetailDTO();
+                dto.setYear(rs.getInt("year"));
+                dto.setRevenue(rs.getBigDecimal("revenue"));
+                list.add(dto);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

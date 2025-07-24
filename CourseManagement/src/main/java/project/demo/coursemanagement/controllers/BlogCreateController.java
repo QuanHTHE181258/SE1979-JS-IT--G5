@@ -9,7 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 
-@WebServlet("/blog/create")
+@WebServlet("/admin/blog/create")
 public class BlogCreateController extends HttpServlet {
     private BlogService blogService;
 
@@ -50,7 +50,7 @@ public class BlogCreateController extends HttpServlet {
 
         boolean success = blogService.createBlog(blog);
         if (success) {
-            response.sendRedirect("list");
+            response.sendRedirect(request.getContextPath() + "/blog/list");
         } else {
             request.setAttribute("error", "Failed to create blog");
             request.getRequestDispatcher("/WEB-INF/views/blog_create.jsp").forward(request, response);

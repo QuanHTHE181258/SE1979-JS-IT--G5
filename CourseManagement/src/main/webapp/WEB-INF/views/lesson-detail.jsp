@@ -39,8 +39,7 @@
             <a href="javascript:history.back()" class="btn btn-secondary mb-3">&larr; Back</a>
             <div class="d-flex gap-2 mb-4">
                 <a href="edit-lesson?id=${lesson.id}" class="btn btn-outline-warning btn-sm"><i class="fas fa-edit me-1"></i>Edit Lesson</a>
-                <button class="btn btn-outline-danger btn-sm" onclick="deleteLesson(${lesson.id})"><i class="fas fa-trash me-1"></i>Delete Lesson</button>
-            </div>
+                <button onclick="if(confirm('Delete?')) location.href='edit-material?action=delete&id=${material.id}'">Delete</button>            </div>
             <c:if test="${not empty lesson}">
                 <div class="mb-3"><span class="label">Lesson ID:</span> ${lesson.id}</div>
                 <div class="mb-3"><span class="label">Title:</span> ${lesson.title}</div>
@@ -120,7 +119,7 @@
                                 </td>
                                 <td>
                                     <a href="edit-material?id=${material.id}" class="btn btn-outline-warning btn-sm"><i class="fas fa-edit me-1"></i>Edit</a>
-                                    <button class="btn btn-outline-danger btn-sm" onclick="deleteMaterial(${material.id})"><i class="fas fa-trash me-1"></i>Delete</button>
+                                    <a href="edit-material?action=delete&id=${material.id}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa material này?');"><i class="fas fa-trash me-1"></i>Delete</a>
                                 </td>
                             </tr>
                         </c:forEach>

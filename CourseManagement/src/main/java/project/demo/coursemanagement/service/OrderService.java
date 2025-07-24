@@ -72,4 +72,17 @@ public class OrderService {
     public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueDetails() {
         return orderDAO.getRevenueDetails();
     }
+
+    public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByDay() {
+        return orderDAO.getRevenueByDay();
+    }
+    public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByWeek() {
+        return orderDAO.getRevenueByWeek();
+    }
+    public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByMonth() {
+        return orderDAO.getRevenueByMonth();
+    }
+    public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByYear() {
+        return orderDAO.getRevenueByYear();
+    }
 } 
