@@ -200,7 +200,7 @@
                 slide.classList.remove('active', 'exiting', 'entering');
                 if (i === index) {
                     slide.classList.add('entering');
-                    setTimeout(() => slide.classList.replace('entering', 'active'), 50); 
+                    setTimeout(() => slide.classList.replace('entering', 'active'), 50);
                 } else if (i === currentSlide) {
                     slide.classList.add('exiting');
                 }
