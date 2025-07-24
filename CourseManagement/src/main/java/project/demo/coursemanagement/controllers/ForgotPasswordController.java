@@ -55,7 +55,7 @@ public class ForgotPasswordController extends HttpServlet {
         }
 
         // Forward to forgot password page
-        request.getRequestDispatcher("/WEB-INF/views/forgot-password.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/login_register/forgot-password.jsp").forward(request, response);
     }
 
     /**
@@ -126,7 +126,7 @@ public class ForgotPasswordController extends HttpServlet {
         }
 
         // Forward back to forgot password page
-        request.getRequestDispatcher("/WEB-INF/views/forgot-password.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/login_register/forgot-password.jsp").forward(request, response);
     }
 
     /**

@@ -1,18 +1,39 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setLocale value="en_US" />
+<fmt:setLocale value="vi_VN" />
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Profile - Course Management System</title>
+  <title>Chỉnh Sửa Hồ Sơ - Hệ Thống Quản Lý Khóa Học</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
+    :root {
+      /* Purple Gradient Theme */
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --primary-500: #667eea;
+      --primary-600: #5a69d4;
+      --primary-50: #f3f1ff;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --text-primary: #2c3e50;
+      --text-secondary: #6c757d;
+      --text-white: #ffffff;
+      --success: #28a745;
+      --error: #dc3545;
+      --warning: #ffc107;
+      --border-light: #e9ecef;
+      --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --focus-ring: rgba(102, 126, 234, 0.25);
+      --transition-medium: all 0.3s ease-in-out;
+    }
+
     body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--bg-primary);
       min-height: 100vh;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
@@ -23,22 +44,23 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
+      background: var(--bg-secondary);
     }
 
     .edit-card {
-      background: rgba(255, 255, 255, 0.95);
+      background: var(--bg-primary);
       backdrop-filter: blur(10px);
       border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: var(--shadow-medium);
+      border: 1px solid var(--border-light);
       overflow: hidden;
       max-width: 800px;
       width: 100%;
     }
 
     .edit-header {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      color: white;
+      background: var(--primary-gradient);
+      color: var(--text-white);
       padding: 40px 30px;
       text-align: center;
       position: relative;
@@ -60,14 +82,14 @@
       position: absolute;
       left: 20px;
       top: 20px;
-      color: white;
+      color: var(--text-white);
       text-decoration: none;
       font-size: 18px;
-      transition: all 0.3s ease;
+      transition: var(--transition-medium);
     }
 
     .back-button:hover {
-      color: white;
+      color: var(--text-white);
       transform: translateX(-5px);
     }
 
@@ -80,28 +102,28 @@
     }
 
     .form-floating > .form-control {
-      background: rgba(248, 249, 250, 0.8);
-      border: 2px solid #e9ecef;
+      background: var(--bg-secondary);
+      border: 2px solid var(--border-light);
       border-radius: 15px;
       padding: 1rem 0.75rem;
       font-size: 16px;
-      transition: all 0.3s ease;
+      transition: var(--transition-medium);
     }
 
     .form-floating > .form-control:focus {
-      background: white;
-      border-color: #4facfe;
-      box-shadow: 0 0 0 0.2rem rgba(79, 172, 254, 0.15);
+      background: var(--bg-primary);
+      border-color: var(--primary-500);
+      box-shadow: 0 0 0 0.2rem var(--focus-ring);
     }
 
     .form-floating > label {
-      color: #6c757d;
+      color: var(--text-secondary);
       font-weight: 500;
     }
 
     .form-floating > .form-control:focus ~ label,
     .form-floating > .form-control:not(:placeholder-shown) ~ label {
-      color: #4facfe;
+      color: var(--primary-500);
       font-weight: 600;
     }
 
@@ -116,6 +138,15 @@
       .form-row {
         grid-template-columns: 1fr;
       }
+
+      .edit-card {
+        margin: 1rem;
+        border-radius: 16px;
+      }
+
+      .edit-body {
+        padding: 2rem 1.5rem;
+      }
     }
 
     .input-icon {
@@ -123,7 +154,7 @@
       right: 15px;
       top: 50%;
       transform: translateY(-50%);
-      color: #6c757d;
+      color: var(--text-secondary);
       font-size: 18px;
       z-index: 5;
       pointer-events: none;
@@ -146,13 +177,21 @@
     }
 
     .alert-success {
-      background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-      color: #155724;
+      background: rgba(40, 167, 69, 0.1);
+      border-left: 4px solid var(--success);
+      color: var(--success);
     }
 
     .alert-danger {
-      background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-      color: #721c24;
+      background: rgba(220, 53, 69, 0.1);
+      border-left: 4px solid var(--error);
+      color: var(--error);
+    }
+
+    .alert-info {
+      background: var(--primary-50);
+      border-left: 4px solid var(--primary-500);
+      color: var(--primary-600);
     }
 
     .alert ul {
@@ -173,7 +212,7 @@
       border-radius: 15px;
       font-weight: 600;
       font-size: 16px;
-      transition: all 0.3s ease;
+      transition: var(--transition-medium);
       text-decoration: none;
       display: inline-flex;
       align-items: center;
@@ -188,23 +227,23 @@
     }
 
     .btn-save {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      color: white;
+      background: var(--primary-gradient);
+      color: var(--text-white);
     }
 
     .btn-save:hover {
-      color: white;
+      color: var(--text-white);
       transform: translateY(-3px);
-      box-shadow: 0 15px 35px rgba(79, 172, 254, 0.4);
+      box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
     }
 
     .btn-cancel {
-      background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-      color: white;
+      background: linear-gradient(135deg, var(--text-secondary) 0%, #495057 100%);
+      color: var(--text-white);
     }
 
     .btn-cancel:hover {
-      color: white;
+      color: var(--text-white);
       transform: translateY(-3px);
       box-shadow: 0 15px 35px rgba(108, 117, 125, 0.4);
     }
@@ -219,21 +258,21 @@
       height: 120px;
       border-radius: 50%;
       object-fit: cover;
-      border: 4px solid #fff;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-      background: #f0f0f0;
+      border: 4px solid var(--bg-primary);
+      box-shadow: var(--shadow-light);
+      background: var(--bg-secondary);
     }
 
     .form-section {
-      background: rgba(248, 249, 250, 0.5);
+      background: var(--primary-50);
       border-radius: 15px;
       padding: 30px;
       margin-bottom: 30px;
-      border: 1px solid rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border-light);
     }
 
     .section-title {
-      color: #2c3e50;
+      color: var(--text-primary);
       font-size: 1.3rem;
       font-weight: 600;
       margin-bottom: 25px;
@@ -243,19 +282,19 @@
 
     .section-title i {
       margin-right: 12px;
-      color: #4facfe;
+      color: var(--primary-500);
       font-size: 1.4rem;
     }
 
     .required-field::after {
       content: '*';
-      color: #dc3545;
+      color: var(--error);
       margin-left: 4px;
     }
 
     .help-text {
       font-size: 14px;
-      color: #6c757d;
+      color: var(--text-secondary);
       margin-top: 8px;
       font-style: italic;
     }
@@ -265,12 +304,22 @@
       width: 100%;
       margin-top: 8px;
       font-size: 14px;
-      color: #dc3545;
+      color: var(--error);
     }
 
     .form-control.is-invalid {
-      border-color: #dc3545;
+      border-color: var(--error);
       background-color: #fff5f5;
+    }
+
+    .form-control.is-valid {
+      border-color: var(--success);
+      background-color: #f8fff9;
+    }
+
+    .form-control.is-valid:focus {
+      border-color: var(--success);
+      box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.15);
     }
 
     .loading-overlay {
@@ -287,26 +336,25 @@
     }
 
     .loading-spinner {
-      color: white;
+      color: var(--text-white);
       font-size: 2rem;
     }
 
     .character-count {
       font-size: 12px;
-      color: #6c757d;
+      color: var(--text-secondary);
       text-align: right;
       margin-top: 5px;
     }
 
     .character-count.warning {
-      color: #ffc107;
+      color: var(--warning);
     }
 
     .character-count.danger {
-      color: #dc3545;
+      color: var(--error);
     }
 
-    /* Custom animations */
     @keyframes fadeInUp {
       from {
         opacity: 0;
@@ -326,20 +374,8 @@
       animation: fadeInUp 0.8s ease-out;
     }
 
-    /* Focus enhancement */
     .form-floating > .form-control:focus {
       transform: scale(1.02);
-    }
-
-    /* Success state */
-    .form-control.is-valid {
-      border-color: #28a745;
-      background-color: #f8fff9;
-    }
-
-    .form-control.is-valid:focus {
-      border-color: #28a745;
-      box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.15);
     }
   </style>
 </head>
@@ -351,8 +387,8 @@
       <a href="${pageContext.request.contextPath}/profile" class="back-button">
         <i class="fas fa-arrow-left"></i>
       </a>
-      <h2>Edit Profile</h2>
-      <p>Update your personal information</p>
+      <h2>Chỉnh Sửa Hồ Sơ</h2>
+      <p>Cập nhật thông tin cá nhân của bạn</p>
     </div>
 
     <!-- Body -->
@@ -362,14 +398,14 @@
         <div class="alert alert-${messageType} alert-dismissible fade show" role="alert">
           <i class="fas fa-info-circle me-2"></i>
             ${message}
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
         </div>
       </c:if>
 
       <!-- Validation Errors -->
       <c:if test="${not empty errors}">
         <div class="alert alert-danger" role="alert">
-          <h6><i class="fas fa-exclamation-triangle me-2"></i>Please correct the following errors:</h6>
+          <h6><i class="fas fa-exclamation-triangle me-2"></i>Vui lòng sửa các lỗi sau:</h6>
           <ul>
             <c:forEach var="error" items="${errors}">
               <li>${error}</li>
@@ -383,18 +419,18 @@
         <c:choose>
           <c:when test="${not empty user.avatarUrl}">
             <img src="${pageContext.request.contextPath}${user.avatarUrl}"
-                 alt="Profile Avatar"
+                 alt="Ảnh đại diện"
                  class="avatar-img">
           </c:when>
           <c:otherwise>
             <img src="${pageContext.request.contextPath}/assets/images/default-avatar.png"
-                 alt="Default Avatar"
+                 alt="Ảnh đại diện mặc định"
                  class="avatar-img">
           </c:otherwise>
         </c:choose>
         <div class="help-text mt-2">
           <a href="${pageContext.request.contextPath}/profile/avatar" class="text-decoration-none">
-            <i class="fas fa-camera me-1"></i>Change Avatar
+            <i class="fas fa-camera me-1"></i>Thay Đổi Ảnh Đại Diện
           </a>
         </div>
       </div>
@@ -406,7 +442,7 @@
         <div class="form-section">
           <h5 class="section-title">
             <i class="fas fa-user-circle"></i>
-            Account Information
+            Thông Tin Tài Khoản
           </h5>
 
           <div class="form-row">
@@ -416,16 +452,16 @@
                      id="username"
                      name="username"
                      value="${user.username}"
-                     placeholder="Username"
+                     placeholder="Tên đăng nhập"
                      required
                      maxlength="20"
                      pattern="[a-zA-Z0-9_]{3,20}">
-              <label for="username" class="required-field">Username</label>
+              <label for="username" class="required-field">Tên đăng nhập</label>
               <i class="fas fa-user input-icon"></i>
               <div class="character-count">
                 <span id="usernameCount">0</span>/20
               </div>
-              <div class="help-text">3-20 characters, letters, numbers, and underscores only</div>
+              <div class="help-text">3-20 ký tự, chỉ chứa chữ cái, số và dấu gạch dưới</div>
             </div>
 
             <div class="form-floating has-icon">
@@ -434,10 +470,10 @@
                      id="email"
                      name="email"
                      value="${user.email}"
-                     placeholder="Email Address"
+                     placeholder="Địa chỉ email"
                      required
                      maxlength="100">
-              <label for="email" class="required-field">Email Address</label>
+              <label for="email" class="required-field">Địa chỉ Email</label>
               <i class="fas fa-envelope input-icon"></i>
               <div class="character-count">
                 <span id="emailCount">0</span>/100
@@ -450,7 +486,7 @@
         <div class="form-section">
           <h5 class="section-title">
             <i class="fas fa-id-card"></i>
-            Personal Information
+            Thông Tin Cá Nhân
           </h5>
 
           <div class="form-row">
@@ -460,10 +496,10 @@
                      id="firstName"
                      name="firstName"
                      value="${user.firstName}"
-                     placeholder="First Name"
+                     placeholder="Họ"
                      maxlength="50"
                      pattern="[a-zA-ZÀ-ỹ\s]{2,50}">
-              <label for="firstName">First Name</label>
+              <label for="firstName">Họ</label>
               <i class="fas fa-user input-icon"></i>
               <div class="character-count">
                 <span id="firstNameCount">0</span>/50
@@ -476,10 +512,10 @@
                      id="lastName"
                      name="lastName"
                      value="${user.lastName}"
-                     placeholder="Last Name"
+                     placeholder="Tên"
                      maxlength="50"
                      pattern="[a-zA-ZÀ-ỹ\s]{2,50}">
-              <label for="lastName">Last Name</label>
+              <label for="lastName">Tên</label>
               <i class="fas fa-user input-icon"></i>
               <div class="character-count">
                 <span id="lastNameCount">0</span>/50
@@ -494,12 +530,12 @@
                      id="phone"
                      name="phone"
                      value="${user.phoneNumber}"
-                     placeholder="Phone Number"
+                     placeholder="Số điện thoại"
                      maxlength="20"
                      pattern="[+]?[0-9]{10,15}">
-              <label for="phone">Phone Number</label>
+              <label for="phone">Số Điện Thoại</label>
               <i class="fas fa-phone input-icon"></i>
-              <div class="help-text">Optional - Include country code if international</div>
+              <div class="help-text">Tùy chọn - Bao gồm mã quốc gia nếu là số quốc tế</div>
             </div>
 
             <div class="form-floating has-icon">
@@ -508,10 +544,10 @@
                      id="dateOfBirth"
                      name="dateOfBirth"
                      value="${user.dateOfBirth}"
-                     placeholder="Date of Birth">
-              <label for="dateOfBirth">Date of Birth</label>
+                     placeholder="Ngày sinh">
+              <label for="dateOfBirth">Ngày Sinh</label>
               <i class="fas fa-calendar input-icon"></i>
-              <div class="help-text">Optional - Must be at least 13 years old</div>
+              <div class="help-text">Tùy chọn - Phải ít nhất 13 tuổi</div>
             </div>
           </div>
         </div>
@@ -520,12 +556,12 @@
         <div class="action-buttons">
           <button type="submit" class="btn btn-action btn-save" id="saveButton">
             <i class="fas fa-save"></i>
-            <span>Save Changes</span>
+            <span>Lưu Thay Đổi</span>
           </button>
 
           <a href="${pageContext.request.contextPath}/profile" class="btn btn-action btn-cancel">
             <i class="fas fa-times"></i>
-            Cancel
+            Hủy
           </a>
         </div>
       </form>
@@ -537,7 +573,7 @@
 <div class="loading-overlay" id="loadingOverlay">
   <div class="loading-spinner">
     <i class="fas fa-spinner fa-spin"></i>
-    <div class="mt-3">Saving changes...</div>
+    <div class="mt-3">Đang lưu thay đổi...</div>
   </div>
 </div>
 
@@ -643,7 +679,7 @@
 
       if (!isUsernameValid || !isEmailValid || !isPhoneValid) {
         // Show error message
-        showAlert('Please correct the highlighted errors before saving.', 'danger');
+        showAlert('Vui lòng sửa các lỗi được đánh dấu trước khi lưu.', 'danger');
         return;
       }
 
@@ -666,7 +702,7 @@
       <div class="alert alert-${type} alert-dismissible fade show" role="alert">
         <i class="fas fa-exclamation-triangle me-2"></i>
         ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
       </div>
     `;
 
@@ -694,7 +730,7 @@
         if (!saveButton.classList.contains('btn-warning')) {
           saveButton.classList.remove('btn-save');
           saveButton.classList.add('btn-warning');
-          saveButton.querySelector('span').textContent = 'Save Changes*';
+          saveButton.querySelector('span').textContent = 'Lưu Thay Đổi*';
         }
       });
     });
@@ -718,10 +754,10 @@
       const age = today.getFullYear() - selectedDate.getFullYear();
 
       if (selectedDate > today) {
-        this.setCustomValidity('Date of birth cannot be in the future');
+        this.setCustomValidity('Ngày sinh không thể trong tương lai');
         toggleValidation(this, false);
       } else if (age < 13) {
-        this.setCustomValidity('You must be at least 13 years old');
+        this.setCustomValidity('Bạn phải ít nhất 13 tuổi');
         toggleValidation(this, false);
       } else {
         this.setCustomValidity('');

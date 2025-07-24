@@ -1,15 +1,34 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Forgot Password - Course Management System</title>
+  <title>Quên Mật Khẩu - Hệ Thống Quản Lý Khóa Học</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
+    :root {
+      /* Purple Gradient Theme */
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --primary-500: #667eea;
+      --primary-600: #5a69d4;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --text-primary: #2c3e50;
+      --text-secondary: #6c757d;
+      --text-white: #ffffff;
+      --success: #28a745;
+      --error: #dc3545;
+      --border-light: #e9ecef;
+      --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --focus-ring: rgba(102, 126, 234, 0.25);
+      --transition-medium: all 0.3s ease-in-out;
+    }
+
     body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--bg-primary);
       min-height: 100vh;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
@@ -20,22 +39,23 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
+      background: var(--bg-secondary);
     }
 
     .forgot-password-card {
-      background: rgba(255, 255, 255, 0.95);
+      background: var(--bg-primary);
       backdrop-filter: blur(10px);
       border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: var(--shadow-medium);
+      border: 1px solid var(--border-light);
       overflow: hidden;
       max-width: 400px;
       width: 100%;
     }
 
     .forgot-password-header {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      color: white;
+      background: var(--primary-gradient);
+      color: var(--text-white);
       padding: 40px 30px 30px;
       text-align: center;
     }
@@ -61,39 +81,39 @@
     }
 
     .form-control {
-      border: 2px solid #e9ecef;
+      border: 2px solid var(--border-light);
       border-radius: 12px;
       height: 60px;
       font-size: 16px;
-      transition: all 0.3s ease;
+      transition: var(--transition-medium);
     }
 
     .form-control:focus {
-      border-color: #4facfe;
-      box-shadow: 0 0 0 0.25rem rgba(79, 172, 254, 0.15);
+      border-color: var(--primary-500);
+      box-shadow: 0 0 0 0.25rem var(--focus-ring);
     }
 
     .form-floating label {
-      color: #6c757d;
+      color: var(--text-secondary);
       font-weight: 500;
     }
 
     .btn-submit {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      background: var(--primary-gradient);
       border: none;
       border-radius: 12px;
       height: 50px;
       font-weight: 600;
       font-size: 16px;
       width: 100%;
-      transition: all 0.3s ease;
-      color: white;
+      transition: var(--transition-medium);
+      color: var(--text-white);
     }
 
     .btn-submit:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(79, 172, 254, 0.3);
-      color: white;
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+      color: var(--text-white);
     }
 
     .btn-submit:active {
@@ -108,35 +128,39 @@
     }
 
     .alert-success {
-      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-      color: #155724;
+      background: rgba(40, 167, 69, 0.1);
+      border-left: 4px solid var(--success);
+      color: var(--success);
     }
 
     .alert-danger {
-      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-      color: #721c24;
+      background: rgba(220, 53, 69, 0.1);
+      border-left: 4px solid var(--error);
+      color: var(--error);
     }
 
     .alert-info {
-      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-      color: #0c5460;
+      background: rgba(102, 126, 234, 0.1);
+      border-left: 4px solid var(--primary-500);
+      color: var(--primary-600);
     }
 
     .forgot-password-footer {
       text-align: center;
       padding: 20px 30px 30px;
-      color: #6c757d;
+      color: var(--text-secondary);
       font-size: 14px;
     }
 
     .forgot-password-footer a {
-      color: #4facfe;
+      color: var(--primary-500);
       text-decoration: none;
       font-weight: 600;
     }
 
     .forgot-password-footer a:hover {
       text-decoration: underline;
+      color: var(--primary-600);
     }
 
     .loading {
@@ -150,6 +174,17 @@
     .btn-submit.loading .btn-text {
       display: none;
     }
+
+    @media (max-width: 576px) {
+      .forgot-password-card {
+        margin: 1rem;
+        border-radius: 16px;
+      }
+
+      .forgot-password-body {
+        padding: 2rem 1.5rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -158,8 +193,8 @@
     <!-- Header -->
     <div class="forgot-password-header">
       <i class="fas fa-key fa-2x mb-3"></i>
-      <h2>Forgot Password</h2>
-      <p>Enter your email to reset your password</p>
+      <h2>Quên Mật Khẩu</h2>
+      <p>Nhập email để đặt lại mật khẩu của bạn</p>
     </div>
 
     <!-- Body -->
@@ -169,7 +204,7 @@
         <div class="alert alert-${messageType} alert-dismissible fade show" role="alert">
           <i class="fas fa-info-circle me-2"></i>
             ${message}
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
         </div>
       </c:if>
 
@@ -180,20 +215,20 @@
                  class="form-control"
                  id="email"
                  name="email"
-                 placeholder="Email Address"
+                 placeholder="Địa chỉ email"
                  required
                  autocomplete="email">
           <label for="email">
-            <i class="fas fa-envelope me-2"></i>Email Address
+            <i class="fas fa-envelope me-2"></i>Địa chỉ email
           </label>
         </div>
 
         <button type="submit" class="btn btn-submit" id="submitBtn">
           <span class="spinner-border spinner-border-sm loading" role="status">
-            <span class="visually-hidden">Loading...</span>
+            <span class="visually-hidden">Đang tải...</span>
           </span>
           <span class="btn-text">
-            <i class="fas fa-paper-plane me-2"></i>Send Reset Link
+            <i class="fas fa-paper-plane me-2"></i>Gửi Link Đặt Lại
           </span>
         </button>
       </form>
@@ -201,8 +236,8 @@
 
     <!-- Footer -->
     <div class="forgot-password-footer">
-      <p><a href="${pageContext.request.contextPath}/login"><i class="fas fa-arrow-left me-1"></i> Back to Login</a></p>
-      <p class="mb-0">&copy; 2024 Course Management System</p>
+      <p><a href="${pageContext.request.contextPath}/login"><i class="fas fa-arrow-left me-1"></i> Quay lại Đăng nhập</a></p>
+      <p class="mb-0">&copy; 2024 Hệ Thống Quản Lý Khóa Học</p>
     </div>
   </div>
 </div>
@@ -218,7 +253,7 @@
     // Basic validation
     if (!email) {
       e.preventDefault();
-      showAlert('Please enter your email address', 'danger');
+      showAlert('Vui lòng nhập địa chỉ email của bạn', 'danger');
       return;
     }
 
@@ -226,7 +261,7 @@
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       e.preventDefault();
-      showAlert('Please enter a valid email address', 'danger');
+      showAlert('Vui lòng nhập địa chỉ email hợp lệ', 'danger');
       return;
     }
 
@@ -248,7 +283,7 @@
     alertDiv.innerHTML = `
       <i class="fas fa-exclamation-triangle me-2"></i>
       ${message}
-      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
     `;
 
     const form = document.getElementById('forgotPasswordForm');

@@ -77,7 +77,7 @@ public class ResetPasswordController extends HttpServlet {
                 request.setAttribute("token", token);
 
                 // Forward to reset password page
-                request.getRequestDispatcher("/WEB-INF/views/reset-password.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/views/login_register/reset-password.jsp").forward(request, response);
             } else {
                 System.out.println("Invalid or expired token: " + token);
                 redirectToForgotPassword(request, response, "This reset link is invalid or has expired. Please request a new password reset.");
@@ -173,7 +173,7 @@ public class ResetPasswordController extends HttpServlet {
         request.setAttribute("token", token);
 
         // Forward back to reset password page
-        request.getRequestDispatcher("/WEB-INF/views/reset-password.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/login_register/reset-password.jsp").forward(request, response);
     }
 
     /**

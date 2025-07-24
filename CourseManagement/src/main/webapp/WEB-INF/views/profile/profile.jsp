@@ -12,8 +12,30 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
+    :root {
+      /* Purple Gradient Theme */
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --primary-500: #667eea;
+      --primary-600: #5a69d4;
+      --primary-50: #f3f1ff;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --text-primary: #2c3e50;
+      --text-secondary: #6c757d;
+      --text-white: #ffffff;
+      --success: #28a745;
+      --warning: #ffc107;
+      --error: #dc3545;
+      --info: #17a2b8;
+      --border-light: #e9ecef;
+      --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --focus-ring: rgba(102, 126, 234, 0.25);
+      --transition-medium: all 0.3s ease-in-out;
+    }
+    
     body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--bg-primary);
       min-height: 100vh;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
@@ -27,19 +49,19 @@
     }
 
     .profile-card {
-      background: rgba(255, 255, 255, 0.95);
+      background: var(--bg-primary);
       backdrop-filter: blur(10px);
       border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: var(--shadow-medium);
+      border: 1px solid var(--border-light);
       overflow: hidden;
       max-width: 900px;
       width: 100%;
     }
 
     .profile-header {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      color: white;
+      background: var(--primary-gradient);
+      color: var(--text-white);
       padding: 40px 30px;
       text-align: center;
       position: relative;
@@ -61,14 +83,14 @@
       position: absolute;
       left: 20px;
       top: 20px;
-      color: white;
+      color: var(--text-white);
       text-decoration: none;
       font-size: 18px;
-      transition: all 0.3s ease;
+      transition: var(--transition-medium);
     }
 
     .back-button:hover {
-      color: white;
+      color: var(--text-white);
       transform: translateX(-5px);
     }
 
@@ -92,10 +114,10 @@
       height: 200px;
       border-radius: 50%;
       object-fit: cover;
-      border: 6px solid #fff;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-      background: #f0f0f0;
-      transition: all 0.3s ease;
+      border: 6px solid var(--bg-primary);
+      box-shadow: var(--shadow-medium);
+      background: var(--bg-secondary);
+      transition: var(--transition-medium);
       cursor: pointer;
     }
 
@@ -108,8 +130,8 @@
       position: absolute;
       bottom: 5px;
       right: 5px;
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      color: white;
+      background: var(--primary-gradient);
+      color: var(--text-white);
       width: 50px;
       height: 50px;
       border-radius: 50%;
@@ -117,14 +139,14 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.3s ease;
-      border: 4px solid #fff;
+      transition: var(--transition-medium);
+      border: 4px solid var(--bg-primary);
       font-size: 20px;
     }
 
     .avatar-overlay:hover {
       transform: scale(1.15);
-      box-shadow: 0 8px 20px rgba(79, 172, 254, 0.5);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
     }
 
     .avatar-section h3 {
@@ -132,23 +154,23 @@
       margin-bottom: 20px;
       font-size: 1.8rem;
       font-weight: 600;
-      color: #2c3e50;
+      color: var(--text-primary);
     }
 
     .completion-badge {
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-      color: white;
+      background: var(--primary-gradient);
+      color: var(--text-white);
       padding: 10px 25px;
       border-radius: 25px;
       display: inline-block;
       font-weight: 600;
       font-size: 15px;
       margin-bottom: 30px;
-      box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     }
 
     .info-section {
-      background: #f8f9fa;
+      background: var(--bg-secondary);
       border-radius: 15px;
       padding: 30px;
       margin-bottom: 30px;
@@ -167,21 +189,21 @@
     }
 
     .info-item {
-      background: white;
+      background: var(--bg-primary);
       padding: 20px;
       border-radius: 12px;
-      border: 2px solid #e9ecef;
-      transition: all 0.3s ease;
+      border: 2px solid var(--border-light);
+      transition: var(--transition-medium);
     }
 
     .info-item:hover {
-      border-color: #4facfe;
+      border-color: var(--primary-500);
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(79, 172, 254, 0.1);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
     }
 
     .info-label {
-      color: #6c757d;
+      color: var(--text-secondary);
       font-size: 14px;
       font-weight: 600;
       margin-bottom: 8px;
@@ -191,11 +213,11 @@
 
     .info-label i {
       margin-right: 8px;
-      color: #4facfe;
+      color: var(--primary-500);
     }
 
     .info-value {
-      color: #2c3e50;
+      color: var(--text-primary);
       font-size: 16px;
       font-weight: 500;
     }
@@ -217,17 +239,17 @@
     }
 
     .stat-card {
-      background: white;
+      background: var(--bg-primary);
       padding: 25px;
       border-radius: 15px;
       text-align: center;
-      border: 2px solid #e9ecef;
-      transition: all 0.3s ease;
+      border: 2px solid var(--border-light);
+      transition: var(--transition-medium);
     }
 
     .stat-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-medium);
     }
 
     .stat-icon {
@@ -238,12 +260,12 @@
     .stat-value {
       font-size: 28px;
       font-weight: 700;
-      color: #2c3e50;
+      color: var(--text-primary);
       margin-bottom: 5px;
     }
 
     .stat-label {
-      color: #6c757d;
+      color: var(--text-secondary);
       font-size: 14px;
       font-weight: 500;
     }
@@ -261,7 +283,7 @@
       border-radius: 12px;
       font-weight: 600;
       font-size: 16px;
-      transition: all 0.3s ease;
+      transition: var(--transition-medium);
       text-decoration: none;
       display: inline-flex;
       align-items: center;
@@ -273,34 +295,34 @@
     }
 
     .btn-edit {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      color: white;
+      background: var(--primary-gradient);
+      color: var(--text-white);
     }
 
     .btn-edit:hover {
-      color: white;
+      color: var(--text-white);
       transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(79, 172, 254, 0.3);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
     }
 
     .btn-password {
       background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-      color: white;
+      color: var(--text-white);
     }
 
     .btn-password:hover {
-      color: white;
+      color: var(--text-white);
       transform: translateY(-2px);
       box-shadow: 0 10px 25px rgba(250, 112, 154, 0.3);
     }
 
     .btn-logout {
       background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-      color: white;
+      color: var(--text-white);
     }
 
     .btn-logout:hover {
-      color: white;
+      color: var(--text-white);
       transform: translateY(-2px);
       box-shadow: 0 10px 25px rgba(245, 87, 108, 0.3);
     }
@@ -313,23 +335,26 @@
     }
 
     .alert-success {
-      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-      color: #155724;
+      background: rgba(40, 167, 69, 0.1);
+      border-left: 4px solid var(--success);
+      color: var(--success);
     }
 
     .alert-danger {
-      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-      color: #721c24;
+      background: rgba(220, 53, 69, 0.1);
+      border-left: 4px solid var(--error);
+      color: var(--error);
     }
 
     .alert-info {
-      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-      color: #0c5460;
+      background: var(--primary-50);
+      border-left: 4px solid var(--primary-500);
+      color: var(--primary-600);
     }
 
     .role-badge {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      background: var(--primary-gradient);
+      color: var(--text-white);
       padding: 5px 15px;
       border-radius: 20px;
       font-size: 12px;
@@ -339,13 +364,13 @@
     }
 
     .verified-badge {
-      color: #28a745;
+      color: var(--success);
       font-size: 18px;
       margin-left: 8px;
     }
 
     .unverified-badge {
-      color: #ffc107;
+      color: var(--warning);
       font-size: 18px;
       margin-left: 8px;
     }
@@ -393,18 +418,18 @@
     }
 
     .status-active {
-      background: #d4edda;
-      color: #155724;
+      background: rgba(40, 167, 69, 0.1);
+      color: var(--success);
     }
 
     .status-completed {
-      background: #d1ecf1;
-      color: #0c5460;
+      background: rgba(23, 162, 184, 0.1);
+      color: var(--info);
     }
 
     .status-inactive {
-      background: #f8d7da;
-      color: #721c24;
+      background: rgba(220, 53, 69, 0.1);
+      color: var(--error);
     }
 
     .enrollment-progress {
@@ -414,12 +439,12 @@
     .progress {
       height: 8px;
       border-radius: 10px;
-      background: #e9ecef;
+      background: var(--border-light);
     }
 
     .progress-bar {
       border-radius: 10px;
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      background: var(--primary-gradient);
     }
 
     .enrollment-meta {
@@ -428,12 +453,12 @@
       align-items: center;
       margin-top: 10px;
       font-size: 12px;
-      color: #6c757d;
+      color: var(--text-secondary);
     }
 
     .certificate-badge {
-      background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
-      color: #2d3436;
+      background: linear-gradient(135deg, var(--warning) 0%, #fab1a0 100%);
+      color: var(--text-primary);
       padding: 2px 8px;
       border-radius: 12px;
       font-size: 11px;
@@ -683,7 +708,7 @@
                       <c:set var="year" value="${fn:substring(dateStr, 0, 4)}" />
                       <c:set var="month" value="${fn:substring(dateStr, 5, 7)}" />
                       <c:set var="day" value="${fn:substring(dateStr, 8, 10)}" />
-                      
+
                       <c:set var="monthName" value="" />
                       <c:choose>
                         <c:when test="${month == '01'}"><c:set var="monthName" value="Jan" /></c:when>
@@ -699,7 +724,7 @@
                         <c:when test="${month == '11'}"><c:set var="monthName" value="Nov" /></c:when>
                         <c:when test="${month == '12'}"><c:set var="monthName" value="Dec" /></c:when>
                       </c:choose>
-                      
+
                       ${day} ${monthName} ${year}
                     </c:if>
                     <c:if test="${empty enrollmentInstant}">
@@ -738,7 +763,7 @@
           <i class="fas fa-user-edit"></i>
           Edit Profile
         </a>
-        
+
         <a href="${pageContext.request.contextPath}/profile/orders" class="btn btn-action" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
           <i class="fas fa-shopping-cart"></i>
           Order History
@@ -833,7 +858,7 @@
         top: 0;
         left: 0;
         height: 3px;
-        background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+        background: var(--primary-gradient);
         width: 0%;
         transition: width 1s ease;
         z-index: 9999;

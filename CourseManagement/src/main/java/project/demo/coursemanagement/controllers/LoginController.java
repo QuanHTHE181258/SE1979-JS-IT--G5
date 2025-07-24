@@ -54,7 +54,7 @@ public class LoginController extends HttpServlet {
         }
 
         // Forward to login page
-        request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/login_register/login.jsp").forward(request, response);
     }
 
     //Post request to handle login form submission
@@ -130,7 +130,7 @@ public class LoginController extends HttpServlet {
         }
 
         // Forward back to login page
-        request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/login_register/login.jsp").forward(request, response);
     }
 
     // Redirect to the appropriate dashboard based on user role
@@ -179,16 +179,16 @@ public class LoginController extends HttpServlet {
                         break;
                     case "USER":
                     case "STUDENT":
-                        response.sendRedirect(contextPath + "/student-dashboard");
+                        response.sendRedirect(contextPath + "/enrollments");
                         break;
                     default:
-                        response.sendRedirect(contextPath + "/student-dashboard");
+                        response.sendRedirect(contextPath + "/home");
                         break;
                 }
             }
         } else {
             // Fallback to general dashboard
-            response.sendRedirect(contextPath + "/student-dashboard");
+            response.sendRedirect(contextPath + "/home");
         }
     }
 
