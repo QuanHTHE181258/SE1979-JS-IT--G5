@@ -9,8 +9,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import project.demo.coursemanagement.utils.ValidationUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Controller for handling password reset functionality
@@ -125,8 +128,11 @@ public class ResetPasswordController extends HttpServlet {
         }
 
         // Password strength validation
-        if (newPassword.length() < 8) {
-            handleError(request, response, "Password must be at least 8 characters long", token);
+        List<String> passwordErrors = new ArrayList<>();
+        ValidationUtil.validatePassword(newPassword, confirmPassword, passwordErrors);
+        
+        if (!passwordErrors.isEmpty()) {
+            handleError(request, response, passwordErrors.get(0), token);
             return;
         }
 

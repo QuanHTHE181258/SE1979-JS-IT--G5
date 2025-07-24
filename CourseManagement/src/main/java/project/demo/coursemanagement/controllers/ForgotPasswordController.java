@@ -1,6 +1,5 @@
 package project.demo.coursemanagement.controllers;
 
-import project.demo.coursemanagement.dto.PasswordResetRequest;
 import project.demo.coursemanagement.service.PasswordResetService;
 import project.demo.coursemanagement.utils.SessionUtil;
 

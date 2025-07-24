@@ -212,6 +212,20 @@
         .password-requirements ul {
             margin: 0;
             padding-left: 20px;
+            list-style-type: none;
+        }
+        
+        .password-requirements li {
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .password-requirements li.met {
+            color: var(--success);
+        }
+        
+        .password-requirements li.not-met {
+            color: var(--text-secondary);
         }
 
         .two-column {
@@ -388,10 +402,10 @@
                 <div class="password-requirements">
                     <strong>Yêu cầu mật khẩu:</strong>
                     <ul>
-                        <li>Ít nhất 6 ký tự</li>
-                        <li>Chứa chữ hoa và chữ thường</li>
-                        <li>Chứa ít nhất một số</li>
-                        <li>Chứa ít nhất một ký tự đặc biệt (!@#$%^&*)</li>
+                        <li id="req-length" class="not-met"><i class="fas fa-times me-2"></i>Ít nhất 6 ký tự</li>
+                        <li id="req-case" class="not-met"><i class="fas fa-times me-2"></i>Chứa chữ hoa và chữ thường</li>
+                        <li id="req-number" class="not-met"><i class="fas fa-times me-2"></i>Chứa ít nhất một số</li>
+                        <li id="req-special" class="not-met"><i class="fas fa-times me-2"></i>Chứa ít nhất một ký tự đặc biệt (!@#$%^&*)</li>
                     </ul>
                 </div>
 
@@ -416,11 +430,11 @@
                                class="form-control"
                                id="dateOfBirth"
                                name="dateOfBirth"
-                               value="${formData.dateOfBirth}"
-                               max="2010-01-01">
+                               value="${formData.dateOfBirth}">
                         <label for="dateOfBirth">
                             <i class="fas fa-calendar me-2"></i>Ngày sinh (Tùy chọn)
                         </label>
+                        <div class="help-text">Phải ít nhất 13 tuổi</div>
                     </div>
                 </div>
 
@@ -580,6 +594,62 @@
             // Could add AJAX call to check email availability
         }
     });
+    
+    // Real-time password validation
+    document.getElementById('password').addEventListener('input', function() {
+        const password = this.value;
+        
+        // Check requirements
+        const hasLength = password.length >= 6;
+        const hasUpper = /[A-Z]/.test(password);
+        const hasLower = /[a-z]/.test(password);
+        const hasNumber = /\d/.test(password);
+        const hasSpecial = /[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(password);
+        
+        // Update requirement indicators
+        updateRequirement('req-length', hasLength);
+        updateRequirement('req-case', hasUpper && hasLower);
+        updateRequirement('req-number', hasNumber);
+        updateRequirement('req-special', hasSpecial);
+        
+        // Check confirm password match if it has a value
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        if (confirmPassword) {
+            const passwordsMatch = password === confirmPassword;
+            document.getElementById('confirmPassword').classList.toggle('is-valid', passwordsMatch);
+            document.getElementById('confirmPassword').classList.toggle('is-invalid', !passwordsMatch);
+        }
+    });
+    
+    // Check password match on confirm password input
+    document.getElementById('confirmPassword').addEventListener('input', function() {
+        const password = document.getElementById('password').value;
+        const confirmPassword = this.value;
+        
+        if (confirmPassword) {
+            const passwordsMatch = password === confirmPassword;
+            this.classList.toggle('is-valid', passwordsMatch);
+            this.classList.toggle('is-invalid', !passwordsMatch);
+        }
+    });
+    
+    // Function to update requirement status
+    function updateRequirement(reqId, isMet) {
+        const reqElement = document.getElementById(reqId);
+        const icon = reqElement.querySelector('i');
+        
+        if (isMet) {
+            reqElement.classList.remove('not-met');
+            reqElement.classList.add('met');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-check');
+        } else {
+            reqElement.classList.remove('met');
+            reqElement.classList.add('not-met');
+            icon.classList.remove('fa-check');
+            icon.classList.add('fa-times');
+        }
+    }
 </script>
 </body>
 </html>-floating {

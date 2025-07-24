@@ -182,158 +182,11 @@ public class RegisterService {
         }
     }
 
-    /**
-     * Validate registration request with business rules
-     */
-    public ValidationResult validateRegistrationRequest(RegistrationRequest request) {
-        System.out.println("[DEBUG_LOG] RegisterService.validateRegistrationRequest: Starting validation transaction");
-        System.out.println("[DEBUG_LOG] RegisterService.validateRegistrationRequest: Transaction data - Username: " + 
-                          (request != null ? request.getUsername() : "null"));
-
-        if (request == null) {
-            System.err.println("[DEBUG_LOG] RegisterService.validateRegistrationRequest: Transaction failed - Request object is null");
-            List<String> errors = new ArrayList<>();
-            errors.add("Invalid registration request");
-            return new ValidationResult(false, errors);
-        }
-
-        // First, run standard validation
-        System.out.println("[DEBUG_LOG] RegisterService.validateRegistrationRequest: Transaction in progress - Running standard validation");
-        ValidationResult standardValidation = ValidationUtil.validateRegistration(request);
-        System.out.println("[DEBUG_LOG] RegisterService.validateRegistrationRequest: Transaction detail - Standard validation result: Valid=" + 
-                          standardValidation.isValid() + ", Errors=" + standardValidation.getErrorCount());
-
-        // Then, run business-specific validation
-        System.out.println("[DEBUG_LOG] RegisterService.validateRegistrationRequest: Transaction in progress - Running business rules validation");
-        ValidationResult businessValidation = validateBusinessRules(request);
-        System.out.println("[DEBUG_LOG] RegisterService.validateRegistrationRequest: Transaction detail - Business validation result: Valid=" + 
-                          businessValidation.isValid() + ", Errors=" + businessValidation.getErrorCount());
-
-        // Combine results
-        ValidationResult combinedResult = ValidationResult.combine(standardValidation, businessValidation);
-
-        System.out.println("[DEBUG_LOG] RegisterService.validateRegistrationRequest: Transaction completed - Final result: Valid=" + 
-                          combinedResult.isValid() + ", Errors=" + combinedResult.getErrorCount() + 
-                          ", Warnings=" + combinedResult.getWarningCount());
-
-        return combinedResult;
-    }
-
-    /**
-     * Apply business-specific validation rules
-     */
-    private ValidationResult validateBusinessRules(RegistrationRequest request) {
-        List<String> errors = new ArrayList<>();
-        List<String> warnings = new ArrayList<>();
-
-        // Business rule: Check if registration is allowed for this role
-        if (!isRoleRegistrationAllowed(request.getRole())) {
-            errors.add("Registration is not currently available for " + request.getRole() + " role");
-        }
-
-        // Business rule: Check domain restrictions for teacher registration
-        if ("TEACHER".equalsIgnoreCase(request.getRole())) {
-            if (!isValidTeacherEmail(request.getEmail())) {
-                warnings.add("Teacher registrations with personal email addresses require approval");
-            }
-        }
-
-        // Business rule: Rate limiting check (simulation)
-        if (isRateLimited(request)) {
-            errors.add("Too many registration attempts. Please try again later");
-        }
-
-        ValidationResult result = new ValidationResult(errors.isEmpty(), errors);
-        result.addWarnings(warnings);
-
-        return result;
-    }
-
-    /**
-     * Check if role registration is currently allowed
-     */
-    private boolean isRoleRegistrationAllowed(String role) {
-        // Business logic: Only allow Student (1) and Teacher (2) self-registration
-        // Other roles should not be available for self-registration
-
-        if (role == null) {
-            return true; // Default to Student role
-        }
-
-        try {
-            int roleId = Integer.parseInt(role);
-            switch (roleId) {
-                case 1: // Student
-                case 2: // Teacher
-                    return true;
-                case 0: // Guest
-                case 3: // CourseManager
-                case 4: // UserManager
-                case 5: // Admin
-                    return false; // These roles require admin approval
-                default:
-                    return false; // Unknown roles not allowed
-            }
-        } catch (NumberFormatException e) {
-            // If role is not a number, try to match by name for backward compatibility
-            switch (role.toUpperCase()) {
-                case "STUDENT":
-                    return true;
-                case "TEACHER":
-                    return true;
-                default:
-                    return false;
-            }
-        }
-    }
-
-    /**
-     * Validate teacher email domain
-     */
-    private boolean isValidTeacherEmail(String email) {
-        if (email == null) {
-            return false;
-        }
-
-        // Business rule: Prefer institutional email domains for teachers
-        String[] institutionalDomains = {
-                "edu", "edu.vn", "university.edu", "college.edu", "school.edu"
-        };
-
-        String emailLower = email.toLowerCase();
-        for (String domain : institutionalDomains) {
-            if (emailLower.endsWith("." + domain)) {
-                return true;
-            }
-        }
-
-        // Personal email domains are allowed but generate warnings
-        return true;
-    }
-
-    /**
-     * Check for suspicious registration patterns
-     */
 
 
-    /**
-     * Check if registration is rate limited
-     */
-    private boolean isRateLimited(RegistrationRequest request) {
-        // Business rule: Simulate rate limiting
-        // In real implementation, this would check against a cache/database
-        // to track registration attempts per IP/email
 
-        // For demo purposes, always return false (no rate limiting)
-        return false;
-    }
 
-    /**
-     * Send welcome email to newly registered user
-     */
-    public void sendWelcomeEmail(User user) {
-        sendWelcomeEmail(user, 1); // Default to Student role (ID 1)
-    }
+
 
     /**
      * Send welcome email to newly registered user with specified role
@@ -378,10 +231,6 @@ public class RegisterService {
         }
     }
 
-    // Generate welcome email content based on user role
-    private String generateWelcomeEmailContent(User user) {
-        return generateWelcomeEmailContent(user, 1); // Default to Student role (ID 1)
-    }
 
     // Generate welcome email content based on user role with specified role ID
     private String generateWelcomeEmailContent(User user, Integer roleId) {
@@ -494,76 +343,7 @@ public class RegisterService {
         }
     }
 
-    /**
-     * Check if a username is available
-     */
-    public boolean isUsernameAvailable(String username) {
-        System.out.println("[DEBUG_LOG] RegisterService.isUsernameAvailable: Starting username availability transaction");
-        System.out.println("[DEBUG_LOG] RegisterService.isUsernameAvailable: Transaction data - Username: " + username);
 
-        if (username == null || username.trim().isEmpty()) {
-            System.err.println("[DEBUG_LOG] RegisterService.isUsernameAvailable: Transaction failed - Username is null or empty");
-            return false;
-        }
-
-        try {
-            // First check format validity
-            System.out.println("[DEBUG_LOG] RegisterService.isUsernameAvailable: Transaction in progress - Checking username format validity");
-            if (!ValidationUtil.isValidUsername(username)) {
-                System.out.println("[DEBUG_LOG] RegisterService.isUsernameAvailable: Transaction detail - Username format is invalid");
-                return false;
-            }
-
-            // Then check database uniqueness
-            System.out.println("[DEBUG_LOG] RegisterService.isUsernameAvailable: Transaction in progress - Checking username uniqueness in database");
-            boolean exists = registerDAO.isUsernameExists(username.trim());
-            boolean isAvailable = !exists;
-
-            System.out.println("[DEBUG_LOG] RegisterService.isUsernameAvailable: Transaction completed - Username '" + 
-                              username + "' is " + (isAvailable ? "available" : "already taken"));
-            return isAvailable;
-
-        } catch (Exception e) {
-            System.err.println("[DEBUG_LOG] RegisterService.isUsernameAvailable: Transaction error - " + e.getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Check if an email is available
-     */
-    public boolean isEmailAvailable(String email) {
-        System.out.println("[DEBUG_LOG] RegisterService.isEmailAvailable: Starting email availability transaction");
-        System.out.println("[DEBUG_LOG] RegisterService.isEmailAvailable: Transaction data - Email: " + email);
-
-        if (email == null || email.trim().isEmpty()) {
-            System.err.println("[DEBUG_LOG] RegisterService.isEmailAvailable: Transaction failed - Email is null or empty");
-            return false;
-        }
-
-        try {
-            // First check format validity
-            System.out.println("[DEBUG_LOG] RegisterService.isEmailAvailable: Transaction in progress - Checking email format validity");
-            if (!ValidationUtil.isValidEmail(email)) {
-                System.out.println("[DEBUG_LOG] RegisterService.isEmailAvailable: Transaction detail - Email format is invalid");
-                return false;
-            }
-
-            // Then check database uniqueness
-            System.out.println("[DEBUG_LOG] RegisterService.isEmailAvailable: Transaction in progress - Checking email uniqueness in database");
-            String normalizedEmail = email.trim().toLowerCase();
-            boolean exists = registerDAO.isEmailExists(normalizedEmail);
-            boolean isAvailable = !exists;
-
-            System.out.println("[DEBUG_LOG] RegisterService.isEmailAvailable: Transaction completed - Email '" + 
-                              email + "' is " + (isAvailable ? "available" : "already registered"));
-            return isAvailable;
-
-        } catch (Exception e) {
-            System.err.println("[DEBUG_LOG] RegisterService.isEmailAvailable: Transaction error - " + e.getMessage());
-            return false;
-        }
-    }
 
     /**
      * Inner class for registration statistics
