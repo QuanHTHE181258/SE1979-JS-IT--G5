@@ -14,6 +14,55 @@
     <title>Course Learning Web</title>
     <link rel="stylesheet" href="css/home-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .home-slider {
+            width: 80%;
+            height: 500px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .home-slider .slides {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+        }
+
+        .home-slider .slide {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            object-fit: contain;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: translateX(100%);
+            transition: transform 0.7s ease-in-out, opacity 0.7s ease-in-out;
+            z-index: 1;
+            opacity: 0;
+        }
+
+        .home-slider h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .home-slider .slide.active {
+            transform: translateX(0);
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .home-slider .slide.exiting {
+            transform: translateX(-100%);
+            opacity: 0;
+            z-index: 1;
+        }
+    </style>
 </head>
 <body>
     <%-- Header --%>
@@ -30,6 +79,14 @@
     </div>
     <%-- Content container --%>
     <div class="home-content">
+        <div class="home-slider">
+            <h2>News</h2>
+            <div class="slides">
+                <img src="assets/images/slide1.jpg" class="slide active" alt="Slide 1">
+                <img src="assets/images/slide2.jpg" class="slide" alt="Slide 2">
+                <img src="assets/images/slide3.jpg" class="slide" alt="Slide 3">
+            </div>
+        </div>
         <%-- Most Popular Courses --%>
         <div class="home-most-views">
             <h2>Highest Rating Courses</h2>
@@ -133,5 +190,33 @@
             <p>© 2025 Courses Learning Web. All rights reserved.</p>
         </div>
     </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active', 'exiting', 'entering');
+                if (i === index) {
+                    slide.classList.add('entering');
+                    setTimeout(() => slide.classList.replace('entering', 'active'), 50); 
+                } else if (i === currentSlide) {
+                    slide.classList.add('exiting');
+                }
+            });
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            const nextIndex = (currentSlide + 1) % slides.length;
+            showSlide(nextIndex);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showSlide(currentSlide); // Khởi tạo slide đầu tiên
+            setInterval(nextSlide, 5000);
+        });
+    </script>
 </body>
 </html>
