@@ -9,134 +9,240 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { background: #f4f6fb; margin: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f4f6fb;
+        }
+
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+
+        .content-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #4a90e2;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .order-table th,
+        .order-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .order-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .order-table tr:hover {
+            background: #f8f9fa;
+            transition: background 0.3s ease;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+
+        .btn-view {
+            background: #4a90e2;
+            color: white;
+        }
+
+        .btn-view:hover {
+            background: #357abd;
+            transform: translateY(-2px);
+        }
+
+        .search-box {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+        }
+
+        .filter-dropdown {
+            padding: 0.75rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 5px;
+            background: white;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-<div style="display:flex; min-height:100vh;">
-    <%-- Sidebar và topbar giữ nguyên như đã đồng bộ --%>
-    <c:set var="dashboardStyle" value="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;" />
-    <c:set var="userStyle" value="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;" />
-    <c:set var="coursesStyle" value="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;" />
-    <c:set var="ordersStyle" value="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;" />
-    <c:set var="revenueStyle" value="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;" />
-    <c:set var="teacherStyle" value="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;" />
-    <c:if test='${request.servletPath == "/admin"}'>
-        <c:set var="dashboardStyle" value="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px; border-left:5px solid #6a82fb; background:#23272b; font-weight:500;" />
-    </c:if>
-    <c:if test='${request.servletPath == "/admin/user-management"}'>
-        <c:set var="userStyle" value="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px; border-left:5px solid #6a82fb; background:#23272b; font-weight:500;" />
-    </c:if>
-    <c:if test='${request.servletPath == "/admin/courses"}'>
-        <c:set var="coursesStyle" value="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px; border-left:5px solid #6a82fb; background:#23272b; font-weight:500;" />
-    </c:if>
-    <c:if test='${request.servletPath == "/admin/orders"}'>
-        <c:set var="ordersStyle" value="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px; border-left:5px solid #6a82fb; background:#23272b; font-weight:500;" />
-    </c:if>
-    <c:if test='${request.servletPath == "/admin/revenue-analytics"}'>
-        <c:set var="revenueStyle" value="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px; border-left:5px solid #6a82fb; background:#23272b; font-weight:500;" />
-    </c:if>
-    <c:if test='${request.servletPath == "/teacher-performance"}'>
-        <c:set var="teacherStyle" value="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px; border-left:5px solid #6a82fb; background:#23272b; font-weight:500;" />
-    </c:if>
-    <nav style="width:250px; background:#343a40; color:#fff; min-height:100vh; display:flex; flex-direction:column;">
-        <div style="padding:32px 0 24px 32px;">
-            <h3 style="margin:0; font-size:1.7rem; font-weight:700; letter-spacing:1px;">Admin Panel</h3>
-        </div>
-        <ul style="list-style:none; padding:0; margin:0; flex:1;">
-            <li><a href="${pageContext.request.contextPath}/admin" style="${dashboardStyle}"><i class="fas fa-tachometer-alt" style="margin-right:14px;"></i> Dashboard</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/user-management" style="${userStyle}"><i class="fas fa-users" style="margin-right:14px;"></i> User Management</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/courses" style="${coursesStyle}"><i class="fas fa-book" style="margin-right:14px;"></i> Courses Management</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/orders" style="${ordersStyle}"><i class="fas fa-shopping-cart" style="margin-right:14px;"></i> Order Management</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/revenue-analytics" style="${revenueStyle}"><i class="fas fa-chart-bar" style="margin-right:14px;"></i> Revenue Analytics</a></li>
-            <li><a href="${pageContext.request.contextPath}/teacher-performance" style="${teacherStyle}"><i class="fas fa-chart-line" style="margin-right:14px;"></i> Teacher Performance</a></li>
-            <li><a href="${pageContext.request.contextPath}/logout" style="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px; font-weight:500;"><i class="fas fa-sign-out-alt" style="margin-right:14px;"></i> Logout</a></li>
-        </ul>
-    </nav>
-    <!-- Main content -->
-    <div style="flex:1; display:flex; flex-direction:column;">
-        <!-- Top Navbar -->
-        <nav style="background:#fff; box-shadow:0 2px 8px rgba(44,44,84,0.04); padding:18px 48px; display:flex; align-items:center; justify-content:space-between;">
-            <div style="font-size:1.4rem; font-weight:700; color:#2c2c54; letter-spacing:1px;">
-                Order Management
-            </div>
-            <div style="display:flex; align-items:center;">
-                <a href="${pageContext.request.contextPath}/admin/profile" style="display:flex; align-items:center; color:#2c2c54; text-decoration:none; margin-right:24px;">
-                    <c:choose>
-                        <c:when test="${not empty sessionScope.user.avatar.url}">
-                            <img src="${pageContext.request.contextPath}/assets/avatar/${sessionScope.user.avatar.url}" style="border-radius:50%; width:36px; height:36px; object-fit:cover;"/>
-                        </c:when>
-                        <c:otherwise>
-                            <img src="${pageContext.request.contextPath}/assets/avatar/default_avatar.png" style="border-radius:50%; width:36px; height:36px; object-fit:cover;"/>
-                        </c:otherwise>
-                    </c:choose>
-                    <span style="margin-left:12px; font-weight:600; font-size:1.1rem;">${sessionScope.user.username}</span>
-                </a>
-                <a href="${pageContext.request.contextPath}/logout" style="color:#dc3545; border:1.5px solid #dc3545; border-radius:7px; padding:7px 18px; text-decoration:none; font-weight:600; font-size:1rem;">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-            </div>
-        </nav>
-        <!-- Content -->
-        <div style="flex:1; padding:48px 0; background:#f4f6fb;">
-            <div style="max-width:1100px; margin:auto; padding:0 16px;">
-                <div style="background:#eaf1fb; color:#2c2c54; border-radius:10px; padding:16px 24px; margin-bottom:24px; font-size:1rem; display:flex; align-items:center;">
-                    <i class="fas fa-info-circle" style="margin-right:10px;"></i>
-                    Hiển thị ${orders.size()} trong tổng số ${totalOrders} bản ghi
-                    <c:if test="${totalPages > 1}">
-                        (Trang ${currentPage} / ${totalPages})
-                    </c:if>
-                </div>
-                <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; margin-bottom:24px; gap:16px;">
-                    <div style="flex:1; min-width:260px;">
-                        <form action="${pageContext.request.contextPath}/admin/orders" method="GET" style="display:flex; gap:8px; align-items:center;">
-                            <input type="text" name="search" placeholder="Search by ID, name, or email" value="${searchKeyword}" aria-label="Search" style="flex:1; padding:10px 14px; border-radius:8px; border:1px solid #d1d5db; font-size:1rem;">
-                            <button type="submit" style="background:#6a82fb; color:#fff; border:none; border-radius:8px; padding:10px 20px; font-weight:600; cursor:pointer; font-size:1rem;">
-                                <i class="fas fa-search"></i> Search
-                            </button>
-                            <c:if test="${not empty searchKeyword}">
-                                <a href="${pageContext.request.contextPath}/admin/orders" style="background:#fff; color:#6a82fb; border:1.5px solid #6a82fb; border-radius:8px; padding:10px 20px; font-weight:600; text-decoration:none; margin-left:4px; font-size:1rem;"> <i class="fas fa-times"></i> Clear</a>
-                            </c:if>
-                        </form>
+    <!-- Include admin sidebar -->
+    <jsp:include page="_admin_sidebar.jsp" />
+
+    <div class="wrapper">
+        <div class="main-content">
+            <div class="content-box">
+                <h2 style="margin-bottom: 2rem">Order Management</h2>
+
+                <!-- Stats Row -->
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <i class="fas fa-shopping-cart stat-icon"></i>
+                        <div class="stat-value">${orderStats.totalOrders}</div>
+                        <div class="stat-label">Total Orders</div>
                     </div>
-                    <div style="display:flex; gap:8px; align-items:center;">
-                        <a href="${pageContext.request.contextPath}/admin/orders/export?format=csv" style="background:#fff; color:#6a82fb; border:1.5px solid #6a82fb; border-radius:8px; padding:10px 20px; font-weight:600; text-decoration:none; font-size:1rem;">
-                            <i class="fas fa-file-csv"></i> Export to CSV
-                        </a>
-                        <a href="${pageContext.request.contextPath}/admin/orders/export?format=excel" style="background:#fff; color:#6a82fb; border:1.5px solid #6a82fb; border-radius:8px; padding:10px 20px; font-weight:600; text-decoration:none; font-size:1rem;">
-                            <i class="fas fa-file-excel"></i> Export to Excel
-                        </a>
+                    <div class="stat-card">
+                        <i class="fas fa-check-circle stat-icon" style="color: #2ecc71;"></i>
+                        <div class="stat-value">${orderStats.completedOrders}</div>
+                        <div class="stat-label">Completed Orders</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-clock stat-icon" style="color: #f1c40f;"></i>
+                        <div class="stat-value">${orderStats.pendingOrders}</div>
+                        <div class="stat-label">Pending Orders</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-dollar-sign stat-icon" style="color: #9b59b6;"></i>
+                        <div class="stat-value">$${orderStats.totalRevenue}</div>
+                        <div class="stat-label">Total Revenue</div>
                     </div>
                 </div>
-                <div style="margin-bottom:24px;">
-                    <a href="${pageContext.request.contextPath}/admin/orders" style="color:${currentStatus == null ? '#fff' : '#6a82fb'}; background:${currentStatus == null ? '#6a82fb' : '#fff'}; border:1.5px solid #6a82fb; border-radius:8px 0 0 8px; padding:8px 18px; font-weight:600; text-decoration:none; font-size:1rem;">All</a>
-                    <a href="${pageContext.request.contextPath}/admin/orders?status=pending" style="color:${currentStatus == 'pending' ? '#fff' : '#f59e42'}; background:${currentStatus == 'pending' ? '#f59e42' : '#fff'}; border:1.5px solid #f59e42; border-radius:0; padding:8px 18px; font-weight:600; text-decoration:none; font-size:1rem;">Pending</a>
-                    <a href="${pageContext.request.contextPath}/admin/orders?status=paid" style="color:${currentStatus == 'paid' ? '#fff' : '#22c55e'}; background:${currentStatus == 'paid' ? '#22c55e' : '#fff'}; border:1.5px solid #22c55e; border-radius:0; padding:8px 18px; font-weight:600; text-decoration:none; font-size:1rem;">Paid</a>
-                    <a href="${pageContext.request.contextPath}/admin/orders?status=cancelled" style="color:${currentStatus == 'cancelled' ? '#fff' : '#ef4444'}; background:${currentStatus == 'cancelled' ? '#ef4444' : '#fff'}; border:1.5px solid #ef4444; border-radius:0 8px 8px 0; padding:8px 18px; font-weight:600; text-decoration:none; font-size:1rem;">Cancelled</a>
+
+                <!-- Search and Filter -->
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="Search orders...">
+                    <select class="filter-dropdown">
+                        <option value="all">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
                 </div>
-                <div style="overflow-x:auto; background:#fff; border-radius:16px; box-shadow:0 2px 8px rgba(44,44,84,0.08);">
-                    <table style="width:100%; border-collapse:collapse; font-size:1rem;">
+
+                <!-- Orders Table -->
+                <div style="overflow-x: auto;">
+                    <table class="order-table">
                         <thead>
-                        <tr style="background:#f5f5fa; color:#2c2c54;">
-                            <th style="padding:14px 8px; text-align:left; font-weight:700;">Order ID</th>
-                            <th style="padding:14px 8px; text-align:left; font-weight:700;">Customer</th>
-                            <th style="padding:14px 8px; text-align:left; font-weight:700;">Email</th>
-                            <th style="padding:14px 8px; text-align:left; font-weight:700;">Status</th>
-                            <th style="padding:14px 8px; text-align:left; font-weight:700;">Payment Method</th>
-                            <th style="padding:14px 8px; text-align:left; font-weight:700;">Total Amount</th>
-                            <th style="padding:14px 8px; text-align:left; font-weight:700;">Created At</th>
-                            <th style="padding:14px 8px; text-align:left; font-weight:700;">Actions</th>
-                        </tr>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Course</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${orders}" var="order">
-                            <tr style="border-bottom:1px solid #e5e7eb;">
-                                <td style="padding:12px 8px;">${order.orderId}</td>
-                                <td style="padding:12px 8px;">${order.customerName}</td>
-                                <td style="padding:12px 8px;">${order.customerEmail}</td>
-                                <td style="padding:12px 8px;">
-                                    <span style="display:inline-block; padding:5px 14px; border-radius:15px; font-size:0.98em;
-                                        background:${order.status == 'pending' ? '#fff3cd' : (order.status == 'paid' ? '#d4edda' : '#f8d7da')};
                                         color:${order.status == 'pending' ? '#856404' : (order.status == 'paid' ? '#155724' : '#721c24')};">
                                         ${order.status}
                                     </span>
