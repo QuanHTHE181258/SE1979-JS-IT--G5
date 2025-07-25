@@ -3,7 +3,6 @@ package project.demo.coursemanagement.controllers;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import project.demo.coursemanagement.entities.Cart;
 import project.demo.coursemanagement.entities.Cartitem;
 import project.demo.coursemanagement.entities.Cours;
 import project.demo.coursemanagement.utils.DatabaseConnection;
@@ -22,7 +21,7 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Integer userId = (Integer) session.getAttribute("userId"); // lấy từ session sau khi đăng nhập
+        Integer userId = (Integer) session.getAttribute("userId");
 
         if (userId == null) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -73,10 +72,8 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-//        int courseId = Integer.parseInt(request.getParameter("courseId"));
-
         String value = request.getParameter("courseId");
-        int courseId = -1;
+        int courseId;
 
         if (value != null && !value.trim().isEmpty()) {
             try {
@@ -94,7 +91,6 @@ public class CartServlet extends HttpServlet {
             return;
         }
 
-
         HttpSession session = request.getSession();
         Integer userId = (Integer) session.getAttribute("userId");
 
@@ -107,7 +103,7 @@ public class CartServlet extends HttpServlet {
             switch (action) {
                 case "add" -> addToCart(conn, userId, courseId);
                 case "remove" -> removeFromCart(conn, userId, courseId);
-                case "moveToWishlist" -> System.out.println("Move to wishlist: " + courseId); // placeholder
+                default -> response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unknown action.");
             }
         } catch (SQLException e) {
             throw new ServletException("Cart operation failed", e);
