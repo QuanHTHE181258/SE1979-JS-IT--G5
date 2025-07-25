@@ -477,7 +477,7 @@
   <div class="profile-card">
     <!-- Header -->
     <div class="profile-header">
-      <a href="${pageContext.request.contextPath}/student-dashboard" class="back-button">
+      <a href="${pageContext.request.contextPath}/enrollments" class="back-button">
         <i class="fas fa-arrow-left"></i>
       </a>
       <h2>My Profile</h2>
@@ -749,7 +749,7 @@
 
           <c:if test="${fn:length(profileStats.recentEnrollments) > 3}">
             <div class="text-center mt-3">
-              <a href="${pageContext.request.contextPath}/student-dashboard" class="btn btn-outline-primary btn-sm">
+              <a href="${pageContext.request.contextPath}/enrollments" class="btn btn-outline-primary btn-sm">
                 View All Enrollments
               </a>
             </div>

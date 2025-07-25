@@ -284,17 +284,17 @@ public class RegisterController extends HttpServlet {
                         response.sendRedirect(contextPath + "/teacher/dashboard");
                         break;
                     case 1: // Student
-                        response.sendRedirect(contextPath + "/student-dashboard");
+                        response.sendRedirect(contextPath + "/enrollments");
                         break;
                     case 3: // CourseManager
-                        response.sendRedirect(contextPath + "/course-manager/dashboard");
+                        response.sendRedirect(contextPath + "/course-manager");
                         break;
                     case 4: // UserManager
-                        response.sendRedirect(contextPath + "/user-manager/dashboard");
+                        response.sendRedirect(contextPath + "/admin/user-management");
                         break;
                     case 0: // Guest
                     default:
-                        response.sendRedirect(contextPath + "/student-dashboard");
+                        response.sendRedirect(contextPath + "/enrollments");
                         break;
                 }
             } catch (NumberFormatException e) {
@@ -308,15 +308,15 @@ public class RegisterController extends HttpServlet {
                         break;
                     case "USER":
                     case "STUDENT":
-                        response.sendRedirect(contextPath + "/student-dashboard");
+                        response.sendRedirect(contextPath + "/enrollments");
                         break;
                     default:
-                        response.sendRedirect(contextPath + "/student-dashboard");
+                        response.sendRedirect(contextPath + "/enrollments");
                         break;
                 }
             }
         } else {
-            response.sendRedirect(contextPath + "/student-dashboard");
+            response.sendRedirect(contextPath + "/enrollments");
         }
     }
 
