@@ -87,19 +87,19 @@ public class AdminController extends HttpServlet {
             }
             
             // Lấy thống kê user
-            RegisterService.RegistrationStatistics stats = registerService.getRegistrationStatistics();
+            int totalUsers = userService.countUsers(null, null);
 
             // Lấy tổng số khóa học
             int totalCourses = courseService.countCourses(null, null);
 
             Map<String, Object> dashboardStats = new HashMap<>();
-            dashboardStats.put("totalUsers", (stats != null) ? stats.getTotalRegistrations() : 0);
+            dashboardStats.put("totalUsers", totalUsers);
             dashboardStats.put("totalCourses", totalCourses);
             dashboardStats.put("activeEnrollments", 0); // TODO: Implement enrollment counting
             dashboardStats.put("totalRevenue", 0.0); // TODO: Implement revenue calculation
 
             request.setAttribute("dashboardStats", dashboardStats);
-            request.setAttribute("recentUsers", (stats != null) ? stats.getTodayRegistrations() : Collections.emptyList());
+            dashboardStats.put("totalUsers", totalUsers);
             request.setAttribute("recentActivities", recentActivities);
             request.setAttribute("recentCourses", recentCourses);
              List<CourseDTO> topCourses = courseService.getTopCourses(5);

@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import project.demo.coursemanagement.dto.CourseDTO;
 import project.demo.coursemanagement.service.HomeService;
+import project.demo.coursemanagement.utils.SessionUtil;
 
 @WebServlet(name = "HomeServlet",urlPatterns = {"/home"})
 public class HomeServlet extends HttpServlet {
@@ -26,6 +27,7 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         List<CourseDTO> allCourses = new ArrayList<>(homeService.getAllCourses());
 
         // Remove duplicates (CourseID-based)

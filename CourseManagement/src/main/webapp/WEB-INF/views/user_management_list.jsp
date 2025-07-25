@@ -43,7 +43,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Stt</th>
                             <th>Username</th>
                             <th>Email</th>
                             <th>Full Name</th>
@@ -51,14 +51,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach items="${students}" var="student">
+                        <c:forEach items="${students}" var="student" varStatus="status">
                             <tr>
-                                <td>${student.id}</td>
+                                <td>${status.index+1}</td>
                                 <td>${student.username}</td>
                                 <td>${student.email}</td>
                                 <td>${student.firstName} ${student.lastName}</td>
                                 <td>
                                     <a href="${pageContext.request.contextPath}/admin/users/edit/${student.id}" class="btn btn-sm btn-warning">Edit</a>
+
+
+
                                 </td>
                             </tr>
                         </c:forEach>
@@ -75,7 +78,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Stt</th>
                             <th>Username</th>
                             <th>Email</th>
                             <th>Full Name</th>
@@ -83,9 +86,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach items="${teachers}" var="teacher">
-                            <tr>
-                                <td>${teacher.id}</td>
+                    <c:forEach items="${teachers}" var="teacher" varStatus="status">
+
+                    <tr>
+                        <td>${status.index+1}</td>
                                 <td>${teacher.username}</td>
                                 <td>${teacher.email}</td>
                                 <td>${teacher.firstName} ${teacher.lastName}</td>

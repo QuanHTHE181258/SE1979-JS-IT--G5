@@ -23,10 +23,13 @@ public interface OrderDAO {
     List<OrderDTO> getOrdersByDateRange(String startDate, String endDate);
     BigDecimal getTotalRevenue();
     Map<String, Integer> getOrdersCountByStatus();
-    Map<String, BigDecimal> getRevenueByMonth();
-    
+
     // Method to get orders by user ID
     List<OrderDTO> getOrdersByUserId(Integer userId);
-    List<RevenueDetailDTO> getRevenueDetails();
     OrderDetailsViewDTO getOrderDetailView(int orderId);
+    List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueDetails();
+    List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByDay();
+    List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByWeek();
+    List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByMonth();
+    List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByYear();
 }
