@@ -17,7 +17,7 @@ public interface OrderDAO {
     List<OrderDTO> getOrdersWithPagination(int offset, int limit);
     List<OrderDTO> searchOrders(String keyword, int offset, int limit);
     int countSearchResults(String keyword);
-    
+
     // New methods for analytics
     OrderAnalyticsDTO getOrderAnalytics();
     List<OrderDTO> getOrdersByDateRange(String startDate, String endDate);
@@ -32,4 +32,7 @@ public interface OrderDAO {
     List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByWeek();
     List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByMonth();
     List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByYear();
+
+    // Thêm phương thức tạo order và orderdetails
+    int createOrderWithDetails(Integer userId, project.demo.coursemanagement.dto.OrderDTO orderDTO);
 }

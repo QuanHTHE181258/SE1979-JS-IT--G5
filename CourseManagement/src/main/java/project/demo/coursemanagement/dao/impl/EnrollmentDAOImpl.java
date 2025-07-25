@@ -53,4 +53,22 @@ public class EnrollmentDAOImpl {
         }
         return enrollments;
     }
+
+    public boolean createEnrollment(int studentId, int courseId, Timestamp enrollmentDate) {
+        String sql = "INSERT INTO enrollments (student_id, course_id, enrollment_date, status, progress_percentage, certificate_issued) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, studentId);
+            stmt.setInt(2, courseId);
+            stmt.setTimestamp(3, enrollmentDate);
+            stmt.setString(4, "active");
+            stmt.setBigDecimal(5, java.math.BigDecimal.ZERO);
+            stmt.setBoolean(6, false);
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
