@@ -20,10 +20,6 @@ public class LessonPreviewServlet extends HttpServlet {
             int lessonId = Integer.parseInt(request.getParameter("lessonID"));
             BigDecimal price = lessonService.getCoursePriceByLessonID(lessonId);
 
-            if (price != null && price.compareTo(BigDecimal.ZERO) > 0) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Bạn cần đăng nhập để xem nội dung.");
-                return;
-            }
             LessonDTO lesson = lessonService.getLesson(lessonId);
             if (lesson != null) {
                 request.setAttribute("lesson", lesson);

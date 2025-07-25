@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -109,28 +110,38 @@
 <body>
 <div class="container py-5">
     <h1 class="quiz-header">Quiz List</h1>
-  <c:choose>
-    <c:when test="${not empty quizList}">
-      <c:forEach var="quiz" items="${quizList}" varStatus="loop">
-        <c:if test="${loop.index == 0 || quiz.quizID != quizList[loop.index - 1].quizID}">
-          <div class="quiz-container">
-            <div class="quiz-title">${quiz.title}</div>
-            <div class="quiz-question">Câu hỏi: ${quiz.questionText}</div>
-            <ul class="answer-list">
-              <c:forEach var="answerQuiz" items="${quizList}" begin="${loop.index}" end="${quizList.size() - 1}">
-                <c:if test="${answerQuiz.quizID == quiz.quizID}">
-                  <li>${answerQuiz.answer}</li>
+    <c:choose>
+        <c:when test="${not empty quizList}">
+            <c:set var="currentQuizID" value="" />
+            <c:forEach var="quiz" items="${quizList}" varStatus="loop">
+                <c:if test="${quiz.quizID != currentQuizID}">
+                    <c:set var="currentQuizID" value="${quiz.quizID}" />
+                    <div class="quiz-container">
+                        <div class="quiz-title">${quiz.title}</div>
+                        <c:set var="questionTexts" value="" />
+                        <c:forEach var="question" items="${quizList}">
+                            <c:if test="${question.quizID == quiz.quizID}">
+                                <c:if test="${fn:contains(questionTexts, question.questionText) == false}">
+                                    <c:set var="questionTexts" value="${questionTexts}${question.questionText};" />
+                                    <div class="quiz-question">Câu hỏi: ${question.questionText}</div>
+                                    <ul class="answer-list">
+                                        <c:forEach var="answerQuiz" items="${quizList}">
+                                            <c:if test="${answerQuiz.quizID == question.quizID && answerQuiz.questionText == question.questionText}">
+                                                <li>${answerQuiz.answer}</li>
+                                            </c:if>
+                                        </c:forEach>
+                                    </ul>
+                                </c:if>
+                            </c:if>
+                        </c:forEach>
+                    </div>
                 </c:if>
-              </c:forEach>
-            </ul>
-          </div>
-        </c:if>
-      </c:forEach>
-    </c:when>
-    <c:otherwise>
-      <p class="no-quiz">Không tìm thấy quiz nào.</p>
-    </c:otherwise>
-  </c:choose>
+            </c:forEach>
+        </c:when>
+        <c:otherwise>
+            <p class="no-quiz">Không tìm thấy quiz nào.</p>
+        </c:otherwise>
+    </c:choose>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>

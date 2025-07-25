@@ -601,7 +601,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/CourseController">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/course">
                         <i class="fas fa-book me-1"></i>Courses
                     </a>
                 </li>
