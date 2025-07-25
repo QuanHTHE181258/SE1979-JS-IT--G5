@@ -17,16 +17,18 @@ public interface OrderDAO {
     List<OrderDTO> getOrdersWithPagination(int offset, int limit);
     List<OrderDTO> searchOrders(String keyword, int offset, int limit);
     int countSearchResults(String keyword);
-    
+
     // New methods for analytics
     OrderAnalyticsDTO getOrderAnalytics();
     List<OrderDTO> getOrdersByDateRange(String startDate, String endDate);
     BigDecimal getTotalRevenue();
     Map<String, Integer> getOrdersCountByStatus();
     Map<String, BigDecimal> getRevenueByMonth();
-    
+
     // Method to get orders by user ID
     List<OrderDTO> getOrdersByUserId(Integer userId);
     List<RevenueDetailDTO> getRevenueDetails();
     OrderDetailsViewDTO getOrderDetailView(int orderId);
+    // Thêm phương thức tạo order và orderdetails
+    int createOrderWithDetails(Integer userId, project.demo.coursemanagement.dto.OrderDTO orderDTO);
 }

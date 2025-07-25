@@ -10,18 +10,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/common/Config.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/common/ajaxServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/common/vnpayQuery.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/common/vnpayRefund.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/CheckoutServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/PaymentResultController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/CartDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/CartDAOImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/checkout.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/paymentFailed.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/paymentSuccess.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/InstructorInfoServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/InstructorInfoServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/course-catalog.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/course-catalog.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/course-details.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/course-details.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/home.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/home.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/instructor-info.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/instructor-info.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/lesson-preview.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/lesson-preview.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/quiz-preview.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/quiz-preview.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view-course.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view-course.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/css/course-details-style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/css/home-style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/css/view-course-style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/OrderDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/OrderDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/EnrollmentDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/EnrollmentDAOImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/OrderDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/OrderDAOImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dto/OrderDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dto/OrderDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/profile/cart.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/profile/cart.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,12 +51,12 @@
     &quot;assignee&quot;: &quot;khiemnbhe182278&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/QuanHTHE181258/SE1979-JS-IT--G5.git",
-    "accountId": "ea79f898-0014-41ff-91b0-12bce0c6036e"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/QuanHTHE181258/SE1979-JS-IT--G5.git&quot;,
+    &quot;accountId&quot;: &quot;ea79f898-0014-41ff-91b0-12bce0c6036e&quot;
   }
-}]]></component>
+}</component>
   <component name="LogFilters">
     <option name="FILTER_ERRORS" value="false" />
     <option name="FILTER_WARNINGS" value="false" />
@@ -77,28 +82,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Tomcat Server.Tomcat 10.1.29.executor&quot;: &quot;Run&quot;,
-    &quot;Tomcat Server.Tomcat 10.1.34.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Tomcat Server.Tomcat 10.1.29.executor": "Run",
+    "Tomcat Server.Tomcat 10.1.34.executor": "Run",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "D:/FULearning/SUMMER2025/SWP391/Project/SE1979-JS-IT--G5/CourseManagement/src/main/webapp/WEB-INF/views",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\FULearning\SUMMER2025\SWP391\Project\SE1979-JS-IT--G5\CourseManagement\src\main\webapp\WEB-INF\views" />
+      <recent name="D:\FULearning\SUMMER2025\SWP391\Project\SE1979-JS-IT--G5\CourseManagement\src\main\webapp" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\FULearnig\SUMMER2025\SWP391\SWP391_Git\SE1979-JS-IT--G5\CourseManagement\src\main\webapp\WEB-INF\views" />
       <recent name="D:\FULearnig\SUMMER2025\SWP391\SWP391_Git\SE1979-JS-IT--G5\CourseManagement\src\main\java\project\demo\coursemanagement\controllers" />
@@ -242,6 +252,7 @@
       <workItem from="1752914923161" duration="6748000" />
       <workItem from="1753163799090" duration="5763000" />
       <workItem from="1753377955948" duration="2787000" />
+      <workItem from="1753412540387" duration="1307000" />
     </task>
     <task id="LOCAL-00001" summary="Merge remote-tracking branch 'origin/main' into KhiemNB">
       <option name="closed" value="true" />

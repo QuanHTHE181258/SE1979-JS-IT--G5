@@ -17,6 +17,7 @@ public class OrderDTO {
     private List<OrderDetailDTO> orderDetails;
     private String customerName;
     private String customerEmail;
+    private Integer userId;
 
     // Calculate total amount based on order details
     public void calculateTotalAmount() {
@@ -107,4 +108,11 @@ public class OrderDTO {
     }
     public Date getCreatedAtDate() {
         return createdAt == null ? null : Date.from(createdAt); }
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 }
