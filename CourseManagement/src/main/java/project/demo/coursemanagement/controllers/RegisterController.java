@@ -122,7 +122,7 @@ public class RegisterController extends HttpServlet {
                 // Handle legacy role names
                 String roleName = registrationRequest.getRole();
                 if ("TEACHER".equalsIgnoreCase(roleName)) {
-                    roleId = 3; // Teacher role ID
+                    roleId = 2; // Teacher role ID
                 }
                 System.out.println("Converted role name '" + roleName + "' to role ID: " + roleId);
             }
@@ -256,10 +256,10 @@ public class RegisterController extends HttpServlet {
      * Set role options for the form
      */
     private void setRoleOptions(HttpServletRequest request) {
-        // Only allow Student (1) and Teacher (3) for self-registration
+        // Only allow Student (1) and Teacher (2) for self-registration
         java.util.Map<String, String> roleOptions = new java.util.LinkedHashMap<>();
         roleOptions.put("1", "Student");
-        roleOptions.put("3", "Teacher");
+        roleOptions.put("2", "Teacher");
         request.setAttribute("roleOptions", roleOptions);
     }
 
@@ -280,13 +280,13 @@ public class RegisterController extends HttpServlet {
                     case 5: // Admin
                         response.sendRedirect(contextPath + "/admin/dashboard");
                         break;
-                    case 3: // Teacher
+                    case 2: // Teacher
                         response.sendRedirect(contextPath + "/teacher/dashboard");
                         break;
                     case 1: // Student
                         response.sendRedirect(contextPath + "/enrollments");
                         break;
-                    case 2: // CourseManager
+                    case 3: // CourseManager
                         response.sendRedirect(contextPath + "/course-manager");
                         break;
                     case 4: // UserManager
