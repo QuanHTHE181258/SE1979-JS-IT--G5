@@ -23,7 +23,7 @@ public class InstructorInfoServlet extends HttpServlet {
 
         String username = request.getParameter("username");
         int page = 1;
-        int size = 5;
+        int size = 6;
 
         String pageParam = request.getParameter("page");
         if (pageParam != null) {

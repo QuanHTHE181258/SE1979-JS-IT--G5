@@ -528,7 +528,7 @@ public class ProfileController extends HttpServlet {
 
             if (targetUser == null) {
                 SessionUtil.setFlashMessage(request, "error", "User profile not found.");
-                response.sendRedirect(request.getContextPath() + "/student-dashboard");
+                response.sendRedirect(request.getContextPath() + "/enrollments");
                 return;
             }
 

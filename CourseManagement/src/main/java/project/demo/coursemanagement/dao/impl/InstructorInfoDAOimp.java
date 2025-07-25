@@ -16,6 +16,7 @@ public class InstructorInfoDAOimp implements InstructorInfoDAO {
     ResultSet rs = null;
     DatabaseConnection dbConn = DatabaseConnection.getInstance();
 
+    @Override
     public UserDTO getUserByUsername(String username) {
         UserDTO user = null;
         String sql = """
@@ -44,6 +45,7 @@ public class InstructorInfoDAOimp implements InstructorInfoDAO {
         return user;
     }
 
+    @Override
     public List<CourseDTO> getCoursesByInstructorUsernameAndPage(String username, int page, int size) {
         List<CourseDTO> courses = new ArrayList<>();
         String sql = """
@@ -83,6 +85,7 @@ public class InstructorInfoDAOimp implements InstructorInfoDAO {
         return courses;
     }
 
+    @Override
     public int countCoursesByInstructor(String username) {
         int count = 0;
         try {
@@ -102,6 +105,4 @@ public class InstructorInfoDAOimp implements InstructorInfoDAO {
         }
         return count;
     }
-
-
 }

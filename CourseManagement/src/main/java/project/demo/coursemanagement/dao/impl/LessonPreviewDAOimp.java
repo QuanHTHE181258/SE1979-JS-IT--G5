@@ -8,7 +8,11 @@ import java.math.BigDecimal;
 import java.sql.*;
 
 public class LessonPreviewDAOimp implements LessonPreviewDAO {
-    private final DatabaseConnection dbConn = DatabaseConnection.getInstance();
+
+    Connection conn = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    DatabaseConnection dbConn = DatabaseConnection.getInstance();
 
     @Override
     public LessonDTO getLessonById(int lessonId) {

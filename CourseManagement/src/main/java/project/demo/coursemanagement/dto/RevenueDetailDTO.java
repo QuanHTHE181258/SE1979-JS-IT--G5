@@ -13,6 +13,13 @@ public class RevenueDetailDTO {
     private String customerName;
     private String customerEmail;
 
+    // Thêm các trường tổng hợp doanh thu
+    private String date; // yyyy-MM-dd
+    private Integer week;
+    private Integer month;
+    private Integer year;
+    private BigDecimal revenue;
+
     // Getters and Setters
     public int getOrderId() { return orderId; }
     public void setOrderId(int orderId) { this.orderId = orderId; }
@@ -30,4 +37,15 @@ public class RevenueDetailDTO {
     public void setCustomerName(String customerName) { this.customerName = customerName; }
     public String getCustomerEmail() { return customerEmail; }
     public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }
+
+    public String getDate() { return date; }
+    public void setDate(String date) { this.date = date; }
+    public Integer getWeek() { return week; }
+    public void setWeek(Integer week) { this.week = week; }
+    public Integer getMonth() { return month; }
+    public void setMonth(Integer month) { this.month = month; }
+    public Integer getYear() { return year; }
+    public void setYear(Integer year) { this.year = year; }
+    public BigDecimal getRevenue() { return revenue; }
+    public void setRevenue(BigDecimal revenue) { this.revenue = revenue; }
 } 

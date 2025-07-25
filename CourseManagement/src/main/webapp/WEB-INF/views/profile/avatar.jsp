@@ -1,18 +1,39 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setLocale value="en_US" />
+<fmt:setLocale value="vi_VN" />
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Change Avatar - Course Management System</title>
+  <title>Thay Đổi Ảnh Đại Diện - Hệ Thống Quản Lý Khóa Học</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
+    :root {
+      /* Purple Gradient Theme */
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --primary-500: #667eea;
+      --primary-600: #5a69d4;
+      --primary-50: #f3f1ff;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --text-primary: #2c3e50;
+      --text-secondary: #6c757d;
+      --text-white: #ffffff;
+      --success: #28a745;
+      --warning: #ffc107;
+      --error: #dc3545;
+      --border-light: #e9ecef;
+      --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --focus-ring: rgba(102, 126, 234, 0.25);
+      --transition-medium: all 0.3s ease-in-out;
+    }
+
     body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--bg-primary);
       min-height: 100vh;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
@@ -23,22 +44,23 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
+      background: var(--bg-secondary);
     }
 
     .avatar-card {
-      background: rgba(255, 255, 255, 0.95);
+      background: var(--bg-primary);
       backdrop-filter: blur(10px);
       border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: var(--shadow-medium);
+      border: 1px solid var(--border-light);
       overflow: hidden;
       max-width: 600px;
       width: 100%;
     }
 
     .avatar-header {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      color: white;
+      background: var(--primary-gradient);
+      color: var(--text-white);
       padding: 40px 30px;
       text-align: center;
       position: relative;
@@ -60,14 +82,14 @@
       position: absolute;
       left: 20px;
       top: 20px;
-      color: white;
+      color: var(--text-white);
       text-decoration: none;
       font-size: 18px;
-      transition: all 0.3s ease;
+      transition: var(--transition-medium);
     }
 
     .back-button:hover {
-      color: white;
+      color: var(--text-white);
       transform: translateX(-5px);
     }
 
@@ -85,47 +107,47 @@
       height: 200px;
       border-radius: 50%;
       object-fit: cover;
-      border: 6px solid #fff;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      background: #f0f0f0;
+      border: 6px solid var(--bg-primary);
+      box-shadow: var(--shadow-medium);
+      background: var(--bg-secondary);
       margin-bottom: 20px;
-      transition: all 0.3s ease;
+      transition: var(--transition-medium);
     }
 
     .current-avatar:hover {
       transform: scale(1.05);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
     }
 
     .avatar-status {
-      color: #6c757d;
+      color: var(--text-secondary);
       font-size: 16px;
       margin-bottom: 10px;
     }
 
     .upload-section {
-      background: rgba(248, 249, 250, 0.7);
+      background: var(--primary-50);
       border-radius: 20px;
       padding: 40px;
       margin-bottom: 30px;
-      border: 2px dashed #dee2e6;
+      border: 2px dashed var(--border-light);
       text-align: center;
-      transition: all 0.3s ease;
+      transition: var(--transition-medium);
       position: relative;
       overflow: hidden;
     }
 
     .upload-section.dragover {
-      border-color: #4facfe;
-      background: rgba(79, 172, 254, 0.1);
+      border-color: var(--primary-500);
+      background: rgba(102, 126, 234, 0.1);
       transform: scale(1.02);
     }
 
     .upload-icon {
       font-size: 4rem;
-      color: #4facfe;
+      color: var(--primary-500);
       margin-bottom: 20px;
-      transition: all 0.3s ease;
+      transition: var(--transition-medium);
     }
 
     .upload-section.dragover .upload-icon {
@@ -140,14 +162,14 @@
     }
 
     .upload-text {
-      color: #2c3e50;
+      color: var(--text-primary);
       font-size: 1.2rem;
       font-weight: 600;
       margin-bottom: 15px;
     }
 
     .upload-subtext {
-      color: #6c757d;
+      color: var(--text-secondary);
       font-size: 14px;
       margin-bottom: 25px;
     }
@@ -166,23 +188,23 @@
     }
 
     .file-input-button {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      color: white;
+      background: var(--primary-gradient);
+      color: var(--text-white);
       padding: 15px 35px;
       border-radius: 15px;
       font-weight: 600;
       font-size: 16px;
       border: none;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: var(--transition-medium);
       display: inline-flex;
       align-items: center;
-      box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
     }
 
     .file-input-button:hover {
       transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(79, 172, 254, 0.4);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
     }
 
     .file-input-button i {
@@ -192,11 +214,12 @@
 
     .preview-section {
       display: none;
-      background: rgba(248, 249, 250, 0.7);
+      background: var(--bg-secondary);
       border-radius: 20px;
       padding: 30px;
       margin-bottom: 30px;
       text-align: center;
+      border: 1px solid var(--border-light);
     }
 
     .preview-image {
@@ -204,26 +227,27 @@
       height: 150px;
       border-radius: 50%;
       object-fit: cover;
-      border: 4px solid #fff;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      border: 4px solid var(--bg-primary);
+      box-shadow: var(--shadow-light);
       margin-bottom: 20px;
     }
 
     .preview-info {
-      color: #6c757d;
+      color: var(--text-secondary);
       font-size: 14px;
       margin-bottom: 20px;
     }
 
     .file-requirements {
-      background: rgba(255, 255, 255, 0.8);
+      background: var(--bg-primary);
       border-radius: 15px;
       padding: 25px;
       margin-bottom: 30px;
+      border: 1px solid var(--border-light);
     }
 
     .requirements-title {
-      color: #2c3e50;
+      color: var(--text-primary);
       font-size: 1.1rem;
       font-weight: 600;
       margin-bottom: 15px;
@@ -233,7 +257,7 @@
 
     .requirements-title i {
       margin-right: 10px;
-      color: #4facfe;
+      color: var(--primary-500);
     }
 
     .requirements-list {
@@ -243,7 +267,7 @@
     }
 
     .requirements-list li {
-      color: #6c757d;
+      color: var(--text-secondary);
       font-size: 14px;
       margin-bottom: 8px;
       display: flex;
@@ -252,7 +276,7 @@
 
     .requirements-list li i {
       margin-right: 10px;
-      color: #28a745;
+      color: var(--success);
       font-size: 12px;
     }
 
@@ -268,7 +292,7 @@
       border-radius: 15px;
       font-weight: 600;
       font-size: 16px;
-      transition: all 0.3s ease;
+      transition: var(--transition-medium);
       text-decoration: none;
       display: inline-flex;
       align-items: center;
@@ -283,41 +307,41 @@
     }
 
     .btn-upload {
-      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-      color: white;
+      background: var(--primary-gradient);
+      color: var(--text-white);
     }
 
     .btn-upload:hover {
-      color: white;
+      color: var(--text-white);
       transform: translateY(-3px);
-      box-shadow: 0 15px 35px rgba(40, 167, 69, 0.4);
+      box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
     }
 
     .btn-upload:disabled {
-      background: #6c757d;
+      background: var(--text-secondary);
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
     }
 
     .btn-remove {
-      background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-      color: white;
+      background: linear-gradient(135deg, var(--error) 0%, #c82333 100%);
+      color: var(--text-white);
     }
 
     .btn-remove:hover {
-      color: white;
+      color: var(--text-white);
       transform: translateY(-3px);
       box-shadow: 0 15px 35px rgba(220, 53, 69, 0.4);
     }
 
     .btn-cancel {
-      background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-      color: white;
+      background: linear-gradient(135deg, var(--text-secondary) 0%, #495057 100%);
+      color: var(--text-white);
     }
 
     .btn-cancel:hover {
-      color: white;
+      color: var(--text-white);
       transform: translateY(-3px);
       box-shadow: 0 15px 35px rgba(108, 117, 125, 0.4);
     }
@@ -331,13 +355,21 @@
     }
 
     .alert-success {
-      background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-      color: #155724;
+      background: rgba(40, 167, 69, 0.1);
+      border-left: 4px solid var(--success);
+      color: var(--success);
     }
 
     .alert-danger {
-      background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-      color: #721c24;
+      background: rgba(220, 53, 69, 0.1);
+      border-left: 4px solid var(--error);
+      color: var(--error);
+    }
+
+    .alert-info {
+      background: var(--primary-50);
+      border-left: 4px solid var(--primary-500);
+      color: var(--primary-600);
     }
 
     .loading-overlay {
@@ -354,12 +386,11 @@
     }
 
     .loading-spinner {
-      color: white;
+      color: var(--text-white);
       font-size: 2rem;
       text-align: center;
     }
 
-    /* Progress bar */
     .upload-progress {
       display: none;
       margin-top: 20px;
@@ -368,40 +399,19 @@
     .progress {
       height: 10px;
       border-radius: 10px;
-      background: rgba(0, 0, 0, 0.1);
+      background: var(--border-light);
       overflow: hidden;
     }
 
     .progress-bar {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      background: var(--primary-gradient);
       height: 100%;
       border-radius: 10px;
       transition: width 0.3s ease;
     }
 
-    /* Animations */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .avatar-card {
-      animation: fadeInUp 0.6s ease-out;
-    }
-
-    .upload-section {
-      animation: fadeInUp 0.8s ease-out;
-    }
-
-    /* File validation feedback */
     .validation-feedback {
-      color: #dc3545;
+      color: var(--error);
       font-size: 14px;
       margin-top: 10px;
       display: none;
@@ -411,7 +421,6 @@
       display: block;
     }
 
-    /* Responsive adjustments */
     @media (max-width: 768px) {
       .current-avatar {
         width: 150px;
@@ -431,6 +440,34 @@
         width: 100%;
         max-width: 280px;
       }
+
+      .avatar-card {
+        margin: 1rem;
+        border-radius: 16px;
+      }
+
+      .avatar-body {
+        padding: 2rem 1.5rem;
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .avatar-card {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .upload-section {
+      animation: fadeInUp 0.8s ease-out;
     }
   </style>
 </head>
@@ -442,8 +479,8 @@
       <a href="${pageContext.request.contextPath}/profile" class="back-button">
         <i class="fas fa-arrow-left"></i>
       </a>
-      <h2>Change Avatar</h2>
-      <p>Upload a new profile picture</p>
+      <h2>Thay Đổi Ảnh Đại Diện</h2>
+      <p>Tải lên ảnh đại diện mới cho hồ sơ của bạn</p>
     </div>
 
     <!-- Body -->
@@ -453,7 +490,7 @@
         <div class="alert alert-${messageType} alert-dismissible fade show" role="alert">
           <i class="fas fa-info-circle me-2"></i>
             ${message}
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
         </div>
       </c:if>
 
@@ -462,22 +499,22 @@
         <c:choose>
           <c:when test="${not empty user.avatarUrl}">
             <img src="${pageContext.request.contextPath}${user.avatarUrl}"
-                 alt="Current Avatar"
+                 alt="Ảnh đại diện hiện tại"
                  class="current-avatar"
                  id="currentAvatar">
             <div class="avatar-status">
               <i class="fas fa-check-circle text-success me-2"></i>
-              Current Profile Picture
+              Ảnh đại diện hiện tại
             </div>
           </c:when>
           <c:otherwise>
             <img src="${pageContext.request.contextPath}/assets/images/default-avatar.png"
-                 alt="Default Avatar"
+                 alt="Ảnh đại diện mặc định"
                  class="current-avatar"
                  id="currentAvatar">
             <div class="avatar-status">
               <i class="fas fa-user-circle text-muted me-2"></i>
-              No profile picture set
+              Chưa có ảnh đại diện
             </div>
           </c:otherwise>
         </c:choose>
@@ -488,9 +525,9 @@
         <div class="upload-icon">
           <i class="fas fa-cloud-upload-alt"></i>
         </div>
-        <div class="upload-text">Choose a new avatar</div>
+        <div class="upload-text">Chọn ảnh đại diện mới</div>
         <div class="upload-subtext">
-          Drag and drop an image here, or click to browse
+          Kéo thả ảnh vào đây hoặc nhấn để chọn file
         </div>
 
         <form action="${pageContext.request.contextPath}/profile/avatar"
@@ -506,7 +543,7 @@
                    required>
             <button type="button" class="file-input-button">
               <i class="fas fa-folder-open"></i>
-              Browse Files
+              Chọn File
             </button>
           </div>
         </form>
@@ -518,18 +555,18 @@
             <div class="progress-bar" id="progressBar" style="width: 0%"></div>
           </div>
           <div class="mt-2 text-center">
-            <small class="text-muted">Uploading... <span id="progressText">0%</span></small>
+            <small class="text-muted">Đang tải lên... <span id="progressText">0%</span></small>
           </div>
         </div>
       </div>
 
       <!-- Preview Section -->
       <div class="preview-section" id="previewSection">
-        <img src="" alt="Preview" class="preview-image" id="previewImage">
+        <img src="" alt="Xem trước" class="preview-image" id="previewImage">
         <div class="preview-info">
-          <strong>Preview:</strong> <span id="fileName"></span>
+          <strong>Xem trước:</strong> <span id="fileName"></span>
           <br>
-          <small>Size: <span id="fileSize"></span></small>
+          <small>Kích thước: <span id="fileSize"></span></small>
         </div>
       </div>
 
@@ -537,24 +574,24 @@
       <div class="file-requirements">
         <div class="requirements-title">
           <i class="fas fa-info-circle"></i>
-          File Requirements
+          Yêu Cầu File
         </div>
         <ul class="requirements-list">
           <li>
             <i class="fas fa-circle"></i>
-            Supported formats: JPG, JPEG, PNG, GIF
+            Định dạng hỗ trợ: JPG, JPEG, PNG, GIF
           </li>
           <li>
             <i class="fas fa-circle"></i>
-            Maximum file size: 5MB
+            Kích thước tối đa: 5MB
           </li>
           <li>
             <i class="fas fa-circle"></i>
-            Recommended size: 400x400 pixels or larger
+            Kích thước khuyến nghị: 400x400 pixel trở lên
           </li>
           <li>
             <i class="fas fa-circle"></i>
-            Square images work best for circular avatars
+            Ảnh vuông sẽ hiển thị tốt nhất cho avatar
           </li>
         </ul>
       </div>
@@ -567,7 +604,7 @@
                 id="uploadBtn"
                 disabled>
           <i class="fas fa-upload"></i>
-          Upload Avatar
+          Tải Lên Ảnh
         </button>
 
         <c:if test="${not empty user.avatarUrl}">
@@ -577,13 +614,13 @@
                   data-bs-toggle="modal"
                   data-bs-target="#removeModal">
             <i class="fas fa-trash"></i>
-            Remove Avatar
+            Xóa Ảnh
           </button>
         </c:if>
 
         <a href="${pageContext.request.contextPath}/profile" class="btn btn-action btn-cancel">
           <i class="fas fa-times"></i>
-          Cancel
+          Hủy
         </a>
       </div>
     </div>
@@ -598,22 +635,22 @@
         <div class="modal-header" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; border-radius: 20px 20px 0 0;">
           <h5 class="modal-title">
             <i class="fas fa-exclamation-triangle me-2"></i>
-            Remove Avatar
+            Xóa Ảnh Đại Diện
           </h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body text-center" style="padding: 30px;">
           <img src="${pageContext.request.contextPath}${user.avatarUrl}"
-               alt="Avatar to remove"
+               alt="Ảnh sẽ bị xóa"
                style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 20px;">
-          <p class="mb-0">Are you sure you want to remove your current avatar?</p>
-          <small class="text-muted">This action cannot be undone.</small>
+          <p class="mb-0">Bạn có chắc muốn xóa ảnh đại diện hiện tại?</p>
+          <small class="text-muted">Hành động này không thể hoàn tác.</small>
         </div>
         <div class="modal-footer" style="border: none; padding: 0 30px 30px;">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
           <form action="${pageContext.request.contextPath}/profile/delete-avatar" method="post" style="display: inline;">
             <button type="submit" class="btn btn-danger">
-              <i class="fas fa-trash me-2"></i>Remove Avatar
+              <i class="fas fa-trash me-2"></i>Xóa Ảnh
             </button>
           </form>
         </div>
@@ -626,7 +663,7 @@
 <div class="loading-overlay" id="loadingOverlay">
   <div class="loading-spinner">
     <i class="fas fa-spinner fa-spin"></i>
-    <div class="mt-3">Processing your avatar...</div>
+    <div class="mt-3">Đang xử lý ảnh của bạn...</div>
   </div>
 </div>
 
@@ -684,7 +721,7 @@
       e.preventDefault();
 
       if (!avatarInput.files[0]) {
-        showValidationError('Please select a file to upload.');
+        showValidationError('Vui lòng chọn file để tải lên.');
         return;
       }
 
@@ -698,7 +735,7 @@
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
       if (!allowedTypes.includes(file.type)) {
-        showValidationError('Invalid file type. Please upload a JPG, PNG, or GIF image.');
+        showValidationError('Định dạng file không hợp lệ. Vui lòng tải lên ảnh JPG, PNG hoặc GIF.');
         resetFileInput();
         return;
       }
@@ -706,7 +743,7 @@
       // Validate file size (5MB)
       const maxSize = 5 * 1024 * 1024;
       if (file.size > maxSize) {
-        showValidationError('File size too large. Maximum allowed size is 5MB.');
+        showValidationError('File quá lớn. Kích thước tối đa cho phép là 5MB.');
         resetFileInput();
         return;
       }
@@ -740,9 +777,9 @@
 
       uploadProgress.style.display = 'block';
       uploadBtn.disabled = true;
-      uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Uploading...';
+      uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Đang tải lên...';
 
-      // Simulate progress (since we can't track real progress with form submission)
+      // Simulate progress
       let progress = 0;
       const progressInterval = setInterval(() => {
         progress += Math.random() * 15;
@@ -752,7 +789,7 @@
         progressText.textContent = Math.round(progress) + '%';
       }, 200);
 
-      // Submit form after a delay to show progress
+      // Submit form after delay
       setTimeout(() => {
         clearInterval(progressInterval);
         progressBar.style.width = '100%';
@@ -777,7 +814,7 @@
       avatarInput.value = '';
       previewSection.style.display = 'none';
       uploadBtn.disabled = true;
-      uploadBtn.innerHTML = '<i class="fas fa-upload me-2"></i>Upload Avatar';
+      uploadBtn.innerHTML = '<i class="fas fa-upload me-2"></i>Tải Lên Ảnh';
     }
 
     function formatFileSize(bytes) {

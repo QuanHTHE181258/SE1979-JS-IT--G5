@@ -9,7 +9,7 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/blog/list")
+@WebServlet({"/blog/list", "/admin/blog/list"})
 public class BlogController extends HttpServlet {
     private BlogService blogService;
 

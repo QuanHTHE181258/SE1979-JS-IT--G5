@@ -64,7 +64,7 @@ public class RegisterController extends HttpServlet {
         setRoleOptions(request);
 
         // Forward to registration page
-        request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/login_register/register.jsp").forward(request, response);
     }
 
     /**
@@ -249,7 +249,7 @@ public class RegisterController extends HttpServlet {
         setRoleOptions(request);
 
         // Forward back to registration page
-        request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/login_register/register.jsp").forward(request, response);
     }
 
     /**

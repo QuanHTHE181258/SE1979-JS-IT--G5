@@ -107,17 +107,17 @@ public class EmailUtil {
      * @return true if the email was sent successfully, false otherwise
      */
     public static boolean sendPasswordResetEmail(String recipient, String resetToken, String resetLink) {
-        String subject = "Password Reset Request - Course Management System";
+        String subject = "Yêu Cầu Đặt Lại Mật Khẩu - Hệ Thống Quản Lý Khóa Học";
 
         String content =
                 "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f8f9fa; padding: 20px;'>" +
                         "<div style='background: white; border-radius: 10px; padding: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);'>" +
                         "<div style='text-align: center; margin-bottom: 30px;'>" +
-                        "<h2 style='color: #4facfe; margin: 0;'>Course Management System</h2>" +
+                        "<h2 style='color: #4facfe; margin: 0;'>Hệ Thống Quản Lý Khóa Học</h2>" +
                         "</div>" +
-                        "<h3 style='color: #333; margin-bottom: 20px;'>Password Reset Request</h3>" +
+                        "<h3 style='color: #333; margin-bottom: 20px;'>Yêu Cầu Đặt Lại Mật Khẩu</h3>" +
                         "<p style='color: #666; line-height: 1.6; margin-bottom: 25px;'>" +
-                        "We received a request to reset your password. Click the button below to create a new password:" +
+                        "Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu của bạn. Nhấp vào nút bên dưới để tạo mật khẩu mới:" +
                         "</p>" +
                         "<div style='text-align: center; margin: 30px 0;'>" +
                         "<a href='" + resetLink + "' style='" +
@@ -129,23 +129,23 @@ public class EmailUtil {
                         "border-radius: 25px; " +
                         "font-weight: 600; " +
                         "box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);" +
-                        "'>Reset Password</a>" +
+                        "'>Đặt Lại Mật Khẩu</a>" +
                         "</div>" +
                         "<p style='color: #666; line-height: 1.6; font-size: 14px;'>" +
-                        "Or copy and paste this URL into your browser:" +
+                        "Hoặc sao chép và dán URL này vào trình duyệt của bạn:" +
                         "</p>" +
                         "<p style='background: #f8f9fa; padding: 10px; border-radius: 5px; word-break: break-all; font-size: 14px;'>" +
                         resetLink +
                         "</p>" +
                         "<div style='margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;'>" +
                         "<p style='color: #999; font-size: 14px; margin-bottom: 5px;'>" +
-                        "⏰ This link will expire in 30 minutes." +
+                        "⏰ Liên kết này sẽ hết hạn sau 30 phút." +
                         "</p>" +
                         "<p style='color: #999; font-size: 14px; margin-bottom: 20px;'>" +
-                        "🔐 If you didn't request a password reset, you can safely ignore this email." +
+                        "🔐 Nếu bạn không yêu cầu đặt lại mật khẩu, bạn có thể bỏ qua email này." +
                         "</p>" +
-                        "<p style='color: #333; margin-bottom: 5px;'>Thank you,</p>" +
-                        "<p style='color: #4facfe; font-weight: 600; margin: 0;'>Course Management System Team</p>" +
+                        "<p style='color: #333; margin-bottom: 5px;'>Xin cảm ơn,</p>" +
+                        "<p style='color: #4facfe; font-weight: 600; margin: 0;'>Đội Ngũ Hệ Thống Quản Lý Khóa Học</p>" +
                         "</div>" +
                         "</div>" +
                         "</div>";

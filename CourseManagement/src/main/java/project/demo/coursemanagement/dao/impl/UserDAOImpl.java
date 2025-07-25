@@ -355,19 +355,45 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public boolean deleteUser(int userId) {
-        String sql = "DELETE FROM users WHERE UserID = ?";
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String deleteEnrollmentsSql = "DELETE FROM enrollments WHERE student_id = ?";
+        String deleteUserSql = "DELETE FROM users WHERE UserID = ?";
+        String deleteFeedbacksSql = "DELETE FROM feedback WHERE UserID = ?";
 
-            stmt.setInt(1, userId);
-            int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+        try (Connection conn = DatabaseConnection.getInstance().getConnection()) {
+            conn.setAutoCommit(false); // Bắt đầu transaction
+
+            try (PreparedStatement stmt1 = conn.prepareStatement(deleteEnrollmentsSql);
+                 PreparedStatement stmt3 = conn.prepareStatement(deleteFeedbacksSql);
+                 PreparedStatement stmt2 = conn.prepareStatement(deleteUserSql)) {
+
+
+                // Xoá enrollments trước
+                stmt1.setInt(1, userId);
+                stmt3.setInt(1, userId);
+                stmt1.executeUpdate();
+                stmt3.executeUpdate();
+
+                // Xoá user sau
+                stmt2.setInt(1, userId);
+                int rowsAffected = stmt2.executeUpdate();
+
+                conn.commit(); // Commit nếu không có lỗi
+
+                return rowsAffected > 0;
+            } catch (SQLException e) {
+                conn.rollback(); // rollback nếu lỗi
+                System.err.println("Transaction rollback - Error deleting user: " + e.getMessage());
+                return false;
+            } finally {
+                conn.setAutoCommit(true);
+            }
         } catch (SQLException e) {
-            System.err.println("Error deleting user: " + e.getMessage());
+            System.err.println("Connection error: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
+
 
     // Retrieve user details from ResultSet and map to User object
     private User mapResultSetToUser(ResultSet rs) throws SQLException {

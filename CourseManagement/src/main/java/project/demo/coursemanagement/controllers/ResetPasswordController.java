@@ -9,8 +9,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import project.demo.coursemanagement.utils.ValidationUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Controller for handling password reset functionality
@@ -77,7 +80,7 @@ public class ResetPasswordController extends HttpServlet {
                 request.setAttribute("token", token);
 
                 // Forward to reset password page
-                request.getRequestDispatcher("/WEB-INF/views/reset-password.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/views/login_register/reset-password.jsp").forward(request, response);
             } else {
                 System.out.println("Invalid or expired token: " + token);
                 redirectToForgotPassword(request, response, "This reset link is invalid or has expired. Please request a new password reset.");
@@ -125,8 +128,11 @@ public class ResetPasswordController extends HttpServlet {
         }
 
         // Password strength validation
-        if (newPassword.length() < 8) {
-            handleError(request, response, "Password must be at least 8 characters long", token);
+        List<String> passwordErrors = new ArrayList<>();
+        ValidationUtil.validatePassword(newPassword, confirmPassword, passwordErrors);
+        
+        if (!passwordErrors.isEmpty()) {
+            handleError(request, response, passwordErrors.get(0), token);
             return;
         }
 
@@ -173,7 +179,7 @@ public class ResetPasswordController extends HttpServlet {
         request.setAttribute("token", token);
 
         // Forward back to reset password page
-        request.getRequestDispatcher("/WEB-INF/views/reset-password.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/login_register/reset-password.jsp").forward(request, response);
     }
 
     /**

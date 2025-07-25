@@ -1,16 +1,38 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Change Password - Course Management System</title>
+  <title>Đổi Mật Khẩu - Hệ Thống Quản Lý Khóa Học</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
+    :root {
+      /* Purple Gradient Theme */
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --primary-500: #667eea;
+      --primary-600: #5a69d4;
+      --primary-50: #f3f1ff;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --text-primary: #2c3e50;
+      --text-secondary: #6c757d;
+      --text-white: #ffffff;
+      --success: #28a745;
+      --warning: #ffc107;
+      --error: #dc3545;
+      --info: #17a2b8;
+      --border-light: #e9ecef;
+      --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --focus-ring: rgba(102, 126, 234, 0.25);
+      --transition-medium: all 0.3s ease-in-out;
+    }
+
     body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--bg-primary);
       min-height: 100vh;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
@@ -21,22 +43,23 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
+      background: var(--bg-secondary);
     }
 
     .password-card {
-      background: rgba(255, 255, 255, 0.95);
+      background: var(--bg-primary);
       backdrop-filter: blur(10px);
       border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: var(--shadow-medium);
+      border: 1px solid var(--border-light);
       overflow: hidden;
       max-width: 500px;
       width: 100%;
     }
 
     .password-header {
-      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-      color: white;
+      background: var(--primary-gradient);
+      color: var(--text-white);
       padding: 40px 30px;
       text-align: center;
       position: relative;
@@ -58,14 +81,14 @@
       position: absolute;
       left: 20px;
       top: 20px;
-      color: white;
+      color: var(--text-white);
       text-decoration: none;
       font-size: 18px;
-      transition: all 0.3s ease;
+      transition: var(--transition-medium);
     }
 
     .back-button:hover {
-      color: white;
+      color: var(--text-white);
       transform: translateX(-5px);
     }
 
@@ -78,7 +101,7 @@
     }
 
     .form-label {
-      color: #2c3e50;
+      color: var(--text-primary);
       font-weight: 600;
       margin-bottom: 8px;
       display: flex;
@@ -87,22 +110,22 @@
 
     .form-label i {
       margin-right: 8px;
-      color: #fa709a;
+      color: var(--primary-500);
     }
 
     .form-control {
-      border: 2px solid #e9ecef;
+      border: 2px solid var(--border-light);
       border-radius: 12px;
       padding: 12px 15px;
       font-size: 16px;
-      transition: all 0.3s ease;
-      background: #f8f9fa;
+      transition: var(--transition-medium);
+      background: var(--bg-secondary);
     }
 
     .form-control:focus {
-      border-color: #fa709a;
-      box-shadow: 0 0 0 0.2rem rgba(250, 112, 154, 0.25);
-      background: white;
+      border-color: var(--primary-500);
+      box-shadow: 0 0 0 0.2rem var(--focus-ring);
+      background: var(--bg-primary);
     }
 
     .password-input-group {
@@ -116,7 +139,7 @@
       transform: translateY(-50%);
       background: none;
       border: none;
-      color: #6c757d;
+      color: var(--text-secondary);
       cursor: pointer;
       padding: 0;
       font-size: 18px;
@@ -124,7 +147,7 @@
     }
 
     .password-toggle:hover {
-      color: #fa709a;
+      color: var(--primary-500);
     }
 
     .password-strength {
@@ -133,7 +156,7 @@
 
     .strength-meter {
       height: 6px;
-      background: #e9ecef;
+      background: var(--border-light);
       border-radius: 3px;
       overflow: hidden;
       margin-bottom: 5px;
@@ -141,46 +164,46 @@
 
     .strength-fill {
       height: 100%;
-      transition: all 0.3s ease;
+      transition: var(--transition-medium);
       border-radius: 3px;
     }
 
     .strength-weak {
-      background: linear-gradient(90deg, #ff6b6b, #ff8e8e);
+      background: linear-gradient(90deg, var(--error), #ff8e8e);
       width: 25%;
     }
 
     .strength-fair {
-      background: linear-gradient(90deg, #feca57, #ff9ff3);
+      background: linear-gradient(90deg, var(--warning), #ffdd57);
       width: 50%;
     }
 
     .strength-good {
-      background: linear-gradient(90deg, #48dbfb, #0abde3);
+      background: linear-gradient(90deg, var(--info), #0abde3);
       width: 75%;
     }
 
     .strength-strong {
-      background: linear-gradient(90deg, #1dd1a1, #10ac84);
+      background: linear-gradient(90deg, var(--success), #10ac84);
       width: 100%;
     }
 
     .strength-text {
       font-size: 12px;
       font-weight: 600;
-      color: #6c757d;
+      color: var(--text-secondary);
     }
 
     .password-requirements {
-      background: #f8f9fa;
+      background: var(--primary-50);
       border-radius: 12px;
       padding: 15px;
       margin-top: 15px;
-      border-left: 4px solid #fa709a;
+      border-left: 4px solid var(--primary-500);
     }
 
     .password-requirements h6 {
-      color: #2c3e50;
+      color: var(--text-primary);
       margin-bottom: 10px;
       font-weight: 600;
     }
@@ -198,30 +221,30 @@
     }
 
     .requirement.met {
-      color: #28a745;
+      color: var(--success);
     }
 
     .requirement.not-met {
-      color: #6c757d;
+      color: var(--text-secondary);
     }
 
     .btn-change-password {
-      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      background: var(--primary-gradient);
       border: none;
-      color: white;
+      color: var(--text-white);
       padding: 12px 30px;
       border-radius: 12px;
       font-weight: 600;
       font-size: 16px;
-      transition: all 0.3s ease;
+      transition: var(--transition-medium);
       width: 100%;
       margin-top: 20px;
     }
 
     .btn-change-password:hover {
-      color: white;
+      color: var(--text-white);
       transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(250, 112, 154, 0.3);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
     }
 
     .btn-change-password:disabled {
@@ -239,25 +262,33 @@
     }
 
     .alert-success {
-      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-      color: #155724;
+      background: rgba(40, 167, 69, 0.1);
+      border-left: 4px solid var(--success);
+      color: var(--success);
     }
 
     .alert-danger {
-      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-      color: #721c24;
+      background: rgba(220, 53, 69, 0.1);
+      border-left: 4px solid var(--error);
+      color: var(--error);
+    }
+
+    .alert-info {
+      background: var(--primary-50);
+      border-left: 4px solid var(--primary-500);
+      color: var(--primary-600);
     }
 
     .security-tips {
-      background: #e7f3fe;
-      border: 1px solid #bee5eb;
+      background: rgba(23, 162, 184, 0.1);
+      border: 1px solid rgba(23, 162, 184, 0.2);
       border-radius: 12px;
       padding: 20px;
       margin-top: 25px;
     }
 
     .security-tips h6 {
-      color: #0c5460;
+      color: var(--info);
       margin-bottom: 15px;
       font-weight: 600;
     }
@@ -268,7 +299,7 @@
     }
 
     .security-tips li {
-      color: #0c5460;
+      color: var(--info);
       margin-bottom: 5px;
       font-size: 14px;
     }
@@ -280,11 +311,11 @@
     }
 
     .match-yes {
-      color: #28a745;
+      color: var(--success);
     }
 
     .match-no {
-      color: #dc3545;
+      color: var(--error);
     }
 
     .loading-spinner {
@@ -304,6 +335,11 @@
       .password-body {
         padding: 25px;
       }
+
+      .password-card {
+        margin: 1rem;
+        border-radius: 16px;
+      }
     }
   </style>
 </head>
@@ -315,8 +351,8 @@
       <a href="${pageContext.request.contextPath}/profile" class="back-button">
         <i class="fas fa-arrow-left"></i>
       </a>
-      <h2>Change Password</h2>
-      <p>Update your account security</p>
+      <h2>Đổi Mật Khẩu</h2>
+      <p>Cập nhật bảo mật tài khoản của bạn</p>
     </div>
 
     <!-- Body -->
@@ -335,7 +371,7 @@
               </c:forEach>
             </ul>
           </c:if>
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
         </div>
       </c:if>
 
@@ -345,7 +381,7 @@
         <div class="form-group">
           <label for="currentPassword" class="form-label">
             <i class="fas fa-key"></i>
-            Current Password
+            Mật khẩu hiện tại
           </label>
           <div class="password-input-group">
             <input type="password"
@@ -353,7 +389,7 @@
                    id="currentPassword"
                    name="currentPassword"
                    required
-                   placeholder="Enter your current password">
+                   placeholder="Nhập mật khẩu hiện tại">
             <button type="button" class="password-toggle" data-target="currentPassword">
               <i class="fas fa-eye"></i>
             </button>
@@ -364,7 +400,7 @@
         <div class="form-group">
           <label for="newPassword" class="form-label">
             <i class="fas fa-lock"></i>
-            New Password
+            Mật khẩu mới
           </label>
           <div class="password-input-group">
             <input type="password"
@@ -372,7 +408,7 @@
                    id="newPassword"
                    name="newPassword"
                    required
-                   placeholder="Enter your new password">
+                   placeholder="Nhập mật khẩu mới">
             <button type="button" class="password-toggle" data-target="newPassword">
               <i class="fas fa-eye"></i>
             </button>
@@ -391,7 +427,7 @@
         <div class="form-group">
           <label for="confirmPassword" class="form-label">
             <i class="fas fa-lock-open"></i>
-            Confirm New Password
+            Xác nhận mật khẩu mới
           </label>
           <div class="password-input-group">
             <input type="password"
@@ -399,7 +435,7 @@
                    id="confirmPassword"
                    name="confirmPassword"
                    required
-                   placeholder="Confirm your new password">
+                   placeholder="Xác nhận mật khẩu mới">
             <button type="button" class="password-toggle" data-target="confirmPassword">
               <i class="fas fa-eye"></i>
             </button>
@@ -409,26 +445,26 @@
 
         <!-- Password Requirements -->
         <div class="password-requirements">
-          <h6><i class="fas fa-shield-alt me-2"></i>Password Requirements</h6>
+          <h6><i class="fas fa-shield-alt me-2"></i>Yêu Cầu Mật Khẩu</h6>
           <div class="requirement" id="req-length">
             <i class="fas fa-times"></i>
-            At least 6 characters long
+            Ít nhất 6 ký tự
           </div>
           <div class="requirement" id="req-upper">
             <i class="fas fa-times"></i>
-            One uppercase letter
+            Một chữ cái viết hoa
           </div>
           <div class="requirement" id="req-lower">
             <i class="fas fa-times"></i>
-            One lowercase letter
+            Một chữ cái viết thường
           </div>
           <div class="requirement" id="req-number">
             <i class="fas fa-times"></i>
-            One number
+            Một chữ số
           </div>
           <div class="requirement" id="req-special">
             <i class="fas fa-times"></i>
-            One special character (!@#$%^&*()_+-=[]{}|;:,.<>?)
+            Một ký tự đặc biệt (!@#$%^&*()_+-=[]{}|;:,.<>?)
           </div>
         </div>
 
@@ -438,19 +474,19 @@
             <i class="fas fa-spinner fa-spin"></i>
           </span>
           <i class="fas fa-key me-2"></i>
-          Change Password
+          Đổi Mật Khẩu
         </button>
       </form>
 
       <!-- Security Tips -->
       <div class="security-tips">
-        <h6><i class="fas fa-lightbulb me-2"></i>Security Tips</h6>
+        <h6><i class="fas fa-lightbulb me-2"></i>Mẹo Bảo Mật</h6>
         <ul>
-          <li>Use a unique password that you don't use anywhere else</li>
-          <li>Consider using a password manager</li>
-          <li>Don't share your password with anyone</li>
-          <li>Change your password regularly</li>
-          <li>Log out from shared computers</li>
+          <li>Sử dụng mật khẩu duy nhất không dùng ở nơi khác</li>
+          <li>Cân nhắc sử dụng trình quản lý mật khẩu</li>
+          <li>Không chia sẻ mật khẩu với bất kỳ ai</li>
+          <li>Thay đổi mật khẩu định kỳ</li>
+          <li>Đăng xuất khỏi máy tính dùng chung</li>
         </ul>
       </div>
     </div>
@@ -560,7 +596,7 @@
 
     function updateStrengthMeter(strength) {
       const strengthClasses = ['', 'strength-weak', 'strength-fair', 'strength-good', 'strength-strong'];
-      const strengthTexts = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+      const strengthTexts = ['', 'Yếu', 'Khá', 'Tốt', 'Mạnh'];
 
       strengthFill.className = 'strength-fill ' + (strengthClasses[strength] || '');
       strengthText.textContent = strengthTexts[strength] || '';
@@ -576,10 +612,10 @@
       }
 
       if (newPass === confirmPass) {
-        matchIndicator.textContent = '✓ Passwords match';
+        matchIndicator.textContent = '✓ Mật khẩu khớp';
         matchIndicator.className = 'match-indicator match-yes';
       } else {
-        matchIndicator.textContent = '✗ Passwords do not match';
+        matchIndicator.textContent = '✗ Mật khẩu không khớp';
         matchIndicator.className = 'match-indicator match-no';
       }
     }
@@ -589,19 +625,19 @@
       // Basic client-side validation
       if (!currentPassword.value || !newPassword.value || !confirmPassword.value) {
         e.preventDefault();
-        alert('Please fill in all password fields.');
+        alert('Vui lòng điền tất cả các trường mật khẩu.');
         return;
       }
 
       if (newPassword.value !== confirmPassword.value) {
         e.preventDefault();
-        alert('New password and confirm password do not match.');
+        alert('Mật khẩu mới và xác nhận mật khẩu không khớp.');
         return;
       }
 
       if (newPassword.value.length < 6) {
         e.preventDefault();
-        alert('New password must be at least 6 characters long.');
+        alert('Mật khẩu mới phải có ít nhất 6 ký tự.');
         return;
       }
 
