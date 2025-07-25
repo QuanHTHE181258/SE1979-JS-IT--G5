@@ -312,63 +312,55 @@
                 <i class="fas fa-crown"></i>
             </div>
         </div>
-        <h3>
-            <c:choose>
-                <c:when test="${sessionScope.user.role.roleName == 'ADMIN'}">Admin Panel</c:when>
-                <c:when test="${sessionScope.user.role.roleName == 'USER_MANAGER'}">User Manager Panel</c:when>
-                <c:otherwise>Control Panel</c:otherwise>
-            </c:choose>
-        </h3>
+        <h3>Admin Panel</h3>
     </div>
 
     <ul class="nav flex-column">
-        <c:if test="${sessionScope.user.role.roleName == 'ADMIN'}">
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/admin">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/admin/user-management/list">
-                    <i class="fas fa-users"></i>
-                    <span>User Management</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/admin/courses">
-                    <i class="fas fa-book"></i>
-                    <span>Courses Management</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/admin/orders">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span>Order Management</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/admin/revenue-analytics">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Revenue Analytics</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/teacher-performance">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Teacher Performance</span>
-                </a>
-            </li>
-        </c:if>
-
-        <c:if test="${sessionScope.user.role.roleName == 'USER_MANAGER'}">
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/admin/user-management/list">
-                    <i class="fas fa-users"></i>
-                    <span>User Management</span>
-                </a>
-            </li>
-        </c:if>
+        <li class="nav-item">
+            <a class="nav-link ${pageContext.request.servletPath == '/WEB-INF/views/admin.jsp' ? 'active' : ''}"
+               href="${pageContext.request.contextPath}/admin">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link ${pageContext.request.servletPath == '/WEB-INF/views/admin_users.jsp' ? 'active' : ''}"
+               href="${pageContext.request.contextPath}/admin/user-management">
+                <i class="fas fa-users"></i>
+                <span>User Management</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link ${pageContext.request.servletPath == '/WEB-INF/views/admin_course.jsp' ? 'active' : ''}"
+               href="${pageContext.request.contextPath}/admin/courses">
+                <i class="fas fa-book"></i>
+                <span>Courses Management</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="${pageContext.request.contextPath}/admin/orders">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Order Management</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="${pageContext.request.contextPath}/admin/revenue-analytics">
+                <i class="fas fa-chart-bar"></i>
+                <span>Revenue Analytics</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="${pageContext.request.contextPath}/admin/teacher-performance">
+                <i class="fas fa-chart-line"></i>
+                <span>Teacher Performance</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link logout" href="${pageContext.request.contextPath}/logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </li>
     </ul>
 </nav>
 
@@ -379,8 +371,7 @@
         const navLinks = document.querySelectorAll('.nav-link');
 
         navLinks.forEach(link => {
-            const href = link.getAttribute('href');
-            if (href && currentPath.includes(href.split('/').pop())) {
+            if (link.getAttribute('href') === currentPath) {
                 link.classList.add('active');
             }
         });
