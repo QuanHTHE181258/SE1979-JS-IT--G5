@@ -163,7 +163,7 @@ public class LoginController extends HttpServlet {
                         break;
                     case 0: // Guest
                     default:
-                        response.sendRedirect(contextPath + "/student-dashboard");
+                        response.sendRedirect(contextPath + "/enrollments");
                         break;
                 }
             } catch (NumberFormatException e) {

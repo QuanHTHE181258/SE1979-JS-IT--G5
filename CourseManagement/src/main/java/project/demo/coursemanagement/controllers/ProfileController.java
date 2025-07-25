@@ -151,7 +151,7 @@ public class ProfileController extends HttpServlet {
 
             if (user == null) {
                 SessionUtil.setFlashMessage(request, "error", "Unable to load profile. Please try again.");
-                response.sendRedirect(request.getContextPath() + "/student-dashboard");
+                response.sendRedirect(request.getContextPath() + "/enrollments");
                 return;
             }
 
@@ -179,7 +179,7 @@ public class ProfileController extends HttpServlet {
             System.err.println("Error loading profile: " + e.getMessage());
             e.printStackTrace();
             SessionUtil.setFlashMessage(request, "error", "An error occurred while loading your profile.");
-            response.sendRedirect(request.getContextPath() + "/student-dashboard");
+            response.sendRedirect(request.getContextPath() + "/enrollments");
         }
     }
 
@@ -545,7 +545,7 @@ public class ProfileController extends HttpServlet {
         } catch (Exception e) {
             System.err.println("Error viewing user profile: " + e.getMessage());
             SessionUtil.setFlashMessage(request, "error", "An error occurred while loading the profile.");
-            response.sendRedirect(request.getContextPath() + "/student-dashboard");
+            response.sendRedirect(request.getContextPath() + "/enrollments");
         }
     }
 
@@ -567,7 +567,7 @@ public class ProfileController extends HttpServlet {
             
             if (user == null) {
                 SessionUtil.setFlashMessage(request, "error", "Unable to load profile. Please try again.");
-                response.sendRedirect(request.getContextPath() + "/student-dashboard");
+                response.sendRedirect(request.getContextPath() + "/enrollments");
                 return;
             }
             
