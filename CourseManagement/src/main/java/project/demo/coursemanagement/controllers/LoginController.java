@@ -150,7 +150,7 @@ public class LoginController extends HttpServlet {
                         response.sendRedirect(contextPath + "/admin/dashboard");
                         break;
                     case 3: // Teacher
-                        response.sendRedirect(contextPath + "/teacher/dashboard");
+                        response.sendRedirect(contextPath + "/teaching-courses");
                         break;
                     case 1: // Student
                         response.sendRedirect(contextPath + "/enrollments");
@@ -173,7 +173,7 @@ public class LoginController extends HttpServlet {
                         response.sendRedirect(contextPath + "/admin/dashboard");
                         break;
                     case "TEACHER":
-                        response.sendRedirect(contextPath + "/teacher/dashboard");
+                        response.sendRedirect(contextPath + "/teaching-courses");
                         break;
                     case "USER_MANAGER":
                         response.sendRedirect(contextPath + "/admin/user-management");
