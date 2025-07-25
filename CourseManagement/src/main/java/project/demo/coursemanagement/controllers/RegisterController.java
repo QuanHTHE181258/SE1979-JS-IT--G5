@@ -280,13 +280,13 @@ public class RegisterController extends HttpServlet {
                     case 5: // Admin
                         response.sendRedirect(contextPath + "/admin/dashboard");
                         break;
-                    case 2: // Teacher
+                    case 3: // Teacher
                         response.sendRedirect(contextPath + "/teacher/dashboard");
                         break;
                     case 1: // Student
                         response.sendRedirect(contextPath + "/enrollments");
                         break;
-                    case 3: // CourseManager
+                    case 2: // CourseManager
                         response.sendRedirect(contextPath + "/course-manager");
                         break;
                     case 4: // UserManager
