@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import project.demo.coursemanagement.dao.CourseDAO;
 import project.demo.coursemanagement.dao.impl.CourseDAOImpl;
+import project.demo.coursemanagement.dao.impl.UserDAOImpl;
 import project.demo.coursemanagement.entities.Cours;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.entities.Category;

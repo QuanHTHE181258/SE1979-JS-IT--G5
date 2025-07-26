@@ -44,4 +44,21 @@ public class LessonPreviewDAOimp implements LessonPreviewDAO {
 
         return lesson;
     }
+
+    @Override
+    public BigDecimal getCoursePriceByLessonID(int lessonID) {
+        String sql = "SELECT c.Price FROM courses c JOIN lessons l ON c.CourseID = l.CourseID WHERE l.LessonID = ?";
+        try (Connection conn = dbConn.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, lessonID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getBigDecimal("Price");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

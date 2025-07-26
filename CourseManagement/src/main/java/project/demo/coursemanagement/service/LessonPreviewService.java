@@ -12,4 +12,9 @@ public class LessonPreviewService {
     public LessonDTO getLesson(int lessonId) {
         return lessonDAO.getLessonById(lessonId);
     }
+
+    public BigDecimal getCoursePriceByLessonID(int lessonID) {
+        return lessonDAO.getCoursePriceByLessonID(lessonID);
+    }
+
 }

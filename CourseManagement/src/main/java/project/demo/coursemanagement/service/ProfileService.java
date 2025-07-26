@@ -3,6 +3,7 @@ package project.demo.coursemanagement.service;
 import project.demo.coursemanagement.dao.ProfileDAO;
 import project.demo.coursemanagement.dao.impl.ProfileDAOImpl;
 import project.demo.coursemanagement.dao.UserDAO;
+import project.demo.coursemanagement.dao.impl.UserDAOImpl;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.entities.UserAvatar;
 import project.demo.coursemanagement.dto.ProfileUpdateRequest;
