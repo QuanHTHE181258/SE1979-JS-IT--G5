@@ -18,7 +18,6 @@ public class LessonPreviewServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             int lessonId = Integer.parseInt(request.getParameter("lessonID"));
-            BigDecimal price = lessonService.getCoursePriceByLessonID(lessonId);
 
             LessonDTO lesson = lessonService.getLesson(lessonId);
             if (lesson != null) {

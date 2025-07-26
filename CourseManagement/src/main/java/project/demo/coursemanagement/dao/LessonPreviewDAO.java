@@ -8,6 +8,4 @@ public interface LessonPreviewDAO {
 
     LessonDTO getLessonById(int lessonId);
 
-    BigDecimal getCoursePriceByLessonID(int lessonID);
-
 }
