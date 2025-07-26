@@ -96,7 +96,7 @@
     }
 
     .btn-primary:hover {
-      background-color: darken(var(--primary-color), 10%);
+      background-color: dark(var(--primary-color), 10%);
       transform: translateY(-2px);
     }
 
@@ -132,6 +132,12 @@
       object-fit: cover;
       border: 4px solid var(--primary-color);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: var(--secondary-color);
+      background-color: var(--light-color);
     }
 
     .profile-menu {
@@ -196,25 +202,51 @@
     <div class="col-lg-3">
       <div class="profile-sidebar">
         <div class="profile-header text-center mb-4">
-          <img src="${user.avatarURL}" alt="Ảnh đại diện" class="profile-avatar">
+          <!-- Check if avatar URL exists and is not empty -->
+          <%
+            String avatarUrl = null;
+            Object userObj = request.getAttribute("user");
+            if (userObj != null) {
+              try {
+                project.demo.coursemanagement.entities.User user = (project.demo.coursemanagement.entities.User) userObj;
+                avatarUrl = user.getAvatarUrl();
+              } catch (Exception e) {
+                // Handle silently
+              }
+            }
+          %>
+
+          <% if (avatarUrl != null && !avatarUrl.trim().isEmpty()) { %>
+          <img src="${pageContext.request.contextPath}${user.avatarUrl}"
+               alt="Ảnh đại diện"
+               class="profile-avatar"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="profile-avatar" style="display: none;">
+            <i class="bi bi-person-circle"></i>
+          </div>
+          <% } else { %>
+          <div class="profile-avatar">
+            <i class="bi bi-person-circle"></i>
+          </div>
+          <% } %>
+
           <h5 class="mt-3 mb-1">${user.firstName} ${user.lastName}</h5>
-          <p class="text-muted mb-0">${user.email}</p>
         </div>
 
         <div class="profile-menu">
-          <a href="profile" class="menu-item">
+          <a href="${pageContext.request.contextPath}/profile" class="menu-item">
             <i class="bi bi-person-circle"></i> Thông Tin Cá Nhân
           </a>
-          <a href="edit-profile" class="menu-item active">
+          <a href="${pageContext.request.contextPath}/profile/edit" class="menu-item active">
             <i class="bi bi-pencil-square"></i> Chỉnh Sửa Thông Tin
           </a>
-          <a href="avatar" class="menu-item">
+          <a href="${pageContext.request.contextPath}/profile/avatar" class="menu-item">
             <i class="bi bi-camera"></i> Thay Đổi Ảnh Đại Diện
           </a>
-          <a href="password" class="menu-item">
+          <a href="${pageContext.request.contextPath}/profile/password" class="menu-item">
             <i class="bi bi-key"></i> Đổi Mật Khẩu
           </a>
-          <a href="order-history" class="menu-item">
+          <a href="${pageContext.request.contextPath}/profile/orders" class="menu-item">
             <i class="bi bi-clock-history"></i> Lịch Sử Giao Dịch
           </a>
         </div>
@@ -226,7 +258,23 @@
       <div class="profile-content">
         <h3 class="section-title">Chỉnh Sửa Thông Tin Cá Nhân</h3>
 
-        <form action="edit-profile" method="post" class="needs-validation" novalidate>
+        <!-- Display any error or success messages -->
+        <% if (request.getAttribute("messageType") != null) { %>
+        <div class="alert alert-<%= request.getAttribute("messageType") %> alert-dismissible fade show" role="alert">
+          <% if (request.getAttribute("errors") != null) { %>
+          <ul class="mb-0">
+            <% for (String error : (java.util.List<String>) request.getAttribute("errors")) { %>
+            <li><%= error %></li>
+            <% } %>
+          </ul>
+          <% } else if (request.getAttribute("message") != null) { %>
+          <%= request.getAttribute("message") %>
+          <% } %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% } %>
+
+        <form action="${pageContext.request.contextPath}/profile/edit" method="post" class="needs-validation" novalidate>
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="firstName" class="form-label">Họ <span class="text-danger">*</span></label>
@@ -266,7 +314,7 @@
             <button type="submit" class="btn btn-primary">
               <i class="bi bi-check-circle me-2"></i>Lưu Thay Đổi
             </button>
-            <a href="profile" class="btn btn-secondary">
+            <a href="${pageContext.request.contextPath}/profile" class="btn btn-secondary">
               <i class="bi bi-x-circle me-2"></i>Hủy
             </a>
           </div>

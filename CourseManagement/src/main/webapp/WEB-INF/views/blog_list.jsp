@@ -2,10 +2,10 @@
 <%@ include file="/WEB-INF/layout/header.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Blog List</title>
+    <title>Danh Sách Bài Viết</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -20,11 +20,11 @@
     <div style="flex:1; padding:48px 0; margin-left: 280px;">
         <div style="max-width:1200px; margin:auto; padding:0 24px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:32px;">
-                <h1 style="font-size:2rem; color:#2c2c54; margin:0;">Blog Management</h1>
+                <h1 style="font-size:2rem; color:#2c2c54; margin:0;">Quản Lý Bài Viết</h1>
                 <a href="${pageContext.request.contextPath}/admin/blog/create"
                    class="btn btn-primary"
                    style="background:#3498db; color:white; padding:10px 20px; border-radius:6px; text-decoration:none;">
-                    <i class="fas fa-plus"></i> Create New Blog
+                    <i class="fas fa-plus"></i> Tạo Bài Viết Mới
                 </a>
             </div>
 
@@ -33,10 +33,10 @@
                 <table style="width:100%; border-collapse:collapse;">
                     <thead>
                     <tr style="background:#f8f9fa;">
-                        <th style="padding:16px; text-align:left;">Title</th>
-                        <th style="padding:16px; text-align:left;">Status</th>
-                        <th style="padding:16px; text-align:left;">Created Date</th>
-                        <th style="padding:16px; text-align:center;">Actions</th>
+                        <th style="padding:16px; text-align:left;">Tiêu Đề</th>
+                        <th style="padding:16px; text-align:left;">Trạng Thái</th>
+                        <th style="padding:16px; text-align:left;">Ngày Tạo</th>
+                        <th style="padding:16px; text-align:center;">Thao Tác</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -75,7 +75,7 @@
 
 <script>
     function deleteBlog(blogId) {
-        if (confirm('Are you sure you want to delete this blog?')) {
+        if (confirm('Bạn có chắc chắn muốn xóa bài viết này không?')) {
             window.location.href = '${pageContext.request.contextPath}/admin/blog/delete?id=' + blogId;
         }
     }

@@ -35,10 +35,10 @@
                         <a class="nav-link px-3" href="${pageContext.request.contextPath}/course">Khóa học</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link px-3" href="${pageContext.request.contextPath}/blogs">Tin tức</a>
+                        <a class="nav-link px-3" href="${pageContext.request.contextPath}/blog/list">Tin tức</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link px-3" href="${pageContext.request.contextPath}/introduce">Giới thiệu</a>
+                        <a class="nav-link px-3" href="${pageContext.request.contextPath}/home">Giới thiệu</a>
                     </li>
 
                     <c:if test="${sessionScope.loggedInUser != null}">

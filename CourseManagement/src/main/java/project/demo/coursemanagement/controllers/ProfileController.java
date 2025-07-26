@@ -149,11 +149,11 @@ public class ProfileController extends HttpServlet {
             // Get user data from database
             User user = profileService.getUserById(userId);
 
-//            if (user == null) {
-//                SessionUtil.setFlashMessage(request, "error", "Unable to load profile. Please try again.");
-//                response.sendRedirect(request.getContextPath() + "/profile");
-//                return;
-//            }
+            if (user == null) {
+                SessionUtil.setFlashMessage(request, "error", "Unable to load profile. Please try again.");
+                response.sendRedirect(request.getContextPath() + "/profile");
+                return;
+            }
 
             // Get profile statistics
             ProfileService.ProfileStatistics stats = profileService.getProfileStatistics(userId);

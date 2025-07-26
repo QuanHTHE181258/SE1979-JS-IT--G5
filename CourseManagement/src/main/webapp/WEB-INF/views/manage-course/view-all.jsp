@@ -1,12 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ include file="/WEB-INF/layout/header.jsp" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Course Management</title>
+  <title>Quản Lý Khóa Học</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome -->
@@ -267,15 +268,15 @@
     <div class="page-header">
       <div class="d-flex justify-content-between align-items-center">
         <div>
-          <h1><i class="fas fa-graduation-cap me-3"></i>Course Management</h1>
-          <p class="subtitle mb-0">Manage and organize your educational content</p>
+          <h1><i class="fas fa-graduation-cap me-3"></i>Quản Lý Khóa Học</h1>
+          <p class="subtitle mb-0">Quản lý và tổ chức nội dung giáo dục của bạn</p>
         </div>
         <div class="d-flex gap-3">
           <button class="btn create-btn" onclick="location.href='create-course'">
-            <i class="fas fa-plus me-2"></i>Create New Course
+            <i class="fas fa-plus me-2"></i>Tạo Khóa Học Mới
           </button>
           <button class="btn btn-outline-light" onclick="location.href='manage-categories'">
-            <i class="fas fa-tags me-2"></i>Manage Categories
+            <i class="fas fa-tags me-2"></i>Quản Lý Danh Mục
           </button>
         </div>
       </div>
@@ -297,12 +298,12 @@
             <i class="fas fa-search text-muted fs-5"></i>
           </span>
           <input type="text" id="searchInput" class="form-control form-control-lg shadow-sm"
-                 placeholder="Search courses by title..." onkeyup="filterAndPaginate()">
+                 placeholder="Tìm kiếm khóa học theo tiêu đề..." onkeyup="filterAndPaginate()">
         </div>
       </div>
       <div class="col-md-4">
         <select id="categoryFilter" class="form-select form-select-lg shadow-sm" onchange="filterAndPaginate()">
-          <option value="">All Categories</option>
+          <option value="">Tất Cả Danh Mục</option>
           <c:if test="${not empty categories}">
             <c:forEach var="category" items="${categories}">
               <option value="${fn:escapeXml(category.name)}">
@@ -310,7 +311,7 @@
               </option>
             </c:forEach>
           </c:if>
-          <option value="Uncategorized">Uncategorized</option>
+          <option value="Uncategorized">Chưa Phân Loại</option>
         </select>
       </div>
     </div>
@@ -318,7 +319,7 @@
     <!-- Results Info -->
     <div class="results-info">
       <i class="fas fa-info-circle me-2"></i>
-      <span id="resultsInfo">Showing all courses</span>
+      <span id="resultsInfo">Hiển thị tất cả khóa học</span>
     </div>
 
     <!-- Course Table -->
@@ -326,14 +327,14 @@
       <table id="courseTable" class="table custom-table shadow-sm rounded bg-white">
         <thead class="table-header text-center">
         <tr>
-          <th>No.</th>
-          <th>Image</th>
-          <th>Title</th>
-          <th>Category</th>
-          <th>Price</th>
-          <th>Statistics</th>
-          <th>Actions</th>
-          <th>Instructor</th>
+          <th>STT</th>
+          <th>Hình Ảnh</th>
+          <th>Tiêu Đề</th>
+          <th>Danh Mục</th>
+          <th>Giá</th>
+          <th>Thống Kê</th>
+          <th>Thao Tác</th>
+          <th>Giảng Viên</th>
         </tr>
         </thead>
         <tbody>
@@ -362,7 +363,7 @@
                   <c:choose>
                     <c:when test="${empty course.categoryName}">
                       <span class="badge" style="background: linear-gradient(135deg, #718096 0%, #4A5568 100%);">
-                        <i class="fas fa-folder me-1"></i> Uncategorized
+                        <i class="fas fa-folder me-1"></i> Chưa Phân Loại
                       </span>
                     </c:when>
                     <c:otherwise>
@@ -399,17 +400,17 @@
                 </td>
                 <td>
                   <div class="d-flex flex-column align-items-center gap-2 flex-wrap">
-                    <a href="course?id=${course.id}" class="btn btn-outline-info btn-sm w-100" title="View details">
-                      <i class="fas fa-eye"></i> View
+                    <a href="course?id=${course.id}" class="btn btn-outline-info btn-sm w-100" title="Xem chi tiết">
+                      <i class="fas fa-eye"></i> Xem
                     </a>
-                    <a href="course-feedback?id=${course.id}" class="btn btn-outline-warning btn-sm w-100" title="View feedback">
-                      <i class="fas fa-comments"></i> Feedback
+                    <a href="course-feedback?id=${course.id}" class="btn btn-outline-warning btn-sm w-100" title="Xem đánh giá">
+                      <i class="fas fa-comments"></i> Đánh Giá
                     </a>
-                    <a href="update-course?id=${course.id}" class="btn btn-outline-secondary btn-sm w-100" title="Edit course">
-                      <i class="fas fa-edit"></i> Edit
+                    <a href="update-course?id=${course.id}" class="btn btn-outline-secondary btn-sm w-100" title="Chỉnh sửa khóa học">
+                      <i class="fas fa-edit"></i> Sửa
                     </a>
-                    <a href="course-lessons?id=${course.id}" class="btn btn-outline-primary btn-sm w-100" title="Manage lessons">
-                      <i class="fas fa-list-ul"></i> Lessons
+                    <a href="course-lessons?id=${course.id}" class="btn btn-outline-primary btn-sm w-100" title="Quản lý bài học">
+                      <i class="fas fa-list-ul"></i> Bài Học
                     </a>
                   </div>
                 </td>
@@ -424,8 +425,8 @@
               <td colspan="8" class="text-center py-4">
                 <div class="no-results">
                   <i class="fas fa-graduation-cap"></i>
-                  <h5>No courses available</h5>
-                  <p>Start by creating your first course</p>
+                  <h5>Không có khóa học nào</h5>
+                  <p>Bắt đầu bằng cách tạo khóa học đầu tiên của bạn</p>
                 </div>
               </td>
             </tr>
@@ -437,8 +438,8 @@
       <!-- No Results Message (for filtered results) -->
       <div id="noResults" class="no-results" style="display: none;">
         <i class="fas fa-search"></i>
-        <h5>No courses found</h5>
-        <p>Try adjusting your search criteria or filters</p>
+        <h5>Không tìm thấy khóa học nào</h5>
+        <p>Hãy thử điều chỉnh tiêu chí tìm kiếm hoặc bộ lọc của bạn</p>
       </div>
     </div>
 
@@ -663,11 +664,11 @@
       const end = Math.min(start + this.rowsPerPage - 1, filteredCount);
 
       if (filteredCount === 0) {
-        resultsInfo.textContent = 'No courses found';
+        resultsInfo.textContent = 'Không tìm thấy khóa học nào';
       } else if (filteredCount === totalCourses) {
-        resultsInfo.textContent = `Showing ${start}-${end} of ${totalCourses} courses`;
+        resultsInfo.textContent = `Hiển thị ${start}-${end} của ${totalCourses} khóa học`;
       } else {
-        resultsInfo.textContent = `Showing ${start}-${end} of ${filteredCount} filtered courses (${totalCourses} total)`;
+        resultsInfo.textContent = `Hiển thị ${start}-${end} của ${filteredCount} khóa học đã lọc (tổng cộng ${totalCourses})`;
       }
     }
 

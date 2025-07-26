@@ -335,7 +335,7 @@
             <i class="fas fa-shopping-cart"></i>
             <h4>Không Tìm Thấy Đơn Hàng</h4>
             <p>Bạn chưa mua khóa học nào.</p>
-            <a href="${pageContext.request.contextPath}/courses" class="btn btn-primary mt-3">
+            <a href="${pageContext.request.contextPath}/course" class="btn btn-primary mt-3">
               <i class="fas fa-book-open me-2"></i>Duyệt Khóa Học
             </a>
           </div>

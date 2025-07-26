@@ -2,10 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>User List Management</title>
+    <title>Quản Lý Danh Sách Người Dùng</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -98,21 +98,21 @@
 <div class="container mt-4">
     <div class="search-box">
         <input type="text" name="keyword" class="search-input"
-               placeholder="Search users..." value="${keyword}">
+               placeholder="Tìm kiếm người dùng..." value="${keyword}">
     </div>
 
     <!-- Students Section -->
     <div class="user-section">
-        <h2 class="section-title">Students</h2>
+        <h2 class="section-title">Học Viên</h2>
         <div class="table-responsive">
             <table class="user-table">
                 <thead>
                 <tr>
-                    <th>User Info</th>
+                    <th>Thông Tin Người Dùng</th>
                     <th>Email</th>
-                    <th>Phone</th>
-                    <th>Created Date</th>
-                    <th>Actions</th>
+                    <th>Điện Thoại</th>
+                    <th>Ngày Tạo</th>
+                    <th>Thao Tác</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -149,16 +149,16 @@
 
     <!-- Teachers Section -->
     <div class="user-section">
-        <h2 class="section-title">Teachers</h2>
+        <h2 class="section-title">Giảng Viên</h2>
         <div class="table-responsive">
             <table class="user-table">
                 <thead>
                 <tr>
-                    <th>User Info</th>
+                    <th>Thông Tin Người Dùng</th>
                     <th>Email</th>
-                    <th>Phone</th>
-                    <th>Created Date</th>
-                    <th>Actions</th>
+                    <th>Điện Thoại</th>
+                    <th>Ngày Tạo</th>
+                    <th>Thao Tác</th>
                 </tr>
                 </thead>
                 <tbody>

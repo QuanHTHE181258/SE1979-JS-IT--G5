@@ -1,4 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.time.Instant" %>
+<%@ page import="java.time.ZoneId" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ include file="/WEB-INF/layout/header.jsp" %>
 <!DOCTYPE html>
 <html lang="vi">
@@ -116,6 +121,11 @@
       background: var(--bg-secondary);
       transition: var(--transition-medium);
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      color: var(--text-secondary);
     }
 
     .avatar-img:hover {
@@ -372,178 +382,202 @@
       margin-left: 8px;
     }
 
-    /* New styles for recent enrollments section */
-    .recent-enrollments {
-      margin-top: 30px;
-    }
-
-    .enrollment-item {
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 15px;
-      border: 2px solid #e9ecef;
-      transition: all 0.3s ease;
-    }
-
-    .enrollment-item:hover {
-      border-color: #4facfe;
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(79, 172, 254, 0.1);
-    }
-
-    .enrollment-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .enrollment-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #2c3e50;
-      margin: 0;
-    }
-
-    .enrollment-status {
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    .status-active {
-      background: rgba(40, 167, 69, 0.1);
-      color: var(--success);
-    }
-
-    .status-completed {
-      background: rgba(23, 162, 184, 0.1);
-      color: var(--info);
-    }
-
-    .status-inactive {
-      background: rgba(220, 53, 69, 0.1);
-      color: var(--error);
-    }
-
-    .enrollment-progress {
-      margin-top: 10px;
-    }
-
-    .progress {
-      height: 8px;
-      border-radius: 10px;
-      background: var(--border-light);
-    }
-
-    .progress-bar {
-      border-radius: 10px;
-      background: var(--primary-gradient);
-    }
-
-    .enrollment-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-
-    .certificate-badge {
-      background: linear-gradient(135deg, var(--warning) 0%, #fab1a0 100%);
-      color: var(--text-primary);
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-    }
-
-    .certificate-badge i {
-      margin-right: 4px;
-    }
+    /* Removed debug styles */
   </style>
 </head>
 <body>
 
-<div class="container py-5">
-  <div class="row">
-    <!-- Sidebar Menu -->
-    <div class="col-lg-3">
-      <div class="profile-sidebar">
-        <div class="profile-header text-center mb-4">
-          <img src="${user.avatarURL}" alt="Avatar" class="profile-avatar">
-          <h5 class="mt-3 mb-1">${user.firstName} ${user.lastName}</h5>
-          <p class="text-muted mb-0">${user.email}</p>
-        </div>
-
-        <div class="profile-menu">
-          <a href="profile" class="menu-item active">
-            <i class="bi bi-person-circle"></i> Thông Tin Cá Nhân
-          </a>
-          <a href="edit-profile" class="menu-item">
-            <i class="bi bi-pencil-square"></i> Chỉnh Sửa Thông Tin
-          </a>
-          <a href="avatar" class="menu-item">
-            <i class="bi bi-camera"></i> Thay Đổi Ảnh Đại Diện
-          </a>
-          <a href="password" class="menu-item">
-            <i class="bi bi-key"></i> Đổi Mật Khẩu
-          </a>
-          <a href="order-history" class="menu-item">
-            <i class="bi bi-clock-history"></i> Lịch Sử Giao Dịch
-          </a>
-        </div>
-      </div>
+<div class="profile-container">
+  <div class="profile-card">
+    <!-- Header Section -->
+    <div class="profile-header">
+      <a href="${pageContext.request.contextPath}/home" class="back-button">
+        <i class="bi bi-arrow-left"></i>
+      </a>
+      <h2>Thông Tin Cá Nhân</h2>
+      <p>Quản lý thông tin tài khoản của bạn</p>
     </div>
 
-    <!-- Main Content -->
-    <div class="col-lg-9">
-      <div class="profile-content">
-        <h3 class="section-title">Thông Tin Cá Nhân</h3>
+    <!-- Body Section -->
+    <div class="profile-body">
 
-        <div class="info-section">
-          <div class="info-item">
-            <label>Họ và Tên:</label>
-            <span>${user.firstName} ${user.lastName}</span>
+
+
+      <!-- Avatar Section -->
+      <div class="avatar-section">
+        <div class="avatar-container">
+          <!-- Check if avatar URL exists and is not empty -->
+          <%
+            String avatarUrl = null;
+            Object userObj = request.getAttribute("user");
+            if (userObj != null) {
+              try {
+                project.demo.coursemanagement.entities.User user = (project.demo.coursemanagement.entities.User) userObj;
+                avatarUrl = user.getAvatarUrl();
+              } catch (Exception e) {
+                // Handle silently
+              }
+            }
+
+            // Date formatters for Vietnamese locale
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+          %>
+
+          <% if (avatarUrl != null && !avatarUrl.trim().isEmpty()) { %>
+          <img src="${pageContext.request.contextPath}${user.avatarUrl}"
+               alt="Avatar"
+               class="avatar-img"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="avatar-img" style="display: none;">
+            <i class="bi bi-person-circle"></i>
           </div>
-
-          <div class="info-item">
-            <label>Email:</label>
-            <span>${user.email}</span>
+          <% } else { %>
+          <div class="avatar-img">
+            <i class="bi bi-person-circle"></i>
           </div>
+          <% } %>
 
-          <div class="info-item">
-            <label>Số Điện Thoại:</label>
-            <span>${user.phoneNumber}</span>
-          </div>
-
-          <div class="info-item">
-            <label>Ngày Sinh:</label>
-            <span>${user.dateOfBirth}</span>
-          </div>
-
-          <div class="info-item">
-            <label>Ngày Tham Gia:</label>
-            <span>${user.createdAt}</span>
-          </div>
-
-          <div class="info-item">
-            <label>Lần Đăng Nhập Cuối:</label>
-            <span>${user.lastLogin}</span>
-          </div>
-        </div>
-
-        <div class="mt-4">
-          <a href="edit-profile" class="btn btn-primary">
-            <i class="bi bi-pencil-square me-2"></i>Chỉnh Sửa Thông Tin
+          <a href="${pageContext.request.contextPath}/profile/avatar" class="avatar-overlay">
+            <i class="bi bi-camera"></i>
           </a>
         </div>
+        <h3>${user.firstName} ${user.lastName}</h3>
+        <div class="completion-badge">
+          <i class="bi bi-person-check"></i>
+          Thành viên hoạt động
+        </div>
+      </div>
+
+      <!-- Information Section -->
+      <div class="info-section">
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">
+              <i class="bi bi-person"></i>
+              Họ và Tên
+            </div>
+            <div class="info-value">${user.firstName} ${user.lastName}</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">
+              <i class="bi bi-envelope"></i>
+              Email
+            </div>
+            <div class="info-value">${user.email}</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">
+              <i class="bi bi-telephone"></i>
+              Số Điện Thoại
+            </div>
+            <div class="info-value">${user.phoneNumber != null ? user.phoneNumber : 'Chưa cập nhật'}</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">
+              <i class="bi bi-calendar"></i>
+              Ngày Sinh
+            </div>
+            <div class="info-value">
+              <%
+                project.demo.coursemanagement.entities.User currentUser = (project.demo.coursemanagement.entities.User) request.getAttribute("user");
+                if (currentUser != null && currentUser.getDateOfBirth() != null) {
+                  out.print(currentUser.getDateOfBirth().format(dateFormatter));
+                } else {
+                  out.print("Chưa cập nhật");
+                }
+              %>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">
+              <i class="bi bi-calendar-plus"></i>
+              Ngày Tham Gia
+            </div>
+            <div class="info-value">
+              <%
+                if (currentUser != null && currentUser.getCreatedAt() != null) {
+                  out.print(currentUser.getCreatedAt().atZone(ZoneId.systemDefault()).format(dateTimeFormatter));
+                } else {
+                  out.print("Chưa có thông tin");
+                }
+              %>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">
+              <i class="bi bi-clock"></i>
+              Lần Đăng Nhập Cuối
+            </div>
+            <div class="info-value">
+              <%
+                if (currentUser != null && currentUser.getLastLogin() != null) {
+                  out.print(currentUser.getLastLogin().atZone(ZoneId.systemDefault()).format(dateTimeFormatter));
+                } else {
+                  out.print("Chưa có thông tin");
+                }
+              %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Section -->
+      <div class="stats-section">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #667eea;">
+              <i class="bi bi-book"></i>
+            </div>
+            <div class="stat-value">${profileStats.enrolledCoursesCount}</div>
+            <div class="stat-label">Khóa học đã tham gia</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #28a745;">
+              <i class="bi bi-check-circle"></i>
+            </div>
+            <div class="stat-value">${profileStats.completedCoursesCount}</div>
+            <div class="stat-label">Khóa học hoàn thành</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #ffc107;">
+              <i class="bi bi-award"></i>
+            </div>
+            <div class="stat-value">${profileStats.certificatesIssuedCount}</div>
+            <div class="stat-label">Chứng chỉ</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #17a2b8;">
+              <i class="bi bi-graph-up"></i>
+            </div>
+            <div class="stat-value">${profileStats.profileCompletionPercentage}%</div>
+            <div class="stat-label">Tiến độ hoàn thành</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <a href="${pageContext.request.contextPath}/profile/edit" class="btn-action btn-edit">
+          <i class="bi bi-pencil-square"></i>
+          Chỉnh Sửa Thông Tin
+        </a>
+        <a href="${pageContext.request.contextPath}/profile/avatar" class="btn-action btn-password">
+          <i class="bi bi-camera"></i>
+          Thay Đổi Ảnh Đại Diện
+        </a>
+        <a href="${pageContext.request.contextPath}/profile/password" class="btn-action btn-logout">
+          <i class="bi bi-key"></i>
+          Đổi Mật Khẩu
+        </a>
       </div>
     </div>
   </div>

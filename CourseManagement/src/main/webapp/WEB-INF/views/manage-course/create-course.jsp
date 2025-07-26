@@ -2,10 +2,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Create Course</title>
+    <title>Tạo Khóa Học</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/create_course_style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -111,28 +111,28 @@
 <body>
 <div class="form-container">
     <div class="form-title">
-        <i class="fas fa-plus-circle form-icon"></i> Create New Course
+        <i class="fas fa-plus-circle form-icon"></i> Tạo Khóa Học Mới
     </div>
     <form action="create-course" method="post" enctype="multipart/form-data">
         <div class="form-group form-section">
-            <label class="form-label"><i class="fas fa-heading form-icon"></i>Title:</label>
+            <label class="form-label"><i class="fas fa-heading form-icon"></i>Tiêu Đề:</label>
             <input type="text" class="form-control" name="title" value="${param.title}" required maxlength="255">
             <c:if test="${not empty errors.title}"><span class="error">${errors.title}</span></c:if>
         </div>
         <div class="form-group form-section">
-            <label class="form-label"><i class="fas fa-align-left form-icon"></i>Description:</label>
+            <label class="form-label"><i class="fas fa-align-left form-icon"></i>Mô Tả:</label>
             <textarea class="form-control" name="description" required maxlength="2000" rows="3">${param.description}</textarea>
             <c:if test="${not empty errors.description}"><span class="error">${errors.description}</span></c:if>
         </div>
         <div class="form-group form-section">
-            <label class="form-label"><i class="fas fa-dollar-sign form-icon"></i>Price ($):</label>
+            <label class="form-label"><i class="fas fa-dollar-sign form-icon"></i>Giá ($):</label>
             <input type="number" class="form-control" name="price" min="0" step="0.01" value="${param.price}" required>
             <c:if test="${not empty errors.price}"><span class="error">${errors.price}</span></c:if>
         </div>
         <div class="form-group form-section">
-            <label class="form-label"><i class="fas fa-tags form-icon"></i>Category:</label>
+            <label class="form-label"><i class="fas fa-tags form-icon"></i>Danh Mục:</label>
             <select class="form-select" name="categoryId" required>
-                <option value="">-- Select category --</option>
+                <option value="">-- Chọn danh mục --</option>
                 <c:forEach var="cat" items="${categories}">
                     <option value="${cat.id}" ${cat.id == param.categoryId ? 'selected' : ''}>
                         <c:out value="${cat.name}"/>
@@ -142,9 +142,9 @@
             <c:if test="${not empty errors.categoryId}"><span class="error">${errors.categoryId}</span></c:if>
         </div>
         <div class="form-group form-section">
-            <label class="form-label"><i class="fas fa-chalkboard-teacher form-icon"></i>Instructor:</label>
+            <label class="form-label"><i class="fas fa-chalkboard-teacher form-icon"></i>Giảng Viên:</label>
             <select class="form-select" name="instructorId" required>
-                <option value="">-- Select instructor --</option>
+                <option value="">-- Chọn giảng viên --</option>
                 <c:forEach var="ins" items="${instructors}">
                     <option value="${ins.id}" ${ins.id == param.instructorId ? 'selected' : ''}>
                         <c:out value="${ins.firstName}"/> <c:out value="${ins.lastName}"/>
@@ -154,13 +154,13 @@
             <c:if test="${not empty errors.instructorId}"><span class="error">${errors.instructorId}</span></c:if>
         </div>
         <div class="form-group form-section">
-            <label class="form-label"><i class="fas fa-image form-icon"></i>Course Image:</label>
+            <label class="form-label"><i class="fas fa-image form-icon"></i>Hình Ảnh Khóa Học:</label>
             <input type="file" class="form-control" name="image" accept="image/*" required>
             <c:if test="${not empty errors.image}"><span class="error">${errors.image}</span></c:if>
         </div>
         <div class="form-group text-center">
-            <button type="submit" class="btn btn-create me-2"><i class="fas fa-save me-2"></i>Create Course</button>
-            <a href="view-all" class="btn btn-cancel"><i class="fas fa-times me-2"></i>Cancel</a>
+            <button type="submit" class="btn btn-create me-2"><i class="fas fa-save me-2"></i>Tạo Khóa Học</button>
+            <a href="view-all" class="btn btn-cancel"><i class="fas fa-times me-2"></i>Hủy Bỏ</a>
         </div>
         <c:if test="${not empty errors.global}"><div class="error text-center mt-2">${errors.global}</div></c:if>
     </form>

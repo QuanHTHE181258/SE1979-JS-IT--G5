@@ -151,12 +151,12 @@ public class SessionUtil {
                 case "ADMIN":
                     return roleId == 5;
                 case "TEACHER":
-                    return roleId == 2;
+                    return roleId == 3;
                 case "USER":
                 case "STUDENT":
                     return roleId == 1;
                 case "COURSE_MANAGER":
-                    return roleId == 3;
+                    return roleId == 2;
                 case "USER_MANAGER":
                     return roleId == 4;
                 case "GUEST":
@@ -170,12 +170,12 @@ public class SessionUtil {
                     case "ADMIN":
                         return roleId == 5;
                     case "TEACHER":
-                        return roleId == 2;
+                        return roleId == 3;
                     case "USER":
                     case "STUDENT":
                         return roleId == 1;
                     case "COURSE_MANAGER":
-                        return roleId == 3;
+                        return roleId == 2;
                     case "USER_MANAGER":
                         return roleId == 4;
                     case "GUEST":
@@ -252,7 +252,7 @@ public class SessionUtil {
     }
 
     public static boolean isTeacher(HttpServletRequest request) {
-        return hasRole(request, "2"); // Teacher role ID
+        return hasRole(request, "3"); // Teacher role ID
     }
 
     public static boolean isStudent(HttpServletRequest request) {
@@ -264,7 +264,7 @@ public class SessionUtil {
     }
 
     public static boolean isCourseManager(HttpServletRequest request) {
-        return hasRole(request, "3"); // CourseManager role ID
+        return hasRole(request, "2"); // CourseManager role ID
     }
 
     public static boolean isGuest(HttpServletRequest request) {

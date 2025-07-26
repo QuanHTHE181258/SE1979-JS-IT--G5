@@ -23,6 +23,19 @@ public class BlogController extends HttpServlet {
             throws ServletException, IOException {
         System.out.println("BlogController: Processing request for " + request.getRequestURI());
 
+        // Check if user has admin role
+        if (!project.demo.coursemanagement.utils.SessionUtil.isAdmin(request)) {
+            // User is not an admin, set flash message and redirect to home page
+            project.demo.coursemanagement.utils.SessionUtil.setFlashMessage(
+                request, 
+                "error", 
+                "Access denied. Admin privileges required to access the blog section."
+            );
+            response.sendRedirect(request.getContextPath() + "/home");
+            return;
+        }
+        
+        // If we get here, the user is an admin
         project.demo.coursemanagement.entities.User currentUser = project.demo.coursemanagement.utils.SessionUtil.getUserFromSession(request);
         String userRole = project.demo.coursemanagement.utils.SessionUtil.getUserRole(request);
 
@@ -30,17 +43,9 @@ public class BlogController extends HttpServlet {
         System.out.println("User role: " + userRole);
 
         java.util.List<project.demo.coursemanagement.entities.Blog> blogList;
-
-        if (project.demo.coursemanagement.utils.SessionUtil.isAdmin(request)) {
-            System.out.println("Loading all blogs for admin");
-            blogList = blogService.getAllBlogs();
-        } else if (currentUser != null) {
-            System.out.println("Loading blogs for user ID: " + currentUser.getId());
-            blogList = blogService.getBlogsForUser(currentUser.getId());
-        } else {
-            System.out.println("Loading published blogs for public view");
-            blogList = blogService.getPublishedBlogs();
-        }
+        
+        System.out.println("Loading all blogs for admin");
+        blogList = blogService.getAllBlogs();
 
         System.out.println("Retrieved " + (blogList != null ? blogList.size() : 0) + " blogs");
         if (blogList != null && !blogList.isEmpty()) {

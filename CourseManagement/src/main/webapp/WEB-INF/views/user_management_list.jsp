@@ -2,10 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>User Management</title>
+    <title>Quản Lý Người Dùng</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -213,11 +213,11 @@
 <div class="wrapper">
     <div class="main-content ${sessionScope.user.role.roleName == 'USER_MANAGER' ? 'no-sidebar' : ''}">
         <div class="content-header">
-            <h1 class="h3 mb-0">User Management</h1>
+            <h1 class="h3 mb-0">Quản Lý Người Dùng</h1>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/admin">Dashboard</a></li>
-                    <li class="breadcrumb-item active">User Management</li>
+                    <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/admin">Bảng Điều Khiển</a></li>
+                    <li class="breadcrumb-item active">Quản Lý Người Dùng</li>
                 </ol>
             </nav>
         </div>
@@ -239,22 +239,22 @@
 
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0">User List</h5>
+                <h5 class="mb-0">Danh Sách Người Dùng</h5>
                 <a href="${pageContext.request.contextPath}/admin/users/new?role=USER_MANAGER" class="btn-action btn-create">
                     <i class="fas fa-user-plus"></i>
-                    Create User Manager
+                    Tạo Quản Lý Người Dùng
                 </a>
             </div>
             <div class="card-body">
                 <form class="search-box" method="GET" action="${pageContext.request.contextPath}/admin/user-management">
                     <input type="text" name="search" class="search-input"
-                           placeholder="Search users..." value="${param.search}">
+                           placeholder="Tìm kiếm người dùng..." value="${param.search}">
                     <select name="role" class="filter-dropdown" onchange="this.form.submit()">
-                        <option value="">All Roles</option>
-                        <option value="USER" ${param.role == 'USER' ? 'selected' : ''}>User</option>
-                        <option value="ADMIN" ${param.role == 'ADMIN' ? 'selected' : ''}>Admin</option>
-                        <option value="USER_MANAGER" ${param.role == 'USER_MANAGER' ? 'selected' : ''}>User Manager</option>
-                        <option value="COURSE_MANAGER" ${param.role == 'COURSE_MANAGER' ? 'selected' : ''}>Course Manager</option>
+                        <option value="">Tất Cả Vai Trò</option>
+                        <option value="USER" ${param.role == 'USER' ? 'selected' : ''}>Người Dùng</option>
+                        <option value="ADMIN" ${param.role == 'ADMIN' ? 'selected' : ''}>Quản Trị Viên</option>
+                        <option value="USER_MANAGER" ${param.role == 'USER_MANAGER' ? 'selected' : ''}>Quản Lý Người Dùng</option>
+                        <option value="COURSE_MANAGER" ${param.role == 'COURSE_MANAGER' ? 'selected' : ''}>Quản Lý Khóa Học</option>
                     </select>
                 </form>
 
@@ -264,13 +264,13 @@
                         <table class="user-table">
                             <thead>
                             <tr>
-                                <th>User</th>
+                                <th>Người Dùng</th>
                                 <th>Email</th>
-                                <th>Role</th>
-                                <th>Status</th>
-                                <th>Created Date</th>
-                                <th>Last Login</th>
-                                <th>Actions</th>
+                                <th>Vai Trò</th>
+                                <th>Trạng Thái</th>
+                                <th>Ngày Tạo</th>
+                                <th>Đăng Nhập Gần Đây</th>
+                                <th>Thao Tác</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -305,7 +305,7 @@
                                     </td>
                                     <td>
                                             <span class="status-badge ${user.active ? 'status-active' : 'status-inactive'}">
-                                                    ${user.active ? 'ACTIVE' : 'INACTIVE'}
+                                                    ${user.active ? 'HOẠT ĐỘNG' : 'KHÔNG HOẠT ĐỘNG'}
                                             </span>
                                     </td>
                                     <td>
@@ -319,7 +319,7 @@
                                                 <fmt:formatDate value="${user.lastLoginDate}" pattern="MMM dd, yyyy HH:mm"/>
                                             </c:when>
                                             <c:otherwise>
-                                                <span class="text-muted">Never</span>
+                                                <span class="text-muted">Chưa bao giờ</span>
                                             </c:otherwise>
                                         </c:choose>
                                     </td>
@@ -355,16 +355,16 @@
                 <c:if test="${empty userList}">
                     <div class="no-users">
                         <i class="fas fa-users fa-3x mb-3"></i>
-                        <h5>No users found</h5>
+                        <h5>Không tìm thấy người dùng</h5>
                         <c:choose>
                             <c:when test="${not empty searchTerm}">
-                                <p>No users match your search criteria: "<strong>${searchTerm}</strong>"</p>
+                                <p>Không có người dùng nào phù hợp với tiêu chí tìm kiếm: "<strong>${searchTerm}</strong>"</p>
                                 <a href="${pageContext.request.contextPath}/admin/users" class="btn btn-primary">
-                                    View All Users
+                                    Xem Tất Cả Người Dùng
                                 </a>
                             </c:when>
                             <c:otherwise>
-                                <p>There are no users in the system.</p>
+                                <p>Không có người dùng nào trong hệ thống.</p>
                             </c:otherwise>
                         </c:choose>
                     </div>
@@ -389,8 +389,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     function toggleUserStatus(userId, action) {
-        const message = action === 'activate' ? 'activate' : 'deactivate';
-        if (confirm(`Are you sure you want to ${message} this user?`)) {
+        const message = action === 'activate' ? 'kích hoạt' : 'vô hiệu hóa';
+        if (confirm(`Bạn có chắc chắn muốn ${message} người dùng này không?`)) {
             // Create a form and submit it
             const form = document.createElement('form');
             form.method = 'POST';
