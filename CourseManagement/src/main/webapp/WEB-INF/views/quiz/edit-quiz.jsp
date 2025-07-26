@@ -6,10 +6,13 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/layout/header.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
     <title>Edit Quiz</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -489,14 +492,7 @@
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save me-2"></i>Save Changes
                 </button>
-                <!-- Separate delete form -->
-                <form method="post" action="edit-quiz" style="display: inline;">
-                    <input type="hidden" name="action" value="deleteQuiz" />
-                    <input type="hidden" name="quizId" value="${quiz.id}" />
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this quiz? This action cannot be undone.');">
-                        <i class="fas fa-trash-alt me-2"></i>Delete Quiz
-                    </button>
-                </form>
+
             </div>
         </form>
     </div>
@@ -506,6 +502,72 @@
         <h4 class="mb-4">
             <i class="fas fa-question-circle me-3"></i>Questions
         </h4>
+
+        <script>
+            function deleteAnswer(answerId, totalAnswers) {
+                if (totalAnswers <= 2) {
+                    alert('Cannot delete answer. A question must have at least 2 answers.');
+                    return;
+                }
+
+                if (confirm('Are you sure you want to delete this answer?')) {
+                    $.ajax({
+                        url: 'edit-quiz',
+                        type: 'POST',
+                        data: {
+                            action: 'deleteAnswer',
+                            answerId: answerId
+                        },
+                        success: function(response) {
+                            try {
+                                const jsonResponse = JSON.parse(response);
+                                if (jsonResponse.success) {
+                                    window.location.reload(); // Reload the page
+                                } else {
+                                    alert(jsonResponse.message || 'Failed to delete answer');
+                                }
+                            } catch (e) {
+                                if (response.includes('success')) {
+                                    window.location.reload(); // Reload the page
+                                } else {
+                                    alert('Failed to delete answer');
+                                    console.error('Error parsing response:', e);
+                                }
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
+                            console.error('Status:', status);
+                            console.error('Response:', xhr.responseText);
+                            alert('An error occurred while deleting the answer');
+                        }
+                    });
+                }
+            }
+
+            function deleteQuestion(questionId, totalQuestions) {
+                if (totalQuestions <= 1) {
+                    alert('Cannot delete question. Quiz must have at least 1 question.');
+                    return;
+                }
+                return confirm('Delete this question?');
+            }
+        </script>
+
+        <style>
+            .console-log {
+                background-color: #f8f9fa;
+                border: 1px solid #dee2e6;
+                padding: 10px;
+                margin-top: 10px;
+                border-radius: 4px;
+                max-height: 200px;
+                overflow-y: auto;
+                display: none;
+            }
+        </style>
+
+        <div id="console-log" class="console-log"></div>
 
         <c:forEach var="question" items="${quiz.questions}" varStatus="status">
             <div class="question-card">
@@ -518,7 +580,8 @@
                             <input type="hidden" name="action" value="deleteQuestion" />
                             <input type="hidden" name="quizId" value="${quiz.id}" />
                             <input type="hidden" name="questionId" value="${question.id}" />
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this question?');">
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return deleteQuestion(${question.id}, ${fn:length(quiz.questions)});">
                                 <i class="fas fa-trash"></i> Delete
                             </button>
                         </form>
@@ -544,7 +607,7 @@
                         <i class="fas fa-list-ul me-2"></i>Answers
                     </h6>
                     <c:forEach var="answer" items="${question.answers}">
-                        <div class="answer-card">
+                        <div class="answer-card" id="answer-${answer.id}">
                             <form method="post" action="edit-quiz" class="d-flex align-items-center gap-3 flex-wrap">
                                 <input type="hidden" name="action" value="updateAnswer" />
                                 <input type="hidden" name="quizId" value="${quiz.id}" />
@@ -559,14 +622,10 @@
                                 <button type="submit" class="btn btn-success btn-sm">
                                     <i class="fas fa-save"></i>
                                 </button>
-                                <form method="post" action="edit-quiz" class="d-inline">
-                                    <input type="hidden" name="action" value="deleteAnswer" />
-                                    <input type="hidden" name="quizId" value="${quiz.id}" />
-                                    <input type="hidden" name="answerId" value="${answer.id}" />
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this answer?');">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                <button type="button" class="btn btn-danger btn-sm"
+                                        onclick="deleteAnswer(${answer.id}, ${fn:length(question.answers)})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </form>
                         </div>
                     </c:forEach>

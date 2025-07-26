@@ -23,7 +23,7 @@ public class OrderDAOImpl implements OrderDAO {
     public List<OrderDTO> getOrdersByStatus(String status) {
         List<OrderDTO> orders = new ArrayList<>();
         String sql = """
-            SELECT o.OrderID, u.Username, o.Status, o.PaymentMethod, o.TotalAmount, 
+            SELECT o.OrderID, o.UserID, u.Username, o.Status, o.PaymentMethod, o.TotalAmount, 
                    o.CreatedAt, u.FirstName, u.LastName, u.Email
             FROM orders o
             JOIN users u ON o.UserID = u.UserID
@@ -121,7 +121,7 @@ public class OrderDAOImpl implements OrderDAO {
     public List<OrderDTO> getOrdersWithPagination(int offset, int limit) {
         List<OrderDTO> orders = new ArrayList<>();
         String sql = """
-            SELECT o.OrderID, u.Username, o.Status, o.PaymentMethod, o.TotalAmount, 
+            SELECT o.OrderID, o.UserID, u.Username, o.Status, o.PaymentMethod, o.TotalAmount, 
                    o.CreatedAt, u.FirstName, u.LastName, u.Email
             FROM orders o
             JOIN users u ON o.UserID = u.UserID
@@ -215,7 +215,7 @@ public class OrderDAOImpl implements OrderDAO {
     public List<OrderDTO> searchOrders(String keyword, int offset, int limit) {
         List<OrderDTO> orders = new ArrayList<>();
         String sql = """
-            SELECT o.OrderID, u.Username, o.Status, o.PaymentMethod, o.TotalAmount, 
+            SELECT o.OrderID, o.UserID, u.Username, o.Status, o.PaymentMethod, o.TotalAmount, 
                    o.CreatedAt, u.FirstName, u.LastName, u.Email
             FROM orders o
             JOIN users u ON o.UserID = u.UserID
@@ -536,7 +536,7 @@ public class OrderDAOImpl implements OrderDAO {
     public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByDay() {
         List<project.demo.coursemanagement.dto.RevenueDetailDTO> list = new ArrayList<>();
         String sql = "SELECT CONVERT(date, CreatedAt) as date, SUM(TotalAmount) as revenue " +
-                     "FROM orders WHERE Status = 'paid' GROUP BY CONVERT(date, CreatedAt) ORDER BY date";
+                "FROM orders WHERE Status = 'paid' GROUP BY CONVERT(date, CreatedAt) ORDER BY date";
         try (Connection conn = dbConn.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -555,7 +555,7 @@ public class OrderDAOImpl implements OrderDAO {
     public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByWeek() {
         List<project.demo.coursemanagement.dto.RevenueDetailDTO> list = new ArrayList<>();
         String sql = "SELECT YEAR(CreatedAt) as year, DATEPART(week, CreatedAt) as week, SUM(TotalAmount) as revenue " +
-                     "FROM orders WHERE Status = 'paid' GROUP BY YEAR(CreatedAt), DATEPART(week, CreatedAt) ORDER BY year, week";
+                "FROM orders WHERE Status = 'paid' GROUP BY YEAR(CreatedAt), DATEPART(week, CreatedAt) ORDER BY year, week";
         try (Connection conn = dbConn.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -575,7 +575,7 @@ public class OrderDAOImpl implements OrderDAO {
     public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByMonth() {
         List<project.demo.coursemanagement.dto.RevenueDetailDTO> list = new ArrayList<>();
         String sql = "SELECT YEAR(CreatedAt) as year, MONTH(CreatedAt) as month, SUM(TotalAmount) as revenue " +
-                     "FROM orders WHERE Status = 'paid' GROUP BY YEAR(CreatedAt), MONTH(CreatedAt) ORDER BY year, month";
+                "FROM orders WHERE Status = 'paid' GROUP BY YEAR(CreatedAt), MONTH(CreatedAt) ORDER BY year, month";
         try (Connection conn = dbConn.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {

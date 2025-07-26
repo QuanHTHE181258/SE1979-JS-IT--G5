@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/layout/header.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,71 +11,74 @@
 </head>
 <body style="margin:0; font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6fb;">
 <div style="display:flex; min-height:100vh;">
-    <!-- Sidebar -->
-    <nav style="width:250px; background:#343a40; color:#fff; min-height:100vh; display:flex; flex-direction:column;">
-        <div style="padding:32px 0 24px 32px;">
-            <h3 style="margin:0; font-size:1.7rem; font-weight:700; letter-spacing:1px;">Admin Panel</h3>
-        </div>
-        <ul style="list-style:none; padding:0; margin:0; flex:1;">
-            <li>
-                <a href="${pageContext.request.contextPath}/admin" style="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;">
-                    <i class="fas fa-tachometer-alt" style="margin-right:14px;"></i> Dashboard
+    <!-- Include Admin Sidebar -->
+    <jsp:include page="_admin_sidebar.jsp">
+        <jsp:param name="active" value="blogs"/>
+    </jsp:include>
+
+    <!-- Main Content -->
+    <div style="flex:1; padding:48px 0; margin-left: 280px;">
+        <div style="max-width:1200px; margin:auto; padding:0 24px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:32px;">
+                <h1 style="font-size:2rem; color:#2c2c54; margin:0;">Blog Management</h1>
+                <a href="${pageContext.request.contextPath}/admin/blog/create"
+                   class="btn btn-primary"
+                   style="background:#3498db; color:white; padding:10px 20px; border-radius:6px; text-decoration:none;">
+                    <i class="fas fa-plus"></i> Create New Blog
                 </a>
-            </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/admin/user-management" style="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;">
-                    <i class="fas fa-users" style="margin-right:14px;"></i> User Management
-                </a>
-            </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/admin/courses" style="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;">
-                    <i class="fas fa-book" style="margin-right:14px;"></i> Courses Management
-                </a>
-            </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/admin/orders" style="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;">
-                    <i class="fas fa-shopping-cart" style="margin-right:14px;"></i> Order Management
-                </a>
-            </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/admin/revenue-analytics" style="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;">
-                    <i class="fas fa-chart-bar" style="margin-right:14px;"></i> Revenue Analytics
-                </a>
-            </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/teacher-performance" style="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;">
-                    <i class="fas fa-chart-line" style="margin-right:14px;"></i> Teacher Performance
-                </a>
-            </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/admin/blog/list" style="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;">
-                    <i class="fas fa-blog" style="margin-right:14px;"></i> Blog Management
-                </a>
-            </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/logout" style="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px; font-weight:500;">
-                    <i class="fas fa-sign-out-alt" style="margin-right:14px;"></i> Logout
-                </a>
-            </li>
-        </ul>
-    </nav>
-    <!-- Main content -->
-    <div style="flex:1; padding:48px 0; background:#f4f6fb;">
-        <div style="max-width:900px; margin:auto;">
-            <div style="background:#fff; border-radius:22px; box-shadow:0 4px 24px rgba(44,44,84,0.13); padding:40px 48px 48px 48px; margin-bottom:36px;">
-                <h2 style="font-size:2.2rem; font-weight:800; color:#2c2c54; margin-bottom:38px; letter-spacing:1px; text-align:center;">Blog List</h2>
-                <c:forEach var="blog" items="${blogList}">
-                    <div style="background:#f5f5fa; border-radius:18px; box-shadow:0 2px 8px rgba(44,44,84,0.08); padding:36px; margin-bottom:36px;">
-                        <h3 style="font-size:1.5rem; font-weight:700; color:#2c2c54;">${blog.title}</h3>
-                        <p style="color:#888; margin:10px 0 18px 0; font-size:1.05rem;">${blog.content}</p>
-                        <a href="${pageContext.request.contextPath}/blog/detail?id=${blog.id}" style="display:inline-block; background:#6a82fb; color:#fff; font-weight:600; padding:12px 28px; border-radius:9px; text-decoration:none; box-shadow:0 2px 8px rgba(44,44,84,0.08); font-size:1rem; transition:background 0.2s;">
-                            <i class="fas fa-eye"></i> View Details
-                        </a>
-                    </div>
-                </c:forEach>
+            </div>
+
+            <!-- Blog List Table -->
+            <div style="background:white; border-radius:12px; box-shadow:0 4px 16px rgba(0,0,0,0.1); overflow:hidden;">
+                <table style="width:100%; border-collapse:collapse;">
+                    <thead>
+                    <tr style="background:#f8f9fa;">
+                        <th style="padding:16px; text-align:left;">Title</th>
+                        <th style="padding:16px; text-align:left;">Status</th>
+                        <th style="padding:16px; text-align:left;">Created Date</th>
+                        <th style="padding:16px; text-align:center;">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="blog" items="${blogList}">
+                        <tr style="border-top:1px solid #eee;">
+                            <td style="padding:16px;">${blog.title}</td>
+                            <td style="padding:16px;">
+                                    <span style="padding:4px 8px; border-radius:4px; font-size:0.85em;
+                                        ${blog.status == 'published' ? 'background:#e1f7e1; color:#2d862d;' : 'background:#fff3cd; color:#856404;'}">
+                                            ${blog.status}
+                                    </span>
+                            </td>
+                            <td style="padding:16px;">${blog.createdAt}</td>
+                            <td style="padding:16px; text-align:center;">
+                                <a href="${pageContext.request.contextPath}/blog/edit?id=${blog.id}"
+                                   style="color:#3498db; margin:0 8px; text-decoration:none;">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="${pageContext.request.contextPath}/blog/detail?id=${blog.id}"
+                                   style="color:#2ecc71; margin:0 8px; text-decoration:none;">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="#" onclick="deleteBlog(${blog.id})"
+                                   style="color:#e74c3c; margin:0 8px; text-decoration:none;">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    function deleteBlog(blogId) {
+        if (confirm('Are you sure you want to delete this blog?')) {
+            window.location.href = '${pageContext.request.contextPath}/admin/blog/delete?id=' + blogId;
+        }
+    }
+</script>
 </body>
-</html> 
+</html>

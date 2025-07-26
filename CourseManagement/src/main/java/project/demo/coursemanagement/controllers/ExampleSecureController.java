@@ -14,29 +14,29 @@ import java.io.IOException;
 public class ExampleSecureController extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         // Cách 1: Sử dụng AuthorizationUtil
         if (!AuthorizationUtil.checkAndRedirect(request, response, "5", "3")) {
             return; // Đã redirect trong checkAndRedirect
         }
-        
+
         // Cách 2: Kiểm tra thủ công
         if (!SessionUtil.isAdmin(request) && !SessionUtil.isCourseManager(request)) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
             return;
         }
-        
+
         // Logic xử lý khi có quyền
         request.setAttribute("message", "Welcome to secure area!");
         request.getRequestDispatcher("/WEB-INF/views/secure-example.jsp").forward(request, response);
     }
-    
+
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         // Kiểm tra quyền cho resource cụ thể
         String resourceOwnerIdStr = request.getParameter("resourceOwnerId");
         if (resourceOwnerIdStr != null) {
@@ -51,10 +51,10 @@ public class ExampleSecureController extends HttpServlet {
                 return;
             }
         }
-        
+
         // Xử lý logic khi có quyền
         // ...
-        
+
         response.sendRedirect(request.getContextPath() + "/success");
     }
 } 

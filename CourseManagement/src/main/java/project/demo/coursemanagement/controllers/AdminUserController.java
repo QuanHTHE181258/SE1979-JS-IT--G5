@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.service.UserService;
 import project.demo.coursemanagement.entities.Role;
-import project.demo.coursemanagement.annotations.RequireRole;
 
 import java.io.IOException;
 import java.util.Date;
@@ -31,85 +30,72 @@ public class AdminUserController extends HttpServlet {
             throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
         String searchTerm = request.getParameter("searchTerm");
-        request.setAttribute("searchTerm", searchTerm);
 
-        if (pathInfo == null || pathInfo.equals("/")) {
-            List<User> userList;
-            if (searchTerm != null && !searchTerm.trim().isEmpty()) {
-                userList = userService.getUsers(searchTerm, null, 1);
-            } else {
-                userList = userService.getAllUsers();
+        System.out.println("=== AdminUserController GET request ===");
+        System.out.println("Path info: " + pathInfo);
+        System.out.println("Search term: " + searchTerm);
+
+        try {
+            // Handle root path /admin/users
+            if (pathInfo == null || pathInfo.equals("/")) {
+                System.out.println("Handling root path");
+                List<User> userList;
+                if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+                    System.out.println("Searching users with term: " + searchTerm);
+                    userList = userService.getUsers(searchTerm, null, 1);
+                } else {
+                    System.out.println("Getting all users");
+                    userList = userService.getAllUsers();
+                }
+
+                System.out.println("Found " + userList.size() + " users");
+                request.setAttribute("userList", userList);
+                request.setAttribute("searchTerm", searchTerm);
+                request.getRequestDispatcher("/WEB-INF/views/admin_users.jsp").forward(request, response);
+                return;
             }
-            userList.forEach(user -> {
-                if (user.getLastLogin() != null) {
-                    user.setLastLoginDate(Date.from(user.getLastLogin()));
-                }
-                if (user.getCreatedAt() != null) {
-                    user.setCreatedAtDate(Date.from(user.getCreatedAt()));
-                }
-            });
-            request.setAttribute("userList", userList);
-            request.getRequestDispatcher("/WEB-INF/views/admin_users.jsp").forward(request, response);
-        } else {
-            // Handle specific user actions like edit
-            String[] pathParts = pathInfo.split("/");
 
-            // The pathInfo for edit is expected to be in the format /edit/{userId}
-            if (pathParts.length == 3 && "edit".equals(pathParts[1])) {
-                String userIdString = pathParts[2]; // User ID is at index 2 for /edit/{userId}
+            // Handle /admin/users/new for user creation form
+            if (pathInfo.equals("/new")) {
+                String role = request.getParameter("role");
+                System.out.println("Showing creation form for role: " + role);
 
-                try {
-                    int userId = Integer.parseInt(userIdString);
-
-                    // Handle GET request for edit page
-                    User user = userService.getUserById(userId);
-                    if (user != null) {
-                        List<Role> roles = userService.getAllRoles(); // Assuming this method exists in UserService
-                        request.setAttribute("user", user);
-                        request.setAttribute("roles", roles);
-                        request.getRequestDispatcher("/WEB-INF/views/edit_user.jsp").forward(request, response);
-                    } else {
-                        response.sendRedirect(request.getContextPath() + "/admin/users?error=User not found"); // Redirect to user management list on error
-                    }
-
-                } catch (NumberFormatException e) {
-                    // Handle invalid user ID format specifically for the edit action
-                    response.sendRedirect(request.getContextPath() + "/admin/users?error=Invalid user ID format"); // Redirect to user management list on error
-                } catch (Exception e) { // Catch potential exceptions from service/DAO calls
-                    response.sendRedirect(request.getContextPath() + "/admin/users?error=edit_fail"); // Redirect to user management list on error
-                }
-
-            } else if (pathParts.length == 2 && "new".equals(pathParts[1])) {
-                // Handle GET request for creating a new user
-                String roleName = request.getParameter("role");
-                
-                if ("USER_MANAGER".equals(roleName)) {
+                if ("USER_MANAGER".equals(role)) {
                     request.getRequestDispatcher("/WEB-INF/views/create_user_manager.jsp").forward(request, response);
                 } else {
-                    List<Role> roles = userService.getAllRoles(); 
-                    request.setAttribute("roleName", roleName); 
+                    List<Role> roles = userService.getAllRoles();
                     request.setAttribute("roles", roles);
-                    request.getRequestDispatcher("/WEB-INF/views/edit_user.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/create_user.jsp").forward(request, response);
                 }
+                return;
+            }
 
-            } else if (pathParts.length >= 3) { // Handle other actions like /activate or /deactivate (though these should ideally be POST)
-                String userIdString = pathParts[1]; // Assuming userId is at index 1 for these old GET patterns
-                String action = pathParts[2];
+            // Handle /admin/users/edit/{id} for edit form
+            if (pathInfo.startsWith("/edit/")) {
+                String idStr = pathInfo.substring("/edit/".length());
+                System.out.println("Editing user with ID: " + idStr);
 
                 try {
-                    int userId = Integer.parseInt(userIdString); // This might still fail if userIdString is not a number
-                    // Redirect any old GET /admin/users/{userId}/action patterns to user management list
-                    response.sendRedirect(request.getContextPath() + "/admin/users?error=Invalid action or GET request not supported");
-
+                    int userId = Integer.parseInt(idStr);
+                    User user = userService.findUserById(userId);
+                    if (user != null) {
+                        request.setAttribute("user", user);
+                        request.getRequestDispatcher("/WEB-INF/views/edit_user.jsp").forward(request, response);
+                        return;
+                    }
                 } catch (NumberFormatException e) {
-                    response.sendRedirect(request.getContextPath() + "/admin/users?error=Invalid user ID format in action URL");
-                } catch (Exception e) {
-                    response.sendRedirect(request.getContextPath() + "/admin/users?error=edit_fail");
+                    System.err.println("Invalid user ID format: " + e.getMessage());
                 }
-
-            } else { // Handle invalid /admin/users/* patterns with less than 2 parts after /admin/users
-                response.sendRedirect(request.getContextPath() + "/admin/users?error=Invalid request format");
             }
+
+            // If no valid pattern is matched
+            System.err.println("Invalid request pattern: " + pathInfo);
+            response.sendRedirect(request.getContextPath() + "/admin/users?error=Invalid request format");
+
+        } catch (Exception e) {
+            System.err.println("Error in doGet: " + e.getMessage());
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/admin/users?error=Internal server error");
         }
     }
 
@@ -168,23 +154,39 @@ public class AdminUserController extends HttpServlet {
 
         } else if (pathParts.length == 2 && "create".equals(pathParts[1])) {
             try {
+                System.out.println("=== Starting user creation process ===");
+
                 // Extract user data from request parameters for creation
                 String username = request.getParameter("username");
                 String email = request.getParameter("email");
-                String password = request.getParameter("password"); // Need a password field in the form for new users
-                String firstName = request.getParameter("firstName"); // Assuming these are also needed for creation
+                String password = request.getParameter("password");
+                String firstName = request.getParameter("firstName");
                 String lastName = request.getParameter("lastName");
                 String phone = request.getParameter("phone");
                 String roleName = request.getParameter("roleName");
-                // isActive is defaulted to true in createUser
+
+                System.out.println("Received parameters:");
+                System.out.println("- Username: " + username);
+                System.out.println("- Email: " + email);
+                System.out.println("- FirstName: " + firstName);
+                System.out.println("- LastName: " + lastName);
+                System.out.println("- Phone: " + phone);
+                System.out.println("- Role: " + roleName);
 
                 // Call UserService to create the user
+                System.out.println("Calling UserService.createUser...");
                 userService.createUser(username, email, password, firstName, lastName, phone, roleName);
+                System.out.println("User created successfully!");
 
                 // Redirect back to user management page with success message
-                response.sendRedirect(request.getContextPath() + "/admin/users?message=User created successfully");
+                String redirectUrl = request.getContextPath() + "/admin/users?message=User created successfully";
+                System.out.println("Redirecting to: " + redirectUrl);
+                response.sendRedirect(redirectUrl);
+                System.out.println("=== User creation process completed ===");
 
             } catch (IllegalArgumentException e) {
+                System.err.println("Validation error during user creation: " + e.getMessage());
+                e.printStackTrace();
                 // Handle validation errors (e.g., missing fields)
                 // Forward back to the form with error message and pre-filled values
                 request.setAttribute("errorMessage", e.getMessage());
@@ -194,7 +196,7 @@ public class AdminUserController extends HttpServlet {
                 request.setAttribute("lastName", request.getParameter("lastName"));
                 request.setAttribute("phone", request.getParameter("phone"));
                 request.setAttribute("roleName", request.getParameter("roleName"));
-                
+
                 if ("USER_MANAGER".equals(request.getParameter("roleName"))) {
                     request.getRequestDispatcher("/WEB-INF/views/create_user_manager.jsp").forward(request, response);
                 } else {
@@ -203,6 +205,8 @@ public class AdminUserController extends HttpServlet {
                 }
 
             } catch (Exception e) {
+                System.err.println("Error during user creation: " + e.getMessage());
+                e.printStackTrace();
                 // Catch other exceptions (e.g., duplicate user)
                 request.setAttribute("errorMessage", e.getMessage());
                 request.setAttribute("username", request.getParameter("username"));

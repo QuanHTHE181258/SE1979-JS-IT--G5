@@ -33,7 +33,7 @@ public class BlogCreateController extends HttpServlet {
         String content = request.getParameter("content");
         String imageURL = request.getParameter("imageURL");
         String status = request.getParameter("status");
-        
+
         // Lấy user hiện tại từ session
         User currentUser = project.demo.coursemanagement.utils.SessionUtil.getUserFromSession(request);
         if (currentUser == null) {

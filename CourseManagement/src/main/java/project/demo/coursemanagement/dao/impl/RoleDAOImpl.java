@@ -15,15 +15,24 @@ public class RoleDAOImpl implements RoleDAO {
 
     @Override
     public Role findByRoleName(String roleName) {
-        String sql = "SELECT RoleID, RoleName FROM roles WHERE UPPER(RoleName) = UPPER(?)";
+        System.out.println("Looking up role by name: " + roleName);
+        String sql = "SELECT RoleID, RoleName FROM roles WHERE RoleName = ?";
+
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, roleName);
+            System.out.println("Executing SQL: " + sql + " with parameter: " + roleName);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return mapResultSetToRole(rs);
+                    Role role = new Role();
+                    role.setId(rs.getInt("RoleID"));
+                    role.setRoleName(rs.getString("RoleName"));
+                    System.out.println("Found role: ID=" + role.getId() + ", Name=" + role.getRoleName());
+                    return role;
+                } else {
+                    System.out.println("No role found with name: " + roleName);
                 }
             }
         } catch (SQLException e) {
@@ -35,7 +44,9 @@ public class RoleDAOImpl implements RoleDAO {
 
     @Override
     public Role findById(int roleId) {
+        System.out.println("Looking up role by ID: " + roleId);
         String sql = "SELECT RoleID, RoleName FROM roles WHERE RoleID = ?";
+
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -43,11 +54,16 @@ public class RoleDAOImpl implements RoleDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return mapResultSetToRole(rs);
+                    Role role = new Role();
+                    role.setId(rs.getInt("RoleID"));
+                    role.setRoleName(rs.getString("RoleName"));
+                    System.out.println("Found role: ID=" + role.getId() + ", Name=" + role.getRoleName());
+                    return role;
                 }
+                System.out.println("No role found with ID: " + roleId);
             }
         } catch (SQLException e) {
-             System.err.println("Error finding role by id: " + e.getMessage());
+            System.err.println("Error finding role by ID: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -55,26 +71,26 @@ public class RoleDAOImpl implements RoleDAO {
 
     @Override
     public List<Role> findAll() {
+        System.out.println("Fetching all roles");
         List<Role> roles = new ArrayList<>();
         String sql = "SELECT RoleID, RoleName FROM roles ORDER BY RoleID";
+
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                roles.add(mapResultSetToRole(rs));
+                Role role = new Role();
+                role.setId(rs.getInt("RoleID"));
+                role.setRoleName(rs.getString("RoleName"));
+                roles.add(role);
             }
+            System.out.println("Found " + roles.size() + " roles");
+            roles.forEach(role -> System.out.println("Role: ID=" + role.getId() + ", Name=" + role.getRoleName()));
         } catch (SQLException e) {
-             System.err.println("Error finding all roles: " + e.getMessage());
+            System.err.println("Error finding all roles: " + e.getMessage());
             e.printStackTrace();
         }
         return roles;
     }
-
-    private Role mapResultSetToRole(ResultSet rs) throws SQLException {
-        Role role = new Role();
-        role.setId(rs.getInt("RoleID"));
-        role.setRoleName(rs.getString("RoleName"));
-        return role;
-    }
-} 
+}

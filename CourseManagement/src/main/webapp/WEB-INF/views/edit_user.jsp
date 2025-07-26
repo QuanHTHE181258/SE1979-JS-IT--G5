@@ -1,149 +1,174 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><c:choose><c:when test="${not empty user}">Edit User</c:when><c:otherwise>Create New User</c:otherwise></c:choose></title>
+    <title>Edit User</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f8;
-            margin: 0;
-            padding: 20px;
+        .edit-form {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+        .form-title {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
         }
-        h1 {
-            margin-top: 0;
-            text-align: center;
-        }
+
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 1rem;
         }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+
+        .form-label {
+            font-weight: 500;
+            color: #2c3e50;
         }
-        .form-group input[type="text"],
-        .form-group input[type="email"],
-        .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box; /* Include padding and border in the element's total width and height */
-        }
-        .form-actions {
-            margin-top: 20px;
-            text-align: right;
-        }
-        .btn {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .btn-primary {
-            background-color: #007bff;
+
+        .btn-save {
+            background-color: #2ecc71;
             color: white;
+            padding: 0.5rem 2rem;
         }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
+
+        .btn-cancel {
+            background-color: #95a5a6;
             color: white;
-            margin-right: 5px;
-        }
-        .btn-secondary:hover {
-            background-color: #545b62;
+            padding: 0.5rem 2rem;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1><c:choose><c:when test="${not empty user}">Edit User</c:when><c:otherwise>Create New User</c:otherwise></c:choose></h1>
-        <c:if test="${not empty errorMessage}">
-            <p style="color: red;">${errorMessage}</p>
-        </c:if>
-        <form action="${pageContext.request.contextPath}/admin/users/<c:choose><c:when test="${not empty user}">update</c:when><c:otherwise>create</c:otherwise></c:choose>" method="post">
-            <c:if test="${not empty user}">
-                <input type="hidden" name="userId" value="${user.id}">
-            </c:if>
-            
+<c:set var="active" value="users" scope="request"/>
+<jsp:include page="/WEB-INF/layout/header.jsp" />
+<jsp:include page="/WEB-INF/views/_admin_sidebar.jsp" />
+
+<div class="container mt-4">
+    <div class="edit-form">
+        <h2 class="form-title">Edit User</h2>
+
+        <form method="POST" action="${pageContext.request.contextPath}/admin/users/edit" id="editUserForm" class="needs-validation" novalidate>
+            <input type="hidden" name="userId" value="${user.id}">
+
             <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" value="${user.username}" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="${user.email}" required>
-            </div>
-            
-            <c:if test="${empty user}">
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
+                <label class="form-label">Username</label>
+                <input type="text" class="form-control" name="username" value="${user.username}" required
+                       pattern="[a-zA-Z0-9_]{3,20}"
+                       title="Username must be 3-20 characters and can only contain letters, numbers, and underscore">
+                <div class="invalid-feedback">
+                    Please enter a valid username (3-20 characters, letters, numbers, underscore only)
                 </div>
-            </c:if>
-            
-            <div class="form-group">
-                <label for="firstName">First Name:</label>
-                <input type="text" id="firstName" name="firstName" value="${user.firstName}">
             </div>
-            
+
             <div class="form-group">
-                <label for="lastName">Last Name:</label>
-                <input type="text" id="lastName" name="lastName" value="${user.lastName}">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" value="${user.email}" required
+                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                       title="Please enter a valid email address">
+                <div class="invalid-feedback">
+                    Please enter a valid email address
+                </div>
             </div>
-            
+
             <div class="form-group">
-                <label for="phone">Phone:</label>
-                <input type="text" id="phone" name="phone" value="${user.phoneNumber}">
+                <label class="form-label">First Name</label>
+                <input type="text" class="form-control" name="firstName" value="${user.firstName}"
+                       pattern="[A-Za-z\s]{2,50}"
+                       title="First name should only contain letters and spaces (2-50 characters)">
+                <div class="invalid-feedback">
+                    First name should only contain letters (2-50 characters)
+                </div>
             </div>
-            
+
             <div class="form-group">
-                <label for="role">Role:</label>
-                <select id="role" name="roleName">
-                    <c:forEach items="${roles}" var="role">
-                        <c:choose>
-                            <c:when test="${not empty user}">
-                                <%-- When editing, allow selecting Student or Teacher --%>
-                                <c:if test="${role.roleName == 'Student' || role.roleName == 'Teacher'}">
-                                    <option value="${role.roleName}" <c:if test="${role.id == userRoleId}">selected</c:if>>${role.roleName}</option>                                </c:if>
-                            </c:when>
-                            <c:otherwise>
-                                <%-- When creating from a specific link (e.g., Create User Manager), only show that role --%>
-                                <c:if test="${not empty roleName}">
-                                    <c:if test="${role.roleName == roleName}">
-                                        <option value="${role.roleName}" selected>${role.roleName}</option>
-                                    </c:if>
-                                </c:if>
-                                <%-- When creating from a generic link, allow selecting any role --%>
-                                <c:if test="${empty roleName}">
-                                    <option value="${role.roleName}">${role.roleName}</option>
-                                </c:if>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:forEach>
+                <label class="form-label">Last Name</label>
+                <input type="text" class="form-control" name="lastName" value="${user.lastName}"
+                       pattern="[A-Za-z\s]{2,50}"
+                       title="Last name should only contain letters and spaces (2-50 characters)">
+                <div class="invalid-feedback">
+                    Last name should only contain letters (2-50 characters)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input type="text" class="form-control" name="phone" value="${user.phoneNumber}"
+                       pattern="[0-9]{10,11}"
+                       title="Phone number must be 10-11 digits">
+                <div class="invalid-feedback">
+                    Please enter a valid phone number (10-11 digits)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Role</label>
+                <select class="form-control" name="roleName" required>
+                    <option value="">Select a role</option>
+                    <option value="STUDENT" ${user.role.roleName == 'STUDENT' ? 'selected' : ''}>Student</option>
+                    <option value="TEACHER" ${user.role.roleName == 'TEACHER' ? 'selected' : ''}>Teacher</option>
                 </select>
+                <div class="invalid-feedback">
+                    Please select a role
+                </div>
             </div>
-            
-            <div class="form-actions">
-                <a href="${pageContext.request.contextPath}/admin/user-management" class="btn btn-secondary">Cancel</a>
-                <button type="submit" class="btn btn-primary"><c:choose><c:when test="${not empty user}">Save Changes</c:when><c:otherwise>Create User</c:otherwise></c:choose></button>
+
+            <div class="form-group">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="isActive" value="true" ${user.active ? 'checked' : ''}>
+                    <label class="form-check-label">Active</label>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2 justify-content-end">
+                <a href="${pageContext.request.contextPath}/admin/users" class="btn btn-cancel">Cancel</a>
+                <button type="submit" class="btn btn-save">Save Changes</button>
             </div>
         </form>
     </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    (function() {
+        'use strict'
+        const form = document.getElementById('editUserForm')
+
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+
+            // Validate email format
+            const email = document.querySelector('input[name="email"]')
+            if (!email.value.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
+                email.setCustomValidity('Please enter a valid email address')
+                event.preventDefault()
+            } else {
+                email.setCustomValidity('')
+            }
+
+            // Validate phone number
+            const phone = document.querySelector('input[name="phone"]')
+            if (phone.value && !phone.value.match(/^[0-9]{10,11}$/)) {
+                phone.setCustomValidity('Phone number must be 10-11 digits')
+                event.preventDefault()
+            } else {
+                phone.setCustomValidity('')
+            }
+
+            form.classList.add('was-validated')
+        }, false)
+    })()
+</script>
 </body>
-</html> 
+</html>

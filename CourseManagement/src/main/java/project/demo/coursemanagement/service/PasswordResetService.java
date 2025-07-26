@@ -1,7 +1,6 @@
 package project.demo.coursemanagement.service;
 
 import project.demo.coursemanagement.dao.UserDAO;
-import project.demo.coursemanagement.dao.impl.UserDAOImpl;
 import project.demo.coursemanagement.dto.PasswordResetRequest;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.utils.EmailUtil;

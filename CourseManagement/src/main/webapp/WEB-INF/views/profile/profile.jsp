@@ -1,16 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<fmt:setLocale value="en_US" />
+<%@ include file="/WEB-INF/layout/header.jsp" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Profile - Course Management System</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <title>Thông Tin Cá Nhân - Hệ Thống Học Trực Tuyến</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
   <style>
     :root {
       /* Purple Gradient Theme */
@@ -33,7 +30,7 @@
       --focus-ring: rgba(102, 126, 234, 0.25);
       --transition-medium: all 0.3s ease-in-out;
     }
-    
+
     body {
       background: var(--bg-primary);
       min-height: 100vh;
@@ -473,401 +470,85 @@
   </style>
 </head>
 <body>
-<div class="profile-container">
-  <div class="profile-card">
-    <!-- Header -->
-    <div class="profile-header">
-      <a href="${pageContext.request.contextPath}/enrollments" class="back-button">
-        <i class="fas fa-arrow-left"></i>
-      </a>
-      <h2>My Profile</h2>
-      <p>Manage your personal information</p>
-    </div>
 
-    <!-- Body -->
-    <div class="profile-body">
-      <!-- Flash Messages -->
-      <c:if test="${not empty message}">
-        <div class="alert alert-${messageType} alert-dismissible fade show" role="alert">
-          <i class="fas fa-info-circle me-2"></i>
-            ${message}
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+<div class="container py-5">
+  <div class="row">
+    <!-- Sidebar Menu -->
+    <div class="col-lg-3">
+      <div class="profile-sidebar">
+        <div class="profile-header text-center mb-4">
+          <img src="${user.avatarURL}" alt="Avatar" class="profile-avatar">
+          <h5 class="mt-3 mb-1">${user.firstName} ${user.lastName}</h5>
+          <p class="text-muted mb-0">${user.email}</p>
         </div>
-      </c:if>
 
-      <!-- Avatar Section -->
-      <div class="avatar-section">
-        <div class="avatar-container">
-          <c:choose>
-            <c:when test="${not empty user.avatarUrl}">
-              <img src="${pageContext.request.contextPath}${user.avatarUrl}"
-                   alt="Profile Avatar"
-                   class="avatar-img"
-                   id="avatarImg">
-            </c:when>
-            <c:otherwise>
-              <img src="${pageContext.request.contextPath}/assets/images/default-avatar.png"
-                   alt="Default Avatar"
-                   class="avatar-img"
-                   id="avatarImg">
-            </c:otherwise>
-          </c:choose>
-          <a href="${pageContext.request.contextPath}/profile/avatar" class="avatar-overlay" title="Change Avatar">
-            <i class="fas fa-camera"></i>
+        <div class="profile-menu">
+          <a href="profile" class="menu-item active">
+            <i class="bi bi-person-circle"></i> Thông Tin Cá Nhân
+          </a>
+          <a href="edit-profile" class="menu-item">
+            <i class="bi bi-pencil-square"></i> Chỉnh Sửa Thông Tin
+          </a>
+          <a href="avatar" class="menu-item">
+            <i class="bi bi-camera"></i> Thay Đổi Ảnh Đại Diện
+          </a>
+          <a href="password" class="menu-item">
+            <i class="bi bi-key"></i> Đổi Mật Khẩu
+          </a>
+          <a href="order-history" class="menu-item">
+            <i class="bi bi-clock-history"></i> Lịch Sử Giao Dịch
           </a>
         </div>
-
-        <h3>${user.firstName} ${user.lastName}
-          <span class="role-badge">
-            <c:choose>
-              <c:when test="${sessionScope.userRole == '0'}">Guest</c:when>
-              <c:when test="${sessionScope.userRole == '1'}">Student</c:when>
-              <c:when test="${sessionScope.userRole == '2'}">Teacher</c:when>
-              <c:when test="${sessionScope.userRole == '3'}">Course Manager</c:when>
-              <c:when test="${sessionScope.userRole == '4'}">User Manager</c:when>
-              <c:when test="${sessionScope.userRole == '5'}">Admin</c:when>
-              <c:otherwise>${sessionScope.userRole}</c:otherwise>
-            </c:choose>
-          </span>
-        </h3>
-
-        <div class="completion-badge">
-          <i class="fas fa-chart-line me-2"></i>
-          Profile ${profileStats.profileCompletionPercentage}% Complete
-        </div>
-      </div>
-
-      <!-- Personal Information Section -->
-      <div class="info-section">
-        <h4 class="mb-4">
-          <i class="fas fa-user-circle me-2"></i>
-          Personal Information
-        </h4>
-
-        <div class="info-grid">
-          <div class="info-item">
-            <div class="info-label">
-              <i class="fas fa-user"></i>
-              Username
-            </div>
-            <div class="info-value">${user.username}</div>
-          </div>
-
-          <div class="info-item">
-            <div class="info-label">
-              <i class="fas fa-envelope"></i>
-              Email Address
-            </div>
-            <div class="info-value">
-              ${user.email}
-              <i class="fas fa-exclamation-circle unverified-badge" title="Not Verified"></i>
-            </div>
-          </div>
-
-          <div class="info-item">
-            <div class="info-label">
-              <i class="fas fa-phone"></i>
-              Phone Number
-            </div>
-            <div class="info-value">
-              <c:choose>
-                <c:when test="${not empty user.phoneNumber}">
-                  ${user.phoneNumber}
-                </c:when>
-                <c:otherwise>
-                  <span class="text-muted">Not provided</span>
-                </c:otherwise>
-              </c:choose>
-            </div>
-          </div>
-
-          <div class="info-item">
-            <div class="info-label">
-              <i class="fas fa-calendar"></i>
-              Date of Birth
-            </div>
-            <div class="info-value">
-              <c:choose>
-                <c:when test="${not empty user.dateOfBirth}">
-                  <c:set var="datePattern" value="dd MMM yyyy" />
-                  <fmt:parseDate value="${user.dateOfBirth}" pattern="yyyy-MM-dd" var="parsedDate" type="date" />
-                  <fmt:formatDate value="${parsedDate}" pattern="${datePattern}" />
-                </c:when>
-                <c:otherwise>
-                  <span class="text-muted">Not provided</span>
-                </c:otherwise>
-              </c:choose>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Statistics Section -->
-      <div class="stats-section">
-        <h4 class="mb-4">
-          <i class="fas fa-chart-bar me-2"></i>
-          Account Statistics
-        </h4>
-
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-icon" style="color: #4facfe;">
-              <i class="fas fa-user-clock"></i>
-            </div>
-            <div class="stat-value">${profileStats.accountAgeFormatted}</div>
-            <div class="stat-label">Account Age</div>
-          </div>
-
-          <div class="stat-card">
-            <div class="stat-icon" style="color: #00f2fe;">
-              <i class="fas fa-sign-in-alt"></i>
-            </div>
-            <div class="stat-value">${profileStats.lastLoginFormatted}</div>
-            <div class="stat-label">Last Login</div>
-          </div>
-
-          <c:if test="${sessionScope.userRole == '1' || sessionScope.userRole == 'USER' || sessionScope.userRole == 'STUDENT'}">
-            <div class="stat-card">
-              <div class="stat-icon" style="color: #fa709a;">
-                <i class="fas fa-book"></i>
-              </div>
-              <div class="stat-value" data-count="${profileStats.enrolledCoursesCount}">${profileStats.enrolledCoursesCount}</div>
-              <div class="stat-label">Enrolled Courses</div>
-            </div>
-
-            <div class="stat-card">
-              <div class="stat-icon" style="color: #fee140;">
-                <i class="fas fa-certificate"></i>
-              </div>
-              <div class="stat-value" data-count="${profileStats.certificatesIssuedCount}">${profileStats.certificatesIssuedCount}</div>
-              <div class="stat-label">Certificates</div>
-            </div>
-          </c:if>
-
-          <c:if test="${sessionScope.userRole == '2' || sessionScope.userRole == 'TEACHER'}">
-            <div class="stat-card">
-              <div class="stat-icon" style="color: #fa709a;">
-                <i class="fas fa-chalkboard-teacher"></i>
-              </div>
-              <div class="stat-value">8</div>
-              <div class="stat-label">Courses Created</div>
-            </div>
-
-            <div class="stat-card">
-              <div class="stat-icon" style="color: #fee140;">
-                <i class="fas fa-users"></i>
-              </div>
-              <div class="stat-value">156</div>
-              <div class="stat-label">Total Students</div>
-            </div>
-          </c:if>
-        </div>
-      </div>
-
-      <!-- Recent Enrollments Section (Only for Students) -->
-      <c:if test="${(sessionScope.userRole == '1' || sessionScope.userRole == 'USER' || sessionScope.userRole == 'STUDENT') && not empty profileStats.recentEnrollments}">
-        <div class="recent-enrollments">
-          <h4 class="mb-4">
-            <i class="fas fa-graduation-cap me-2"></i>
-            Recent Enrollments
-          </h4>
-
-          <c:forEach var="enrollment" items="${profileStats.recentEnrollments}" varStatus="status">
-            <c:if test="${status.index < 3}"> <!-- Show only first 3 enrollments -->
-              <div class="enrollment-item">
-                <div class="enrollment-header">
-                  <h5 class="enrollment-title">${enrollment.courseTitle}</h5>
-                  <span class="enrollment-status
-                    <c:choose>
-                      <c:when test="${enrollment.status == 'ACTIVE'}">status-active</c:when>
-                      <c:when test="${enrollment.status == 'COMPLETED'}">status-completed</c:when>
-                      <c:otherwise>status-inactive</c:otherwise>
-                    </c:choose>">
-                      ${enrollment.status}
-                  </span>
-                </div>
-
-                <c:if test="${enrollment.progressPercentage != null}">
-                  <div class="enrollment-progress">
-                    <div class="progress">
-                      <div class="progress-bar" role="progressbar"
-                           style="width: ${enrollment.progressPercentage}%"
-                           aria-valuenow="${enrollment.progressPercentage}"
-                           aria-valuemin="0"
-                           aria-valuemax="100"></div>
-                    </div>
-                  </div>
-                </c:if>
-
-                <div class="enrollment-meta">
-                  <span>
-                    Enrolled:
-                    <c:set var="enrollmentInstant" value="${enrollment.enrollmentDate}" />
-                    <c:if test="${not empty enrollmentInstant}">
-                      <c:set var="dateStr" value="${enrollmentInstant.toString()}" />
-                      <c:set var="year" value="${fn:substring(dateStr, 0, 4)}" />
-                      <c:set var="month" value="${fn:substring(dateStr, 5, 7)}" />
-                      <c:set var="day" value="${fn:substring(dateStr, 8, 10)}" />
-
-                      <c:set var="monthName" value="" />
-                      <c:choose>
-                        <c:when test="${month == '01'}"><c:set var="monthName" value="Jan" /></c:when>
-                        <c:when test="${month == '02'}"><c:set var="monthName" value="Feb" /></c:when>
-                        <c:when test="${month == '03'}"><c:set var="monthName" value="Mar" /></c:when>
-                        <c:when test="${month == '04'}"><c:set var="monthName" value="Apr" /></c:when>
-                        <c:when test="${month == '05'}"><c:set var="monthName" value="May" /></c:when>
-                        <c:when test="${month == '06'}"><c:set var="monthName" value="Jun" /></c:when>
-                        <c:when test="${month == '07'}"><c:set var="monthName" value="Jul" /></c:when>
-                        <c:when test="${month == '08'}"><c:set var="monthName" value="Aug" /></c:when>
-                        <c:when test="${month == '09'}"><c:set var="monthName" value="Sep" /></c:when>
-                        <c:when test="${month == '10'}"><c:set var="monthName" value="Oct" /></c:when>
-                        <c:when test="${month == '11'}"><c:set var="monthName" value="Nov" /></c:when>
-                        <c:when test="${month == '12'}"><c:set var="monthName" value="Dec" /></c:when>
-                      </c:choose>
-
-                      ${day} ${monthName} ${year}
-                    </c:if>
-                    <c:if test="${empty enrollmentInstant}">
-                      Unknown date
-                    </c:if>
-                  </span>
-                  <div>
-                    <c:if test="${enrollment.grade != null}">
-                      <span class="me-2">Grade: ${enrollment.grade}%</span>
-                    </c:if>
-                    <c:if test="${enrollment.certificateIssued}">
-                      <span class="certificate-badge">
-                        <i class="fas fa-award"></i>
-                        Certified
-                      </span>
-                    </c:if>
-                  </div>
-                </div>
-              </div>
-            </c:if>
-          </c:forEach>
-
-          <c:if test="${fn:length(profileStats.recentEnrollments) > 3}">
-            <div class="text-center mt-3">
-              <a href="${pageContext.request.contextPath}/enrollments" class="btn btn-outline-primary btn-sm">
-                View All Enrollments
-              </a>
-            </div>
-          </c:if>
-        </div>
-      </c:if>
-
-      <!-- Action Buttons -->
-      <div class="action-buttons">
-        <a href="${pageContext.request.contextPath}/profile/edit" class="btn btn-action btn-edit">
-          <i class="fas fa-user-edit"></i>
-          Edit Profile
-        </a>
-
-        <a href="${pageContext.request.contextPath}/profile/orders" class="btn btn-action" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-          <i class="fas fa-shopping-cart"></i>
-          Order History
-        </a>
-
-        <a href="${pageContext.request.contextPath}/profile/password" class="btn btn-action btn-password">
-          <i class="fas fa-key"></i>
-          Change Password
-        </a>
-
-        <a href="${pageContext.request.contextPath}/logout" class="btn btn-action btn-logout">
-          <i class="fas fa-sign-out-alt"></i>
-          Logout
-        </a>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- Avatar Modal -->
-<div class="modal fade" id="avatarModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Change Avatar</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body text-center">
-        <img src="" id="modalAvatar" class="img-fluid rounded mb-3" style="max-height: 300px;">
-        <div class="d-grid gap-2">
-          <a href="${pageContext.request.contextPath}/profile/avatar" class="btn btn-primary">
-            <i class="fas fa-upload me-2"></i>Upload New Avatar
+    <!-- Main Content -->
+    <div class="col-lg-9">
+      <div class="profile-content">
+        <h3 class="section-title">Thông Tin Cá Nhân</h3>
+
+        <div class="info-section">
+          <div class="info-item">
+            <label>Họ và Tên:</label>
+            <span>${user.firstName} ${user.lastName}</span>
+          </div>
+
+          <div class="info-item">
+            <label>Email:</label>
+            <span>${user.email}</span>
+          </div>
+
+          <div class="info-item">
+            <label>Số Điện Thoại:</label>
+            <span>${user.phoneNumber}</span>
+          </div>
+
+          <div class="info-item">
+            <label>Ngày Sinh:</label>
+            <span>${user.dateOfBirth}</span>
+          </div>
+
+          <div class="info-item">
+            <label>Ngày Tham Gia:</label>
+            <span>${user.createdAt}</span>
+          </div>
+
+          <div class="info-item">
+            <label>Lần Đăng Nhập Cuối:</label>
+            <span>${user.lastLogin}</span>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <a href="edit-profile" class="btn btn-primary">
+            <i class="bi bi-pencil-square me-2"></i>Chỉnh Sửa Thông Tin
           </a>
-          <c:if test="${not empty user.avatarUrl}">
-            <form action="${pageContext.request.contextPath}/profile/delete-avatar" method="post" style="display: inline;">
-              <button type="submit" class="btn btn-danger w-100">
-                <i class="fas fa-trash me-2"></i>Remove Avatar
-              </button>
-            </form>
-          </c:if>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Scripts -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script>
-  // Avatar click to show modal
-  document.getElementById('avatarImg').addEventListener('click', function() {
-    const modal = new bootstrap.Modal(document.getElementById('avatarModal'));
-    document.getElementById('modalAvatar').src = this.src;
-    modal.show();
-  });
-
-  // Animate stats on page load
-  document.addEventListener('DOMContentLoaded', function() {
-    const statValues = document.querySelectorAll('.stat-value');
-    statValues.forEach(stat => {
-      const finalValue = stat.getAttribute('data-count') || stat.textContent;
-      if (!isNaN(finalValue) && finalValue !== '') {
-        let currentValue = 0;
-        const increment = Math.ceil(finalValue / 30) || 1;
-        const timer = setInterval(() => {
-          currentValue += increment;
-          if (currentValue >= finalValue) {
-            currentValue = finalValue;
-            clearInterval(timer);
-          }
-          stat.textContent = currentValue;
-        }, 50);
-      }
-    });
-
-    // Animate progress bars
-    const progressBars = document.querySelectorAll('.progress-bar');
-    progressBars.forEach(bar => {
-      const width = bar.style.width;
-      bar.style.width = '0%';
-      setTimeout(() => {
-        bar.style.width = width;
-      }, 500);
-    });
-  });
-
-  // Progress bar animation for profile completion
-  const completionPercentage = ${profileStats.profileCompletionPercentage};
-  const progressBar = document.createElement('div');
-  progressBar.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 3px;
-        background: var(--primary-gradient);
-        width: 0%;
-        transition: width 1s ease;
-        z-index: 9999;
-    `;
-  document.body.appendChild(progressBar);
-
-  setTimeout(() => {
-    progressBar.style.width = completionPercentage + '%';
-  }, 100);
-</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

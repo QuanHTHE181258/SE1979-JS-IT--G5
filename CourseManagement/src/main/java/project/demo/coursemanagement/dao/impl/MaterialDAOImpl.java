@@ -37,7 +37,7 @@ public class MaterialDAOImpl implements MaterialDAO {
                     material.setId(rs.getInt("MaterialID"));
                     Lesson lesson = new Lesson();
                     lesson.setId(rs.getInt("LessonID"));
-                    material.setLessonID(lesson);
+                    material.setLessonId(rs.getInt("LessonID")); // Sửa từ setLessonID thành setLessonId
                     material.setTitle(rs.getString("Title"));
                     material.setFileURL(rs.getString("FileURL"));
                     return material;
@@ -62,7 +62,7 @@ public class MaterialDAOImpl implements MaterialDAO {
                     material.setId(rs.getInt("MaterialID"));
                     Lesson lesson = new Lesson();
                     lesson.setId(rs.getInt("LessonID"));
-                    material.setLessonID(lesson);
+                    material.setLessonId(rs.getInt("LessonID")); // Sửa từ setLessonID thành setLessonId
                     material.setTitle(rs.getString("Title"));
                     material.setFileURL(rs.getString("FileURL"));
                     list.add(material);
@@ -102,4 +102,3 @@ public class MaterialDAOImpl implements MaterialDAO {
         }
     }
 }
-

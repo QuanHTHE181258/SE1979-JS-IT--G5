@@ -15,33 +15,25 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "materials")
 public class Material {
     @Id
-    @Column(name = "MaterialID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "MaterialID")
     private Integer id;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "LessonID", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LessonID")
     private Lesson lessonID;
 
     @Size(max = 255)
-    @Nationalized
     @Column(name = "Title")
     private String title;
 
     @Size(max = 255)
-    @Nationalized
     @Column(name = "FileURL")
     private String fileURL;
 
     public void setLessonId(int lessonId) {
         Lesson lesson = new Lesson();
         lesson.setId(lessonId);
-        this.lessonID = lesson;
-    }
-    
-    // Compatibility method for existing code
-    public void setLessonID(Lesson lesson) {
         this.lessonID = lesson;
     }
 }

@@ -1,3 +1,6 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/layout/header.jsp" %>
+
 <!-- Add feedback form -->
 <div class="card mt-4">
     <div class="card-body">
@@ -29,49 +32,49 @@
 </div>
 
 <style>
-.rating {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-}
+    .rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+    }
 
-.rating:not(:checked) > input {
-    position: absolute;
-    top: -9999px;
-}
+    .rating:not(:checked) > input {
+        position: absolute;
+        top: -9999px;
+    }
 
-.rating:not(:checked) > label {
-    float: right;
-    width: 1em;
-    padding: 0 .1em;
-    overflow: hidden;
-    white-space: nowrap;
-    cursor: pointer;
-    font-size: 200%;
-    line-height: 1.2;
-    color: #ddd;
-}
+    .rating:not(:checked) > label {
+        float: right;
+        width: 1em;
+        padding: 0 .1em;
+        overflow: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 200%;
+        line-height: 1.2;
+        color: #ddd;
+    }
 
-.rating:not(:checked) > label:before {
-    content: '★';
-}
+    .rating:not(:checked) > label:before {
+        content: '★';
+    }
 
-.rating > input:checked ~ label {
-    color: #ffc700;
-}
+    .rating > input:checked ~ label {
+        color: #ffc700;
+    }
 
-.rating:not(:checked) > label:hover,
-.rating:not(:checked) > label:hover ~ label {
-    color: #ffc700;
-}
+    .rating:not(:checked) > label:hover,
+    .rating:not(:checked) > label:hover ~ label {
+        color: #ffc700;
+    }
 
-.rating > input:checked + label:hover,
-.rating > input:checked + label:hover ~ label,
-.rating > input:checked ~ label:hover,
-.rating > input:checked ~ label:hover ~ label,
-.rating > label:hover ~ input:checked ~ label {
-    color: #ffd700;
-}
+    .rating > input:checked + label:hover,
+    .rating > input:checked + label:hover ~ label,
+    .rating > input:checked ~ label:hover,
+    .rating > input:checked ~ label:hover ~ label,
+    .rating > label:hover ~ input:checked ~ label {
+        color: #ffd700;
+    }
 </style>
 
 <!-- Display success/error messages -->

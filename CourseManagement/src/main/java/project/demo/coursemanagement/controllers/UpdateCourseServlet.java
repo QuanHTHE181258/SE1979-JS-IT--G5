@@ -22,7 +22,6 @@ import project.demo.coursemanagement.entities.Category;
 import project.demo.coursemanagement.dao.CategoryDAO;
 import project.demo.coursemanagement.dao.impl.CategoryDAOImpl;
 import project.demo.coursemanagement.dao.UserDAO;
-import project.demo.coursemanagement.dao.impl.UserDAOImpl;
 import project.demo.coursemanagement.dto.CategoryDTO;
 
 @WebServlet(name = "UpdateCourseServlet", urlPatterns = {"/update-course"})

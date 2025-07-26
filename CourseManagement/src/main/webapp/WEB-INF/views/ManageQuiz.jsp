@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/layout/header.jsp" %>
 <%@ page import="java.util.*" %>
 <%@ page import="project.demo.coursemanagement.entities.*" %>
 <%

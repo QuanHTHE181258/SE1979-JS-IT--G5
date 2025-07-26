@@ -48,6 +48,14 @@ public class CourseService {
         return courseDAO.countCourses(keyword, categoryId);
     }
 
+    public List<CourseDTO> getAllCourses() {
+        List<CourseDTO> courses = courseDAO.getAllCourses();
+        if (courses == null || courses.isEmpty()) {
+            courses = courseViewDAO.getAllCourses();
+        }
+        return courses;
+    }
+
     public List<CourseDTO> getRecentCourses(int limit) {
         return courseDAO.getRecentCourses(limit);
     }
@@ -67,10 +75,6 @@ public class CourseService {
     // HoangQL's Commit
     public List<CourseDTO> getTopCourses(int limit) {
         return courseDAO.getTopCourses(limit);
-    }
-
-    public List<CourseDTO> getAllCourses() {
-        return courseViewDAO.getAllCourses();
     }
 
     public List<CourseDTO> getCoursesByPage(int page, int size) {

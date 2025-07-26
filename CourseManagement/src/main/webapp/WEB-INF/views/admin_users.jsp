@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/layout/header.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
@@ -78,43 +79,43 @@
     </style>
 </head>
 <body>
-    <!-- Include admin sidebar -->
-    <jsp:include page="_admin_sidebar.jsp" />
+<!-- Include admin sidebar -->
+<jsp:include page="_admin_sidebar.jsp" />
 
-    <div class="wrapper">
-        <div class="main-content">
-            <div class="content-box">
-                <h2 style="margin-bottom: 2rem; text-align: center;">User Management</h2>
+<div class="wrapper">
+    <div class="main-content">
+        <div class="content-box">
+            <h2 style="margin-bottom: 2rem; text-align: center;">User Management</h2>
 
-                <!-- Create User Manager Card -->
-                <div class="card">
-                    <div class="card-icon">
-                        <i class="fas fa-user-shield"></i>
-                    </div>
-                    <div class="card-content">
-                        <h3>User Manager</h3>
-                        <p>Create an account for managing users in the system</p>
-                        <a href="${pageContext.request.contextPath}/admin/users/new?role=USER_MANAGER" class="btn">
-                            <i class="fas fa-plus"></i> Create User Manager
-                        </a>
-                    </div>
+            <!-- Create User Manager Card -->
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-user-shield"></i>
                 </div>
+                <div class="card-content">
+                    <h3>User Manager</h3>
+                    <p>Create an account for managing users in the system</p>
+                    <a href="${pageContext.request.contextPath}/admin/users/new?role=USER_MANAGER" class="btn">
+                        <i class="fas fa-plus"></i> Create User Manager
+                    </a>
+                </div>
+            </div>
 
-                <!-- Manage Users Card -->
-                <div class="card">
-                    <div class="card-icon">
-                        <i class="fas fa-users-cog"></i>
-                    </div>
-                    <div class="card-content">
-                        <h3>Manage Users</h3>
-                        <p>View and manage all users in the system</p>
-                        <a href="${pageContext.request.contextPath}/admin/user-management/list" class="btn">
-                            <i class="fas fa-users"></i> View All Users
-                        </a>
-                    </div>
+            <!-- Manage Users Card -->
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-users-cog"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Manage Users</h3>
+                    <p>View and manage all users in the system</p>
+                    <a href="${pageContext.request.contextPath}/admin/user-management/list" class="btn">
+                        <i class="fas fa-users"></i> View All Users
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>

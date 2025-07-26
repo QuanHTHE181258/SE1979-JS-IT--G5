@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/layout/header.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -54,52 +55,52 @@
     </style>
 </head>
 <body>
-    <div class="container mt-4">
-        <div class="row mb-4">
-            <div class="col">
-                <h2 class="mb-3">Course Lessons</h2>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/" class="text-decoration-none">Home</a></li>
-                        <li class="breadcrumb-item active">Lesson List</li>
-                    </ol>
-                </nav>
-            </div>
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="mb-3">Course Lessons</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/" class="text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item active">Lesson List</li>
+                </ol>
+            </nav>
         </div>
+    </div>
 
-        <c:if test="${empty lessons}">
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle me-2"></i>
-                No lessons found in this course
-            </div>
-        </c:if>
+    <c:if test="${empty lessons}">
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>
+            No lessons found in this course
+        </div>
+    </c:if>
 
-        <div class="row">
-            <div class="col-12">
-                <c:forEach items="${lessons}" var="lessonStat">
-                    <div class="lesson-card">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap">
-                            <div class="d-flex align-items-center mb-2 mb-md-0">
-                                <span class="lesson-number">Lesson ${lessonStat.order}</span>
-                                <a href="${pageContext.request.contextPath}/learning?lessonId=${lessonStat.lesson.id}" class="h5 mb-0 text-decoration-none text-dark">${lessonStat.lesson.title}</a>
-                            </div>
-                            <div>
+    <div class="row">
+        <div class="col-12">
+            <c:forEach items="${lessons}" var="lessonStat">
+                <div class="lesson-card">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                        <div class="d-flex align-items-center mb-2 mb-md-0">
+                            <span class="lesson-number">Lesson ${lessonStat.order}</span>
+                            <a href="${pageContext.request.contextPath}/learning?lessonId=${lessonStat.lesson.id}" class="h5 mb-0 text-decoration-none text-dark">${lessonStat.lesson.title}</a>
+                        </div>
+                        <div>
                                 <span class="stat-badge">
                                     <i class="bi bi-question-circle-fill"></i>
                                     ${lessonStat.totalQuizzes} quizzes
                                 </span>
-                                <span class="stat-badge">
+                            <span class="stat-badge">
                                     <i class="bi bi-file-earmark-text-fill"></i>
                                     ${lessonStat.totalMaterials} materials
                                 </span>
-                            </div>
                         </div>
                     </div>
-                </c:forEach>
-            </div>
+                </div>
+            </c:forEach>
         </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

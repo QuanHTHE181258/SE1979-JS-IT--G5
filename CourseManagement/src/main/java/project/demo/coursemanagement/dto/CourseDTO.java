@@ -30,6 +30,8 @@ public class CourseDTO {
     private java.util.Date createdAtDate;
     private int enrollmentCount;
     private String status;
+    private String categoryName;    // Add this field
+    private String instructorName;  // Add this field
 
     private int courseID;
     private String courseTitle;
@@ -225,7 +227,7 @@ public class CourseDTO {
     public void setStatus(String status) {
         this.status = status;
     }
-    
+
     public int getCourseID() {
         return courseID;
     }

@@ -50,13 +50,16 @@ public class UserService {
 
     // Methods for User Management
 
-    public List<User> getUsers(String search, String roleName, int page) {
+    public User findUserById(Integer userId) {
+        if (userId == null) {
+            return null;
+        }
+        return userDAO.findUserById(userId);
+    }
+
+    public List<User> getUsers(String search, String roleFilter, int page) {
         int offset = (page - 1) * USERS_PER_PAGE;
-        // If roleName is null or empty, filter by TEACHER and USER implicitly if needed, 
-        // or handle this logic in the DAO based on your exact requirements for "All Roles"
-        // For now, directly pass roleName to DAO, assuming DAO handles null/empty by not filtering.
-        // If "All Roles" means ONLY Teacher and User, you might need to adjust here or in DAO.
-        return userDAO.findUsers(search, roleName, offset, USERS_PER_PAGE);
+        return userDAO.findUsers(search, roleFilter, offset, USERS_PER_PAGE);
     }
 
 //    public int getTotalPages(String search, String roleName) {
@@ -65,8 +68,8 @@ public class UserService {
 //    }
 
     public User getUserById(int userId) {
-         // Use findUserByIdIncludeInactive if you need to edit inactive users
-        return userDAO.findUserById(userId); 
+        // Use findUserByIdIncludeInactive if you need to edit inactive users
+        return userDAO.findUserById(userId);
     }
 
     public User getUserByIdWithRole(int userId) {
@@ -81,21 +84,37 @@ public class UserService {
     }
 
     public void createUser(String username, String email, String password, String firstName, String lastName, String phoneNumber, String roleName) throws Exception {
-        // Basic validation - only require username, email, password, and roleName for creation
-        if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty() || roleName == null || roleName.trim().isEmpty()) {
+        System.out.println("=== Starting user creation process ===");
+        System.out.println("Raw roleName received: '" + roleName + "'");
+
+        // Basic validation
+        if (username == null || username.trim().isEmpty() ||
+                email == null || email.trim().isEmpty() ||
+                password == null || password.trim().isEmpty() ||
+                roleName == null || roleName.trim().isEmpty()) {
             throw new IllegalArgumentException("Username, email, password, and role are required.");
         }
 
         // Check username and email existence
-        if (userDAO.findUserByUsernameOrEmail(username) != null) {
-            throw new Exception("Username or Email already exists"); // Assuming findUserByUsernameOrEmail checks both
+        System.out.println("Checking for existing username/email...");
+        User existingUser = userDAO.findUserByUsernameOrEmail(username);
+        if (existingUser != null) {
+            System.out.println("Username/Email already exists!");
+            throw new Exception("Username or Email already exists");
         }
 
         // Find Role by name
+        System.out.println("Looking up role with exact name: '" + roleName + "'");
         Role role = roleDAO.findByRoleName(roleName);
         if (role == null) {
-            throw new IllegalArgumentException("Invalid role specified.");
+            System.out.println("Role not found in database. Available roles:");
+            List<Role> allRoles = roleDAO.findAll();
+            for (Role r : allRoles) {
+                System.out.println("- '" + r.getRoleName() + "' (ID: " + r.getId() + ")");
+            }
+            throw new IllegalArgumentException("Invalid role specified: " + roleName);
         }
+        System.out.println("Found role: '" + role.getRoleName() + "' (ID: " + role.getId() + ")");
 
         // Create User object
         User user = new User();
@@ -105,29 +124,33 @@ public class UserService {
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setPhoneNumber(phoneNumber);
-        // Set other default fields if necessary (e.g., created_at, updated_at)
 
         // Create the user first
+        System.out.println("Creating user in database...");
         boolean success = userDAO.createUser(user);
         if (!success) {
+            System.out.println("Failed to create user!");
             throw new Exception("Failed to create user.");
         }
+        System.out.println("User created successfully with ID: " + user.getId());
 
         // Then assign the role to the user
+        System.out.println("Assigning role to user...");
         success = userRoleDAO.assignRoleToUser(user.getId(), role.getId());
-        System.out.println("User created successfully"+ success);
         if (!success) {
-            // If role assignment fails, delete the user to maintain consistency
+            System.out.println("Failed to assign role! Rolling back user creation...");
             userDAO.deleteUser(user.getId());
             throw new Exception("Failed to assign role to user.");
         }
+        System.out.println("Role assigned successfully");
+        System.out.println("=== User creation completed successfully ===");
     }
     public int countUsers(String search, String roleName){
         return userDAO.countUsers(search, roleName);
     }
     public void updateUser(int userId, String username, String email, String phoneNumber, String roleName) throws Exception {
         // Basic validation
-         if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty() || phoneNumber == null || phoneNumber.trim().isEmpty() || roleName == null || roleName.trim().isEmpty()) {
+        if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty() || phoneNumber == null || phoneNumber.trim().isEmpty() || roleName == null || roleName.trim().isEmpty()) {
             throw new IllegalArgumentException("Username, email, phone, and role are required.");
         }
 
@@ -138,18 +161,18 @@ public class UserService {
 
         // Check if email is being changed and if new email already exists
         if (!existingUser.getEmail().equalsIgnoreCase(email)) {
-             User userWithSameEmail = userDAO.findUserByUsernameOrEmail(email); // Assuming this checks email only if input is email format
-             if (userWithSameEmail != null && !userWithSameEmail.getId().equals(userId)) {
-                 throw new Exception("Email already exists.");
-             }
+            User userWithSameEmail = userDAO.findUserByUsernameOrEmail(email); // Assuming this checks email only if input is email format
+            if (userWithSameEmail != null && !userWithSameEmail.getId().equals(userId)) {
+                throw new Exception("Email already exists.");
+            }
         }
-         // Check if username is being changed and if new username already exists
-         if (!existingUser.getUsername().equalsIgnoreCase(username)) {
-              User userWithSameUsername = userDAO.findUserByUsernameOrEmail(username); // Assuming this checks username only if input is not email format
-              if (userWithSameUsername != null && !userWithSameUsername.getId().equals(userId)) {
-                  throw new Exception("Username already exists.");
-              }
-         }
+        // Check if username is being changed and if new username already exists
+        if (!existingUser.getUsername().equalsIgnoreCase(username)) {
+            User userWithSameUsername = userDAO.findUserByUsernameOrEmail(username); // Assuming this checks username only if input is not email format
+            if (userWithSameUsername != null && !userWithSameUsername.getId().equals(userId)) {
+                throw new Exception("Username already exists.");
+            }
+        }
 
         // Find Role by name
         Role newRole = roleDAO.findByRoleName(roleName);
@@ -179,27 +202,27 @@ public class UserService {
         }
     }
 
-     public void deleteUser(int userId) throws Exception {
-         User userToDelete = userDAO.findUserById(userId);
-         if (userToDelete == null) {
-             throw new Exception("User not found.");
-         }
-         // TODO: Add check to prevent deleting the currently logged-in user
+    public void deleteUser(int userId) throws Exception {
+        User userToDelete = userDAO.findUserById(userId);
+        if (userToDelete == null) {
+            throw new Exception("User not found.");
+        }
+        // TODO: Add check to prevent deleting the currently logged-in user
 
-         boolean success = userDAO.deleteUser(userId);
-          if (!success) {
+        boolean success = userDAO.deleteUser(userId);
+        if (!success) {
             throw new Exception("Failed to delete user.");
         }
-     }
+    }
 
-     // Note: User entity no longer has isActive field, so this method is removed
-     // If status tracking is needed, it should be implemented differently
+    // Note: User entity no longer has isActive field, so this method is removed
+    // If status tracking is needed, it should be implemented differently
 
-     // Assuming RoleDAO exists and has findByRoleName
-     // You might also need a method to get all roles for the dropdown in JSP
-      public List<Role> getAllRoles() {
-          return roleDAO.findAll(); // Assuming RoleDAO has findAll
-      }
+    // Assuming RoleDAO exists and has findByRoleName
+    // You might also need a method to get all roles for the dropdown in JSP
+    public List<Role> getAllRoles() {
+        return roleDAO.findAll(); // Assuming RoleDAO has findAll
+    }
 
     public List<User> getAllUsers() {
         return userDAO.getAllUsers();
@@ -226,4 +249,21 @@ public class UserService {
         return userRoleDAO.findPrimaryRoleByUserId(userId);
     }
 
+    public int getTotalUsers(String search, String roleFilter) {
+        return userDAO.countUsers(search, roleFilter);
+    }
+
+    public User findById(int userId) {
+        return userDAO.findUserById(userId);
+    }
+
+    public boolean updateUser(User user) {
+        try {
+            userDAO.updateUser(user);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

@@ -524,4 +524,54 @@ public class CourseDAOImpl implements CourseDAO {
         }
         return courses;
     }
+
+    @Override
+    public List<CourseDTO> getAllCourses() {
+        List<CourseDTO> courses = new ArrayList<>();
+        String sql = """
+            SELECT c.CourseID, c.Title, c.Description, c.Price, c.Rating, c.CreatedAt, c.ImageURL, c.Status,
+                cat.Name as CategoryName,
+                u.FirstName as InstructorFirstName, u.LastName as InstructorLastName
+            FROM Courses c
+            LEFT JOIN categories cat ON c.CategoryID = cat.CategoryID
+            LEFT JOIN users u ON c.InstructorID = u.UserID
+            ORDER BY c.CreatedAt DESC
+        """;
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                CourseDTO course = new CourseDTO();
+                course.setCourseCode(String.valueOf(rs.getInt("CourseID")));
+                course.setTitle(rs.getString("Title"));
+                course.setDescription(rs.getString("Description"));
+                course.setPrice(rs.getBigDecimal("Price"));
+                course.setRating(rs.getDouble("Rating"));
+
+                Timestamp createdAt = rs.getTimestamp("CreatedAt");
+                if (createdAt != null) {
+                    course.setCreatedAt(createdAt.toInstant());
+                    course.setCreatedAtDate(new java.util.Date(createdAt.getTime()));
+                }
+
+                course.setImageUrl(rs.getString("ImageURL"));
+                course.setStatus(rs.getString("Status"));
+                course.setCategories(rs.getString("CategoryName")); // Changed from setCategoryName to setCategories
+
+                String instructorFirstName = rs.getString("InstructorFirstName");
+                String instructorLastName = rs.getString("InstructorLastName");
+                if (instructorFirstName != null && instructorLastName != null) {
+                    course.setTeacherName(instructorFirstName + " " + instructorLastName); // Changed from setInstructorName to setTeacherName
+                }
+
+                courses.add(course);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting all courses: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return courses;
     }
+}

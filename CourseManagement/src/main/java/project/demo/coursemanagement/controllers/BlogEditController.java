@@ -50,7 +50,7 @@ public class BlogEditController extends HttpServlet {
         String content = request.getParameter("content");
         String imageURL = request.getParameter("imageURL");
         String status = request.getParameter("status");
-        
+
         if (idParam != null) {
             try {
                 int id = Integer.parseInt(idParam);

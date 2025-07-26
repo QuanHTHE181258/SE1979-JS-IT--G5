@@ -45,8 +45,8 @@ public class LessonListServlet extends HttpServlet {
 
             if (lessons != null) {
                 System.out.println("First lesson title: " +
-                    (lessons.isEmpty() ? "no lessons" :
-                    (lessons.get(0).getLesson() != null ? lessons.get(0).getLesson().getTitle() : "null lesson")));
+                        (lessons.isEmpty() ? "no lessons" :
+                                (lessons.get(0).getLesson() != null ? lessons.get(0).getLesson().getTitle() : "null lesson")));
             }
 
             request.setAttribute("lessons", lessons);

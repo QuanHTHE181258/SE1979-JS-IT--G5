@@ -111,7 +111,7 @@
 <body>
 <div class="form-container">
     <div class="form-title">
-            <i class="fas fa-plus-circle form-icon"></i> Create New Course
+        <i class="fas fa-plus-circle form-icon"></i> Create New Course
     </div>
     <form action="create-course" method="post" enctype="multipart/form-data">
         <div class="form-group form-section">

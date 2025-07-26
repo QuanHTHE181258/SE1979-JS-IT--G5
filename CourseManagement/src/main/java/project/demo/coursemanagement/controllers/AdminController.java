@@ -70,7 +70,7 @@ public class AdminController extends HttpServlet {
             } else {
                 recentCourses = courseService.getRecentCourses(courseLimit);
             }
-             if (recentCourses == null) {
+            if (recentCourses == null) {
                 recentCourses = Collections.emptyList();
             }
 
@@ -85,7 +85,7 @@ public class AdminController extends HttpServlet {
             if (recentActivities == null) {
                 recentActivities = Collections.emptyList();
             }
-            
+
             // Lấy thống kê user
             int totalUsers = userService.countUsers(null, null);
 
@@ -102,12 +102,12 @@ public class AdminController extends HttpServlet {
             dashboardStats.put("totalUsers", totalUsers);
             request.setAttribute("recentActivities", recentActivities);
             request.setAttribute("recentCourses", recentCourses);
-             List<CourseDTO> topCourses = courseService.getTopCourses(5);
+            List<CourseDTO> topCourses = courseService.getTopCourses(5);
             if (topCourses == null) {
                 topCourses = Collections.emptyList();
             }
             request.setAttribute("topCourses", topCourses);
-            
+
             Map<Integer, Role> userRoles = new HashMap<>();
             if (recentActivities != null) {
                 for (User user : recentActivities) {

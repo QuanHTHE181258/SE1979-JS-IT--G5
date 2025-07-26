@@ -1,80 +1,121 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/layout/header.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Blog Detail</title>
-    <link href="${pageContext.request.contextPath}/css/admincss.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        .wrapper { display: flex; }
-        #sidebar { min-width: 250px; max-width: 250px; min-height: 100vh; }
-        #content { width: 100%; }
-        .blog-content { margin-top: 1rem; }
-        .blog-meta { color: #6c757d; margin-bottom: 1rem; }
-        .blog-image { max-width: 100%; margin: 1rem 0; border-radius: 8px; }
+        .blog-content {
+            margin-top: 2rem;
+            line-height: 1.6;
+            color: #2c3e50;
+        }
+        .blog-meta {
+            color: #6c757d;
+            margin: 1rem 0;
+            font-size: 0.9em;
+        }
+        .blog-image {
+            max-width: 100%;
+            margin: 1.5rem 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .action-buttons {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        .status-published {
+            background: #e1f7e1;
+            color: #2d862d;
+        }
+        .status-draft {
+            background: #fff3cd;
+            color: #856404;
+        }
     </style>
 </head>
-<body>
-<div class="wrapper">
-    <nav id="sidebar" class="">
-        <div class="sidebar-header">
-            <h3>Admin Panel</h3>
-        </div>
-        <ul class="components">
-            <li><a href="${pageContext.request.contextPath}/admin/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/courses"><i class="fas fa-book"></i> Courses</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/orders"><i class="fas fa-shopping-cart"></i> Orders</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/users"><i class="fas fa-users"></i> Users</a></li>
-            <li class="active"><a href="${pageContext.request.contextPath}/blog/list"><i class="fas fa-blog"></i> Blog Management</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/revenue-analytics"><i class="fas fa-chart-bar"></i> Revenue Analytics</a></li>
-        </ul>
-    </nav>
-    <div id="content">
-        <nav class="navbar navbar-expand-lg">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Blog Detail</a>
-            </div>
-        </nav>
-        <div class="container-fluid py-4">
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <h2 class="m-0 font-weight-bold">${blog.title}</h2>
+<body style="margin:0; font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6fb;">
+<div style="display:flex; min-height:100vh;">
+    <!-- Include Admin Sidebar -->
+    <jsp:include page="_admin_sidebar.jsp">
+        <jsp:param name="active" value="blogs"/>
+    </jsp:include>
+
+    <!-- Main Content -->
+    <div style="flex:1; padding:48px 0; margin-left: 280px;">
+        <div style="max-width:900px; margin:auto; padding:0 24px;">
+            <!-- Back Button -->
+            <a href="${pageContext.request.contextPath}/admin/blog/list"
+               style="display:inline-flex; align-items:center; text-decoration:none; color:#3498db; margin-bottom:24px;">
+                <i class="fas fa-arrow-left" style="margin-right:8px;"></i> Back to Blog List
+            </a>
+
+            <!-- Blog Detail Card -->
+            <div style="background:white; border-radius:12px; box-shadow:0 4px 16px rgba(0,0,0,0.1); padding:32px;">
+                <!-- Blog Header -->
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+                    <h1 style="font-size:2rem; color:#2c2c54; margin:0;">${blog.title}</h1>
+                    <span class="status-badge ${blog.status == 'published' ? 'status-published' : 'status-draft'}">
+                        ${blog.status}
+                    </span>
                 </div>
-                <div class="card-body">
-                    <c:if test="${not empty blog}">
-                        <div class="blog-meta">
-                            <i class="fas fa-user"></i> By <b>${blog.authorID.username}</b> | 
-                            <i class="fas fa-calendar"></i> ${blog.createdAt} |
-                            <span class="badge bg-${blog.status == 'published' ? 'success' : blog.status == 'draft' ? 'warning' : 'secondary'}">
-                                ${blog.status}
-                            </span>
-                        </div>
-                        <c:if test="${not empty blog.imageURL}">
-                            <img src="${blog.imageURL}" alt="Blog Image" class="blog-image"/>
-                        </c:if>
-                        <div class="blog-content">
-                            ${blog.content}
-                        </div>
-                        <div class="mt-3">
-                            <c:if test="${sessionScope.loggedInUser != null && sessionScope.loggedInUser.id == blog.authorID.id}">
-                                <a href="edit?id=${blog.id}" class="btn btn-warning">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
-                            </c:if>
-                            <a href="list" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left"></i> Back to List
-                            </a>
-                        </div>
+
+                <!-- Blog Metadata -->
+                <div class="blog-meta">
+                    <span><i class="far fa-calendar"></i> Created: ${blog.createdAt}</span>
+                    <c:if test="${not empty blog.updatedAt}">
+                        <span style="margin-left:16px;">
+                            <i class="far fa-edit"></i> Updated: ${blog.updatedAt}
+                        </span>
                     </c:if>
-                    <c:if test="${empty blog}">
-                        <div class="alert alert-warning">Blog not found.</div>
-                    </c:if>
+                </div>
+
+                <!-- Blog Image -->
+                <c:if test="${not empty blog.imageURL}">
+                    <img src="${blog.imageURL}" alt="${blog.title}" class="blog-image">
+                </c:if>
+
+                <!-- Blog Content -->
+                <div class="blog-content">
+                    ${blog.content}
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <a href="${pageContext.request.contextPath}/admin/blog/edit?id=${blog.id}"
+                       class="btn btn-primary"
+                       style="background:#3498db; color:white; padding:10px 20px; border-radius:6px; text-decoration:none;">
+                        <i class="fas fa-edit"></i> Edit Blog
+                    </a>
+                    <button onclick="deleteBlog(${blog.id})"
+                            style="background:#e74c3c; color:white; padding:10px 20px; border-radius:6px; border:none; cursor:pointer;">
+                        <i class="fas fa-trash"></i> Delete Blog
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    function deleteBlog(blogId) {
+        if (confirm('Are you sure you want to delete this blog?')) {
+            window.location.href = '${pageContext.request.contextPath}/admin/blog/delete?id=' + blogId;
+        }
+    }
+</script>
 </body>
-</html> 
+</html>

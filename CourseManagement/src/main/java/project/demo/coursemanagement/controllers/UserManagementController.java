@@ -13,7 +13,7 @@ import project.demo.coursemanagement.utils.SessionUtil;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "UserManagementController", urlPatterns = {"/admin/user-management", "/admin/user-management/list"})
+@WebServlet(name = "UserManagementController", urlPatterns = {"/admin/user-management"})
 @RequireRole({"ADMIN", "USER_MANAGER"})
 public class UserManagementController extends HttpServlet {
     private UserService userService;
@@ -27,25 +27,28 @@ public class UserManagementController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String servletPath = request.getServletPath();
-        String roleId = SessionUtil.getUserRole(request);
-        if ("/admin/user-management".equals(servletPath) && "4".equals(roleId)) {
-            response.sendRedirect(request.getContextPath() + "/admin/user-management/list");
-            return;
+        String search = request.getParameter("search");
+        String roleFilter = request.getParameter("role");
+        String pageStr = request.getParameter("page");
+        int page = 1;
+
+        try {
+            if (pageStr != null) {
+                page = Integer.parseInt(pageStr);
+            }
+        } catch (NumberFormatException e) {
+            // Keep default page = 1 if invalid
         }
-        if ("/admin/user-management/list".equals(servletPath)) {
-            String keyword = request.getParameter("keyword");
-            request.setAttribute("keyword", keyword);
-            // Get student list
-            List<User> students = userService.getUsers(keyword, "Student", 1);
-            // Get teacher list
-            List<User> teachers = userService.getUsers(keyword, "Teacher", 1);
-            request.setAttribute("students", students);
-            request.setAttribute("teachers", teachers);
-            request.getRequestDispatcher("/WEB-INF/views/user_management_list.jsp").forward(request, response);
-        } else {
-            // Landing page
-            request.getRequestDispatcher("/WEB-INF/views/admin_users.jsp").forward(request, response);
-        }
+
+        // Get users with pagination
+        List<User> users = userService.getUsers(search, roleFilter, page);
+        int totalUsers = userService.getTotalUsers(search, roleFilter);
+        int totalPages = (int) Math.ceil(totalUsers / 10.0); // Assuming 10 users per page
+
+        request.setAttribute("users", users);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+
+        request.getRequestDispatcher("/WEB-INF/views/user_management_list.jsp").forward(request, response);
     }
-} 
+}

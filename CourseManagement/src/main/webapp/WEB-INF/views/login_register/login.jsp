@@ -1,10 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/layout/header.jsp" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Đăng Nhập - Hệ Thống Quản Lý Khóa Học</title>
+  <title>Đăng Nhập - Hệ Thống Học Trực Tuyến</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -374,7 +375,7 @@
     <div class="welcome-content">
       <i class="fas fa-graduation-cap fa-4x mb-4"></i>
       <h1>Chào Mừng Trở Lại</h1>
-      <p>Khám phá thế giới học tập không giới hạn cùng với hệ thống quản lý khóa học hiện đại và tiện lợi nhất</p>
+      <p>Khám phá thế giới kiến thức không giới hạn cùng với hệ thống học trực tuyến hiện đại và ti��n lợi</p>
 
       <ul class="welcome-features">
         <li>
@@ -387,7 +388,7 @@
         </li>
         <li>
           <i class="fas fa-trophy"></i>
-          Nhận chứng chỉ được công nhận quốc tế
+          Nhận chứng chỉ được công nhận
         </li>
         <li>
           <i class="fas fa-clock"></i>
@@ -403,7 +404,7 @@
       <!-- Header -->
       <div class="login-header">
         <h2>Đăng Nhập</h2>
-        <p>Vào tài khoản của bạn</p>
+        <p>Đăng nhập vào tài khoản của bạn</p>
       </div>
 
       <!-- Body -->
@@ -419,11 +420,11 @@
 
         <!-- Demo Credentials -->
         <a href="#" class="demo-credentials-toggle" onclick="toggleDemoCredentials()">
-          <i class="fas fa-eye me-1"></i>Hiển thị Tài Khoản Demo
+          <i class="fas fa-eye me-1"></i>Xem tài khoản demo
         </a>
 
         <div class="demo-credentials" id="demoCredentials" style="display: none;">
-          <h6><i class="fas fa-key me-2"></i>Tài Khoản Demo</h6>
+          <h6><i class="fas fa-key me-2"></i>Tài khoản thử nghiệm</h6>
           <div class="demo-item" onclick="fillCredentials('admin', 'admin123')">
             <span class="demo-role">Quản trị viên:</span>
             <span>admin / admin123</span>
@@ -478,17 +479,16 @@
           </div>
 
           <button type="submit" class="btn btn-login" id="loginBtn">
-          <span class="spinner-border spinner-border-sm loading" role="status">
-            <span class="visually-hidden">Đang tải...</span>
-          </span>
+                        <span class="spinner-border spinner-border-sm loading" role="status">
+                            <span class="visually-hidden">Đang tải...</span>
+                        </span>
             <span class="btn-text">
-            <i class="fas fa-sign-in-alt me-2"></i>Đăng Nhập
-          </span>
+                            <i class="fas fa-sign-in-alt me-2"></i>Đăng Nhập
+                        </span>
           </button>
         </form>
       </div>
 
-      <!-- Footer -->
       <div class="login-footer">
         <p>Chưa có tài khoản? <a href="${pageContext.request.contextPath}/register">Tạo Tài Khoản</a></p>
         <p><a href="${pageContext.request.contextPath}/forgot-password">Quên Mật Khẩu?</a></p>

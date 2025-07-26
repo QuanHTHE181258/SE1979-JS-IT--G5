@@ -1,10 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/layout/header.jsp" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quên Mật Khẩu - Hệ Thống Quản Lý Khóa Học</title>
+  <title>Quên Mật Khẩu - Hệ Thống Học Trực Tuyến</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -194,7 +195,7 @@
     <div class="forgot-password-header">
       <i class="fas fa-key fa-2x mb-3"></i>
       <h2>Quên Mật Khẩu</h2>
-      <p>Nhập email để đặt lại mật khẩu của bạn</p>
+      <p>Nhập email để khôi phục mật khẩu của bạn</p>
     </div>
 
     <!-- Body -->
@@ -224,20 +225,22 @@
         </div>
 
         <button type="submit" class="btn btn-submit" id="submitBtn">
-          <span class="spinner-border spinner-border-sm loading" role="status">
-            <span class="visually-hidden">Đang tải...</span>
-          </span>
+                    <span class="spinner-border spinner-border-sm loading" role="status">
+                        <span class="visually-hidden">Đang xử lý...</span>
+                    </span>
           <span class="btn-text">
-            <i class="fas fa-paper-plane me-2"></i>Gửi Link Đặt Lại
-          </span>
+                        <i class="fas fa-paper-plane me-2"></i>Gửi Liên Kết Khôi Phục
+                    </span>
         </button>
       </form>
     </div>
 
     <!-- Footer -->
     <div class="forgot-password-footer">
-      <p><a href="${pageContext.request.contextPath}/login"><i class="fas fa-arrow-left me-1"></i> Quay lại Đăng nhập</a></p>
-      <p class="mb-0">&copy; 2024 Hệ Thống Quản Lý Khóa Học</p>
+      <p><a href="${pageContext.request.contextPath}/login">
+        <i class="fas fa-arrow-left me-1"></i>Quay lại Đăng nhập</a>
+      </p>
+      <p class="mb-0">&copy; 2024 Hệ Thống Học Trực Tuyến</p>
     </div>
   </div>
 </div>
@@ -250,14 +253,14 @@
     const email = document.getElementById('email').value.trim();
     const submitBtn = document.getElementById('submitBtn');
 
-    // Basic validation
+    // Kiểm tra cơ bản
     if (!email) {
       e.preventDefault();
       showAlert('Vui lòng nhập địa chỉ email của bạn', 'danger');
       return;
     }
 
-    // Email format validation
+    // Kiểm tra định dạng email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       e.preventDefault();
@@ -265,34 +268,25 @@
       return;
     }
 
-    // Show loading state
+    // Hiển thị trạng thái loading
     submitBtn.classList.add('loading');
     submitBtn.disabled = true;
 
-    // Re-enable button after 10 seconds (fallback)
+    // Khôi phục nút sau 10 giây (phòng trường hợp lỗi)
     setTimeout(() => {
       submitBtn.classList.remove('loading');
       submitBtn.disabled = false;
     }, 10000);
   });
 
-  // Show alert function
-  function showAlert(message, type) {
-    const alertDiv = document.createElement('div');
-    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
-    alertDiv.innerHTML = `
-      <i class="fas fa-exclamation-triangle me-2"></i>
-      ${message}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
-    `;
 
-    const form = document.getElementById('forgotPasswordForm');
-    form.parentNode.insertBefore(alertDiv, form);
+  const form = document.getElementById('forgotPasswordForm');
+  form.parentNode.insertBefore(alertDiv, form);
 
-    // Auto dismiss after 5 seconds
-    setTimeout(() => {
-      alertDiv.remove();
-    }, 5000);
+  // Auto dismiss after 5 seconds
+  setTimeout(() => {
+    alertDiv.remove();
+  }, 5000);
   }
 
   // Auto-focus on email input

@@ -495,57 +495,39 @@ public class QuizDAO {
         }
     }
 
-    // Xóa một đáp án
+    // Xóa một câu trả lời
     public void deleteAnswerOption(int answerId) throws SQLException {
         String sql = "DELETE FROM answers WHERE AnswerID = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, answerId);
-            stmt.executeUpdate();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            System.out.println("Deleting answer ID: " + answerId);
+            ps.setInt(1, answerId);
+            int result = ps.executeUpdate();
+            System.out.println("Deleted " + result + " answer(s)");
         }
     }
 
-    // Xóa một câu hỏi (và tất cả đáp án liên quan)
+    // Xóa một câu hỏi
     public void deleteQuestion(int questionId) throws SQLException {
-
-        String sql1 = "DELETE FROM answers WHERE QuestionID = ?";
-        String sql2 = "DELETE FROM questions WHERE QuestionID = ?";
+        String sql = "DELETE FROM questions WHERE QuestionID = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement stmt1 = conn.prepareStatement(sql1);
-             PreparedStatement stmt2 = conn.prepareStatement(sql2);) {
-
-            // Xóa đáp án trước
-            stmt1.setInt(1, questionId);
-            stmt1.executeUpdate();
-
-            // Xóa câu hỏi
-            stmt2.setInt(1, questionId);
-            stmt2.executeUpdate();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            System.out.println("Deleting question ID: " + questionId);
+            ps.setInt(1, questionId);
+            int result = ps.executeUpdate();
+            System.out.println("Deleted " + result + " question(s)");
         }
-
     }
 
-    // Xóa quiz (và toàn bộ câu hỏi + đáp án liên quan)
+    // Xóa quiz
     public void deleteQuiz(int quizId) throws SQLException {
-        String sql1 = "DELETE FROM answers WHERE QuestionID IN (SELECT QuestionID FROM questions WHERE QuizID = ?)";
-        String sql2 = "DELETE FROM questions WHERE QuizID = ?";
-        String sql3 = "DELETE FROM quizzes WHERE QuizID = ?";
-
+        String sql = "DELETE FROM quizzes WHERE QuizID = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement stmt1 = conn.prepareStatement(sql1);
-             PreparedStatement stmt2 = conn.prepareStatement(sql2);
-             PreparedStatement stmt3 = conn.prepareStatement(sql3);) {
-            // Xóa đáp án
-            stmt1.setInt(1, quizId);
-            stmt1.executeUpdate();
-
-            // Xóa câu hỏi
-            stmt2.setInt(1, quizId);
-            stmt2.executeUpdate();
-
-            // Xóa quiz
-            stmt3.setInt(1, quizId);
-            stmt3.executeUpdate();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            System.out.println("Deleting quiz ID: " + quizId);
+            ps.setInt(1, quizId);
+            int result = ps.executeUpdate();
+            System.out.println("Deleted " + result + " quiz(zes)");
         }
     }
 
@@ -634,19 +616,34 @@ public class QuizDAO {
 
             ps.setInt(1, quizId);
             ps.setInt(2, userId);
+
+            System.out.println("Debug - Creating new quiz attempt:");
+            System.out.println("QuizID: " + quizId);
+            System.out.println("UserID: " + userId);
+            System.out.println("SQL: " + sql);
+
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
-                return QuizAttempt.builder()
-                        .id(rs.getInt(1))
+                int attemptId = rs.getInt(1);
+                System.out.println("Created attempt with ID: " + attemptId);
+
+                QuizAttempt attempt = QuizAttempt.builder()
+                        .id(attemptId)
                         .quiz(Quiz.builder().id(quizId).build())
                         .user(User.builder().id(userId).build())
                         .startTime(new Date())
                         .score(0)
                         .build();
+
+                System.out.println("Debug - New attempt object:");
+                System.out.println("AttemptID: " + attempt.getId());
+                System.out.println("StartTime: " + attempt.getStartTime());
+                return attempt;
             }
         } catch (SQLException e) {
+            System.err.println("Error creating quiz attempt:");
             e.printStackTrace();
         }
         return null;
@@ -657,10 +654,34 @@ public class QuizDAO {
         String sql = "UPDATE quiz_attempts SET EndTime = GETDATE(), Score = ? WHERE AttemptID = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            System.out.println("Debug - Finishing quiz attempt:");
+            System.out.println("AttemptID: " + attemptId);
+            System.out.println("Score: " + score);
+            System.out.println("SQL: " + sql);
+
             ps.setDouble(1, score);
             ps.setInt(2, attemptId);
-            ps.executeUpdate();
+
+            int rowsAffected = ps.executeUpdate();
+            System.out.println("Rows affected by update: " + rowsAffected);
+
+            // Verify the update
+            String verifySql = "SELECT EndTime, Score FROM quiz_attempts WHERE AttemptID = ?";
+            try (PreparedStatement verifyPs = conn.prepareStatement(verifySql)) {
+                verifyPs.setInt(1, attemptId);
+                ResultSet rs = verifyPs.executeQuery();
+                if (rs.next()) {
+                    System.out.println("Verification after update:");
+                    System.out.println("EndTime: " + rs.getTimestamp("EndTime"));
+                    System.out.println("Score: " + rs.getDouble("Score"));
+                } else {
+                    System.out.println("Warning: Could not verify update - attempt not found");
+                }
+            }
+
         } catch (SQLException e) {
+            System.err.println("Error finishing quiz attempt:");
             e.printStackTrace();
         }
     }

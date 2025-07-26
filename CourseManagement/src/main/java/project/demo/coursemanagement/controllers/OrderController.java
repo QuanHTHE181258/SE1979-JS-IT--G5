@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "OrderController", urlPatterns = {
-    "/admin/orders", 
-    "/admin/orders/update-status",
-    "/admin/orders/export",
-    "/admin/orders/analytics"
+        "/admin/orders",
+        "/admin/orders/update-status",
+        "/admin/orders/export",
+        "/admin/orders/analytics"
 })
 public class OrderController extends HttpServlet {
     private final OrderService orderService = new OrderService();
@@ -27,13 +27,32 @@ public class OrderController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String path = request.getServletPath();
+        System.out.println("OrderController - Processing path: " + path);
 
-        if ("/admin/orders".equals(path)) {
-            handleOrdersList(request, response);
-        } else if ("/admin/orders/export".equals(path)) {
-            handleExportOrders(request, response);
-        } else if ("/admin/orders/analytics".equals(path)) {
-            handleOrderAnalytics(request, response);
+        switch (path) {
+            case "/admin/orders":
+                handleOrdersList(request, response);
+                break;
+            case "/admin/orders/export":
+                handleExportOrders(request, response);
+                break;
+            case "/admin/orders/analytics":
+                handleOrderAnalytics(request, response);
+                break;
+            default:
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String path = request.getServletPath();
+
+        if ("/admin/orders/update-status".equals(path)) {
+            handleUpdateOrderStatus(request, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
@@ -44,74 +63,66 @@ public class OrderController extends HttpServlet {
         String searchKeyword = request.getParameter("search");
 
         int page = 1;
-        if (pageParam != null && !pageParam.isEmpty()) {
-            try {
+        try {
+            if (pageParam != null && !pageParam.isEmpty()) {
                 page = Integer.parseInt(pageParam);
-            } catch (NumberFormatException e) {
-                page = 1;
             }
+        } catch (NumberFormatException e) {
+            // Default to page 1 if invalid
         }
 
         int offset = (page - 1) * PAGE_SIZE;
         List<OrderDTO> orders;
         int totalOrders;
-        int totalPages;
 
         if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
-            // Search functionality
             orders = orderService.searchOrders(searchKeyword, offset, PAGE_SIZE);
             totalOrders = orderService.countSearchResults(searchKeyword);
             request.setAttribute("searchKeyword", searchKeyword);
         } else if (status != null && !status.isEmpty()) {
-            // Filter by status - cải thiện để hỗ trợ phân trang
             List<OrderDTO> allOrdersByStatus = orderService.getOrdersByStatus(status);
             totalOrders = allOrdersByStatus.size();
-            
-            // Phân trang cho status filter
-            int startIndex = offset;
-            int endIndex = Math.min(startIndex + PAGE_SIZE, totalOrders);
-            if (startIndex < totalOrders) {
-                orders = allOrdersByStatus.subList(startIndex, endIndex);
+            if (offset < totalOrders) {
+                int endIndex = Math.min(offset + PAGE_SIZE, totalOrders);
+                orders = allOrdersByStatus.subList(offset, endIndex);
             } else {
                 orders = new ArrayList<>();
             }
         } else {
-            // Default pagination
             orders = orderService.getOrdersWithPagination(offset, PAGE_SIZE);
             totalOrders = orderService.countOrders();
         }
 
-        totalPages = (int) Math.ceil((double) totalOrders / PAGE_SIZE);
+        int totalPages = (int) Math.ceil((double) totalOrders / PAGE_SIZE);
+        OrderAnalyticsDTO orderStats = orderService.getOrderAnalytics();
 
         request.setAttribute("orders", orders);
+        request.setAttribute("orderStats", orderStats);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
-        request.setAttribute("totalOrders", totalOrders); // Thêm tổng số bản ghi
+        request.setAttribute("totalOrders", totalOrders);
         request.setAttribute("currentStatus", status);
-        request.setAttribute("pageSize", PAGE_SIZE); // Thêm kích thước trang
+        request.setAttribute("pageSize", PAGE_SIZE);
 
         request.getRequestDispatcher("/WEB-INF/views/admin_orders.jsp").forward(request, response);
     }
 
-    // Function 1: Export Orders (3 transactions: Controller → Service → DAO)
     private void handleExportOrders(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String format = request.getParameter("format");
         String status = request.getParameter("status");
-        
-        // Get orders based on filter
+
         List<OrderDTO> orders;
         if (status != null && !status.isEmpty()) {
             orders = orderService.getOrdersByStatus(status);
         } else {
             orders = orderService.getAllOrders();
         }
-        
-        // Export using service (Transaction 1: Controller → Service)
+
         byte[] exportData;
         String filename;
-        
-        if ("excel".equalsIgnoreCase(format)) {
+
+        if ("xlsx".equals(format)) {
             exportData = orderService.exportOrdersToExcel(orders);
             filename = "orders_export.xlsx";
             response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -120,50 +131,40 @@ public class OrderController extends HttpServlet {
             filename = "orders_export.csv";
             response.setContentType("text/csv");
         }
-        
+
         response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
         response.getOutputStream().write(exportData);
         response.getOutputStream().flush();
     }
 
-    // Function 2: Order Analytics Dashboard (4 transactions: Controller → DTO → Service → DAO)
     private void handleOrderAnalytics(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Get analytics data (Transaction 1: Controller → Service)
         OrderAnalyticsDTO analytics = orderService.getOrderAnalytics();
-        
-        // Set analytics data to request (Transaction 2: Service → DTO)
         request.setAttribute("analytics", analytics);
-        
-        // Forward to analytics view
         request.getRequestDispatcher("/WEB-INF/views/admin_order_analytics.jsp").forward(request, response);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String path = request.getServletPath();
+    private void handleUpdateOrderStatus(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        String orderIdParam = request.getParameter("orderId");
+        String newStatus = request.getParameter("status");
 
-        if ("/admin/orders/update-status".equals(path)) {
-            String orderIdParam = request.getParameter("orderId");
-            String newStatus = request.getParameter("status");
+        if (orderIdParam != null && newStatus != null) {
+            try {
+                Integer orderId = Integer.parseInt(orderIdParam);
+                boolean success = orderService.updateOrderStatus(orderId, newStatus);
 
-            if (orderIdParam != null && newStatus != null) {
-                try {
-                    int orderId = Integer.parseInt(orderIdParam);
-                    boolean success = orderService.updateOrderStatus(orderId, newStatus);
-
-                    if (success) {
-                        response.sendRedirect(request.getContextPath() + "/admin/orders");
-                    } else {
-                        request.setAttribute("error", "Failed to update order status");
-                        request.getRequestDispatcher("/WEB-INF/views/admin_orders.jsp").forward(request, response);
-                    }
-                } catch (NumberFormatException e) {
-                    request.setAttribute("error", "Invalid order ID");
-                    request.getRequestDispatcher("/WEB-INF/views/admin_orders.jsp").forward(request, response);
+                if (!success) {
+                    request.setAttribute("error", "Failed to update order status");
                 }
+                response.sendRedirect(request.getContextPath() + "/admin/orders");
+            } catch (NumberFormatException e) {
+                request.setAttribute("error", "Invalid order ID");
+                request.getRequestDispatcher("/WEB-INF/views/admin_orders.jsp").forward(request, response);
             }
+        } else {
+            request.setAttribute("error", "Missing required parameters");
+            request.getRequestDispatcher("/WEB-INF/views/admin_orders.jsp").forward(request, response);
         }
     }
 }

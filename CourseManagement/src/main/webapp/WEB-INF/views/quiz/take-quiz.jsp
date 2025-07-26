@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/layout/header.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
@@ -604,38 +605,32 @@
     </div>
 
     <!-- Quiz Form -->
-    <form id="quizForm" action="take-quiz" method="post">
+    <form action="take-quiz" method="post" id="quizForm">
         <input type="hidden" name="action" value="submit">
-        <input type="hidden" name="quizId" value="${quiz.id}">
+        <input type="hidden" name="lessonId" value="${param.lessonId}">
 
-        <!-- Questions -->
-        <c:forEach var="question" items="${quiz.questions}" varStatus="status">
-            <div class="question-card" style="animation-delay: ${status.index * 0.1}s" data-question-id="${question.id}">
+        <!-- Questions Section -->
+        <c:forEach items="${quiz.questions}" var="question" varStatus="status">
+            <div class="question-card fade-in">
                 <div class="question-header">
-                    <div class="d-flex align-items-center">
-                            <span class="question-number">
-                                <i class="fas fa-question-circle"></i>
-                                ${status.index + 1}
-                            </span>
-                        <h5 class="question-title">Question ${status.index + 1}</h5>
-                    </div>
+                    <span class="question-number">
+                        <i class="fas fa-question-circle"></i>
+                        Question ${status.index + 1}
+                    </span>
+                    <h2 class="question-title">${question.questionText}</h2>
                 </div>
                 <div class="question-body">
-                    <div class="question-text">${question.questionText}</div>
-
-                    <div class="answers">
-                        <c:forEach var="answer" items="${question.answers}" varStatus="answerStatus">
-                            <div class="answer-option" onclick="selectAnswer(this, ${question.id}, ${answer.id})">
+                    <div class="answers-list">
+                        <c:forEach items="${question.answers}" var="answer" varStatus="answerStatus">
+                            <div class="answer-option">
                                 <input type="radio"
+                                       id="q${question.id}a${answer.id}"
                                        name="question_${question.id}"
                                        value="${answer.id}"
-                                       id="answer_${question.id}_${answer.id}"
-                                       onchange="updateProgress()">
-                                <label for="answer_${question.id}_${answer.id}" class="answer-label">
-                                        <span class="answer-prefix">
-                                                ${answerStatus.index == 0 ? 'A' : answerStatus.index == 1 ? 'B' : answerStatus.index == 2 ? 'C' : 'D'}
-                                        </span>
-                                    <span>${answer.answerText}</span>
+                                       class="answer-input">
+                                <label class="answer-label" for="q${question.id}a${answer.id}">
+                                    <span class="answer-prefix">${answerStatus.index + 1}</span>
+                                        ${answer.answerText}
                                 </label>
                             </div>
                         </c:forEach>
@@ -646,21 +641,18 @@
 
         <!-- Submit Section -->
         <div class="submit-section fade-in">
-            <div class="submit-info">
-                <i class="fas fa-lightbulb text-warning me-2"></i>
-                Double-check your answers before submitting. You won't be able to change them afterwards.
-            </div>
-            <button type="button" class="btn btn-submit" onclick="confirmSubmit()">
+            <p class="submit-info">Make sure to review all your answers before submitting</p>
+            <button type="submit" class="btn btn-submit">
                 <i class="fas fa-paper-plane"></i>
-                <span>Submit Quiz</span>
+                Submit Quiz
             </button>
         </div>
     </form>
 </div>
 
 <!-- Confirmation Modal -->
-<div class="modal fade" id="confirmModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+<div class="modal fade" id="submitConfirmModal" tabindex="-1">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
@@ -670,551 +662,71 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p class="mb-3">Are you ready to submit your quiz?</p>
-                <div class="bg-light p-3 rounded-3 mb-3">
-                    <strong>Progress Summary:</strong><br>
-                    <span class="text-success">
-                            <i class="fas fa-check-circle me-1"></i>
-                            Answered: <span id="confirmedAnswered">0</span>/<c:out value="${quiz.questions.size()}"/> questions
-                        </span>
+                <div class="alert alert-warning">
+                    <i class="fas fa-info-circle"></i>
+                    Are you sure you want to submit? You cannot change your answers after submission.
                 </div>
-                <div class="alert alert-warning d-flex align-items-center">
-                    <i class="fas fa-info-circle me-3"></i>
-                    <div>
-                        <strong>Important:</strong> Once you submit, you cannot modify your answers or retake this attempt.
-                    </div>
-                </div>
+                <p>Please review your answers before confirming.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-dismiss="modal">
-                    <i class="fas fa-arrow-left me-2"></i>Go Back
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Review Again
                 </button>
-                <button type="button" class="btn btn-primary btn-lg" onclick="submitQuiz()">
-                    <i class="fas fa-paper-plane me-2"></i>Submit Now
+                <button type="button" class="btn btn-primary" id="confirmSubmit">
+                    <i class="fas fa-check"></i> Yes, Submit
                 </button>
             </div>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    let totalQuestions = ${quiz.questions.size()};
-    let startTime = new Date().getTime();
-    let timerInterval;
-    let autoSaveInterval;
-
-    // Initialize when page loads
     document.addEventListener('DOMContentLoaded', function() {
-        startTimer();
-        initializeAutoSave();
-        loadSavedAnswers();
-        setupKeyboardNavigation();
-    });
+        const form = document.getElementById('quizForm');
+        const submitBtn = document.querySelector('.btn-submit');
+        const confirmBtn = document.getElementById('confirmSubmit');
+        const modal = new bootstrap.Modal(document.getElementById('submitConfirmModal'));
 
-    // Initialize timer
-    function startTimer() {
-        timerInterval = setInterval(function() {
-            const now = new Date().getTime();
-            const elapsed = now - startTime;
-            const minutes = Math.floor(elapsed / 60000);
-            const seconds = Math.floor((elapsed % 60000) / 1000);
-            const display = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
-
-            const timerElement = document.getElementById('timer-display');
-            if (timerElement) {
-                timerElement.textContent = display;
-            }
-
-            // Update mobile timer if exists
-            const mobileTimer = document.querySelector('.timer.d-md-none span');
-            if (mobileTimer) {
-                mobileTimer.textContent = display;
-            }
-        }, 1000);
-    }
-
-    // Auto-save functionality
-    function initializeAutoSave() {
-        autoSaveInterval = setInterval(function() {
-            saveProgress();
-        }, 30000); // Save every 30 seconds
-    }
-
-    function saveProgress() {
-        const answers = {};
-        const radioButtons = document.querySelectorAll('input[type="radio"]:checked');
-
-        radioButtons.forEach(radio => {
-            const questionId = radio.name.replace('question_', '');
-            answers[questionId] = radio.value;
-        });
-
-        // Save to session storage (in a real app, this would be sent to server)
-        const progressData = {
-            answers: answers,
-            timestamp: new Date().getTime(),
-            elapsedTime: new Date().getTime() - startTime
+        // Prevent direct form submission
+        form.onsubmit = function(e) {
+            e.preventDefault();
+            modal.show();
         };
 
-        try {
-            // In a real implementation, you would send this to the server
-            // For now, we'll just show the save indicator
-            showAutoSaveIndicator();
-        } catch (error) {
-            console.error('Failed to save progress:', error);
-        }
-    }
+        // Handle confirmation
+        confirmBtn.onclick = function() {
+            form.submit();
+        };
 
-    function showAutoSaveIndicator() {
-        const indicator = document.getElementById('autoSaveIndicator');
-        indicator.classList.add('show');
-        setTimeout(() => {
-            indicator.classList.remove('show');
-        }, 2000);
-    }
-
-    function loadSavedAnswers() {
-        // In a real implementation, this would load from server
-        // For demo purposes, we'll skip this
-    }
-
-    // Keyboard navigation
-    function setupKeyboardNavigation() {
-        document.addEventListener('keydown', function(e) {
-            if (e.key >= '1' && e.key <= '4') {
-                const currentQuestion = getCurrentQuestion();
-                if (currentQuestion) {
-                    const answerIndex = parseInt(e.key) - 1;
-                    const answerOptions = currentQuestion.querySelectorAll('.answer-option');
-                    if (answerOptions[answerIndex]) {
-                        answerOptions[answerIndex].click();
-                    }
-                }
-            }
-        });
-    }
-
-    function getCurrentQuestion() {
-        const questions = document.querySelectorAll('.question-card');
-        for (let question of questions) {
-            const rect = question.getBoundingClientRect();
-            if (rect.top >= 0 && rect.top <= window.innerHeight / 2) {
-                return question;
-            }
-        }
-        return questions[0]; // Default to first question
-    }
-
-    // Answer selection with enhanced animation
-    function selectAnswer(element, questionId, answerId) {
-        const siblings = element.parentNode.querySelectorAll('.answer-option');
-        siblings.forEach(sibling => {
-            sibling.classList.remove('selected');
-            sibling.style.transform = '';
-        });
-
-        element.classList.add('selected');
-
-        const radio = element.querySelector('input[type="radio"]');
-        radio.checked = true;
-
-        // Mark question as answered
-        const questionCard = element.closest('.question-card');
-        questionCard.classList.add('answered');
-
-        // Add selection animation
-        element.style.transform = 'translateX(8px) scale(1.02)';
-        setTimeout(() => {
-            element.style.transform = 'translateX(8px)';
-        }, 200);
-
-        updateProgress();
-        playSelectionSound();
-
-        // Auto-save after selection
-        setTimeout(saveProgress, 1000);
-    }
-
-    // Progress tracking with smooth animations
-    function updateProgress() {
-        const answeredCount = document.querySelectorAll('input[type="radio"]:checked').length;
-        const progressPercentage = (answeredCount / totalQuestions) * 100;
-
-        document.getElementById('answered').textContent = answeredCount;
-
+        // Progress tracking
+        const radioButtons = document.querySelectorAll('input[type="radio"]');
         const progressBar = document.getElementById('progress');
-        progressBar.style.width = progressPercentage + '%';
+        const answeredSpan = document.getElementById('answered');
+        const totalQuestions = ${quiz.questions.size()};
 
-        // Add completion celebration
-        if (answeredCount == totalQuestions) {
-            celebrateCompletion();
-        }
-    }
+        function updateProgress() {
+            const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+            const percentage = (answered / totalQuestions) * 100;
+            progressBar.style.width = percentage + '%';
+            answeredSpan.textContent = answered;
 
-    // Completion celebration
-    function celebrateCompletion() {
-        const progressBadge = document.querySelector('.progress-badge');
-        progressBadge.style.animation = 'pulse 0.6s ease-in-out';
-
-        // Create confetti effect (simplified)
-        createConfetti();
-
-        // Show completion message
-        showCompletionMessage();
-    }
-
-    // Simple confetti effect
-    function createConfetti() {
-        const colors = ['#4f46e5', '#818cf8', '#10b981', '#f59e0b'];
-        const container = document.querySelector('.quiz-progress');
-
-        for (let i = 0; i < 20; i++) {
-            const confetti = document.createElement('div');
-            const x = (Math.random() - 0.5) * 400;
-            const y = (Math.random() - 0.5) * 400;
-
-            confetti.style.cssText = `
-                    position: absolute;
-                    width: 6px;
-                    height: 6px;
-                    background: ${colors[Math.floor(Math.random() * colors.length)]};
-                    border-radius: 50%;
-                    pointer-events: none;
-                    top: 50%;
-                    left: 50%;
-                    animation: confetti 1s ease-out forwards;
-                    z-index: 1000;
-                    --x: ${x}px;
-                    --y: ${y}px;
-                `;
-
-            container.appendChild(confetti);
-
-            setTimeout(() => {
-                if (confetti.parentNode) {
-                    confetti.remove();
-                }
-            }, 1000);
-        }
-    }
-
-    // Show completion message
-    function showCompletionMessage() {
-        const existingMessage = document.querySelector('.completion-message');
-        if (existingMessage) {
-            existingMessage.remove();
-        }
-
-        const message = document.createElement('div');
-        message.className = 'completion-message alert alert-success d-flex align-items-center';
-        message.style.cssText = `
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                z-index: 1002;
-                min-width: 300px;
-                text-align: center;
-                box-shadow: var(--shadow-xl);
-                border-radius: 16px;
-                animation: fadeIn 0.5s ease-out;
-            `;
-        message.innerHTML = `
-                <div class="w-100">
-                    <i class="fas fa-check-circle text-success me-2" style="font-size: 1.5rem;"></i>
-                    <strong>All questions completed!</strong><br>
-                    <small class="text-muted">Ready to submit your quiz?</small>
-                </div>
-            `;
-
-        document.body.appendChild(message);
-
-        setTimeout(() => {
-            if (message.parentNode) {
-                message.remove();
-            }
-        }, 3000);
-    }
-
-    // Sound effect for selection (using Web Audio API)
-    function playSelectionSound() {
-        try {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-
-            oscillator.frequency.value = 800;
-            oscillator.type = 'sine';
-
-            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.1);
-        } catch (e) {
-            // Ignore if audio context is not supported
-        }
-    }
-
-    // Enhanced confirmation modal
-    function confirmSubmit() {
-        const answeredCount = document.querySelectorAll('input[type="radio"]:checked').length;
-        const unansweredCount = totalQuestions - answeredCount;
-
-        document.getElementById('confirmedAnswered').textContent = answeredCount;
-
-        // Add warning for unanswered questions
-        const modalBody = document.querySelector('#confirmModal .modal-body');
-        const existingWarning = modalBody.querySelector('.unanswered-warning');
-        if (existingWarning) {
-            existingWarning.remove();
-        }
-
-        if (unansweredCount > 0) {
-            const warningDiv = document.createElement('div');
-            warningDiv.className = 'alert alert-danger unanswered-warning d-flex align-items-center';
-            warningDiv.innerHTML = `
-                    <i class="fas fa-exclamation-triangle me-3"></i>
-                    <div>
-                        <strong>Warning:</strong> You have ${unansweredCount} unanswered question${unansweredCount > 1 ? 's' : ''}.
-                        These will be marked as incorrect.
-                    </div>
-                `;
-            modalBody.insertBefore(warningDiv, modalBody.lastElementChild);
-
-            // Change submit button text if there are unanswered questions
-            const submitBtn = document.querySelector('#confirmModal .btn-primary');
-            submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Submit Anyway';
-            submitBtn.className = 'btn btn-warning btn-lg';
-        } else {
-            // Reset submit button if all questions are answered
-            const submitBtn = document.querySelector('#confirmModal .btn-primary');
-            submitBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Submit Now';
-            submitBtn.className = 'btn btn-primary btn-lg';
-        }
-
-        const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
-        modal.show();
-    }
-
-    // Submit quiz with loading state
-    function submitQuiz() {
-        const submitBtn = document.querySelector('#confirmModal .btn-primary, #confirmModal .btn-warning');
-        const originalText = submitBtn.innerHTML;
-
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
-        submitBtn.disabled = true;
-
-        // Disable all form elements
-        const formElements = document.querySelectorAll('#quizForm input, #quizForm button');
-        formElements.forEach(element => {
-            element.disabled = true;
-        });
-
-        // Clear intervals
-        clearInterval(timerInterval);
-        clearInterval(autoSaveInterval);
-
-        // Add elapsed time to form
-        const elapsed = new Date().getTime() - startTime;
-        const hiddenInput = document.createElement('input');
-        hiddenInput.type = 'hidden';
-        hiddenInput.name = 'elapsedTime';
-        hiddenInput.value = elapsed;
-        document.getElementById('quizForm').appendChild(hiddenInput);
-
-        // Add timestamp
-        const timestampInput = document.createElement('input');
-        timestampInput.type = 'hidden';
-        timestampInput.name = 'submissionTime';
-        timestampInput.value = new Date().toISOString();
-        document.getElementById('quizForm').appendChild(timestampInput);
-
-        // Show final progress save
-        showFinalSaving();
-
-        setTimeout(() => {
-            document.getElementById('quizForm').submit();
-        }, 1500);
-    }
-
-    // Show final saving indicator
-    function showFinalSaving() {
-        const overlay = document.createElement('div');
-        overlay.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.7);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 2000;
-                backdrop-filter: blur(5px);
-            `;
-
-        const loader = document.createElement('div');
-        loader.style.cssText = `
-                background: white;
-                padding: 3rem;
-                border-radius: 20px;
-                text-align: center;
-                box-shadow: var(--shadow-xl);
-                max-width: 400px;
-                animation: fadeIn 0.3s ease-out;
-            `;
-        loader.innerHTML = `
-                <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <h5 class="mb-2">Submitting Your Quiz</h5>
-                <p class="text-muted mb-0">Please wait while we process your answers...</p>
-                <div class="progress mt-3" style="height: 6px;">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated"
-                         role="progressbar" style="width: 100%"></div>
-                </div>
-            `;
-
-        overlay.appendChild(loader);
-        document.body.appendChild(overlay);
-    }
-
-    // Handle page unload (warn user about unsaved progress)
-    window.addEventListener('beforeunload', function(e) {
-        const answeredCount = document.querySelectorAll('input[type="radio"]:checked').length;
-        if (answeredCount > 0 && !document.querySelector('#quizForm input[name="elapsedTime"]')) {
-            e.preventDefault();
-            e.returnValue = 'You have unsaved progress. Are you sure you want to leave?';
-            return e.returnValue;
-        }
-    });
-
-    // Handle visibility change (save progress when tab becomes hidden)
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            saveProgress();
-        }
-    });
-
-    // Smooth scrolling to unanswered questions
-    function scrollToUnanswered() {
-        const unansweredQuestions = document.querySelectorAll('.question-card:not(.answered)');
-        if (unansweredQuestions.length > 0) {
-            unansweredQuestions[0].scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
+            // Add visual feedback
+            document.querySelectorAll('.question-card').forEach(card => {
+                const questionInputs = card.querySelectorAll('input[type="radio"]');
+                const isAnswered = Array.from(questionInputs).some(input => input.checked);
+                card.classList.toggle('answered', isAnswered);
             });
         }
-    }
 
-    // Add scroll progress indicator
-    function updateScrollProgress() {
-        const scrollTop = window.pageYOffset;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const scrollPercent = (scrollTop / docHeight) * 100;
-
-        let scrollIndicator = document.getElementById('scrollIndicator');
-        if (!scrollIndicator) {
-            scrollIndicator = document.createElement('div');
-            scrollIndicator.id = 'scrollIndicator';
-            scrollIndicator.style.cssText = `
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 3px;
-                    background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-light) 100%);
-                    z-index: 1001;
-                    transform-origin: left;
-                    transition: transform 0.1s ease-out;
-                `;
-            document.body.appendChild(scrollIndicator);
-        }
-
-        scrollIndicator.style.transform = `scaleX(${scrollPercent / 100})`;
-    }
-
-    // Add scroll listener
-    window.addEventListener('scroll', updateScrollProgress);
-
-    // Initialize scroll progress
-    updateScrollProgress();
-
-    // Add helpful shortcuts info
-    function showShortcutsHelp() {
-        const helpModal = document.createElement('div');
-        helpModal.className = 'modal fade';
-        helpModal.innerHTML = `
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">
-                                <i class="fas fa-keyboard me-2"></i>
-                                Keyboard Shortcuts
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h6><i class="fas fa-mouse-pointer me-2"></i>Answer Selection:</h6>
-                                    <ul class="list-unstyled">
-                                        <li><kbd>1</kbd> - Select option A</li>
-                                        <li><kbd>2</kbd> - Select option B</li>
-                                        <li><kbd>3</kbd> - Select option C</li>
-                                        <li><kbd>4</kbd> - Select option D</li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-6">
-                                    <h6><i class="fas fa-info-circle me-2"></i>Tips:</h6>
-                                    <ul class="list-unstyled text-muted">
-                                        <li>• Progress auto-saves every 30s</li>
-                                        <li>• All questions are optional</li>
-                                        <li>• Review before submitting</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-        document.body.appendChild(helpModal);
-        const modal = new bootstrap.Modal(helpModal);
-        modal.show();
-
-        helpModal.addEventListener('hidden.bs.modal', function() {
-            helpModal.remove();
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', updateProgress);
         });
-    }
 
-    // Add help button (optional)
-    function addHelpButton() {
-        const helpBtn = document.createElement('button');
-        helpBtn.type = 'button';
-        helpBtn.className = 'btn btn-outline-secondary btn-sm position-fixed';
-        helpBtn.style.cssText = `
-                bottom: 2rem;
-                left: 2rem;
-                z-index: 1000;
-                border-radius: 50px;
-                padding: 0.75rem 1rem;
-            `;
-        helpBtn.innerHTML = '<i class="fas fa-question-circle me-1"></i>Help';
-        helpBtn.onclick = showShortcutsHelp;
-
-        document.body.appendChild(helpBtn);
-    }
-
-    // Initialize help button
-    addHelpButton();
-
+        // Initialize progress
+        updateProgress();
+    });
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

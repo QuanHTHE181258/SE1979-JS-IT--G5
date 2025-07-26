@@ -2,7 +2,7 @@
 <%@ page import="java.util.*" %>
 <%@ page import="project.demo.coursemanagement.entities.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ include file="/WEB-INF/layout/header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -132,6 +132,8 @@
             margin: -2rem 0 3rem;
             position: relative;
             z-index: 3;
+            display: flex;
+            justify-content: center;
         }
 
         .stat-card {
@@ -585,92 +587,6 @@
 </head>
 <body>
 <!-- Enhanced Navbar -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
-        <a class="navbar-brand" href="${pageContext.request.contextPath}/home">
-            <i class="fas fa-graduation-cap me-2"></i>Online Learning
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mx-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/home">
-                        <i class="fas fa-home me-1"></i>Home
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/course">
-                        <i class="fas fa-book me-1"></i>Courses
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/blogs.jsp">
-                        <i class="fas fa-blog me-1"></i>Blogs
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/introduce.jsp">
-                        <i class="fas fa-info-circle me-1"></i>About
-                    </a>
-                </li>
-            </ul>
-
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/wishlist.jsp">
-                        <i class="fas fa-heart me-1"></i>Wishlist
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/cart.jsp">
-                        <i class="fas fa-shopping-cart me-1"></i>Cart
-                    </a>
-                </li>
-
-                <c:choose>
-                    <c:when test="${not empty sessionScope.user}">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
-                               role="button" data-bs-toggle="dropdown">
-                                <img src="<c:out value='${sessionScope.user.avatarUrl != null ? sessionScope.user.avatarUrl : "https://th.bing.com/th/id/OIP.-Zanaodp4hv0ry2WpuuPfgHaEf?rs=1&pid=ImgDetMain"}'/>"
-                                     alt="Avatar" style="width:32px; height:32px; border-radius:50%; object-fit:cover; margin-right:8px;">
-                                <span>${sessionScope.user.firstName}</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/${sessionScope.user.roleId == 2 ? 'teacher/profile' : 'profile'}">
-                                    <i class="fas fa-user me-2"></i>My Profile</a></li>
-                                <c:if test="${sessionScope.user.roleId == 3}">
-                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/student/refund">
-                                        <i class="fas fa-undo me-2"></i>Refund Request</a></li>
-                                    <li><a class="dropdown-item" href="myorder">
-                                        <i class="fas fa-shopping-bag me-2"></i>My Orders</a></li>
-                                </c:if>
-                                <c:if test="${sessionScope.user.roleId == 1}">
-                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashBoard">
-                                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
-                                </c:if>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/login?action=logout">
-                                    <i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                            </ul>
-                        </li>
-                    </c:when>
-                    <c:otherwise>
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/login.jsp">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/register.jsp">Register</a>
-                        </li>
-                    </c:otherwise>
-                </c:choose>
-            </ul>
-        </div>
-    </div>
-</nav>
-
 <!-- Hero Section -->
 <section class="hero-section">
     <div class="container">
@@ -682,42 +598,44 @@
 </section>
 
 <!-- Stats Section -->
-<div class="container stats-container">
-    <div class="row g-4 fade-in">
-        <div class="col-md-3 col-sm-6">
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
-                    <i class="fas fa-book"></i>
+<div class="container">
+    <div class="stats-container">
+        <div class="row g-4 fade-in justify-content-center">
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="stat-number" id="totalCourses">0</div>
+                    <div class="stat-label">Total Courses</div>
                 </div>
-                <div class="stat-number" id="totalCourses">0</div>
-                <div class="stat-label">Total Courses</div>
             </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, var(--success-color), #00f2fe);">
-                    <i class="fas fa-check-circle"></i>
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, var(--success-color), #00f2fe);">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-number" id="completedCourses">0</div>
+                    <div class="stat-label">Completed</div>
                 </div>
-                <div class="stat-number" id="completedCourses">0</div>
-                <div class="stat-label">Completed</div>
             </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, var(--info-color), #38f9d7);">
-                    <i class="fas fa-play-circle"></i>
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, var(--info-color), #38f9d7);">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                    <div class="stat-number" id="activeCourses">0</div>
+                    <div class="stat-label">In Progress</div>
                 </div>
-                <div class="stat-number" id="activeCourses">0</div>
-                <div class="stat-label">In Progress</div>
             </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, var(--warning-color), #fee140);">
-                    <i class="fas fa-certificate"></i>
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, var(--warning-color), #fee140);">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <div class="stat-number" id="certificatesEarned">0</div>
+                    <div class="stat-label">Certificates</div>
                 </div>
-                <div class="stat-number" id="certificatesEarned">0</div>
-                <div class="stat-label">Certificates</div>
             </div>
         </div>
     </div>

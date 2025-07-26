@@ -49,7 +49,7 @@ public class ProfileController extends HttpServlet {
 
         // Pass the webapp path
         profileService = new ProfileService(webappPath);
-        
+
         // Initialize OrderService
         orderService = new OrderService();
 
@@ -149,11 +149,11 @@ public class ProfileController extends HttpServlet {
             // Get user data from database
             User user = profileService.getUserById(userId);
 
-            if (user == null) {
-                SessionUtil.setFlashMessage(request, "error", "Unable to load profile. Please try again.");
-                response.sendRedirect(request.getContextPath() + "/enrollments");
-                return;
-            }
+//            if (user == null) {
+//                SessionUtil.setFlashMessage(request, "error", "Unable to load profile. Please try again.");
+//                response.sendRedirect(request.getContextPath() + "/profile");
+//                return;
+//            }
 
             // Get profile statistics
             ProfileService.ProfileStatistics stats = profileService.getProfileStatistics(userId);
@@ -179,7 +179,7 @@ public class ProfileController extends HttpServlet {
             System.err.println("Error loading profile: " + e.getMessage());
             e.printStackTrace();
             SessionUtil.setFlashMessage(request, "error", "An error occurred while loading your profile.");
-            response.sendRedirect(request.getContextPath() + "/enrollments");
+            response.sendRedirect(request.getContextPath() + "/profile");
         }
     }
 
@@ -554,26 +554,26 @@ public class ProfileController extends HttpServlet {
      */
     private void showOrderHistory(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         Integer userId = SessionUtil.getUserId(request);
         if (userId == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-        
+
         try {
             // Get user data from database
             User user = profileService.getUserById(userId);
-            
+
             if (user == null) {
                 SessionUtil.setFlashMessage(request, "error", "Unable to load profile. Please try again.");
                 response.sendRedirect(request.getContextPath() + "/enrollments");
                 return;
             }
-            
+
             // Get user's orders
             List<OrderDTO> orders = orderService.getOrdersByUserId(userId);
-            
+
             // Get any flash messages
             String flashMessage = SessionUtil.getAndClearFlashMessage(request);
             if (flashMessage != null) {
@@ -583,14 +583,14 @@ public class ProfileController extends HttpServlet {
                     request.setAttribute("message", parts[1]);
                 }
             }
-            
+
             // Set attributes for JSP
             request.setAttribute("user", user);
             request.setAttribute("orders", orders);
-            
+
             // Forward to order history page
             request.getRequestDispatcher("/WEB-INF/views/profile/order_history.jsp").forward(request, response);
-            
+
         } catch (Exception e) {
             System.err.println("Error showing order history: " + e.getMessage());
             e.printStackTrace();
@@ -598,7 +598,7 @@ public class ProfileController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/profile");
         }
     }
-    
+
     /**
      * Create profile update request from form parameters
      */

@@ -7,11 +7,16 @@
     <meta charset="UTF-8">
     <title>Course Management - Admin</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary-color: #3498db;
+            --danger-color: #e74c3c;
+            --success-color: #2ecc71;
+            --warning-color: #f1c40f;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --sidebar-width: 280px;
         }
 
         body {
@@ -26,49 +31,126 @@
 
         .main-content {
             flex: 1;
-            margin-left: 280px;
+            margin-left: var(--sidebar-width);
             padding: 2rem;
         }
 
-        .content-box {
-            background: #fff;
-            border-radius: 10px;
-            padding: 2rem;
+        .content-header {
             margin-bottom: 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .table {
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            border: none;
+        }
+
+        .card-header {
+            background: var(--dark-color);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .stats-card {
+            background: linear-gradient(45deg, var(--primary-color), #2980b9);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .course-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             margin-top: 1rem;
         }
 
-        .table th,
-        .table td {
+        .course-table th,
+        .course-table td {
             padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid #eee;
         }
 
-        .table th {
+        .course-table th {
             background: #f8f9fa;
             font-weight: 600;
+            color: var(--dark-color);
         }
 
-        .btn {
-            display: inline-block;
+        .course-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
             padding: 0.5rem 1rem;
-            background: #4a90e2;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: all 0.3s ease;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
         }
 
-        .btn:hover {
-            background: #357abd;
+        .status-active {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .status-draft {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .btn-manage {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            font-weight: 500;
+        }
+
+        .btn-manage:hover {
+            background: #2980b9;
             transform: translateY(-2px);
+            color: white;
+        }
+
+        .create-manager-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .create-manager-card i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .create-manager-card h5 {
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+        }
+
+        .create-manager-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
         }
 
         @media (max-width: 768px) {
@@ -80,57 +162,82 @@
     </style>
 </head>
 <body>
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Create Course Manager Account</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="card h-100">
-                                        <div class="card-body text-center">
-                                            <i class="fas fa-book-reader fa-3x text-success mb-3"></i>
-                                            <h5 class="card-title">Course Manager</h5>
-                                            <p class="card-text text-muted">Create an account for managing courses in the system</p>
-                                            <a href="${pageContext.request.contextPath}/admin/courses/new?role=COURSE_MANAGER" class="btn btn-success">
-                                                <i class="fas fa-book-reader"></i> Create Course Manager
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<c:set var="active" value="courses" scope="request"/>
+<%@ include file="/WEB-INF/layout/header.jsp" %>
+<%@ include file="_admin_sidebar.jsp" %>
 
-                    <div class="card shadow mt-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Course List</h6>
-                        </div>
-                        <div class="card-body">
-                            <table style="width:100%; border-collapse:collapse; font-size:1rem;">
+<div class="wrapper">
+    <div class="main-content">
+        <div class="content-header">
+            <h1 class="h3 mb-0">Course Management</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/admin">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Course Management</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Course Manager</h5>
+                    </div>
+                    <div class="card-body create-manager-card">
+                        <i class="fas fa-book-reader mb-3"></i>
+                        <h5>Create Course Manager Account</h5>
+                        <p class="text-muted">Set up a new account for managing courses in the system</p>
+                        <a href="${pageContext.request.contextPath}/admin/courses/new?role=COURSE_MANAGER"
+                           class="btn btn-manage">
+                            <i class="fas fa-plus-circle me-2"></i>Create Course Manager
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Course List</h5>
+                        <a href="${pageContext.request.contextPath}/admin/course-management"
+                           class="btn btn-manage btn-sm">
+                            <i class="fas fa-cog me-2"></i>Manage Courses
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="course-table">
                                 <thead>
-                                    <tr style="background:#f5f5fa; color:#2c2c54;">
-                                        <th style="padding:14px 8px; text-align:left; font-weight:700;">COURSE NAME</th>
-                                        <th style="padding:14px 8px; text-align:left; font-weight:700;">INSTRUCTOR</th>
-                                        <th style="padding:14px 8px; text-align:left; font-weight:700;">CATEGORY</th>
-                                        <th style="padding:14px 8px; text-align:left; font-weight:700;">STATUS</th>
-                                    </tr>
+                                <tr>
+                                    <th>Course Name</th>
+                                    <th>Instructor</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach items="${courses}" var="course">
-                                        <tr style="border-bottom:1px solid #e5e7eb;">
-                                            <td style="padding:12px 8px;">${course.name}</td>
-                                            <td style="padding:12px 8px;">${course.instructor}</td>
-                                            <td style="padding:12px 8px;">${course.category}</td>
-                                            <td style="padding:12px 8px;">${course.status}</td>
-                                        </tr>
-                                    </c:forEach>
+                                <c:forEach items="${courses}" var="course">
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="${course.imageUrl}" alt="${course.title}"
+                                                     class="rounded" width="40" height="40" style="object-fit: cover;">
+                                                <div class="ms-3">
+                                                    <h6 class="mb-0">${course.title}</h6>
+                                                    <small class="text-muted">ID: ${course.courseCode}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>${course.teacherName}</td>
+                                        <td>${course.categories}</td>
+                                        <td>
+                                                <span class="status-badge ${course.status == 'active' ? 'status-active' : 'status-draft'}">
+                                                        ${course.status}
+                                                </span>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
                                 </tbody>
                             </table>
-                            <div style="text-align:center; margin-top:20px;">
-                                <a href="${pageContext.request.contextPath}/admin/course-management" class="btn btn-info" style="background:#17a2b8; color:#fff; padding:10px 20px; border:none; border-radius:4px; font-weight:600; text-decoration:none;">
-                                    <i class="fas fa-book"></i> Go to Course Management
-                                </a>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -138,5 +245,7 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

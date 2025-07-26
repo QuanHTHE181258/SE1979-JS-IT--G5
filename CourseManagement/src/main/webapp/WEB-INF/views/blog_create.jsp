@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/layout/header.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,54 +11,9 @@
 </head>
 <body style="margin:0; font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6fb;">
 <div style="display:flex; min-height:100vh;">
-    <!-- Sidebar -->
-    <nav style="width:250px; background:#343a40; color:#fff; min-height:100vh; display:flex; flex-direction:column;">
-        <div style="padding:32px 0 24px 32px;">
-            <h3 style="margin:0; font-size:1.7rem; font-weight:700; letter-spacing:1px;">Admin Panel</h3>
-        </div>
-        <ul style="list-style:none; padding:0; margin:0; flex:1;">
-            <li>
-                <a href="${pageContext.request.contextPath}/admin" style="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;">
-                    <i class="fas fa-tachometer-alt" style="margin-right:14px;"></i> Dashboard
-                </a>
-            </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/admin/user-management" style="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;">
-                    <i class="fas fa-users" style="margin-right:14px;"></i> User Management
-                </a>
-            </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/admin/courses" style="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;">
-                    <i class="fas fa-book" style="margin-right:14px;"></i> Courses Management
-                </a>
-            </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/admin/orders" style="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;">
-                    <i class="fas fa-shopping-cart" style="margin-right:14px;"></i> Order Management
-                </a>
-            </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/admin/revenue-analytics" style="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;">
-                    <i class="fas fa-chart-bar" style="margin-right:14px;"></i> Revenue Analytics
-                </a>
-            </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/teacher-performance" style="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;">
-                    <i class="fas fa-chart-line" style="margin-right:14px;"></i> Teacher Performance
-                </a>
-            </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/admin/blog/list" style="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px;">
-                    <i class="fas fa-blog" style="margin-right:14px;"></i> Blog Management
-                </a>
-            </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/logout" style="color:#fff; text-decoration:none; display:flex; align-items:center; padding:14px 32px; font-weight:500;">
-                    <i class="fas fa-sign-out-alt" style="margin-right:14px;"></i> Logout
-                </a>
-            </li>
-        </ul>
-    </nav>
+    <!-- Include Admin Sidebar -->
+    <jsp:include page="/WEB-INF/views/_admin_sidebar.jsp" />
+
     <!-- Main content -->
     <div style="flex:1; padding:48px 0; background:#f4f6fb;">
         <div style="max-width:900px; margin:auto;">
@@ -66,33 +22,94 @@
                 <c:if test="${not empty error}">
                     <div style="color:red; margin-bottom:20px;">${error}</div>
                 </c:if>
-                <form action="${pageContext.request.contextPath}/admin/blog/create" method="post" style="max-width:600px; margin:auto;">
+                <form action="${pageContext.request.contextPath}/admin/blog/create" method="post" id="blogForm" class="needs-validation" novalidate>
                     <div style="margin-bottom:16px;">
                         <label for="title" style="display:block; font-weight:600; margin-bottom:8px;">Title:</label>
-                        <input type="text" id="title" name="title" required style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;">
+                        <input type="text" id="title" name="title" required
+                               minlength="10" maxlength="200"
+                               class="form-control"
+                               style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;">
+                        <div class="invalid-feedback">
+                            Title must be between 10 and 200 characters
+                        </div>
                     </div>
+
                     <div style="margin-bottom:16px;">
                         <label for="content" style="display:block; font-weight:600; margin-bottom:8px;">Content:</label>
-                        <textarea id="content" name="content" rows="5" required style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;"></textarea>
+                        <textarea id="content" name="content" rows="5" required
+                                  minlength="50"
+                                  class="form-control"
+                                  style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;"></textarea>
+                        <div class="invalid-feedback">
+                            Content must be at least 50 characters long
+                        </div>
                     </div>
+
                     <div style="margin-bottom:16px;">
                         <label for="imageURL" style="display:block; font-weight:600; margin-bottom:8px;">Image URL:</label>
-                        <input type="text" id="imageURL" name="imageURL" style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;">
+                        <input type="url" id="imageURL" name="imageURL"
+                               pattern="https?://.+"
+                               class="form-control"
+                               style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;">
+                        <div class="invalid-feedback">
+                            Please enter a valid URL starting with http:// or https://
+                        </div>
                     </div>
+
                     <div style="margin-bottom:16px;">
                         <label for="status" style="display:block; font-weight:600; margin-bottom:8px;">Status:</label>
-                        <select id="status" name="status" style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;">
+                        <select id="status" name="status" required class="form-control"
+                                style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;">
+                            <option value="">Select a status</option>
                             <option value="draft">Draft</option>
                             <option value="published">Published</option>
                         </select>
+                        <div class="invalid-feedback">
+                            Please select a status
+                        </div>
                     </div>
+
                     <div style="text-align:right;">
-                        <button type="submit" class="btn btn-primary" style="background-color:#007bff; color:white; padding:10px 15px; border-radius:4px; border:none;">Create Blog</button>
+                        <button type="submit" class="btn btn-primary">Create Blog</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    (function() {
+        'use strict';
+        const form = document.getElementById('blogForm');
+
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            // Custom validation for content length
+            const content = document.getElementById('content');
+            if (content.value.trim().length < 50) {
+                content.setCustomValidity('Content must be at least 50 characters long');
+                event.preventDefault();
+            } else {
+                content.setCustomValidity('');
+            }
+
+            // Custom validation for image URL format
+            const imageURL = document.getElementById('imageURL');
+            if (imageURL.value && !imageURL.value.match(/^https?:\/\/.+/)) {
+                imageURL.setCustomValidity('Please enter a valid URL starting with http:// or https://');
+                event.preventDefault();
+            } else {
+                imageURL.setCustomValidity('');
+            }
+
+            form.classList.add('was-validated');
+        }, false);
+    })();
+</script>
 </body>
-</html> 
+</html>

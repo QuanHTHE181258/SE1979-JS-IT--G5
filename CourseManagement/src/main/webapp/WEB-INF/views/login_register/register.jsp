@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/layout/header.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="vi">
@@ -214,16 +215,16 @@
             padding-left: 20px;
             list-style-type: none;
         }
-        
+
         .password-requirements li {
             margin-bottom: 5px;
             transition: all 0.3s ease;
         }
-        
+
         .password-requirements li.met {
             color: var(--success);
         }
-        
+
         .password-requirements li.not-met {
             color: var(--text-secondary);
         }
@@ -594,24 +595,24 @@
             // Could add AJAX call to check email availability
         }
     });
-    
+
     // Real-time password validation
     document.getElementById('password').addEventListener('input', function() {
         const password = this.value;
-        
+
         // Check requirements
         const hasLength = password.length >= 6;
         const hasUpper = /[A-Z]/.test(password);
         const hasLower = /[a-z]/.test(password);
         const hasNumber = /\d/.test(password);
         const hasSpecial = /[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(password);
-        
+
         // Update requirement indicators
         updateRequirement('req-length', hasLength);
         updateRequirement('req-case', hasUpper && hasLower);
         updateRequirement('req-number', hasNumber);
         updateRequirement('req-special', hasSpecial);
-        
+
         // Check confirm password match if it has a value
         const confirmPassword = document.getElementById('confirmPassword').value;
         if (confirmPassword) {
@@ -620,24 +621,24 @@
             document.getElementById('confirmPassword').classList.toggle('is-invalid', !passwordsMatch);
         }
     });
-    
+
     // Check password match on confirm password input
     document.getElementById('confirmPassword').addEventListener('input', function() {
         const password = document.getElementById('password').value;
         const confirmPassword = this.value;
-        
+
         if (confirmPassword) {
             const passwordsMatch = password === confirmPassword;
             this.classList.toggle('is-valid', passwordsMatch);
             this.classList.toggle('is-invalid', !passwordsMatch);
         }
     });
-    
+
     // Function to update requirement status
     function updateRequirement(reqId, isMet) {
         const reqElement = document.getElementById(reqId);
         const icon = reqElement.querySelector('i');
-        
+
         if (isMet) {
             reqElement.classList.remove('not-met');
             reqElement.classList.add('met');

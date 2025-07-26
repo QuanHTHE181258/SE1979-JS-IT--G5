@@ -38,10 +38,9 @@ public class MaterialService {
         entity.setId(dto.getId());
         Lesson lesson = new Lesson();
         lesson.setId(dto.getLessonId());
-        entity.setLessonID(lesson);
+        entity.setLessonId(dto.getLessonId()); // Sửa từ setLessonID thành setLessonId
         entity.setTitle(dto.getTitle());
         entity.setFileURL(dto.getFileURL());
         return materialDAO.updateMaterial(entity);
     }
 }
-

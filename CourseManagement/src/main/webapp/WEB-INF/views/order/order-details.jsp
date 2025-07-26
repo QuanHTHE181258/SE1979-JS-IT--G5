@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/layout/header.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="vi_VN" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -286,19 +288,14 @@
                     </div>
                 </div>
                 <div class="col-md-4 text-end">
-                        <span class="status-badge status-${orderDetails.status.toLowerCase()}">
-                            <c:choose>
-                                <c:when test="${orderDetails.status == 'PAID'}">
-                                    <i class="fas fa-check-circle"></i> Đã thanh toán
-                                </c:when>
-                                <c:when test="${orderDetails.status == 'PENDING'}">
-                                    <i class="fas fa-clock"></i> Chờ thanh toán
-                                </c:when>
-                                <c:otherwise>
-                                    <i class="fas fa-times-circle"></i> ${orderDetails.status}
-                                </c:otherwise>
-                            </c:choose>
-                        </span>
+                    <span class="status-badge status-${orderDetails.status.toLowerCase()}">
+                        <c:choose>
+                            <c:when test="${orderDetails.status == 'PAID'}"><i class="fas fa-check-circle"></i> Đã thanh toán</c:when>
+                            <c:when test="${orderDetails.status == 'PENDING'}"><i class="fas fa-clock"></i> Chờ thanh toán</c:when>
+                            <c:when test="${orderDetails.status == 'CANCELLED'}"><i class="fas fa-times-circle"></i> Đã hủy</c:when>
+                            <c:otherwise>${orderDetails.status}</c:otherwise>
+                        </c:choose>
+                    </span>
                 </div>
             </div>
         </div>
@@ -309,27 +306,35 @@
                 <div class="info-item">
                     <span class="info-label"><i class="fas fa-calendar-alt"></i> Ngày đặt hàng:</span>
                     <span class="info-value">
-                            <fmt:formatDate value="${orderDetails.createdAt}" pattern="dd/MM/yyyy HH:mm"/>
-                        </span>
+                        <fmt:formatDate value="${orderDetails.createdAt}" pattern="dd/MM/yyyy HH:mm"/>
+                    </span>
                 </div>
                 <div class="info-item">
                     <span class="info-label"><i class="fas fa-credit-card"></i> Phương thức thanh toán:</span>
-                    <span class="info-value">${orderDetails.paymentMethod}</span>
+                    <span class="info-value">
+                        <c:choose>
+                            <c:when test="${orderDetails.paymentMethod == 'Credit Card'}">Thẻ tín dụng</c:when>
+                            <c:when test="${orderDetails.paymentMethod == 'Bank Transfer'}">Chuyển khoản</c:when>
+                            <c:when test="${orderDetails.paymentMethod == 'VNPAY'}">Ví VNPAY</c:when>
+                            <c:otherwise>${orderDetails.paymentMethod}</c:otherwise>
+                        </c:choose>
+                    </span>
                 </div>
                 <div class="info-item">
                     <span class="info-label"><i class="fas fa-info-circle"></i> Trạng thái:</span>
                     <span class="info-value">
-                            <c:choose>
-                                <c:when test="${orderDetails.status == 'PAID'}">Đã thanh toán</c:when>
-                                <c:when test="${orderDetails.status == 'PENDING'}">Chờ thanh toán</c:when>
-                                <c:otherwise>${orderDetails.status}</c:otherwise>
-                            </c:choose>
-                        </span>
+                        <c:choose>
+                            <c:when test="${orderDetails.status == 'PAID'}">Đã thanh toán</c:when>
+                            <c:when test="${orderDetails.status == 'PENDING'}">Chờ thanh toán</c:when>
+                            <c:when test="${orderDetails.status == 'CANCELLED'}">Đã hủy</c:when>
+                            <c:otherwise>${orderDetails.status}</c:otherwise>
+                        </c:choose>
+                    </span>
                 </div>
             </div>
 
             <div class="info-card">
-                <h5><i class="fas fa-graduation-cap"></i> Khóa học đã mua</h5>
+                <h5><i class="fas fa-graduation-cap"></i> Danh sách khóa học</h5>
                 <div class="courses-table">
                     <table class="table">
                         <thead>
@@ -343,7 +348,7 @@
                             <tr>
                                 <td class="course-name">${course.courseName}</td>
                                 <td class="text-end price">
-                                    $<fmt:formatNumber value="${course.price}" pattern="#,##0.00"/>
+                                    <fmt:formatNumber value="${course.price}" pattern="#,##0"/> đ
                                 </td>
                             </tr>
                         </c:forEach>
@@ -355,7 +360,7 @@
             <div class="total-section">
                 <div class="total-label">Tổng cộng</div>
                 <div class="total-amount">
-                    $<fmt:formatNumber value="${orderDetails.totalAmount}" pattern="#,##0.00"/>
+                    <fmt:formatNumber value="${orderDetails.totalAmount}" pattern="#,##0"/> đ
                 </div>
             </div>
         </div>

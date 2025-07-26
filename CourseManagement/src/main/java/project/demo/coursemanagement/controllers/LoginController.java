@@ -89,16 +89,15 @@ public class LoginController extends HttpServlet {
                 System.out.println("Login successful for user: " + user.getUsername());
                 // Create user session
                 SessionUtil.setUserSession(request, user);
+                System.out.println("DEBUG - After setting session: " + request.getSession().getAttribute("user"));
                 // Handle "Remember Me" functionality (optional)
                 if ("on".equals(rememberMe)) {
-                    // Can implement remember me cookies here
                     System.out.println("Remember me requested for: " + user.getUsername());
                 }
                 // Set success message
                 SessionUtil.setFlashMessage(request, "success", "Welcome back, " + user.getFirstName() + user.getLastName() + "!");
                 // Redirect to dashboard
                 redirectToDashboard(request, response);
-
             } else {
                 // Login failed
                 System.out.println("Login failed for: " + identifier);
@@ -147,40 +146,40 @@ public class LoginController extends HttpServlet {
                 int roleId = Integer.parseInt(userRole);
                 switch (roleId) {
                     case 5: // Admin
-                        response.sendRedirect(contextPath + "/admin/dashboard");
+                        response.sendRedirect(contextPath + "/home");
                         break;
                     case 3: // Teacher
-                        response.sendRedirect(contextPath + "/teaching-courses");
+                        response.sendRedirect(contextPath + "/home");
                         break;
                     case 1: // Student
-                        response.sendRedirect(contextPath + "/enrollments");
+                        response.sendRedirect(contextPath + "/home");
                         break;
                     case 2: // CourseManager
-                        response.sendRedirect(contextPath + "/course-manager");
+                        response.sendRedirect(contextPath + "/home");
                         break;
                     case 4: // UserManager
-                        response.sendRedirect(contextPath + "/admin/user-management");
+                        response.sendRedirect(contextPath + "/admin/user-management/list");
                         break;
                     case 0: // Guest
                     default:
-                        response.sendRedirect(contextPath + "/enrollments");
+                        response.sendRedirect(contextPath + "/home");
                         break;
                 }
             } catch (NumberFormatException e) {
                 // For backward compatibility, handle role names
                 switch (userRole) {
                     case "ADMIN":
-                        response.sendRedirect(contextPath + "/admin/dashboard");
+                        response.sendRedirect(contextPath + "/home");
                         break;
                     case "TEACHER":
-                        response.sendRedirect(contextPath + "/teaching-courses");
+                        response.sendRedirect(contextPath + "/home");
                         break;
                     case "USER_MANAGER":
                         response.sendRedirect(contextPath + "/admin/user-management");
                         break;
                     case "USER":
                     case "STUDENT":
-                        response.sendRedirect(contextPath + "/enrollments");
+                        response.sendRedirect(contextPath + "/home");
                         break;
                     default:
                         response.sendRedirect(contextPath + "/home");

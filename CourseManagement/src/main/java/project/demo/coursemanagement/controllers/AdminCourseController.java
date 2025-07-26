@@ -26,9 +26,17 @@ public class AdminCourseController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String path = request.getServletPath();
+        System.out.println("AdminCourseController - Path: " + path);
 
         switch (path) {
             case "/admin/courses":
+                // Lấy danh sách courses để hiển thị
+                List<CourseDTO> courses = courseService.getAllCourses();
+                System.out.println("Courses size: " + (courses != null ? courses.size() : "null"));
+                if (courses != null && !courses.isEmpty()) {
+                    System.out.println("First course: " + courses.get(0).getTitle());
+                }
+                request.setAttribute("courses", courses);
                 request.getRequestDispatcher("/WEB-INF/views/admin_course.jsp").forward(request, response);
                 break;
 
@@ -56,11 +64,11 @@ public class AdminCourseController extends HttpServlet {
                     } catch (NumberFormatException ignored) {}
                 }
 
-                List<CourseDTO> courses = courseService.getCoursesForManager(keyword, categoryId, page, PAGE_SIZE);
+                List<CourseDTO> managedCourses = courseService.getCoursesForManager(keyword, categoryId, page, PAGE_SIZE);
                 int totalCourses = courseService.countCourses(keyword, categoryId);
                 int totalPages = (int) Math.ceil((double) totalCourses / PAGE_SIZE);
 
-                request.setAttribute("courses", courses);
+                request.setAttribute("courses", managedCourses);
                 request.setAttribute("currentPage", page);
                 request.setAttribute("totalPages", totalPages);
                 request.setAttribute("keyword", keyword);
@@ -87,13 +95,16 @@ public class AdminCourseController extends HttpServlet {
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
             String phone = request.getParameter("phone");
-            String roleName = request.getParameter("roleName"); // Đúng với form mới
+            String roleName = request.getParameter("roleName");
+
+            System.out.println("Received roleName from form: '" + roleName + "'");
 
             try {
                 userService.createUser(username, email, password, firstName, lastName, phone, roleName);
                 request.getSession().setAttribute("successMessage", "Course Manager account created successfully!");
                 response.sendRedirect(request.getContextPath() + "/admin/courses");
             } catch (Exception e) {
+                System.out.println("Error creating user with role: '" + roleName + "'");
                 e.printStackTrace();
                 request.setAttribute("errorMessage", "Error creating account: " + e.getMessage());
                 request.getRequestDispatcher("/WEB-INF/views/admin_course_new.jsp").forward(request, response);

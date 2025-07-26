@@ -516,9 +516,9 @@
         if (!categoryCell) return false;
         const categoryText = categoryCell.textContent.trim();
         const categoryMatch =
-          categoryFilterValue === "" ||
-          categoryText.includes(categoryFilterValue) ||
-          (categoryFilterValue === "Uncategorized" && categoryText.includes("Uncategorized"));
+                categoryFilterValue === "" ||
+                categoryText.includes(categoryFilterValue) ||
+                (categoryFilterValue === "Uncategorized" && categoryText.includes("Uncategorized"));
 
         // Only include rows that match both filters
         return titleMatch && categoryMatch;
