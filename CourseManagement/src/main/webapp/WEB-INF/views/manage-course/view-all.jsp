@@ -400,12 +400,6 @@
                 </td>
                 <td>
                   <div class="d-flex flex-column align-items-center gap-2 flex-wrap">
-                    <a href="course?id=${course.id}" class="btn btn-outline-info btn-sm w-100" title="Xem chi tiết">
-                      <i class="fas fa-eye"></i> Xem
-                    </a>
-                    <a href="course-feedback?id=${course.id}" class="btn btn-outline-warning btn-sm w-100" title="Xem đánh giá">
-                      <i class="fas fa-comments"></i> Đánh Giá
-                    </a>
                     <a href="update-course?id=${course.id}" class="btn btn-outline-secondary btn-sm w-100" title="Chỉnh sửa khóa học">
                       <i class="fas fa-edit"></i> Sửa
                     </a>

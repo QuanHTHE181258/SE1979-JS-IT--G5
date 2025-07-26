@@ -173,7 +173,7 @@ public class AddMaterialServlet extends HttpServlet {
 
             if (success) {
                 LOGGER.info("Material saved successfully");
-                response.sendRedirect(request.getContextPath() + "/lesson/view?id=" + lessonIdStr + "&message=Material added successfully");
+                response.sendRedirect(request.getContextPath() + "/lesson-details?id=" + lessonIdStr + "&message=Material added successfully");
             } else {
                 LOGGER.warning("Failed to save material to database");
                 // Delete uploaded file if database save fails

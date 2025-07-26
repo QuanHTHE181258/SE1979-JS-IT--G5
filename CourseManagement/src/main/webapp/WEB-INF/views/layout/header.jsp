@@ -30,7 +30,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="${pageContext.request.contextPath}/introduce">
+            <a class="nav-link" href="${pageContext.request.contextPath}/introduce.jsp">
               <i class="bi bi-info-circle"></i> Giới thiệu
             </a>
           </li>
