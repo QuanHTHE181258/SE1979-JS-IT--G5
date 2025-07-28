@@ -383,7 +383,7 @@
                             </td>
                             <td>
                                         <span class="badge price-badge">
-                                            <i class="fas fa-dollar-sign me-1"></i>${course.price}
+                                            <i class="fas fa-dollar-sign me-1"></i>{course.price}VNĐ
                                         </span>
                             </td>
                             <td>
@@ -410,9 +410,6 @@
                                 <div class="action-buttons">
                                     <a href="course-lessons?id=${course.id}" class="btn-modern btn-view">
                                         <i class="fas fa-eye"></i>View Details
-                                    </a>
-                                    <a href="course-feedback?id=${course.id}" class="btn-modern btn-feedback">
-                                        <i class="fas fa-comments"></i>Feedback
                                     </a>
                                 </div>
                             </td>

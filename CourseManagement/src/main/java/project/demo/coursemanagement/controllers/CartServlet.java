@@ -3,6 +3,7 @@ package project.demo.coursemanagement.controllers;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import project.demo.coursemanagement.entities.Cart;
 import project.demo.coursemanagement.entities.Cartitem;
 import project.demo.coursemanagement.entities.Cours;
 import project.demo.coursemanagement.utils.DatabaseConnection;
@@ -21,7 +22,7 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Integer userId = (Integer) session.getAttribute("userId");
+        Integer userId = (Integer) session.getAttribute("userId"); // lấy từ session sau khi đăng nhập
 
         if (userId == null) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -34,63 +35,48 @@ public class CartServlet extends HttpServlet {
         try (Connection conn = dbConn.getConnection()) {
             String sql = """
                 SELECT ci.CartItemID, ci.Price, 
-                       c.CourseID, c.Title, c.Price as CoursePrice,
-                       CASE WHEN e.enrollment_id IS NOT NULL THEN 1 ELSE 0 END as IsEnrolled
+                       c.CourseID, c.Title, c.Price as CoursePrice
                 FROM cartitem ci
                 JOIN courses c ON ci.CourseID = c.CourseID
                 JOIN cart ct ON ci.CartID = ct.CartID
-                LEFT JOIN enrollments e ON e.course_id = c.CourseID AND e.student_id = ct.UserID
                 WHERE ct.UserID = ?
-                """;
-
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setInt(1, userId);
-                ResultSet rs = stmt.executeQuery();
-
-                while (rs.next()) {
-                    boolean isEnrolled = rs.getInt("IsEnrolled") == 1;
-                    if (!isEnrolled) {
+            """;
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, userId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
                         Cartitem item = new Cartitem();
                         item.setId(rs.getInt("CartItemID"));
-                        item.setPrice(rs.getBigDecimal("Price"));
 
                         Cours course = new Cours();
                         course.setId(rs.getInt("CourseID"));
                         course.setTitle(rs.getString("Title"));
                         course.setPrice(rs.getBigDecimal("CoursePrice"));
-
                         item.setCourseID(course);
+
+                        item.setPrice(rs.getBigDecimal("Price"));
                         cartItems.add(item);
-                        totalPrice = totalPrice.add(item.getPrice());
-                    } else {
-                        // Remove enrolled course from cart
-                        int cartItemId = rs.getInt("CartItemID");
-                        String deleteSql = "DELETE FROM cartitem WHERE CartItemID = ?";
-                        try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
-                            deleteStmt.setInt(1, cartItemId);
-                            deleteStmt.executeUpdate();
-                        }
+                        totalPrice = totalPrice.add(item.getPrice() != null ? item.getPrice() : BigDecimal.ZERO);
                     }
                 }
             }
 
-            // Store updated cart items and total
-            session.setAttribute("cartItems", cartItems);
-            session.setAttribute("totalPrice", totalPrice);
-
-            request.getRequestDispatcher("/WEB-INF/views/profile/cart.jsp").forward(request, response);
-
         } catch (SQLException e) {
-            e.printStackTrace();
-            response.sendRedirect("error.jsp");
+            throw new ServletException("Error loading cart items", e);
         }
+
+        session.setAttribute("cartItems", cartItems);
+        session.setAttribute("totalPrice", totalPrice);
+        request.getRequestDispatcher("/WEB-INF/views/profile/cart.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
+//        int courseId = Integer.parseInt(request.getParameter("courseId"));
+
         String value = request.getParameter("courseId");
-        int courseId;
+        int courseId = -1;
 
         if (value != null && !value.trim().isEmpty()) {
             try {
@@ -108,6 +94,7 @@ public class CartServlet extends HttpServlet {
             return;
         }
 
+
         HttpSession session = request.getSession();
         Integer userId = (Integer) session.getAttribute("userId");
 
@@ -117,66 +104,10 @@ public class CartServlet extends HttpServlet {
         }
 
         try (Connection conn = dbConn.getConnection()) {
-            // Kiểm tra role của user
-            if ("add".equals(action)) {
-                String checkRoleSql = """
-                    SELECT r.RoleName 
-                    FROM user_roles ur 
-                    JOIN roles r ON ur.RoleID = r.RoleID 
-                    WHERE ur.UserID = ?
-                    """;
-                try (PreparedStatement checkStmt = conn.prepareStatement(checkRoleSql)) {
-                    checkStmt.setInt(1, userId);
-                    ResultSet rs = checkStmt.executeQuery();
-                    boolean isStudent = false;
-                    while (rs.next()) {
-                        if ("Student".equals(rs.getString("RoleName"))) {
-                            isStudent = true;
-                            break;
-                        }
-                    }
-                    if (!isStudent) {
-                        session.setAttribute("message", "Chỉ học viên mới có thể thêm khóa học vào giỏ hàng!");
-                        response.sendRedirect("CartServlet");
-                        return;
-                    }
-                }
-            }
-
-            // Check if user is already enrolled
-            String checkEnrollSql = "SELECT COUNT(*) FROM enrollments WHERE student_id = ? AND course_id = ?";
-            try (PreparedStatement checkStmt = conn.prepareStatement(checkEnrollSql)) {
-                checkStmt.setInt(1, userId);
-                checkStmt.setInt(2, courseId);
-                ResultSet rs = checkStmt.executeQuery();
-                if (rs.next() && rs.getInt(1) > 0) {
-                    session.setAttribute("message", "Bạn đã đăng ký khóa học này rồi!");
-                    response.sendRedirect("CartServlet");
-                    return;
-                }
-            }
-
-            // Check if user has already purchased the course
-            String checkPurchaseSql = """
-                SELECT COUNT(*) FROM orders o
-                JOIN orderdetails od ON o.OrderID = od.OrderID
-                WHERE o.UserID = ? AND od.CourseID = ? AND o.Status = 'Completed'
-                """;
-            try (PreparedStatement checkStmt = conn.prepareStatement(checkPurchaseSql)) {
-                checkStmt.setInt(1, userId);
-                checkStmt.setInt(2, courseId);
-                ResultSet rs = checkStmt.executeQuery();
-                if (rs.next() && rs.getInt(1) > 0) {
-                    session.setAttribute("message", "Bạn đã mua khóa học này rồi!");
-                    response.sendRedirect("CartServlet");
-                    return;
-                }
-            }
-
             switch (action) {
                 case "add" -> addToCart(conn, userId, courseId);
                 case "remove" -> removeFromCart(conn, userId, courseId);
-                default -> response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unknown action.");
+                case "moveToWishlist" -> System.out.println("Move to wishlist: " + courseId); // placeholder
             }
         } catch (SQLException e) {
             throw new ServletException("Cart operation failed", e);

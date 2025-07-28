@@ -627,7 +627,7 @@
             <div class="stat-icon text-warning">
                 <i class="fas fa-clock"></i>
             </div>
-            <div class="stat-value" data-target="${completionMins}">0</div>
+            <div class="stat-value" data-target="${completionTimeMinutes}">0</div>
             <div class="stat-label">Minutes Taken</div>
         </div>
     </div>
@@ -653,7 +653,7 @@
                 <div class="col-md-4">
                     <div class="text-center p-3 rounded-3" style="background: rgba(59, 130, 246, 0.1);">
                         <div class="h4 text-info mb-1">
-                            <fmt:formatNumber value="${completionMins * 60 / questionAttempts.size()}" maxFractionDigits="0"/>s
+                            <fmt:formatNumber value="${completionTimeMinutes * 60 / questionAttempts.size()}" maxFractionDigits="0"/>s
                         </div>
                         <div class="text-muted">Avg. per Question</div>
                     </div>
@@ -662,8 +662,8 @@
                     <div class="text-center p-3 rounded-3" style="background: rgba(245, 158, 11, 0.1);">
                         <div class="h4 text-warning mb-1">
                             <c:choose>
-                                <c:when test="${completionMins <= 5}">Fast</c:when>
-                                <c:when test="${completionMins <= 10}">Normal</c:when>
+                                <c:when test="${completionTimeMinutes <= 5}">Fast</c:when>
+                                <c:when test="${completionTimeMinutes <= 10}">Normal</c:when>
                                 <c:otherwise>Careful</c:otherwise>
                             </c:choose>
                         </div>
@@ -1129,7 +1129,7 @@
             gtag('event', 'quiz_completed', {
                 'quiz_id': '${quiz.id}',
                 'score': ${attempt.score},
-                'completion_time': ${completionMins},
+                'completion_time': ${completionTimeMinutes},
                 'total_questions': ${questionAttempts.size()},
                 'correct_answers': ${correctCount}
             });
@@ -1192,3 +1192,4 @@
 </script>
 </body>
 </html>
+

@@ -32,7 +32,7 @@
               <div class="card-body">
                 <p class="course-desc">${course.courseDescription}</p>
                 <div class="course-detail">
-                  <p><strong>Price:</strong> $${course.price}</p>
+                  <p><strong>Price:</strong> ${course.price}VNĐ</p>
                   <p><strong>Rating:</strong> ${course.rating}</p>
                   <p><strong>Category:</strong> ${course.categories}</p>
                   <p><strong>Status:</strong> ${course.courseStatus}</p>

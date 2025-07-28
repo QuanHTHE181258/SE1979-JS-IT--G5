@@ -134,7 +134,7 @@
         }
 
         .custom-table thead th {
-            color: white;
+            color: #222;
             font-weight: 600;
             padding: 1.25rem 1rem;
             border: none;
@@ -402,13 +402,11 @@
                 <table class="table custom-table">
                     <thead>
                     <tr>
-                        <th style="width: 80px;">ID</th>
-                        <th>Lesson Title</th>
-                        <th style="width: 120px;">Quizzes</th>
-                        <th style="width: 120px;">Materials</th>
-                        <th style="width: 100px;">Status</th>
-                        <th style="width: 150px;">Preview</th>
-                        <th style="width: 280px;">Actions</th>
+                        <th style="color:#222">#</th>
+                        <th style="color:#222">Lesson Title</th>
+                        <th style="color:#222">Type</th>
+                        <th style="color:#222">Created At</th>
+                        <th style="color:#222">Actions</th>
                     </tr>
                     </thead>
                     <tbody id="lessonsTableBody">

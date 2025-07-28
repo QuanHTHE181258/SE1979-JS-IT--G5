@@ -176,16 +176,19 @@ public class TakeQuizController extends HttpServlet {
             double completionTimeMinutes = (attempt.getEndTime().getTime() - attempt.getStartTime().getTime()) / (60.0 * 1000);
             attempt.setCompletionTimeMinutes(completionTimeMinutes);
 
-            System.out.println("Debug - Time Analysis Data:");
-            System.out.println("Start Time: " + attempt.getStartTime());
-            System.out.println("End Time: " + attempt.getEndTime());
-            System.out.println("Completion Time (minutes): " + completionTimeMinutes);
-            System.out.println("Questions Count: " + questionAttempts.size());
+            // Calculate correct count
+            int correctCount = 0;
+            if (questionAttempts != null) {
+                for (QuestionAttempt qa : questionAttempts) {
+                    if (Boolean.TRUE.equals(qa.getIsCorrect())) correctCount++;
+                }
+            }
 
             request.setAttribute("attempt", attempt);
             request.setAttribute("quiz", quiz);
             request.setAttribute("questionAttempts", questionAttempts);
             request.setAttribute("completionTimeMinutes", completionTimeMinutes);
+            request.setAttribute("correctCount", correctCount);
             // Add lessonId to request for JSP usage
             request.setAttribute("lessonId", quiz.getLessonID().getId());
             request.getRequestDispatcher("/WEB-INF/views/quiz/quiz-result.jsp").forward(request, response);

@@ -125,7 +125,7 @@
             <c:if test="${not empty errors.description}"><span class="error">${errors.description}</span></c:if>
         </div>
         <div class="form-group form-section">
-            <label class="form-label"><i class="fas fa-dollar-sign form-icon"></i>Giá ($):</label>
+            <label class="form-label"><i class="fas fa-dollar-sign form-icon"></i>Giá (VNĐ):</label>
             <input type="number" class="form-control" name="price" min="0" step="0.01" value="${param.price}" required>
             <c:if test="${not empty errors.price}"><span class="error">${errors.price}</span></c:if>
         </div>

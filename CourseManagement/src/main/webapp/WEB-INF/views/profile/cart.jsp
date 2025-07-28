@@ -1,317 +1,545 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="/WEB-INF/layout/header.jsp" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Giỏ Hàng - Hệ Thống Học Trực Tuyến</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --color-bg: #ffffff;
-            --color-primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --color-primary-solid: #6d5cae;
-            --color-primary-dark: #4b367c;
-            --color-accent: #f5f6fa;
-            --color-text: #22223b;
-            --color-text-light: #ffffff;
-            --color-border: #e0e0e0;
-            --color-warning: #ffb347;
-            --color-success: #43e97b;
-            --color-danger: #ff6b6b;
-            --color-disabled: #bdbdbd;
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            --danger-gradient: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+            --warning-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --card-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --border-radius: 16px;
         }
+
+        * {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 0;
+            margin: 0;
         }
-        .cart-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .cart-card {
-            background: rgba(255, 255, 255, 0.97);
-            backdrop-filter: blur(10px);
-            border-radius: 32px;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.13);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            overflow: hidden;
+
+        .main-container {
             max-width: 1200px;
-            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1rem;
         }
-        .cart-header {
-            background: var(--color-primary-gradient);
-            color: white;
-            padding: 56px 48px 32px 48px;
+
+        .page-header {
             text-align: center;
+            margin-bottom: 3rem;
             position: relative;
         }
-        .cart-header h1 {
-            margin: 0;
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .page-subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
             font-weight: 400;
-            font-size: 2.5rem;
-            letter-spacing: 1px;
         }
-        .cart-header p {
-            font-size: 1.15rem;
-            opacity: 0.92;
-            margin-top: 10px;
+
+        .alert-modern {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            backdrop-filter: blur(10px);
+            animation: slideInDown 0.5s ease-out;
         }
-        .cart-body {
-            padding: 56px 48px 48px 48px;
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        .table {
-            background: #fff;
-            border-radius: 18px;
+
+        .cart-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
             overflow: hidden;
-            font-size: 1.15rem;
+            animation: fadeInUp 0.6s ease-out;
         }
-        .table thead {
-            background: var(--color-primary-gradient);
-            color: var(--color-text-light);
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .table-modern {
+            margin: 0;
+            background: transparent;
+        }
+
+        .table-modern thead th {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 1.5rem 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+        }
+
+        .table-modern tbody tr {
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .table-modern tbody tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .table-modern td {
+            padding: 1.5rem 1rem;
+            border: none;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            vertical-align: middle;
+        }
+
+        .course-title {
+            font-weight: 600;
+            color: #1e293b;
             font-size: 1.1rem;
         }
-        .table tbody tr:hover {
-            background: #f3f0fa;
-            transition: background 0.2s;
-        }
-        .btn-primary, .btn-gradient {
-            background: var(--color-primary-gradient);
-            color: var(--color-text-light);
-            border: none;
-            transition: background 0.3s, box-shadow 0.3s;
-        }
-        .btn-primary:hover, .btn-gradient:hover, .btn-primary:focus {
-            background: var(--color-primary-solid);
-            color: var(--color-text-light);
-            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.15);
-        }
-        .btn-success {
-            background: var(--color-success);
-            color: var(--color-text-light);
-            border: none;
-            transition: background 0.3s, box-shadow 0.3s;
-        }
-        .btn-success:hover {
-            background: #2ecc71;
-            color: var(--color-text-light);
-        }
-        .btn-danger {
-            background: var(--color-danger);
-            color: var(--color-text-light);
-            border: none;
-            transition: background 0.3s;
-        }
-        .btn-danger:hover {
-            background: #c0392b;
-        }
-        .btn-warning {
-            background: var(--color-warning);
-            color: var(--color-text);
-            border: none;
-            transition: background 0.3s;
-        }
-        .btn-warning:hover {
-            background: #e1a03a;
-            color: var(--color-text-light);
-        }
-        .empty-cart-icon {
-            font-size: 5rem;
-            color: var(--color-primary-solid);
-            margin-bottom: 1rem;
-            transition: color 0.3s;
-        }
-        .alert-info {
-            background: var(--color-accent);
-            color: var(--color-primary-dark);
-            border-radius: 16px;
-            border: none;
-            font-weight: 500;
-            margin-bottom: 30px;
-            font-size: 1.1rem;
-        }
-        .fw-bold {
-            color: var(--color-primary-dark);
-        }
-        .cart-total-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 2.5rem;
+
+        .price-tag {
             font-size: 1.25rem;
+            font-weight: 700;
+            background: var(--success-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .cart-empty {
-            text-align: center;
-            padding: 3rem;
+
+        .btn-modern {
+            border: none;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
-        .cart-empty i {
-            font-size: 4rem;
-            color: #6c757d;
+
+        .btn-modern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-modern:hover::before {
+            left: 100%;
+        }
+
+        .btn-danger-modern {
+            background: var(--danger-gradient);
+            color: white;
+        }
+
+        .btn-danger-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(252, 70, 107, 0.3);
+            color: white;
+        }
+
+        .btn-warning-modern {
+            background: var(--warning-gradient);
+            color: white;
+        }
+
+        .btn-warning-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(240, 147, 251, 0.3);
+            color: white;
+        }
+
+        .btn-success-modern {
+            background: var(--success-gradient);
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-success-modern:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(17, 153, 142, 0.4);
+            color: white;
+        }
+
+        .btn-secondary-modern {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-secondary-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(116, 185, 255, 0.3);
+            color: white;
+        }
+
+        .summary-card {
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            position: sticky;
+            top: 2rem;
+        }
+
+        .total-amount {
+            font-size: 2rem;
+            font-weight: 700;
             margin-bottom: 1rem;
         }
-        @media (max-width: 992px) {
-            .cart-card {
-                max-width: 98vw;
-                border-radius: 18px;
+
+        .empty-cart {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            animation: fadeInScale 0.8s ease-out;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
             }
-            .cart-header, .cart-body {
-                padding-left: 18px;
-                padding-right: 18px;
+            to {
+                opacity: 1;
+                transform: scale(1);
             }
         }
+
+        .empty-cart-icon {
+            font-size: 6rem;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cart-item {
+            animation: slideInLeft 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .cart-item:nth-child(1) { animation-delay: 0.1s; }
+        .cart-item:nth-child(2) { animation-delay: 0.2s; }
+        .cart-item:nth-child(3) { animation-delay: 0.3s; }
+        .cart-item:nth-child(4) { animation-delay: 0.4s; }
+        .cart-item:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .floating-checkout {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(17, 153, 142, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(17, 153, 142, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(17, 153, 142, 0);
+            }
+        }
+
         @media (max-width: 768px) {
-            .cart-body {
-                padding: 1rem;
+            .page-title {
+                font-size: 2rem;
             }
-            .cart-header {
-                padding: 2rem 1rem 1rem 1rem;
-            }
-            .cart-card {
-                border-radius: 10px;
-            }
+
             .table-responsive {
-                font-size: 0.95rem;
+                border-radius: var(--border-radius);
             }
-            .btn-lg {
-                font-size: 1rem;
-                padding: 0.5rem 1.2rem;
-            }
-            .cart-total-section {
+
+            .action-buttons {
                 flex-direction: column;
-                gap: 1rem;
-                align-items: flex-start;
             }
+
+            .btn-modern {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .floating-checkout {
+                position: static;
+                margin-top: 2rem;
+                width: 100%;
+            }
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-<div class="container py-5">
-    <div class="row">
-        <!-- Main Content -->
-        <div class="col-lg-8">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0"><i class="bi bi-cart me-2"></i>Giỏ Hàng</h4>
-                </div>
-                <div class="card-body">
-                    <!-- Hiển thị thông báo nếu có -->
-                    <c:if test="${not empty message}">
-                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                ${message}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    </c:if>
 
-                    <c:choose>
-                        <c:when test="${not empty cartItems}">
-                            <c:forEach var="item" items="${cartItems}">
-                                <div class="card mb-3" id="cart-item-${item.id}">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center">
-                                            <img src="${item.courseID.imageURL}" alt="${item.courseID.title}"
-                                                 class="img-fluid rounded me-3" style="width: 100px;">
-                                            <div class="flex-grow-1">
-                                                <h5 class="card-title mb-1">${item.courseID.title}</h5>
-                                                <p class="text-muted mb-0">
-                                                    <i class="bi bi-tag me-1"></i>Giá:
-                                                    <fmt:formatNumber value="${item.price}" type="currency" currencySymbol="₫"
-                                                                      minFractionDigits="0" maxFractionDigits="0"/>
-                                                </p>
-                                            </div>
-                                            <div class="ms-3">
-                                                <button class="btn btn-outline-danger btn-sm"
-                                                        onclick="removeFromCart(${item.id})">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:forEach>
-                        </c:when>
-                        <c:otherwise>
-                            <!-- Hiển thị khi giỏ hàng trống -->
-                            <div class="cart-empty">
-                                <i class="bi bi-cart-x"></i>
-                                <h4>Giỏ hàng trống</h4>
-                                <p class="text-muted">Bạn chưa có khóa học nào trong giỏ hàng</p>
-                                <a href="${pageContext.request.contextPath}/course" class="btn btn-primary">
-                                    <i class="bi bi-search me-2"></i>Khám Phá Khóa Học
-                                </a>
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-            </div>
+<div class="main-container">
+    <!-- Header -->
+    <div class="page-header">
+        <h1 class="page-title">Giỏ hàng của bạn</h1>
+        <p class="page-subtitle">Xem lại và thanh toán các khóa học đã chọn</p>
+    </div>
+
+    <!-- Thông báo -->
+    <c:if test="${not empty message}">
+        <div class="alert alert-warning alert-modern alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+                ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+    </c:if>
 
-        <!-- Order Summary -->
-        <div class="col-lg-4">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi bi-receipt me-2"></i>Tổng Thanh Toán</h5>
+    <c:choose>
+        <c:when test="${not empty cartItems}">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Bảng giỏ hàng -->
+                    <div class="cart-card">
+                        <div class="table-responsive">
+                            <table class="table table-modern">
+                                <thead>
+                                <tr>
+                                    <th style="width: 5%">#</th>
+                                    <th style="width: 45%">Khóa học</th>
+                                    <th style="width: 20%">Giá</th>
+                                    <th style="width: 30%">Hành động</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach items="${cartItems}" var="item" varStatus="status">
+                                    <tr class="cart-item">
+                                        <td class="text-center fw-bold">${status.index + 1}</td>
+                                        <td>
+                                            <div class="course-title">${item.courseID.title}</div>
+                                        </td>
+                                        <td>
+                                            <span class="price-tag">$${item.price}</span>
+                                        </td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <!-- Nút Xóa -->
+                                                <form action="CartServlet" method="post" style="display: inline;">
+                                                    <input type="hidden" name="action" value="remove"/>
+                                                    <input type="hidden" name="courseId" value="${item.courseID.id}"/>
+                                                    <button type="submit" class="btn btn-modern btn-danger-modern btn-sm" onclick="showLoading(this)">
+                                                        <span class="loading-spinner"></span>
+                                                        <i class="bi bi-trash"></i> Xóa
+                                                    </button>
+                                                </form>
+                                                <!-- Nút Wishlist -->
+                                                <form action="CartServlet" method="post" style="display: inline;">
+                                                    <input type="hidden" name="action" value="moveToWishlist"/>
+                                                    <input type="hidden" name="courseId" value="${item.courseID.id}"/>
+                                                    <button type="submit" class="btn btn-modern btn-warning-modern btn-sm" onclick="showLoading(this)">
+                                                        <span class="loading-spinner"></span>
+                                                        <i class="bi bi-heart"></i> Yêu thích
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-between mb-3">
-                        <span>Tổng tiền:</span>
-                        <strong>
+
+                <div class="col-lg-4">
+                    <!-- Thẻ tổng kết -->
+                    <div class="summary-card">
+                        <h4 class="mb-3">
+                            <i class="bi bi-calculator me-2"></i>
+                            Tổng kết đơn hàng
+                        </h4>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Số khóa học:</span>
+                            <span class="fw-bold">${cartItems.size()}</span>
+                        </div>
+                        <hr style="border-color: rgba(255,255,255,0.3);">
+                        <div class="total-amount">
+                            Tổng cộng:
                             <c:choose>
                                 <c:when test="${not empty sessionScope.totalPrice}">
-                                    <fmt:formatNumber value="${sessionScope.totalPrice}" type="currency" currencySymbol="₫"
-                                                      minFractionDigits="0" maxFractionDigits="0"/>
+                                    $${sessionScope.totalPrice}
                                 </c:when>
                                 <c:otherwise>
-                                    0₫
+                                    $0.00
                                 </c:otherwise>
                             </c:choose>
-                        </strong>
-                    </div>
-                    <hr>
-                    <div class="d-grid gap-2">
-                        <form action="CheckoutServlet" method="post" style="margin:0;">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-credit-card me-2"></i>Thanh Toán
+                        </div>
+                        <form action="CheckoutServlet" method="post">
+                            <button type="submit" class="btn btn-success-modern w-100">
+                                <i class="bi bi-credit-card me-2"></i>
+                                Thanh toán ngay
                             </button>
                         </form>
                     </div>
                 </div>
             </div>
-        </div>
+        </c:when>
+
+        <c:otherwise>
+            <!-- Giỏ hàng trống -->
+            <div class="empty-cart">
+                <i class="bi bi-cart-x empty-cart-icon"></i>
+                <h3 class="mb-3" style="color: #1e293b; font-weight: 600;">Giỏ hàng trống</h3>
+                <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 2rem;">
+                    Hãy khám phá các khóa học tuyệt vời và thêm vào giỏ hàng của bạn!
+                </p>
+                <a href="course" class="btn btn-modern btn-success-modern">
+                    <i class="bi bi-book me-2"></i>
+                    Khám phá khóa học
+                </a>
+            </div>
+        </c:otherwise>
+    </c:choose>
+
+    <!-- Nút quay lại -->
+    <div class="text-center mt-4">
+        <a href="course" class="btn btn-modern btn-secondary-modern">
+            <i class="bi bi-arrow-left me-2"></i>
+            Tiếp tục mua sắm
+        </a>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    function removeFromCart(itemId) {
-        if (confirm('Bạn có chắc chắn muốn xóa khóa học này khỏi giỏ hàng?')) {
-            fetch('CartServlet?action=remove&courseId=' + itemId, {
-                method: 'POST'
-            }).then(response => {
-                if (response.ok) {
-                    document.getElementById('cart-item-' + itemId).remove();
-                    // Kiểm tra nếu giỏ hàng trống
-                    if (document.querySelectorAll('.card.mb-3').length === 0) {
-                        location.reload();
-                    }
-                } else {
-                    alert('Có lỗi xảy ra khi xóa khóa học khỏi giỏ hàng');
-                }
-            });
+    function showLoading(button) {
+        const spinner = button.querySelector('.loading-spinner');
+        if (spinner) {
+            spinner.style.display = 'inline-block';
+            button.disabled = true;
         }
     }
 
-    function checkout() {
-        if (${empty cartItems}) {
-            alert('Giỏ hàng của bạn đang trống!');
-            return;
-        }
-        window.location.href = '${pageContext.request.contextPath}/checkout';
-    }
+    // Smooth scroll animation for page load
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.style.opacity = '0';
+        document.body.style.transform = 'translateY(20px)';
+
+        setTimeout(() => {
+            document.body.style.transition = 'all 0.6s ease-out';
+            document.body.style.opacity = '1';
+            document.body.style.transform = 'translateY(0)';
+        }, 100);
+    });
+
+    // Add hover effects to table rows
+    document.querySelectorAll('.table-modern tbody tr').forEach(row => {
+        row.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+        });
+
+        row.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
 </script>
 </body>
 </html>

@@ -907,8 +907,8 @@
                         '<div class="progress-text">' + e.progress + '%</div>';
 
                     var actionsHtml = '<a href="lessons?courseId=' + e.courseId + '" class="btn btn-modern btn-primary-modern"><i class="fas fa-eye"></i> View</a>';
-                    if (e.status == 'COMPLETED') {
-                        actionsHtml += '<a href="feedback?courseId=' + e.courseId + '" class="btn btn-modern btn-warning-modern"><i class="fas fa-comment"></i> Feedback</a>';
+                    if (e.progress >= 80) {
+                        actionsHtml += '<a href="feedback?courseId=' + e.courseId + '" class="btn btn-modern btn-warning-modern ms-1"><i class="fas fa-comment"></i> Feedback</a>';
                     }
 
                     return '<tr>' +
@@ -1015,3 +1015,4 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

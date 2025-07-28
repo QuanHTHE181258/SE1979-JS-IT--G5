@@ -373,7 +373,7 @@
                     </c:otherwise>
                   </c:choose>
                 </td>
-                <td><span class="badge bg-success"><c:out value="${course.price}"/>$</span></td>
+                <td><span class="badge bg-success"><c:out value="${course.price}"/>VNĐ</span></td>
                 <td>
                   <div class="d-flex flex-wrap justify-content-center gap-2">
                     <span class="badge rounded-pill bg-light text-dark" title="Rating">
@@ -403,9 +403,7 @@
                     <a href="update-course?id=${course.id}" class="btn btn-outline-secondary btn-sm w-100" title="Chỉnh sửa khóa học">
                       <i class="fas fa-edit"></i> Sửa
                     </a>
-                    <a href="course-lessons?id=${course.id}" class="btn btn-outline-primary btn-sm w-100" title="Quản lý bài học">
-                      <i class="fas fa-list-ul"></i> Bài Học
-                    </a>
+
                   </div>
                 </td>
                 <td>
