@@ -25,6 +25,20 @@ public class UserService {
         this.userRoleDAO = new UserRoleDAOImpl();
     }
 
+    public boolean blockUser(int userId) {
+        System.out.println("[LOG] Attempting to block user with ID: " + userId);
+        boolean result = userDAO.blockUser(userId);
+        System.out.println("[LOG] Block user result for ID " + userId + ": " + result);
+        return result;
+    }
+
+    public boolean unblockUser(int userId) {
+        System.out.println("[LOG] Attempting to unblock user with ID: " + userId);
+        boolean result = userDAO.unblockUser(userId);
+        System.out.println("[LOG] Unblock user result for ID " + userId + ": " + result);
+        return result;
+    }
+
     public User authenticate(String identifier, String password){
         //find user by user name or email
         User user = userDAO.findUserByUsernameOrEmail(identifier);
@@ -32,7 +46,11 @@ public class UserService {
             System.out.println("User not found");
             return null;
         }
-
+        // Check if blocked
+        if(user.isBlocked()){
+            System.out.println("Tài khoản đã bị chặn");
+            return null;
+        }
         // Check if password matches
         if(PasswordUtil.verifyPassword(password, user.getPasswordHash())){
             userDAO.UpdateLastLogin(user.getId());
@@ -59,7 +77,11 @@ public class UserService {
 
     public List<User> getUsers(String search, String roleFilter, int page) {
         int offset = (page - 1) * USERS_PER_PAGE;
-        return userDAO.findUsers(search, roleFilter, offset, USERS_PER_PAGE);
+        List<User> users = userDAO.findUsers(search, roleFilter, offset, USERS_PER_PAGE);
+        long blockedCount = users.stream().filter(User::isBlocked).count();
+        System.out.println("[LOG] User list loaded: total=" + users.size() + ", blocked=" + blockedCount);
+        users.forEach(u -> System.out.println("[LOG] UserID=" + u.getId() + ", Username=" + u.getUsername() + ", Blocked=" + u.isBlocked()));
+        return users;
     }
 
 //    public int getTotalPages(String search, String roleName) {

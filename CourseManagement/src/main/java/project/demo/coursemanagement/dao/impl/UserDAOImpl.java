@@ -2,11 +2,9 @@ package project.demo.coursemanagement.dao.impl;
 
 import project.demo.coursemanagement.dao.UserDAO;
 import project.demo.coursemanagement.entities.User;
-import project.demo.coursemanagement.entities.Role;
 import project.demo.coursemanagement.utils.DatabaseConnection;
 
 import java.sql.*;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +19,7 @@ public class UserDAOImpl implements UserDAO {
         String sql = """
                     SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName,
                            u.LastName, u.PhoneNumber, u.DateOfBirth, u.AvatarURL,
-                           u.LastLogin, u.CreatedAt
+                           u.LastLogin, u.CreatedAt, u.Blocked
                     FROM users u
                     WHERE (u.Username = ? OR u.Email = ?)
                 """;
@@ -49,7 +47,7 @@ public class UserDAOImpl implements UserDAO {
         String sql = """
                     SELECT u.UserID, u.Username, u.Email, u.PasswordHash,
                            u.FirstName, u.LastName, u.PhoneNumber, u.DateOfBirth,
-                           u.AvatarURL, u.LastLogin, u.CreatedAt
+                           u.AvatarURL, u.LastLogin, u.CreatedAt, u.Blocked
                     FROM users u
                     WHERE u.UserID = ?
                 """;
@@ -106,7 +104,7 @@ public class UserDAOImpl implements UserDAO {
         String sql = """
                     SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName,
                            u.LastName, u.PhoneNumber, u.DateOfBirth, u.AvatarURL,
-                           u.LastLogin, u.CreatedAt
+                           u.LastLogin, u.CreatedAt, u.Blocked
                     FROM users u
                 """;
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -128,7 +126,7 @@ public class UserDAOImpl implements UserDAO {
         String sql = """
                     SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName,
                            u.LastName, u.PhoneNumber, u.DateOfBirth, u.AvatarURL,
-                           u.LastLogin, u.CreatedAt
+                           u.LastLogin, u.CreatedAt, u.Blocked
                     FROM users u
                     WHERE u.FirstName LIKE ? OR u.LastName LIKE ? OR u.Username LIKE ?
                 """;
@@ -158,7 +156,7 @@ public class UserDAOImpl implements UserDAO {
         List<User> users = new ArrayList<>();
         String sql = """
             SELECT TOP (?) u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName,
-                   u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt
+                   u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt, u.Blocked
             FROM users u
             ORDER BY u.CreatedAt DESC
         """;
@@ -188,7 +186,7 @@ public class UserDAOImpl implements UserDAO {
             // Include role filter
             sql.append("""
                 SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName,
-                       u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt
+                       u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt, u.Blocked
                 FROM users u
                 INNER JOIN user_roles ur ON u.UserID = ur.UserID
                 INNER JOIN roles r ON ur.RoleID = r.RoleID
@@ -198,7 +196,7 @@ public class UserDAOImpl implements UserDAO {
             // No role filter
             sql.append("""
                 SELECT u.UserID, u.Username, u.Email, u.PasswordHash, u.FirstName, u.LastName,
-                       u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt
+                       u.PhoneNumber, u.DateOfBirth, u.AvatarURL, u.LastLogin, u.CreatedAt, u.Blocked
                 FROM users u
                 WHERE 1=1
             """);
@@ -438,6 +436,15 @@ public class UserDAOImpl implements UserDAO {
             user.setCreatedAtDate(new java.util.Date(createdAtTs.getTime()));
         }
 
+        // Fix: set blocked status from DB
+        try {
+            int blockedValue = rs.getInt("Blocked");
+            user.setBlocked(blockedValue == 1);
+            System.out.println("[USER MAP] UserID=" + user.getId() + ", Blocked=" + blockedValue + ", mappedBlocked=" + user.isBlocked());
+        } catch (SQLException e) {
+            System.out.println("[USER MAP] Blocked column not found for UserID=" + user.getId());
+        }
+
         return user;
     }
 
@@ -558,4 +565,58 @@ public class UserDAOImpl implements UserDAO {
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
         return pattern.matcher(nfdNormalizedString).replaceAll("");
     }
+
+    @Override
+    public boolean blockUser(int userId) {
+        String sql = "UPDATE users SET Blocked = 1 WHERE UserID = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error blocking user: " + e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public boolean unblockUser(int userId) {
+        String sql = "UPDATE users SET Blocked = 0 WHERE UserID = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error unblocking user: " + e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public boolean createTeacher(User user) {
+        boolean userCreated = createUser(user);
+        if (!userCreated || user.getId() == null) {
+            System.err.println("Failed to create user for teacher");
+            return false;
+        }
+
+        String sql = "INSERT INTO user_roles (UserID, RoleID) SELECT ?, RoleID FROM roles WHERE RoleName = 'Teacher'";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, user.getId());
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected == 0) {
+                System.err.println("Failed to assign Teacher role to user ID: " + user.getId());
+            }
+
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Error assigning Teacher role: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

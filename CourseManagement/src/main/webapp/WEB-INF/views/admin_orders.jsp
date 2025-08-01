@@ -320,11 +320,11 @@
                     <div class="stat-value">${orderStats.completedOrders}</div>
                     <div class="stat-label">Completed Orders</div>
                 </div>
-                <div class="stat-card">
-                    <i class="fas fa-clock stat-icon" style="color: #f1c40f;"></i>
-                    <div class="stat-value">${orderStats.pendingOrders}</div>
-                    <div class="stat-label">Pending Orders</div>
-                </div>
+<%--                <div class="stat-card">--%>
+<%--                    <i class="fas fa-clock stat-icon" style="color: #f1c40f;"></i>--%>
+<%--                    <div class="stat-value">${orderStats.pendingOrders}</div>--%>
+<%--                    <div class="stat-label">Pending Orders</div>--%>
+<%--                </div>--%>
                 <div class="stat-card">
                     <i class="fas fa-dollar-sign stat-icon" style="color: #9b59b6;"></i>
                     <div class="stat-value">$<fmt:formatNumber value="${orderStats.totalRevenue}" pattern="#,##0.00"/></div>
@@ -335,12 +335,7 @@
             <!-- Search and Filter -->
             <form method="GET" action="${pageContext.request.contextPath}/admin/orders" class="search-box">
                 <input type="text" name="search" class="search-input" placeholder="Search orders..." value="${searchKeyword}">
-                <select name="status" class="filter-dropdown" onchange="this.form.submit()">
-                    <option value="">All Status</option>
-                    <option value="pending" ${currentStatus == 'pending' ? 'selected' : ''}>Pending</option>
-                    <option value="paid" ${currentStatus == 'paid' ? 'selected' : ''}>Completed</option>
-                    <option value="cancelled" ${currentStatus == 'cancelled' ? 'selected' : ''}>Cancelled</option>
-                </select>
+
             </form>
 
             <!-- Orders Table -->
@@ -367,7 +362,7 @@
                             <td><fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="$"/></td>
                             <td><fmt:formatDate value="${order.createdAtDate}" pattern="MMM dd, yyyy"/></td>
                             <td>
-                                    <span class="status-badge ${order.status == 'pending' ? 'status-pending' :
+                                    <span class="status-badge ${
                                         (order.status == 'paid' ? 'status-completed' : 'status-cancelled')}">
                                             ${order.status}
                                     </span>

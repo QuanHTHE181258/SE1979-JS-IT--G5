@@ -8,6 +8,29 @@
     <title>Edit Blog</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
+    <style>
+        .ck-editor__editable_inline {
+            min-height: 400px;
+        }
+        .image-preview {
+            max-width: 200px;
+            margin-top: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        .custom-file-upload {
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            background: #f8f9fa;
+        }
+        input[type="file"] {
+            display: none;
+        }
+    </style>
 </head>
 <body style="margin:0; font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6fb;">
 <div style="display:flex; min-height:100vh;">
@@ -35,7 +58,8 @@
                     </div>
                 </c:if>
 
-                <form action="${pageContext.request.contextPath}/admin/blog/edit" method="post" id="blogEditForm" class="needs-validation" novalidate>
+                <form action="${pageContext.request.contextPath}/admin/blog/edit" method="post" id="blogEditForm"
+                      class="needs-validation" novalidate enctype="multipart/form-data">
                     <input type="hidden" name="id" value="${blog.id}">
 
                     <div style="margin-bottom:24px;">
@@ -43,29 +67,24 @@
                         <input type="text" id="title" name="title" value="${blog.title}" required
                                minlength="10" maxlength="200"
                                style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; font-size:1em;">
-                        <div class="invalid-feedback" style="color: #e74c3c; font-size: 0.875em; margin-top: 4px;">
-                            Title must be between 10 and 200 characters
-                        </div>
+                        <div class="invalid-feedback">Title must be between 10 and 200 characters</div>
                     </div>
 
                     <div style="margin-bottom:24px;">
                         <label for="content" style="display:block; margin-bottom:8px; font-weight:500; color:#2c3e50;">Content</label>
-                        <textarea id="content" name="content" rows="10" required
-                                  minlength="50"
-                                  style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; font-size:1em; resize:vertical;">${blog.content}</textarea>
-                        <div class="invalid-feedback" style="color: #e74c3c; font-size: 0.875em; margin-top: 4px;">
-                            Content must be at least 50 characters long
-                        </div>
+                        <textarea id="content" name="content" required>${blog.content}</textarea>
+                        <div class="invalid-feedback">Content is required</div>
                     </div>
 
                     <div style="margin-bottom:24px;">
-                        <label for="imageURL" style="display:block; margin-bottom:8px; font-weight:500; color:#2c3e50;">Image URL</label>
-                        <input type="url" id="imageURL" name="imageURL" value="${blog.imageURL}"
-                               pattern="https?://.+"
-                               style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; font-size:1em;">
-                        <div class="invalid-feedback" style="color: #e74c3c; font-size: 0.875em; margin-top: 4px;">
-                            Please enter a valid URL starting with http:// or https://
-                        </div>
+                        <label style="display:block; margin-bottom:8px; font-weight:500; color:#2c3e50;">Blog Image</label>
+                        <label for="imageFile" class="custom-file-upload">
+                            <i class="fas fa-upload"></i> Choose Image
+                        </label>
+                        <input type="file" id="imageFile" name="imageFile" accept="image/*"
+                               onchange="previewImage(this);">
+                        <img id="imagePreview" src="${blog.imageURL}" alt="Preview"
+                             class="image-preview" style="${not empty blog.imageURL ? 'display: block;' : ''}">
                     </div>
 
                     <div style="margin-bottom:32px;">
@@ -76,19 +95,8 @@
                             <option value="draft" ${blog.status == 'draft' ? 'selected' : ''}>Draft</option>
                             <option value="published" ${blog.status == 'published' ? 'selected' : ''}>Published</option>
                         </select>
-                        <div class="invalid-feedback" style="color: #e74c3c; font-size: 0.875em; margin-top: 4px;">
-                            Please select a status
-                        </div>
+                        <div class="invalid-feedback">Please select a status</div>
                     </div>
-
-                    <!-- Preview Current Image -->
-                    <c:if test="${not empty blog.imageURL}">
-                        <div style="margin-bottom:24px;">
-                            <p style="font-weight:500; color:#2c3e50; margin-bottom:8px;">Current Image:</p>
-                            <img src="${blog.imageURL}" alt="Current blog image"
-                                 style="max-width:300px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
-                        </div>
-                    </c:if>
 
                     <!-- Action Buttons -->
                     <div style="display:flex; gap:16px; justify-content:flex-end;">
@@ -105,6 +113,29 @@
                 </form>
 
                 <script>
+                    ClassicEditor
+                        .create(document.querySelector('#content'), {
+                            toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'insertImage', '|', 'undo', 'redo'],
+                            simpleUpload: {
+                                uploadUrl: '${pageContext.request.contextPath}/admin/blog/upload-image'
+                            }
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+
+                    function previewImage(input) {
+                        const preview = document.getElementById('imagePreview');
+                        if (input.files && input.files[0]) {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                preview.src = e.target.result;
+                                preview.style.display = 'block';
+                            }
+                            reader.readAsDataURL(input.files[0]);
+                        }
+                    }
+
                     (function() {
                         'use strict';
                         const form = document.getElementById('blogEditForm');
@@ -114,34 +145,8 @@
                                 event.preventDefault();
                                 event.stopPropagation();
                             }
-
-                            // Custom validation for content length
-                            const content = document.getElementById('content');
-                            if (content.value.trim().length < 50) {
-                                content.setCustomValidity('Content must be at least 50 characters long');
-                                event.preventDefault();
-                            } else {
-                                content.setCustomValidity('');
-                            }
-
-                            // Custom validation for image URL format
-                            const imageURL = document.getElementById('imageURL');
-                            if (imageURL.value && !imageURL.value.match(/^https?:\/\/.+/)) {
-                                imageURL.setCustomValidity('Please enter a valid URL starting with http:// or https://');
-                                event.preventDefault();
-                            } else {
-                                imageURL.setCustomValidity('');
-                            }
-
                             form.classList.add('was-validated');
                         }, false);
-
-                        // Auto-resize textarea
-                        const textarea = document.getElementById('content');
-                        textarea.addEventListener('input', function() {
-                            this.style.height = 'auto';
-                            this.style.height = (this.scrollHeight + 2) + 'px';
-                        });
                     })();
                 </script>
             </div>

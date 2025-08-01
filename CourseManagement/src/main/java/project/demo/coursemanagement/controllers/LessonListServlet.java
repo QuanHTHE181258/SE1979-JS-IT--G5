@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import project.demo.coursemanagement.dao.LessonDAO;
 import project.demo.coursemanagement.dao.impl.LessonDAOImpl;
 import project.demo.coursemanagement.dto.LessonStats;
+import project.demo.coursemanagement.entities.User;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,6 +25,11 @@ public class LessonListServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        User user = (User) request.getSession().getAttribute("loggedInUser");
+        if (user == null) {
+            response.sendRedirect("login");
+            return;
+        }
         System.out.println("LessonListServlet doGet called"); // Debug log
 
         String courseIdStr = request.getParameter("courseId");

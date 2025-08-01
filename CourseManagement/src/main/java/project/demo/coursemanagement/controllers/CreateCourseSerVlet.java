@@ -32,7 +32,11 @@ import project.demo.coursemanagement.dto.CategoryDTO;
 public class CreateCourseSerVlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Lấy danh sách category từ DB
+        User user = (User) req.getSession().getAttribute("loggedInUser");
+        if (user == null) {
+            resp.sendRedirect("login");
+            return;
+        }
         CategoryDAO categoryDAO = new CategoryDAOImpl();
         List<CategoryDTO> categories = categoryDAO.getAllCategories();
         req.setAttribute("categories", categories);

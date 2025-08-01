@@ -31,6 +31,10 @@ public interface UserDAO {
     boolean createUser(User user);
     boolean updateUser(User user);
     boolean deleteUser(int userId);
+    boolean blockUser(int userId);
+    boolean unblockUser(int userId);
 
     List<User> searchRecentActivities(String keyword, int limit, String role);
+
+    boolean createTeacher(User user);
 }

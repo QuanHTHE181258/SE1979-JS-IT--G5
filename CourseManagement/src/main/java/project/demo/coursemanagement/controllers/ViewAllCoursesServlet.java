@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import project.demo.coursemanagement.dto.CourseStatsDTO;
 import project.demo.coursemanagement.dto.CategoryDTO;
+import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.service.CourseService;
 import project.demo.coursemanagement.service.CategoryService;
 
@@ -39,7 +40,11 @@ public class ViewAllCoursesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        User user = (User) request.getSession().getAttribute("loggedInUser");
+        if (user == null) {
+            response.sendRedirect("login");
+            return;
+        }
         try {
             // Lấy categoryId từ query string (nếu có)
             String categoryParam = request.getParameter("categoryId");

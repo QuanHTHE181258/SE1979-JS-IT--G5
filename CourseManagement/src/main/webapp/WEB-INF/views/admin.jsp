@@ -330,38 +330,31 @@
 <div class="wrapper">
     <div class="main-content">
         <!-- Stats Cards -->
-        <div class="row">
-            <div class="col-xl-3 col-md-6">
+        <div class="row g-4">
+            <div class="col-md-4">
                 <div class="stats-card">
                     <i class="fas fa-users stats-card-icon"></i>
-                    <div class="stats-card-header">Total Users</div>
-                    <div class="stats-card-value">${dashboardStats.totalUsers}</div>
+                    <div class="stats-card-header">Tổng Người Dùng</div>
+                    <div class="stats-card-value">
+                        <fmt:formatNumber value="${dashboardStats.totalUsers}" type="number"/>
+                    </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-md-4">
                 <div class="stats-card">
                     <i class="fas fa-book stats-card-icon"></i>
-                    <div class="stats-card-header">Total Courses</div>
+                    <div class="stats-card-header">Tổng Khóa Học</div>
                     <div class="stats-card-value">
-                        <fmt:formatNumber value="${dashboardStats.totalCourses}" />
+                        <fmt:formatNumber value="${dashboardStats.totalCourses}" type="number"/>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
-                <div class="stats-card">
-                    <i class="fas fa-graduation-cap stats-card-icon"></i>
-                    <div class="stats-card-header">Active Enrollments</div>
-                    <div class="stats-card-value">
-                        <fmt:formatNumber value="${dashboardStats.activeEnrollments}" />
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-md-4">
                 <div class="stats-card">
                     <i class="fas fa-dollar-sign stats-card-icon"></i>
-                    <div class="stats-card-header">Revenue</div>
+                    <div class="stats-card-header">Doanh Thu</div>
                     <div class="stats-card-value">
-                        $<fmt:formatNumber value="${dashboardStats.totalRevenue}" pattern="#,##0.00" />
+                        <fmt:formatNumber value="${dashboardStats.totalRevenue}" type="currency" currencySymbol="$"/>
                     </div>
                 </div>
             </div>

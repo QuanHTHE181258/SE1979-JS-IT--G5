@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.service.LessonService;
 import java.io.IOException;
 
@@ -12,6 +13,12 @@ import java.io.IOException;
 public class ViewListLessonServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        User user = (User) request.getSession().getAttribute("loggedInUser");
+        if (user == null) {
+            response.sendRedirect("login");
+            return;
+        }
+
         String courseIdStr = request.getParameter("id");
         if (courseIdStr == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing course id");

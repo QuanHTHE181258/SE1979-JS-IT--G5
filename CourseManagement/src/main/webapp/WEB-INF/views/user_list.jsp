@@ -112,7 +112,7 @@
                     <th>Email</th>
                     <th>Điện Thoại</th>
                     <th>Ngày Tạo</th>
-                    <th>Thao Tác</th>
+                    <th>Trạng Thái</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -132,13 +132,12 @@
                         <td>${student.phoneNumber}</td>
                         <td><fmt:formatDate value="${student.createdAtDate}" pattern="MMM dd, yyyy"/></td>
                         <td>
-                            <a href="${pageContext.request.contextPath}/admin/users/edit?id=${student.id}"
-                               class="btn-action btn-edit me-2">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <button class="btn-action btn-delete" onclick="deleteUser(${student.id})">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            <c:if test="${student.blocked}">
+                                <span class="badge bg-danger">Đã bị chặn</span>
+                            </c:if>
+                            <c:if test="${!student.blocked}">
+                                <span class="badge bg-success">Hoạt động</span>
+                            </c:if>
                         </td>
                     </tr>
                 </c:forEach>
@@ -150,6 +149,10 @@
     <!-- Teachers Section -->
     <div class="user-section">
         <h2 class="section-title">Giảng Viên</h2>
+        <a href="${pageContext.request.contextPath}/admin/teachers/create" class="btn btn-primary mb-3">
+            <i class="fas fa-plus-circle me-1"></i> Tạo Giảng Viên
+        </a>
+
         <div class="table-responsive">
             <table class="user-table">
                 <thead>
@@ -158,6 +161,7 @@
                     <th>Email</th>
                     <th>Điện Thoại</th>
                     <th>Ngày Tạo</th>
+                    <th>Trạng Thái</th>
                     <th>Thao Tác</th>
                 </tr>
                 </thead>
@@ -178,13 +182,30 @@
                         <td>${teacher.phoneNumber}</td>
                         <td><fmt:formatDate value="${teacher.createdAtDate}" pattern="MMM dd, yyyy"/></td>
                         <td>
-                            <a href="${pageContext.request.contextPath}/admin/users/edit?id=${teacher.id}"
-                               class="btn-action btn-edit me-2">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <button class="btn-action btn-delete" onclick="deleteUser(${teacher.id})">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            <c:if test="${teacher.blocked}">
+                                <span class="badge bg-danger">Đã bị chặn</span>
+                            </c:if>
+                            <c:if test="${!teacher.blocked}">
+                                <span class="badge bg-success">Hoạt động</span>
+                            </c:if>
+                        </td>
+                        <td>
+                            <c:if test="${teacher.blocked}">
+                                <form method="post" action="${pageContext.request.contextPath}/admin/users/unblock" style="display:inline">
+                                    <input type="hidden" name="id" value="${teacher.id}" />
+                                    <button type="submit" class="btn-action btn-edit" title="Mở chặn">
+                                        <i class="fas fa-unlock"></i>
+                                    </button>
+                                </form>
+                            </c:if>
+                            <c:if test="${!teacher.blocked}">
+                                <form method="post" action="${pageContext.request.contextPath}/admin/users/block" style="display:inline">
+                                    <input type="hidden" name="id" value="${teacher.id}" />
+                                    <button type="submit" class="btn-action btn-delete" title="Chặn">
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                </form>
+                            </c:if>
                         </td>
                     </tr>
                 </c:forEach>
@@ -192,6 +213,143 @@
             </table>
         </div>
     </div>
+
+    <!-- Course Managers Section -->
+    <div class="user-section">
+        <h2 class="section-title">Quản Lý Khóa Học</h2>
+        <a href="${pageContext.request.contextPath}/admin/courses/new?role=COURSE_MANAGER" class="btn btn-primary mb-3">
+            <i class="fas fa-plus-circle me-1"></i> Tạo Quản Lý Khóa Học
+        </a>
+        <div class="table-responsive">
+            <table class="user-table">
+                <thead>
+                <tr>
+                    <th>Thông Tin Người Dùng</th>
+                    <th>Email</th>
+                    <th>Điện Thoại</th>
+                    <th>Ngày Tạo</th>
+                    <th>Trạng Thái</th>
+                    <th>Thao Tác</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${courseManagers}" var="manager">
+                    <tr>
+                        <td>
+                            <div class="user-info">
+                                <img src="${not empty manager.avatarUrl ? manager.avatarUrl : '/assets/avatar/default_avatar.png'}"
+                                     alt="${manager.username}" class="avatar">
+                                <div>
+                                    <div>${manager.firstName} ${manager.lastName}</div>
+                                    <small class="text-muted">@${manager.username}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>${manager.email}</td>
+                        <td>${manager.phoneNumber}</td>
+                        <td><fmt:formatDate value="${manager.createdAtDate}" pattern="MMM dd, yyyy"/></td>
+                        <td>
+                            <c:if test="${manager.blocked}">
+                                <span class="badge bg-danger">Đã bị chặn</span>
+                            </c:if>
+                            <c:if test="${!manager.blocked}">
+                                <span class="badge bg-success">Hoạt động</span>
+                            </c:if>
+                        </td>
+                        <td>
+                            <c:if test="${manager.blocked}">
+                                <form method="post" action="${pageContext.request.contextPath}/admin/users/unblock" style="display:inline">
+                                    <input type="hidden" name="id" value="${manager.id}" />
+                                    <button type="submit" class="btn-action btn-edit" title="Mở chặn">
+                                        <i class="fas fa-unlock"></i>
+                                    </button>
+                                </form>
+                            </c:if>
+                            <c:if test="${!manager.blocked}">
+                                <form method="post" action="${pageContext.request.contextPath}/admin/users/block" style="display:inline">
+                                    <input type="hidden" name="id" value="${manager.id}" />
+                                    <button type="submit" class="btn-action btn-delete" title="Chặn">
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                </form>
+                            </c:if>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- User Managers Section (Only visible for Admin) -->
+    <c:if test="${isAdmin}">
+        <div class="user-section">
+            <h2 class="section-title">Quản Lý Người Dùng</h2>
+            <a href="${pageContext.request.contextPath}/admin/users/new?role=USER_MANAGER" class="btn btn-primary mb-3">
+                <i class="fas fa-plus-circle me-1"></i> Tạo Quản Lý Người Dùng
+            </a>
+
+            <div class="table-responsive">
+                <table class="user-table">
+                    <thead>
+                    <tr>
+                        <th>Thông Tin Người Dùng</th>
+                        <th>Email</th>
+                        <th>Điện Thoại</th>
+                        <th>Ngày Tạo</th>
+                        <th>Trạng Thái</th>
+                        <th>Thao Tác</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${userManagers}" var="manager">
+                        <tr>
+                            <td>
+                                <div class="user-info">
+                                    <img src="${not empty manager.avatarUrl ? manager.avatarUrl : '/assets/avatar/default_avatar.png'}"
+                                         alt="${manager.username}" class="avatar">
+                                    <div>
+                                        <div>${manager.firstName} ${manager.lastName}</div>
+                                        <small class="text-muted">@${manager.username}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>${manager.email}</td>
+                            <td>${manager.phoneNumber}</td>
+                            <td><fmt:formatDate value="${manager.createdAtDate}" pattern="MMM dd, yyyy"/></td>
+                            <td>
+                                <c:if test="${manager.blocked}">
+                                    <span class="badge bg-danger">Đã bị chặn</span>
+                                </c:if>
+                                <c:if test="${!manager.blocked}">
+                                    <span class="badge bg-success">Hoạt động</span>
+                                </c:if>
+                            </td>
+                            <td>
+                                <c:if test="${manager.blocked}">
+                                    <form method="post" action="${pageContext.request.contextPath}/admin/users/unblock" style="display:inline">
+                                        <input type="hidden" name="id" value="${manager.id}" />
+                                        <button type="submit" class="btn-action btn-edit" title="Mở chặn">
+                                            <i class="fas fa-unlock"></i>
+                                        </button>
+                                    </form>
+                                </c:if>
+                                <c:if test="${!manager.blocked}">
+                                    <form method="post" action="${pageContext.request.contextPath}/admin/users/block" style="display:inline">
+                                        <input type="hidden" name="id" value="${manager.id}" />
+                                        <button type="submit" class="btn-action btn-delete" title="Chặn">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                    </form>
+                                </c:if>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </c:if>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

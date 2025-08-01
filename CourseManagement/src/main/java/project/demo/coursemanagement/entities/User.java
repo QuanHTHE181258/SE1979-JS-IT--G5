@@ -80,6 +80,10 @@ User {
     @jakarta.persistence.Transient
     private java.util.Date createdAtDate;
 
+    @Column(name = "Blocked", nullable = false)
+    @Builder.Default
+    private boolean blocked = false;
+
     public java.util.Date getLastLoginDate() {
         return lastLoginDate;
     }

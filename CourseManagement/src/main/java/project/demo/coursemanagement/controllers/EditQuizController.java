@@ -37,8 +37,7 @@ public class EditQuizController extends HttpServlet {
             Quiz quiz = quizDAO.getQuizById(quizId);
             // Only check if user is logged in
             if (user == null) {
-                logger.warning("Unauthorized access attempt - user not logged in");
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Please login to edit quizzes.");
+                response.sendRedirect("login");
                 return;
             }
 

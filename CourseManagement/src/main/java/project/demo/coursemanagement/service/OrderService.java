@@ -53,12 +53,12 @@ public class OrderService {
         sb.append("Order ID,User,Email,Course,Price,Status,Order Date\n");
         for (OrderDTO order : orders) {
             sb.append(order.getOrderId()).append(",")
-              .append(order.getUsername()).append(",")
-              .append(order.getCustomerEmail()).append(",")
-              .append(order.getOrderDetails() != null && !order.getOrderDetails().isEmpty() ? order.getOrderDetails().get(0).getCourseTitle() : "N/A").append(",")
-              .append(order.getTotalAmount()).append(",")
-              .append(order.getStatus()).append(",")
-              .append(order.getCreatedAtDate()).append("\n");
+                    .append(order.getUsername()).append(",")
+                    .append(order.getCustomerEmail()).append(",")
+                    .append(order.getOrderDetails() != null && !order.getOrderDetails().isEmpty() ? order.getOrderDetails().get(0).getCourseTitle() : "N/A").append(",")
+                    .append(order.getTotalAmount()).append(",")
+                    .append(order.getStatus()).append(",")
+                    .append(order.getCreatedAtDate()).append("\n");
         }
         return sb.toString().getBytes();
     }
@@ -74,7 +74,7 @@ public class OrderService {
     public List<OrderDTO> getOrdersByUserId(Integer userId) {
         return orderDAO.getOrdersByUserId(userId);
     }
-    
+
     public List<RevenueDetailDTO> getRevenueDetails() {
         return orderDAO.getRevenueDetails();
     }
@@ -90,5 +90,5 @@ public class OrderService {
     public List<project.demo.coursemanagement.dto.RevenueDetailDTO> getRevenueByYear() {
         return orderDAO.getRevenueByYear();
     }
-} 
+}
 

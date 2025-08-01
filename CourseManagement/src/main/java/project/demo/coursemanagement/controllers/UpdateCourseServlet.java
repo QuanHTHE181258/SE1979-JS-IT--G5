@@ -30,6 +30,11 @@ import project.demo.coursemanagement.dto.CategoryDTO;
 public class UpdateCourseServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        User user = (User) req.getSession().getAttribute("loggedInUser");
+        if (user == null) {
+            resp.sendRedirect("login");
+            return;
+        }
         String idStr = req.getParameter("id");
         if (idStr == null) {
             resp.sendRedirect("view-all");

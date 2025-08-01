@@ -9,6 +9,7 @@ import project.demo.coursemanagement.dao.LessonDAO;
 import project.demo.coursemanagement.dao.impl.LessonDAOImpl;
 import project.demo.coursemanagement.dto.LessonStats;
 import project.demo.coursemanagement.entities.Lesson;
+import project.demo.coursemanagement.entities.User;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,6 +25,11 @@ public class LearningPageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        User user = (User) request.getSession().getAttribute("loggedInUser");
+        if (user == null) {
+            response.sendRedirect("login");
+            return;
+        }
         String lessonIdStr = request.getParameter("lessonId");
         if (lessonIdStr == null || lessonIdStr.trim().isEmpty()) {
             request.setAttribute("errorMessage", "Lesson ID is required.");

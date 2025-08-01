@@ -11,6 +11,8 @@ import project.demo.coursemanagement.dto.CourseDTO;
 import project.demo.coursemanagement.service.UserService;
 import project.demo.coursemanagement.service.CourseService;
 import project.demo.coursemanagement.service.RegisterService;
+import project.demo.coursemanagement.service.OrderService;
+import project.demo.coursemanagement.dto.OrderAnalyticsDTO;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -26,6 +28,7 @@ public class AdminController extends HttpServlet {
     private final UserService userService = new UserService();
     private final RegisterService registerService = new RegisterService();
     private final CourseService courseService = new CourseService();
+    private final OrderService orderService = new OrderService(); // Add OrderService
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -86,20 +89,20 @@ public class AdminController extends HttpServlet {
                 recentActivities = Collections.emptyList();
             }
 
-            // Lấy thống kê user
+            // Lấy thống kê user và khóa học
             int totalUsers = userService.countUsers(null, null);
-
-            // Lấy tổng số khóa học
             int totalCourses = courseService.countCourses(null, null);
+
+            // Lấy thống kê đơn hàng và doanh thu
+            OrderAnalyticsDTO orderStats = orderService.getOrderAnalytics();
 
             Map<String, Object> dashboardStats = new HashMap<>();
             dashboardStats.put("totalUsers", totalUsers);
             dashboardStats.put("totalCourses", totalCourses);
-            dashboardStats.put("activeEnrollments", 0); // TODO: Implement enrollment counting
-            dashboardStats.put("totalRevenue", 0.0); // TODO: Implement revenue calculation
+            dashboardStats.put("totalRevenue", orderStats.getTotalRevenue());
 
             request.setAttribute("dashboardStats", dashboardStats);
-            dashboardStats.put("totalUsers", totalUsers);
+//            dashboardStats.put("totalUsers", totalUsers);
             request.setAttribute("recentActivities", recentActivities);
             request.setAttribute("recentCourses", recentCourses);
             List<CourseDTO> topCourses = courseService.getTopCourses(5);
@@ -112,13 +115,14 @@ public class AdminController extends HttpServlet {
             if (recentActivities != null) {
                 for (User user : recentActivities) {
                     if (user != null) {
-                        Role role = userService.getPrimaryRoleByUserId(user.getId());
+                        Role role = userService.getPrimaryRoleByUserId(user.getId()); // Gọi đúng hàm lấy role theo userId
                         userRoles.put(user.getId(), role);
                     }
                 }
             }
 
             request.setAttribute("userRoles", userRoles);
+
 
             request.getRequestDispatcher("/WEB-INF/views/admin.jsp").forward(request, response);
         } catch (Exception e) {

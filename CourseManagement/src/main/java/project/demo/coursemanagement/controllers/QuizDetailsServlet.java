@@ -17,7 +17,11 @@ public class QuizDetailsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String quizId = request.getParameter("id");
-
+        User user = (User) request.getSession().getAttribute("loggedInUser");
+        if (user == null) {
+            response.sendRedirect("login");
+            return;
+        }
         if (quizId != null && !quizId.isEmpty()) {
             try {
                 QuizDAOImpl quizDAO = new QuizDAOImpl();

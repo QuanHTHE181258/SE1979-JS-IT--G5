@@ -14,7 +14,7 @@ public class BlogDAOImpl implements BlogDAO {
     public List<Blog> getAllBlogs() {
         List<Blog> blogs = new ArrayList<>();
         String sql = "SELECT b.BlogID, b.Title, b.Content, b.ImageURL, b.AuthorID, b.CreatedAt, b.UpdatedAt, b.Status, u.Username " +
-                     "FROM blogs b JOIN users u ON b.AuthorID = u.UserID";
+                "FROM blogs b JOIN users u ON b.AuthorID = u.UserID";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -45,7 +45,7 @@ public class BlogDAOImpl implements BlogDAO {
     @Override
     public Blog getBlogById(int id) {
         String sql = "SELECT b.BlogID, b.Title, b.Content, b.ImageURL, b.AuthorID, b.CreatedAt, b.UpdatedAt, b.Status, u.Username " +
-                     "FROM blogs b JOIN users u ON b.AuthorID = u.UserID WHERE b.BlogID = ?";
+                "FROM blogs b JOIN users u ON b.AuthorID = u.UserID WHERE b.BlogID = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -111,7 +111,7 @@ public class BlogDAOImpl implements BlogDAO {
     public List<Blog> getPublishedBlogs() {
         List<Blog> blogs = new ArrayList<>();
         String sql = "SELECT b.BlogID, b.Title, b.Content, b.ImageURL, b.AuthorID, b.CreatedAt, b.UpdatedAt, b.Status, u.Username " +
-                     "FROM blogs b JOIN users u ON b.AuthorID = u.UserID WHERE b.Status = 'published'";
+                "FROM blogs b JOIN users u ON b.AuthorID = u.UserID WHERE b.Status = 'published'";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -139,8 +139,8 @@ public class BlogDAOImpl implements BlogDAO {
     public List<Blog> getBlogsForUser(int userId) {
         List<Blog> blogs = new ArrayList<>();
         String sql = "SELECT b.BlogID, b.Title, b.Content, b.ImageURL, b.AuthorID, b.CreatedAt, b.UpdatedAt, b.Status, u.Username " +
-                     "FROM blogs b JOIN users u ON b.AuthorID = u.UserID " +
-                     "WHERE b.Status = 'published' OR b.AuthorID = ?";
+                "FROM blogs b JOIN users u ON b.AuthorID = u.UserID " +
+                "WHERE b.Status = 'published' OR b.AuthorID = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -166,4 +166,91 @@ public class BlogDAOImpl implements BlogDAO {
         }
         return blogs;
     }
-} 
+
+    @Override
+    public boolean deleteBlog(int id) {
+        String sql = "DELETE FROM blogs WHERE BlogID = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public List<Blog> getRelatedBlogs(int currentBlogId, int authorId, int limit) {
+        List<Blog> relatedBlogs = new ArrayList<>();
+        // First, get blogs from same author
+        String sql = "SELECT TOP (?) b.BlogID, b.Title, b.Content, b.ImageURL, b.AuthorID, b.CreatedAt, b.UpdatedAt, b.Status, u.Username " +
+                "FROM blogs b JOIN users u ON b.AuthorID = u.UserID " +
+                "WHERE b.Status = 'published' AND b.BlogID != ? AND b.AuthorID = ? " +
+                "ORDER BY b.CreatedAt DESC";
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, limit);
+            ps.setInt(2, currentBlogId);
+            ps.setInt(3, authorId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Blog blog = new Blog();
+                    blog.setId(rs.getInt("BlogID"));
+                    blog.setTitle(rs.getString("Title"));
+                    blog.setContent(rs.getString("Content"));
+                    blog.setImageURL(rs.getString("ImageURL"));
+                    blog.setCreatedAt(rs.getTimestamp("CreatedAt") != null ? rs.getTimestamp("CreatedAt").toInstant() : null);
+                    blog.setUpdatedAt(rs.getTimestamp("UpdatedAt") != null ? rs.getTimestamp("UpdatedAt").toInstant() : null);
+                    blog.setStatus(rs.getString("Status"));
+
+                    User author = new User();
+                    author.setId(rs.getInt("AuthorID"));
+                    author.setUsername(rs.getString("Username"));
+                    blog.setAuthorID(author);
+
+                    relatedBlogs.add(blog);
+                }
+            }
+
+            // If we don't have enough related blogs from the same author, get recent blogs from other authors
+            if (relatedBlogs.size() < limit) {
+                String sql2 = "SELECT TOP (?) b.BlogID, b.Title, b.Content, b.ImageURL, b.AuthorID, b.CreatedAt, b.UpdatedAt, b.Status, u.Username " +
+                        "FROM blogs b JOIN users u ON b.AuthorID = u.UserID " +
+                        "WHERE b.Status = 'published' AND b.BlogID != ? AND b.AuthorID != ? " +
+                        "ORDER BY b.CreatedAt DESC";
+
+                try (PreparedStatement ps2 = conn.prepareStatement(sql2)) {
+                    ps2.setInt(1, limit - relatedBlogs.size());
+                    ps2.setInt(2, currentBlogId);
+                    ps2.setInt(3, authorId);
+
+                    try (ResultSet rs2 = ps2.executeQuery()) {
+                        while (rs2.next()) {
+                            Blog blog = new Blog();
+                            blog.setId(rs2.getInt("BlogID"));
+                            blog.setTitle(rs2.getString("Title"));
+                            blog.setContent(rs2.getString("Content"));
+                            blog.setImageURL(rs2.getString("ImageURL"));
+                            blog.setCreatedAt(rs2.getTimestamp("CreatedAt") != null ? rs2.getTimestamp("CreatedAt").toInstant() : null);
+                            blog.setUpdatedAt(rs2.getTimestamp("UpdatedAt") != null ? rs2.getTimestamp("UpdatedAt").toInstant() : null);
+                            blog.setStatus(rs2.getString("Status"));
+
+                            User author = new User();
+                            author.setId(rs2.getInt("AuthorID"));
+                            author.setUsername(rs2.getString("Username"));
+                            blog.setAuthorID(author);
+
+                            relatedBlogs.add(blog);
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return relatedBlogs;
+    }
+}

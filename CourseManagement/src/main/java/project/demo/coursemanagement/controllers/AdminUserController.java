@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.service.UserService;
 import project.demo.coursemanagement.entities.Role;
+import project.demo.coursemanagement.utils.SessionUtil;
 
 import java.io.IOException;
 import java.util.Date;
@@ -31,27 +32,39 @@ public class AdminUserController extends HttpServlet {
         String pathInfo = request.getPathInfo();
         String searchTerm = request.getParameter("searchTerm");
 
-        System.out.println("=== AdminUserController GET request ===");
-        System.out.println("Path info: " + pathInfo);
-        System.out.println("Search term: " + searchTerm);
+        System.out.println("[CONTROLLER] GET request: pathInfo=" + pathInfo + ", searchTerm=" + searchTerm);
 
         try {
-            // Handle root path /admin/users
             if (pathInfo == null || pathInfo.equals("/")) {
-                System.out.println("Handling root path");
-                List<User> userList;
-                if (searchTerm != null && !searchTerm.trim().isEmpty()) {
-                    System.out.println("Searching users with term: " + searchTerm);
-                    userList = userService.getUsers(searchTerm, null, 1);
-                } else {
-                    System.out.println("Getting all users");
-                    userList = userService.getAllUsers();
-                }
+                List<User> students = userService.getUsers(null, "STUDENT", 1);
+                List<User> teachers = userService.getUsers(null, "TEACHER", 1);
+                List<User> courseManagers = userService.getUsers(null, "Course Manager", 1);
+                List<User> userManagers = userService.getUsers(null, "UserManager", 1);
 
-                System.out.println("Found " + userList.size() + " users");
-                request.setAttribute("userList", userList);
-                request.setAttribute("searchTerm", searchTerm);
-                request.getRequestDispatcher("/WEB-INF/views/admin_users.jsp").forward(request, response);
+                long blockedStudents = students.stream().filter(User::isBlocked).count();
+                long blockedTeachers = teachers.stream().filter(User::isBlocked).count();
+                long blockedManagers = courseManagers.stream().filter(User::isBlocked).count();
+                long blockedUserManagers = userManagers.stream().filter(User::isBlocked).count();
+
+                System.out.println("[CONTROLLER] Students: total=" + students.size() + ", blocked=" + blockedStudents);
+                students.forEach(u -> System.out.println("[CONTROLLER] Student: ID=" + u.getId() + ", Username=" + u.getUsername() + ", Blocked=" + u.isBlocked()));
+                System.out.println("[CONTROLLER] Teachers: total=" + teachers.size() + ", blocked=" + blockedTeachers);
+                teachers.forEach(u -> System.out.println("[CONTROLLER] Teacher: ID=" + u.getId() + ", Username=" + u.getUsername() + ", Blocked=" + u.isBlocked()));
+                System.out.println("[CONTROLLER] CourseManagers: total=" + courseManagers.size() + ", blocked=" + blockedManagers);
+                courseManagers.forEach(u -> System.out.println("[CONTROLLER] Manager: ID=" + u.getId() + ", Username=" + u.getUsername() + ", Blocked=" + u.isBlocked()));
+                System.out.println("[CONTROLLER] UserManagers: total=" + userManagers.size() + ", blocked=" + blockedUserManagers);
+                userManagers.forEach(u -> System.out.println("[CONTROLLER] UserManager: ID=" + u.getId() + ", Username=" + u.getUsername() + ", Blocked=" + u.isBlocked()));
+
+                request.setAttribute("students", students);
+                request.setAttribute("teachers", teachers);
+                request.setAttribute("courseManagers", courseManagers);
+                request.setAttribute("userManagers", userManagers);
+
+                // Get current user's role for UI control
+                String userRole = SessionUtil.getUserRole(request);
+                request.setAttribute("isAdmin", "5".equals(userRole)); // Role 5 is Admin
+
+                request.getRequestDispatcher("/WEB-INF/views/user_list.jsp").forward(request, response);
                 return;
             }
 
@@ -224,6 +237,42 @@ public class AdminUserController extends HttpServlet {
                 }
             }
 
+        } else if (pathParts.length == 2 && "block".equals(pathParts[1])) {
+            System.out.println("[BLOCK USER] POST /admin/users/block");
+            try {
+                String idParam = request.getParameter("id");
+                System.out.println("Block request for userId param: " + idParam);
+                int userId = Integer.parseInt(idParam);
+                boolean success = userService.blockUser(userId);
+                System.out.println("Block result: " + success);
+                if (success) {
+                    response.sendRedirect(request.getContextPath() + "/admin/users?message=User blocked successfully");
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/admin/users?error=Block user failed");
+                }
+            } catch (Exception e) {
+                System.out.println("Exception in block: " + e.getMessage());
+                e.printStackTrace();
+                response.sendRedirect(request.getContextPath() + "/admin/users?error=Block user error");
+            }
+        } else if (pathParts.length == 2 && "unblock".equals(pathParts[1])) {
+            System.out.println("[UNBLOCK USER] POST /admin/users/unblock");
+            try {
+                String idParam = request.getParameter("id");
+                System.out.println("Unblock request for userId param: " + idParam);
+                int userId = Integer.parseInt(idParam);
+                boolean success = userService.unblockUser(userId);
+                System.out.println("Unblock result: " + success);
+                if (success) {
+                    response.sendRedirect(request.getContextPath() + "/admin/users?message=User unblocked successfully");
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/admin/users?error=Unblock user failed");
+                }
+            } catch (Exception e) {
+                System.out.println("Exception in unblock: " + e.getMessage());
+                e.printStackTrace();
+                response.sendRedirect(request.getContextPath() + "/admin/users?error=Unblock user error");
+            }
         } else if (pathParts.length >= 3) { // Handle activate/deactivate which should ideally be POST
             String userIdString = pathParts[1];
             String action = pathParts[2];

@@ -3,6 +3,7 @@ package project.demo.coursemanagement.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.servlet.http.Part;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -58,4 +60,17 @@ public class Blog {
     @Column(name = "Status", length = 20)
     private String status;
 
+    @Transient
+    private Part imageFile;
+
+    @Transient
+    private Date createdAtDate;
+
+    public Date getCreatedAtDate() {
+        return createdAtDate;
+    }
+
+    public void setCreatedAtDate(Date createdAtDate) {
+        this.createdAtDate = createdAtDate;
+    }
 }

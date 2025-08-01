@@ -34,4 +34,12 @@ public class BlogService {
     public List<Blog> getBlogsForUser(int userId) {
         return blogDAO.getBlogsForUser(userId);
     }
-} 
+
+    public boolean deleteBlog(int id) {
+        return blogDAO.deleteBlog(id);
+    }
+
+    public List<Blog> getRelatedBlogs(int currentBlogId, int authorId, int limit) {
+        return blogDAO.getRelatedBlogs(currentBlogId, authorId, limit);
+    }
+}

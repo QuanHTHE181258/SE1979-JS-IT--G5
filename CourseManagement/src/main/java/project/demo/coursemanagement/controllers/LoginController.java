@@ -53,6 +53,12 @@ public class LoginController extends HttpServlet {
             }
         }
 
+        // Hiển thị thông báo nếu bị chặn
+        if ("true".equals(request.getParameter("blocked"))) {
+            request.setAttribute("messageType", "danger");
+            request.setAttribute("message", "Tài khoản của bạn đã bị chặn. Vui lòng liên hệ quản trị viên để biết thêm chi tiết.");
+        }
+
         // Forward to login page
         request.getRequestDispatcher("/WEB-INF/views/login_register/login.jsp").forward(request, response);
     }

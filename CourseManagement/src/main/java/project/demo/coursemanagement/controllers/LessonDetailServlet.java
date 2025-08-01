@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import project.demo.coursemanagement.entities.Lesson;
+import project.demo.coursemanagement.entities.User;
 import project.demo.coursemanagement.service.LessonService;
 import project.demo.coursemanagement.service.QuizService;
 import project.demo.coursemanagement.service.MaterialService;
@@ -18,6 +19,11 @@ import java.io.IOException;
 public class LessonDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        User user = (User) request.getSession().getAttribute("loggedInUser");
+        if (user == null) {
+            response.sendRedirect("login");
+            return;
+        }
         String lessonIdStr = request.getParameter("id");
         if (lessonIdStr == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing lesson id");
