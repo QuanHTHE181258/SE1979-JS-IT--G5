@@ -58,24 +58,24 @@ public class AdminCourseController extends HttpServlet {
                     } catch (NumberFormatException ignored) {}
                 }
 
-                if (pageParam != null) {
-                    try {
-                        page = Integer.parseInt(pageParam);
-                    } catch (NumberFormatException ignored) {}
-                }
-
-                List<CourseDTO> managedCourses = courseService.getCoursesForManager(keyword, categoryId, page, PAGE_SIZE);
-                int totalCourses = courseService.countCourses(keyword, categoryId);
-                int totalPages = (int) Math.ceil((double) totalCourses / PAGE_SIZE);
-
-                request.setAttribute("courses", managedCourses);
-                request.setAttribute("currentPage", page);
-                request.setAttribute("totalPages", totalPages);
-                request.setAttribute("keyword", keyword);
-                request.setAttribute("categoryId", categoryId);
-
-                request.getRequestDispatcher("/WEB-INF/views/manager-course.jsp").forward(request, response);
-                break;
+//                if (pageParam != null) {
+//                    try {
+//                        page = Integer.parseInt(pageParam);
+//                    } catch (NumberFormatException ignored) {}
+//                }
+//
+//                List<CourseDTO> managedCourses = courseService.getCoursesForManager(keyword, categoryId, page, PAGE_SIZE);
+//                int totalCourses = courseService.countCourses(keyword, categoryId);
+//                int totalPages = (int) Math.ceil((double) totalCourses / PAGE_SIZE);
+//
+//                request.setAttribute("courses", managedCourses);
+//                request.setAttribute("currentPage", page);
+//                request.setAttribute("totalPages", totalPages);
+//                request.setAttribute("keyword", keyword);
+//                request.setAttribute("categoryId", categoryId);
+//
+//                request.getRequestDispatcher("/WEB-INF/views/manager-course.jsp").forward(request, response);
+//                break;
 
             default:
                 response.sendRedirect(request.getContextPath() + "/admin");

@@ -43,7 +43,7 @@
         </c:if>
 
         <form method="POST" action="${pageContext.request.contextPath}/admin/users/create" id="createUserForm">
-            <input type="hidden" name="roleName" value="Course Manager">
+            <input type="hidden" name="roleName" value="UserManager">
 
             <div class="form-group">
                 <label class="form-label">Username*</label>

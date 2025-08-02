@@ -198,10 +198,10 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Course List</h5>
-                        <a href="${pageContext.request.contextPath}/admin/course-management"
-                           class="btn btn-manage btn-sm">
-                            <i class="fas fa-cog me-2"></i>Manage Courses
-                        </a>
+<%--                        <a href="${pageContext.request.contextPath}/admin/course-management"--%>
+<%--                           class="btn btn-manage btn-sm">--%>
+<%--                            <i class="fas fa-cog me-2"></i>Manage Courses--%>
+<%--                        </a>--%>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">

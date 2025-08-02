@@ -197,25 +197,25 @@ public class AdminUserController extends HttpServlet {
                 response.sendRedirect(redirectUrl);
                 System.out.println("=== User creation process completed ===");
 
-            } catch (IllegalArgumentException e) {
-                System.err.println("Validation error during user creation: " + e.getMessage());
-                e.printStackTrace();
-                // Handle validation errors (e.g., missing fields)
-                // Forward back to the form with error message and pre-filled values
-                request.setAttribute("errorMessage", e.getMessage());
-                request.setAttribute("username", request.getParameter("username"));
-                request.setAttribute("email", request.getParameter("email"));
-                request.setAttribute("firstName", request.getParameter("firstName"));
-                request.setAttribute("lastName", request.getParameter("lastName"));
-                request.setAttribute("phone", request.getParameter("phone"));
-                request.setAttribute("roleName", request.getParameter("roleName"));
-
-                if ("USER_MANAGER".equals(request.getParameter("roleName"))) {
-                    request.getRequestDispatcher("/WEB-INF/views/create_user_manager.jsp").forward(request, response);
-                } else {
-                    request.setAttribute("roles", userService.getAllRoles()); // Need roles for the dropdown
-                    request.getRequestDispatcher("/WEB-INF/views/edit_user.jsp").forward(request, response);
-                }
+//            } catch (IllegalArgumentException e) {
+//                System.err.println("Validation error during user creation: " + e.getMessage());
+//                e.printStackTrace();
+//                // Handle validation errors (e.g., missing fields)
+//                // Forward back to the form with error message and pre-filled values
+//                request.setAttribute("errorMessage", e.getMessage());
+//                request.setAttribute("username", request.getParameter("username"));
+//                request.setAttribute("email", request.getParameter("email"));
+//                request.setAttribute("firstName", request.getParameter("firstName"));
+//                request.setAttribute("lastName", request.getParameter("lastName"));
+//                request.setAttribute("phone", request.getParameter("phone"));
+//                request.setAttribute("roleName", request.getParameter("roleName"));
+//
+//                if ("USER_MANAGER".equals(request.getParameter("roleName"))) {
+//                    request.getRequestDispatcher("/WEB-INF/views/create_user_manager.jsp").forward(request, response);
+//                } else {
+//                    request.setAttribute("roles", userService.getAllRoles()); // Need roles for the dropdown
+//                    request.getRequestDispatcher("/WEB-INF/views/edit_user.jsp").forward(request, response);
+//                }
 
             } catch (Exception e) {
                 System.err.println("Error during user creation: " + e.getMessage());
