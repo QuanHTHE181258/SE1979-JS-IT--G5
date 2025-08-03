@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import project.demo.coursemanagement.dao.CompletedLessonDAO;
 import project.demo.coursemanagement.dao.LessonDAO;
 import project.demo.coursemanagement.dao.impl.LessonDAOImpl;
 import project.demo.coursemanagement.dto.LessonStats;
@@ -44,12 +45,15 @@ public class LearningPageServlet extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(request, response);
                 return;
             }
+            boolean isCompleted = CompletedLessonDAO.isLessonCompleted(user.getId(), lessonId);
+            request.setAttribute("isCompleted", isCompleted);
+
             // Load quizzes and materials for this lesson
             request.setAttribute("lesson", lesson);
             request.setAttribute("quizzes", lessonDAO.getQuizzesByLessonId(lessonId));
             request.setAttribute("materials", lessonDAO.getMaterialsByLessonId(lessonId));
             // Load all lessons for the course for navigation
-            List<LessonStats> lessons = lessonDAO.getLessonSummaryByCourseId(lesson.getCourseId());
+            List<LessonStats> lessons = lessonDAO.getLessonSummaryByCourseId(lesson.getCourseId(), user.getId());
             request.setAttribute("lessons", lessons);
             // Also set lessonList for sidebar compatibility
             List<Lesson> lessonList = lessonDAO.getLessonsByCourseId(lesson.getCourseId());

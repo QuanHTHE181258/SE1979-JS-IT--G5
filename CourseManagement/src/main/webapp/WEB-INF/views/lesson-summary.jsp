@@ -85,7 +85,16 @@
                             <a href="${pageContext.request.contextPath}/learning?lessonId=${lessonStat.lesson.id}" class="h5 mb-0 text-decoration-none text-dark">${lessonStat.lesson.title}</a>
                         </div>
                         <div>
-                                <span class="stat-badge">
+                            <c:choose>
+                                <c:when test="${lessonStat.completed}">
+                                    <span class="badge bg-success ms-3"><i class="bi bi-check-circle-fill me-1"></i>Đã hoàn thành</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="badge bg-secondary ms-3"><i class="bi bi-clock-fill me-1"></i>Chưa hoàn thành</span>
+                                </c:otherwise>
+                            </c:choose>
+
+                            <span class="stat-badge">
                                     <i class="bi bi-question-circle-fill"></i>
                                     ${lessonStat.totalQuizzes} quizzes
                                 </span>

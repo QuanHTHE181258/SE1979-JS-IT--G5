@@ -5,6 +5,8 @@ import project.demo.coursemanagement.entities.Lesson;
 import project.demo.coursemanagement.dto.LessonStats;
 import project.demo.coursemanagement.entities.Quiz;
 import project.demo.coursemanagement.entities.Material;
+import project.demo.coursemanagement.utils.DatabaseConnection;
+
 import java.sql.*;
 import java.util.*;
 
@@ -41,22 +43,26 @@ public class LessonDAOImpl implements LessonDAO {
     }
 
     @Override
-    public List<LessonStats> getLessonSummaryByCourseId(int courseId) {
+    public List<LessonStats> getLessonSummaryByCourseId(int courseId, int userId) {
         List<LessonStats> list = new ArrayList<>();
-        String sql = "SELECT l.LessonID, l.Title, " +
-                    "COUNT(DISTINCT q.QuizID) as QuizCount, " +
-                    "COUNT(DISTINCT m.MaterialID) as MaterialCount " +
-                    "FROM [CourseManagementSystem].[dbo].[lessons] l " +
-                    "LEFT JOIN [CourseManagementSystem].[dbo].[quizzes] q ON q.LessonID = l.LessonID " +
-                    "LEFT JOIN [CourseManagementSystem].[dbo].[materials] m ON m.LessonID = l.LessonID " +
-                    "WHERE l.CourseID = ? " +
-                    "GROUP BY l.LessonID, l.Title " +
-                    "ORDER BY l.LessonID";
+        String sql = "SELECT \n" +
+                "    l.LessonID, l.Title,\n" +
+                "    COUNT(DISTINCT q.QuizID) AS QuizCount,\n" +
+                "    COUNT(DISTINCT m.MaterialID) AS MaterialCount,\n" +
+                "    CASE WHEN cl.user_id IS NOT NULL THEN 1 ELSE 0 END AS Completed\n" +
+                "FROM lessons l\n" +
+                "LEFT JOIN quizzes q ON q.LessonID = l.LessonID\n" +
+                "LEFT JOIN materials m ON m.LessonID = l.LessonID\n" +
+                "LEFT JOIN completed_lessons cl ON cl.lesson_id = l.LessonID AND cl.user_id = ?\n" +
+                "WHERE l.CourseID = ?\n" +
+                "GROUP BY l.LessonID, l.Title, cl.user_id\n" +
+                "ORDER BY l.LessonID\n";
 
         try (Connection conn = project.demo.coursemanagement.utils.DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, courseId);
+            stmt.setInt(1, userId);
+            stmt.setInt(2, courseId);
             System.out.println("Executing query with courseId: " + courseId);
 
             try (ResultSet rs = stmt.executeQuery()) {
@@ -69,12 +75,15 @@ public class LessonDAOImpl implements LessonDAO {
                     int quizCount = rs.getInt("QuizCount");
                     int materialCount = rs.getInt("MaterialCount");
 
+                    boolean completed = rs.getBoolean("Completed");
                     LessonStats stats = new LessonStats(lesson, orderNumber++, quizCount, materialCount);
+                    stats.setCompleted(completed);
                     list.add(stats);
 
+
                     System.out.println("Found lesson: " + lesson.getTitle() +
-                                     " with " + quizCount + " quizzes and " +
-                                     materialCount + " materials");
+                            " with " + quizCount + " quizzes and " +
+                            materialCount + " materials");
                 }
             }
 
@@ -103,7 +112,7 @@ public class LessonDAOImpl implements LessonDAO {
                     lesson.setStatus(rs.getString("Status"));
                     lesson.setIsFreePreview(rs.getBoolean("IsFreePreview"));
                     lesson.setCreatedAt(rs.getTimestamp("CreatedAt").toInstant());
-                    
+
                     // Set courseID
                     project.demo.coursemanagement.entities.Cours course = new project.demo.coursemanagement.entities.Cours();
                     course.setId(rs.getInt("CourseID"));
@@ -161,6 +170,17 @@ public class LessonDAOImpl implements LessonDAO {
         }
         return materials;
     }
+    public static int getTotalLessonsByCourse(int courseId) throws Exception {
+        String sql = "SELECT COUNT(*) FROM lessons WHERE CourseID = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, courseId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        }
+        return 0;
+    }
+
 
     @Override
     public List<Lesson> getLessonsByCourseId(int courseId) {
@@ -178,12 +198,12 @@ public class LessonDAOImpl implements LessonDAO {
                     lesson.setStatus(rs.getString("Status"));
                     lesson.setIsFreePreview(rs.getBoolean("IsFreePreview"));
                     lesson.setCreatedAt(rs.getTimestamp("CreatedAt").toInstant());
-                    
+
                     // Set courseID
                     project.demo.coursemanagement.entities.Cours course = new project.demo.coursemanagement.entities.Cours();
                     course.setId(rs.getInt("CourseID"));
                     lesson.setCourseID(course);
-                    
+
                     lessons.add(lesson);
                 }
             }
@@ -212,7 +232,7 @@ public class LessonDAOImpl implements LessonDAO {
             return false;
         }
     }
-    
+
     // Additional method from HEAD branch
     public boolean addLesson(Lesson lesson) {
         String sql = "INSERT INTO lessons (Title, Content, Status, IsFreePreview, CreatedAt, CourseID) VALUES (?, ?, ?, ?, ?, ?)";

@@ -3,181 +3,152 @@ package project.demo.coursemanagement.controllers;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import project.demo.coursemanagement.entities.Cart;
+
+import project.demo.coursemanagement.dao.CartDAO;
+import project.demo.coursemanagement.dao.impl.CartDAOImpl;
 import project.demo.coursemanagement.entities.Cartitem;
-import project.demo.coursemanagement.entities.Cours;
-import project.demo.coursemanagement.utils.DatabaseConnection;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/CartServlet")
 public class CartServlet extends HttpServlet {
 
-    private final DatabaseConnection dbConn = DatabaseConnection.getInstance();
+    private final CartDAO cartDAO = new CartDAOImpl();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("=== CartServlet GET Debug ===");
+
         HttpSession session = request.getSession();
-        Integer userId = (Integer) session.getAttribute("userId"); // lấy từ session sau khi đăng nhập
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        System.out.println("UserId from session: " + userId);
 
         if (userId == null) {
+            System.out.println("UserId is null, redirecting to login");
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        List<Cartitem> cartItems = new ArrayList<>();
-        BigDecimal totalPrice = BigDecimal.ZERO;
+        List<Cartitem> cartItems = cartDAO.getCartItems(userId);
+        System.out.println("Retrieved " + cartItems.size() + " cart items");
 
-        try (Connection conn = dbConn.getConnection()) {
-            String sql = """
-                SELECT ci.CartItemID, ci.Price, 
-                       c.CourseID, c.Title, c.Price as CoursePrice
-                FROM cartitem ci
-                JOIN courses c ON ci.CourseID = c.CourseID
-                JOIN cart ct ON ci.CartID = ct.CartID
-                WHERE ct.UserID = ?
-            """;
-            try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setInt(1, userId);
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        Cartitem item = new Cartitem();
-                        item.setId(rs.getInt("CartItemID"));
-
-                        Cours course = new Cours();
-                        course.setId(rs.getInt("CourseID"));
-                        course.setTitle(rs.getString("Title"));
-                        course.setPrice(rs.getBigDecimal("CoursePrice"));
-                        item.setCourseID(course);
-
-                        item.setPrice(rs.getBigDecimal("Price"));
-                        cartItems.add(item);
-                        totalPrice = totalPrice.add(item.getPrice() != null ? item.getPrice() : BigDecimal.ZERO);
-                    }
-                }
-            }
-
-        } catch (SQLException e) {
-            throw new ServletException("Error loading cart items", e);
+        // Debug cart items
+        for (int i = 0; i < cartItems.size(); i++) {
+            Cartitem item = cartItems.get(i);
         }
+
+        BigDecimal totalPrice = cartItems.stream()
+                .map(item -> item.getPrice() != null ? item.getPrice() : BigDecimal.ZERO)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        System.out.println("Total price calculated: " + totalPrice);
 
         session.setAttribute("cartItems", cartItems);
         session.setAttribute("totalPrice", totalPrice);
+
+        System.out.println("Forwarding to cart.jsp");
         request.getRequestDispatcher("/WEB-INF/views/profile/cart.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("=== CartServlet POST Debug ===");
+
         String action = request.getParameter("action");
-//        int courseId = Integer.parseInt(request.getParameter("courseId"));
-
         String value = request.getParameter("courseId");
-        int courseId = -1;
 
-        if (value != null && !value.trim().isEmpty()) {
-            try {
-                courseId = Integer.parseInt(value.trim());
-                if (courseId <= 0) {
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid courseId.");
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "courseId must be a number.");
-                return;
-            }
-        } else {
+        request.getParameterMap().forEach((k, v) ->
+                System.out.println("  " + k + " = " + java.util.Arrays.toString(v)));
+
+        int courseId;
+        if (value == null || value.trim().isEmpty()) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "courseId is required.");
             return;
         }
 
+        try {
+            courseId = Integer.parseInt(value.trim());
+            System.out.println("Parsed courseId: " + courseId);
+
+            if (courseId <= 0) {
+                System.err.println("ERROR: courseId is not positive: " + courseId);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid courseId.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("ERROR: courseId is not a number: '" + value + "'");
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "courseId must be a number.");
+            return;
+        }
 
         HttpSession session = request.getSession();
         Integer userId = (Integer) session.getAttribute("userId");
 
+        System.out.println("UserId from session: " + userId);
+
         if (userId == null) {
+            System.out.println("UserId is null, redirecting to login");
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        try (Connection conn = dbConn.getConnection()) {
+        System.out.println("Executing action: " + action + " for courseId: " + courseId + " and userId: " + userId);
+
+        try {
             switch (action) {
-                case "add" -> addToCart(conn, userId, courseId);
-                case "remove" -> removeFromCart(conn, userId, courseId);
-                case "moveToWishlist" -> System.out.println("Move to wishlist: " + courseId); // placeholder
+                case "add" -> {
+                    System.out.println("Adding course to cart...");
+                    String result = cartDAO.addToCart(userId, courseId);
+
+                    // Xử lý thông báo dựa trên kết quả
+                    switch (result) {
+                        case "SUCCESS" -> {
+                            session.setAttribute("message", "Khóa học đã được thêm vào giỏ hàng thành công!");
+                            session.setAttribute("messageType", "success");
+                            System.out.println("Course added successfully");
+                        }
+                        case "ALREADY_ENROLLED" -> {
+                            session.setAttribute("message", "Bạn đã ghi danh khóa học này rồi!");
+                            session.setAttribute("messageType", "warning");
+                            System.out.println("Course already enrolled");
+                        }
+                        case "ALREADY_IN_CART" -> {
+                            session.setAttribute("message", "Khóa học này đã có trong giỏ hàng của bạn!");
+                            session.setAttribute("messageType", "info");
+                            System.out.println("Course already in cart");
+                        }
+                        case "FAILED" -> {
+                            session.setAttribute("message", "Không thể thêm khóa học vào giỏ hàng. Vui lòng thử lại!");
+                            session.setAttribute("messageType", "error");
+                            System.out.println("Failed to add course to cart");
+                        }
+                    }
+                }
+                case "remove" -> {
+                    System.out.println("Removing course from cart...");
+                    cartDAO.removeFromCart(userId, courseId);
+                    session.setAttribute("message", "Khóa học đã được xóa khỏi giỏ hàng!");
+                    session.setAttribute("messageType", "success");
+                    System.out.println("Course removed successfully");
+                }
+                default -> {
+                    System.err.println("ERROR: Invalid action: " + action);
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action.");
+                    return;
+                }
             }
-        } catch (SQLException e) {
-            throw new ServletException("Cart operation failed", e);
+        } catch (Exception e) {
+            System.err.println("ERROR: Exception during DAO operation:");
+            e.printStackTrace();
+            session.setAttribute("message", "Đã xảy ra lỗi. Vui lòng thử lại!");
+            session.setAttribute("messageType", "error");
         }
 
+        System.out.println("Redirecting to CartServlet GET");
         response.sendRedirect("CartServlet");
-    }
-
-    private void addToCart(Connection conn, int userId, int courseId) throws SQLException {
-        int cartId = getOrCreateCart(conn, userId);
-
-        String checkExist = "SELECT 1 FROM cartitem WHERE CartID = ? AND CourseID = ?";
-        try (PreparedStatement ps = conn.prepareStatement(checkExist)) {
-            ps.setInt(1, cartId);
-            ps.setInt(2, courseId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return; // Course already in cart
-            }
-        }
-
-        BigDecimal coursePrice = getCoursePrice(conn, courseId);
-
-        String insert = "INSERT INTO cartitem (CartID, CourseID, Price) VALUES (?, ?, ?)";
-        try (PreparedStatement ps = conn.prepareStatement(insert)) {
-            ps.setInt(1, cartId);
-            ps.setInt(2, courseId);
-            ps.setBigDecimal(3, coursePrice);
-            ps.executeUpdate();
-        }
-    }
-
-    private void removeFromCart(Connection conn, int userId, int courseId) throws SQLException {
-        int cartId = getOrCreateCart(conn, userId);
-        String delete = "DELETE FROM cartitem WHERE CartID = ? AND CourseID = ?";
-        try (PreparedStatement ps = conn.prepareStatement(delete)) {
-            ps.setInt(1, cartId);
-            ps.setInt(2, courseId);
-            ps.executeUpdate();
-        }
-    }
-
-    private int getOrCreateCart(Connection conn, int userId) throws SQLException {
-        String findCart = "SELECT CartID FROM cart WHERE UserID = ?";
-        try (PreparedStatement ps = conn.prepareStatement(findCart)) {
-            ps.setInt(1, userId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return rs.getInt("CartID");
-            }
-        }
-
-        String insertCart = "INSERT INTO cart (UserID, Status, TotalPrice, CreatedAt) VALUES (?, 'active', 0, GETDATE())";
-        try (PreparedStatement ps = conn.prepareStatement(insertCart, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setInt(1, userId);
-            ps.executeUpdate();
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) return rs.getInt(1);
-            }
-        }
-
-        throw new SQLException("Failed to create or retrieve cart.");
-    }
-
-    private BigDecimal getCoursePrice(Connection conn, int courseId) throws SQLException {
-        String sql = "SELECT Price FROM courses WHERE CourseID = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, courseId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return rs.getBigDecimal("Price");
-            }
-        }
-        return BigDecimal.ZERO;
     }
 }

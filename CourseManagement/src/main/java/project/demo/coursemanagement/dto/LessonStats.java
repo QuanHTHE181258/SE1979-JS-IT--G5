@@ -7,7 +7,7 @@ public class LessonStats {
     private int order;
     private int totalQuizzes;
     private int totalMaterials;
-
+    private boolean completed;
     public LessonStats() {}
     public LessonStats(Lesson lesson, int order, int totalQuizzes, int totalMaterials) {
         this.lesson = lesson;
@@ -15,6 +15,15 @@ public class LessonStats {
         this.totalQuizzes = totalQuizzes;
         this.totalMaterials = totalMaterials;
     }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
     public Lesson getLesson() { return lesson; }
     public void setLesson(Lesson lesson) { this.lesson = lesson; }
     public int getOrder() { return order; }

@@ -46,7 +46,8 @@ public class LessonListServlet extends HttpServlet {
             int courseId = Integer.parseInt(courseIdStr);
             System.out.println("Getting lessons for courseId: " + courseId); // Debug log
 
-            List<LessonStats> lessons = lessonDAO.getLessonSummaryByCourseId(courseId);
+            List<LessonStats> lessons = lessonDAO.getLessonSummaryByCourseId(courseId, user.getId());
+
             System.out.println("Found " + (lessons != null ? lessons.size() : "null") + " lessons"); // Debug log
 
             if (lessons != null) {

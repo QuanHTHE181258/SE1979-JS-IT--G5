@@ -568,6 +568,26 @@
                                 </c:if>
                             </div>
                         </div>
+                        <c:choose>
+                            <c:when test="${isCompleted}">
+                                <div class="text-end mb-4">
+            <span class="badge bg-success px-3 py-2 rounded-pill fs-6">
+                <i class="fas fa-check-circle me-1"></i> Đã hoàn thành
+            </span>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="text-end mb-4">
+                                    <form action="complete-lesson" method="post">
+                                        <input type="hidden" name="lessonId" value="${lesson.id}" />
+                                        <button type="submit" class="btn btn-success px-4 py-2 rounded-pill fw-semibold shadow-sm" style="background: var(--success-gradient); border: none;">
+                                            <i class="fas fa-check-circle me-2"></i>Đã hoàn thành bài học
+                                        </button>
+                                    </form>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+
 
                         <!-- Navigation -->
                         <div class="navigation-buttons">

@@ -335,11 +335,6 @@
             color: white;
         }
 
-        .badge-certificate {
-            background: linear-gradient(135deg, var(--warning-color), #fee140);
-            color: white;
-        }
-
         .badge-no-certificate {
             background: #e2e8f0;
             color: #718096;
@@ -592,7 +587,7 @@
     <div class="container">
         <div class="hero-content fade-in">
             <h1 class="hero-title">My Learning Journey</h1>
-            <p class="hero-subtitle">Track your progress, celebrate achievements, and continue growing with your enrolled courses</p>
+            <p class="hero-subtitle">Track your progress and continue growing with your enrolled courses</p>
         </div>
     </div>
 </section>
@@ -601,40 +596,40 @@
 <div class="container">
     <div class="stats-container">
         <div class="row g-4 fade-in justify-content-center">
-            <div class="col-md-3 col-sm-6">
+            <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="stat-card">
                     <div class="stat-icon" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
-                        <i class="fas fa-book"></i>
+                        <i class="fas fa-graduation-cap"></i>
                     </div>
                     <div class="stat-number" id="totalCourses">0</div>
-                    <div class="stat-label">Total Courses</div>
+                    <div class="stat-label">Tổng khóa học</div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-6">
+            <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="stat-card">
                     <div class="stat-icon" style="background: linear-gradient(135deg, var(--success-color), #00f2fe);">
-                        <i class="fas fa-check-circle"></i>
+                        <i class="fas fa-trophy"></i>
                     </div>
                     <div class="stat-number" id="completedCourses">0</div>
-                    <div class="stat-label">Completed</div>
+                    <div class="stat-label">Đã hoàn thành</div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-6">
+            <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="stat-card">
                     <div class="stat-icon" style="background: linear-gradient(135deg, var(--info-color), #38f9d7);">
-                        <i class="fas fa-play-circle"></i>
+                        <i class="fas fa-clock"></i>
                     </div>
                     <div class="stat-number" id="activeCourses">0</div>
-                    <div class="stat-label">In Progress</div>
+                    <div class="stat-label">Đang học</div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-6">
+            <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="stat-card">
                     <div class="stat-icon" style="background: linear-gradient(135deg, var(--warning-color), #fee140);">
-                        <i class="fas fa-certificate"></i>
+                        <i class="fas fa-chart-line"></i>
                     </div>
-                    <div class="stat-number" id="certificatesEarned">0</div>
-                    <div class="stat-label">Certificates</div>
+                    <div class="stat-number" id="averageProgress">0</div>
+                    <div class="stat-label">Tiến độ trung bình (%)</div>
                 </div>
             </div>
         </div>
@@ -662,34 +657,25 @@
                 </div>
                 <form id="filterForm">
                     <div class="row g-3">
-                        <div class="col-lg-3 col-md-6">
+                        <div class="col-lg-4 col-md-6">
                             <label class="form-label text-muted small">Course Title</label>
                             <input type="text" class="form-control" id="filterTitle" placeholder="Search by title...">
                         </div>
-                        <div class="col-lg-2 col-md-6">
+                        <div class="col-lg-3 col-md-6">
                             <label class="form-label text-muted small">Status</label>
                             <select class="form-select" id="filterStatus">
                                 <option value="">All Statuses</option>
-                                <option value="ACTIVE">Active</option>
-                                <option value="COMPLETED">Completed</option>
-                                <option value="CANCELLED">Cancelled</option>
+                                <option value="in_progress">In progress</option>
+                                <option value="completed">Completed</option>
                             </select>
                         </div>
                         <div class="col-lg-2 col-md-4">
                             <label class="form-label text-muted small">Min Score</label>
                             <input type="number" class="form-control" id="filterMinScore" placeholder="0" min="0" max="100">
                         </div>
-                        <div class="col-lg-2 col-md-4">
+                        <div class="col-lg-3 col-md-4">
                             <label class="form-label text-muted small">Max Score</label>
                             <input type="number" class="form-control" id="filterMaxScore" placeholder="100" min="0" max="100">
-                        </div>
-                        <div class="col-lg-3 col-md-4">
-                            <label class="form-label text-muted small">Certificate</label>
-                            <select class="form-select" id="filterCertificate">
-                                <option value="">All Certificates</option>
-                                <option value="yes">Has Certificate</option>
-                                <option value="no">No Certificate</option>
-                            </select>
                         </div>
                     </div>
                     <div class="row g-3 mt-2">
@@ -722,7 +708,6 @@
                         <th><i class="fas fa-chart-line me-2"></i>Progress</th>
                         <th><i class="fas fa-info-circle me-2"></i>Status</th>
                         <th><i class="fas fa-star me-2"></i>Score</th>
-                        <th><i class="fas fa-certificate me-2"></i>Certificate</th>
                         <th><i class="fas fa-cogs me-2"></i>Actions</th>
                     </tr>
                     </thead>
@@ -789,7 +774,6 @@
             progress: <%= e.getProgressPercentage() != null ? e.getProgressPercentage() : 0 %>,
             status: "<%= e.getStatus() %>",
             score: <%= e.getGrade() != null ? e.getGrade() : 0 %>,
-            certificate: "<%= Boolean.TRUE.equals(e.getCertificateIssued()) ? "yes" : "no" %>",
             price: <%= c != null && c.getPrice() != null ? c.getPrice() : 0 %>
         }<%= (i < enrollments.size() - 1) ? "," : "" %>
         <%          }
@@ -804,20 +788,23 @@
     // Update statistics
     function updateStats() {
         var totalCourses = enrollments.length;
-        var completedCourses = enrollments.filter(function(e) { return e.status == 'COMPLETED'; }).length;
-        var activeCourses = enrollments.filter(function(e) { return e.status == 'ACTIVE'; }).length;
-        var certificatesEarned = enrollments.filter(function(e) { return e.certificate == 'yes'; }).length;
+        var completedCourses = enrollments.filter(function(e) { return e.status == 'completed'; }).length;
+        var activeCourses = enrollments.filter(function(e) { return e.status == 'in_progress'; }).length;
+
+        // Calculate average progress
+        var totalProgress = enrollments.reduce(function(sum, e) { return sum + e.progress; }, 0);
+        var averageProgress = totalCourses > 0 ? Math.round(totalProgress / totalCourses) : 0;
 
         document.getElementById('totalCourses').textContent = totalCourses;
         document.getElementById('completedCourses').textContent = completedCourses;
         document.getElementById('activeCourses').textContent = activeCourses;
-        document.getElementById('certificatesEarned').textContent = certificatesEarned;
+        document.getElementById('averageProgress').textContent = averageProgress;
 
         // Animate counters
         animateCounter('totalCourses', totalCourses);
         animateCounter('completedCourses', completedCourses);
         animateCounter('activeCourses', activeCourses);
-        animateCounter('certificatesEarned', certificatesEarned);
+        animateCounter('averageProgress', averageProgress);
     }
 
     function animateCounter(elementId, target) {
@@ -851,14 +838,12 @@
             var status = document.getElementById('filterStatus').value;
             var minScore = parseFloat(document.getElementById('filterMinScore').value) || null;
             var maxScore = parseFloat(document.getElementById('filterMaxScore').value) || null;
-            var certificate = document.getElementById('filterCertificate').value;
             var minProgress = parseFloat(document.getElementById('filterMinProgress').value) || null;
             var maxProgress = parseFloat(document.getElementById('filterMaxProgress').value) || null;
 
             var filtered = enrollments.filter(function(e) {
                 if (title && e.courseName.toLowerCase().indexOf(title) == -1) return false;
                 if (status && e.status != status) return false;
-                if (certificate && e.certificate != certificate) return false;
                 if (minScore != null && e.score < minScore) return false;
                 if (maxScore != null && e.score > maxScore) return false;
                 if (minProgress != null && e.progress < minProgress) return false;
@@ -877,7 +862,7 @@
             var tbody = document.getElementById('enrollmentsBody');
 
             if (pageData.length == 0) {
-                tbody.innerHTML = '<tr><td colspan="8" class="empty-state"><div class="empty-state-icon"><i class="fas fa-search"></i></div><div class="empty-state-title">No courses found</div><p>Try adjusting your search criteria</p></td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><div class="empty-state-icon"><i class="fas fa-search"></i></div><div class="empty-state-title">No courses found</div><p>Try adjusting your search criteria</p></td></tr>';
             } else {
                 var htmlRows = pageData.map(function(e) {
                     var completionDateHtml = e.completionDate && e.completionDate != 'null' && e.completionDate != ''
@@ -885,21 +870,17 @@
                         : '<span class="badge badge-modern badge-no-certificate"><i class="fas fa-clock"></i> In Progress</span>';
 
                     var statusHtml = '';
-                    if (e.status == 'COMPLETED') {
+                    if (e.status == 'completed') {
                         statusHtml = '<span class="badge badge-modern badge-completed"><i class="fas fa-check-circle"></i> COMPLETED</span>';
-                    } else if (e.status == 'ACTIVE') {
-                        statusHtml = '<span class="badge badge-modern badge-active"><i class="fas fa-play-circle"></i> ACTIVE</span>';
+                    } else if (e.status == 'in_progress') {
+                        statusHtml = '<span class="badge badge-modern badge-active"><i class="fas fa-play-circle"></i> IN PROGRESS</span>';
                     } else {
-                        statusHtml = '<span class="badge badge-modern badge-cancelled"><i class="fas fa-times-circle"></i> ' + e.status + '</span>';
+                        statusHtml = '<span class="badge badge-modern badge-cancelled"><i class="fas fa-times-circle"></i> ' + e.status.toUpperCase() + '</span>';
                     }
 
                     var scoreHtml = e.score > 0
                         ? '<span class="badge badge-modern badge-score"><i class="fas fa-star"></i> ' + e.score + '</span>'
                         : '<span class="text-muted">No Score</span>';
-
-                    var certificateHtml = e.certificate == 'yes'
-                        ? '<span class="badge badge-modern badge-certificate"><i class="fas fa-certificate"></i> Available</span>'
-                        : '<span class="badge badge-modern badge-no-certificate"><i class="fas fa-times"></i> Not Available</span>';
 
                     var progressHtml = '<div class="progress-modern mb-1">' +
                         '<div class="progress-bar-modern" style="width: ' + e.progress + '%"></div>' +
@@ -907,9 +888,8 @@
                         '<div class="progress-text">' + e.progress + '%</div>';
 
                     var actionsHtml = '<a href="lessons?courseId=' + e.courseId + '" class="btn btn-modern btn-primary-modern"><i class="fas fa-eye"></i> View</a>';
-                    if (e.progress >= 80) {
-                        actionsHtml += '<a href="feedback?courseId=' + e.courseId + '" class="btn btn-modern btn-warning-modern ms-1"><i class="fas fa-comment"></i> Feedback</a>';
-                    }
+
+                    actionsHtml += '<a href="#" onclick="handleFeedbackClick(' + e.courseId + ', ' + e.progress + '); return false;" class="btn btn-modern btn-warning-modern ms-1"><i class="fas fa-comment"></i> Feedback</a>';
 
                     return '<tr>' +
                         '<td><div class="course-name">' + e.courseName + '</div><div class="course-meta">Course ID: ' + e.courseId + '</div></td>' +
@@ -918,7 +898,6 @@
                         '<td>' + progressHtml + '</td>' +
                         '<td>' + statusHtml + '</td>' +
                         '<td>' + scoreHtml + '</td>' +
-                        '<td>' + certificateHtml + '</td>' +
                         '<td>' + actionsHtml + '</td>' +
                         '</tr>';
                 }).join('');
@@ -929,6 +908,14 @@
             renderPagination(totalPages);
             hideLoading();
         }, 500);
+    }
+
+    function handleFeedbackClick(courseId, progress) {
+        if (progress < 60) {
+            alert("Bạn cần hoàn thành ít nhất 60% khóa học để gửi phản hồi.");
+            return;
+        }
+        window.location.href = "feedback?courseId=" + courseId;
     }
 
     function renderPagination(totalPages) {
@@ -1015,4 +1002,3 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
