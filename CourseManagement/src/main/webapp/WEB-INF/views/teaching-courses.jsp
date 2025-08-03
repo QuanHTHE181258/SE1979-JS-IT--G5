@@ -409,7 +409,7 @@
                             <td>
                                 <div class="action-buttons">
                                     <a href="course-lessons?id=${course.id}" class="btn-modern btn-view">
-                                        <i class="fas fa-eye"></i>View Details
+                                        <i class="fas fa-eye"></i>Xem chi tiết
                                     </a>
                                 </div>
                             </td>

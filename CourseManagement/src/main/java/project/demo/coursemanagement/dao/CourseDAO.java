@@ -10,6 +10,7 @@ public interface CourseDAO {
     List<CourseStatsDTO> getCoursesByCategory(Long categoryId);
     boolean insertCourse(project.demo.coursemanagement.entities.Cours course);
     boolean updateCourse(project.demo.coursemanagement.entities.Cours course);
+    boolean updateCourseStatus(Long courseId, String status); // New method for status update
     void deleteCourseByCode(String courseCode);
     List<CourseDTO> getCoursesForManager(String keyword, Integer categoryId, int page, int pageSize);
     int countCourses(String keyword, Integer categoryId);

@@ -14,6 +14,7 @@ public class CourseStatsDTO {
     private Double rating;
     private Instant createdAt;
     private String imageURL;
+    private String status; // Added status field
 
     private Long feedbackCount;
     private Long materialCount;
@@ -26,9 +27,9 @@ public class CourseStatsDTO {
     private String instructorFirstName;
     private String instructorLastName;
 
-    // Constructor
+    // Updated Constructor to include status
     public CourseStatsDTO(Long id, String title, String description, BigDecimal price,
-                          Double rating, Instant createdAt, String imageURL,
+                          Double rating, Instant createdAt, String imageURL, String status,
                           Long feedbackCount, Long materialCount, Long quizCount, Long enrollmentCount,
                           Long categoryId, String categoryName,
                           Long instructorId, String instructorFirstName, String instructorLastName) {
@@ -39,6 +40,7 @@ public class CourseStatsDTO {
         this.rating = rating;
         this.createdAt = createdAt;
         this.imageURL = imageURL;
+        this.status = status;
         this.feedbackCount = feedbackCount;
         this.materialCount = materialCount;
         this.quizCount = quizCount;
@@ -50,6 +52,16 @@ public class CourseStatsDTO {
         this.instructorLastName = instructorLastName;
     }
 
+    // Getter and setter for status
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    // Existing getters and setters
     public Long getCategoryId() {
         return categoryId;
     }

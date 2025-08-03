@@ -21,7 +21,7 @@ public class CourseDAOImpl implements CourseDAO {
         List<CourseStatsDTO> courses = new ArrayList<>();
 
         String sql = """
-        SELECT c.CourseID, c.Title, c.Description, c.Price, c.Rating, c.CreatedAt, c.ImageURL,
+        SELECT c.CourseID, c.Title, c.Description, c.Price, c.Rating, c.CreatedAt, c.ImageURL, c.Status,
             cat.CategoryID, cat.Name as CategoryName,
             u.UserID as InstructorID, u.FirstName as InstructorFirstName, u.LastName as InstructorLastName,
             (SELECT COUNT(*) FROM feedback f WHERE f.CourseID = c.CourseID) AS FeedbackCount,
@@ -51,6 +51,7 @@ public class CourseDAOImpl implements CourseDAO {
                         rs.getDouble("Rating"),
                         rs.getTimestamp("CreatedAt").toInstant(),
                         rs.getString("ImageURL"),
+                        rs.getString("Status"), // Added status field
                         rs.getLong("FeedbackCount"),
                         rs.getLong("MaterialCount"),
                         rs.getLong("QuizCount"),
@@ -77,7 +78,7 @@ public class CourseDAOImpl implements CourseDAO {
         List<CourseStatsDTO> courses = new ArrayList<>();
 
         String sql = """
-        SELECT c.CourseID, c.Title, c.Description, c.Price, c.Rating, c.CreatedAt, c.ImageURL,
+        SELECT c.CourseID, c.Title, c.Description, c.Price, c.Rating, c.CreatedAt, c.ImageURL, c.Status,
             cat.CategoryID, cat.Name as CategoryName,
             u.UserID as InstructorID, u.FirstName as InstructorFirstName, u.LastName as InstructorLastName,
             (SELECT COUNT(*) FROM feedback f WHERE f.CourseID = c.CourseID) AS FeedbackCount,
@@ -110,6 +111,7 @@ public class CourseDAOImpl implements CourseDAO {
                             rs.getDouble("Rating"),
                             rs.getTimestamp("CreatedAt").toInstant(),
                             rs.getString("ImageURL"),
+                            rs.getString("Status"), // Added status field
                             rs.getLong("FeedbackCount"),
                             rs.getLong("MaterialCount"),
                             rs.getLong("QuizCount"),
@@ -130,6 +132,23 @@ public class CourseDAOImpl implements CourseDAO {
         }
 
         return courses;
+    }
+
+    // New method to update course status
+    @Override
+    public boolean updateCourseStatus(Long courseId, String status) {
+        String sql = "UPDATE courses SET Status = ? WHERE CourseID = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            stmt.setLong(2, courseId);
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating course status: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

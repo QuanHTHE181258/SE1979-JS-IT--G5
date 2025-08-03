@@ -36,6 +36,15 @@ public class CourseService {
         return courseDAO.getCoursesByCategory(categoryId);
     }
 
+    // New method to update course status
+    public boolean updateCourseStatus(Long courseId, String status) {
+        // Validate status values
+        if (status == null || (!status.equals("active") && !status.equals("draft"))) {
+            throw new IllegalArgumentException("Status must be either 'active' or 'draft'");
+        }
+        return courseDAO.updateCourseStatus(courseId, status);
+    }
+
     public void deleteCourseByCode(String courseCode) {
         courseDAO.deleteCourseByCode(courseCode);
     }

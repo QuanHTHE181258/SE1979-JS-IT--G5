@@ -13,22 +13,30 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --primary-color: rgba(13, 181, 253, 0.94);
-      --primary-dark: #0bc6d7;
-      --secondary-color: rgba(10, 186, 202, 0.24);
-      --success-color: #48bb78;
-      --warning-color: #ed8936;
-      --danger-color: #f56565;
-      --info-color: #4299e1;
-      --light-bg: #f8fafc;
-      --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-      --card-shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.1);
-      --border-radius: 12px;
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --primary: #2563eb;
+      --primary-light: #3b82f6;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --border-radius: 8px;
+      --transition: all 0.15s ease;
     }
 
     * {
@@ -36,273 +44,394 @@
     }
 
     body {
-      /*background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);*/
-      min-height: 100vh;
-      padding: 20px 0;
+      background-color: var(--gray-50);
+      color: var(--gray-900);
+      line-height: 1.6;
     }
 
     .main-container {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      border-radius: var(--border-radius);
-      box-shadow: var(--card-shadow);
-      padding: 2rem;
-      width: 100%;
-      margin: 0;
-      transition: var(--transition);
+      padding: 24px;
     }
 
+    /* Header */
     .page-header {
-      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-      color: white;
-      padding: 2rem;
+      background: white;
       border-radius: var(--border-radius);
-      margin-bottom: 2rem;
-      position: relative;
-      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      padding: 32px;
+      margin-bottom: 24px;
+      border: 1px solid var(--gray-200);
     }
 
-    .page-header::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 200px;
-      height: 200px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      transform: translate(50px, -50px);
-    }
-
-    .page-header h1 {
-      font-weight: 700;
-      font-size: 2.5rem;
+    .page-header h2 {
+      font-weight: 600;
+      font-size: 28px;
+      color: var(--gray-900);
       margin: 0;
-      position: relative;
-      z-index: 2;
     }
 
-    .page-header .subtitle {
-      opacity: 0.9;
-      font-size: 1.1rem;
-      margin-top: 0.5rem;
-      position: relative;
-      z-index: 2;
-    }
-
-    .create-btn {
-      background: linear-gradient(135deg, var(--success-color) 0%, #38a169 100%);
-      border: none;
-      border-radius: 50px;
-      padding: 12px 24px;
-      font-weight: 600;
+    .btn {
+      font-weight: 500;
+      border-radius: var(--border-radius);
       transition: var(--transition);
-      box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
-      position: relative;
-      z-index: 2;
+      border: none;
+      font-size: 14px;
+      padding: 10px 16px;
     }
 
-    .create-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
-      background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
-    }
-
-    .fade-in {
-      animation: fadeIn 0.5s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .custom-table {
-      border-collapse: separate;
-      border-spacing: 0;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .custom-table thead {
-      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    .btn-primary {
+      background-color: var(--primary);
       color: white;
-      font-weight: bold;
-      border: none;
     }
 
-    .custom-table th,
-    .custom-table td {
-      vertical-align: middle;
-      padding: 0.85rem 1rem;
-      border: none;
-    }
-
-    .custom-table tbody tr {
-      background-color: #f9f9fc;
-      transition: all 0.2s ease-in-out;
-    }
-
-    .custom-table tbody tr:hover {
-      background-color: #eef2ff;
-      transform: scale(1.01);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-      z-index: 10;
-    }
-
-    .custom-table .badge {
-      font-size: 0.95rem;
-      padding: 0.5em 0.75em;
-    }
-
-    .category-item {
-      padding: 8px 15px;
-      border-radius: 30px;
-      font-weight: 600;
-      transition: all 0.2s;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
-    }
-
-    .category-item:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-    }
-
-    #categoryFilter, #searchInput {
-      border-radius: 50px;
-      padding-left: 1.5rem;
-      font-size: 1rem;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      transition: all 0.3s;
-      border: none;
-      background-color: white;
-    }
-
-    #categoryFilter:focus, #searchInput:focus {
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    .btn-primary:hover {
+      background-color: var(--primary-light);
       transform: translateY(-1px);
+      box-shadow: var(--shadow);
     }
 
-    #searchInput::placeholder {
-      color: #aaa;
+    .btn-outline-secondary {
+      background-color: transparent;
+      border: 1px solid var(--gray-300);
+      color: var(--gray-700);
     }
 
-    .btn-sm {
-      transition: all 0.2s;
-      margin: 0 2px;
+    .btn-outline-secondary:hover {
+      background-color: var(--gray-100);
+      border-color: var(--gray-400);
     }
 
-    .btn-sm:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    /* Search Section */
+    .search-section {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid var(--gray-200);
     }
 
+    .form-control,
+    .form-select {
+      border: 1px solid var(--gray-300);
+      border-radius: var(--border-radius);
+      padding: 12px 16px;
+      background: white;
+      transition: var(--transition);
+      font-size: 14px;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
+      outline: none;
+    }
+
+    /* Table */
+    .table-container {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      border: 1px solid var(--gray-200);
+    }
+
+    .table {
+      margin: 0;
+    }
+
+    .table thead th {
+      background-color: var(--gray-50);
+      color: var(--gray-700);
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 16px;
+      border-bottom: 1px solid var(--gray-200);
+      border-top: none;
+    }
+
+    .table tbody tr {
+      border-bottom: 1px solid var(--gray-100);
+      transition: var(--transition);
+    }
+
+    .table tbody tr:hover {
+      background-color: var(--gray-50);
+    }
+
+    .table tbody td {
+      padding: 16px;
+      vertical-align: middle;
+      color: var(--gray-800);
+      border-top: none;
+    }
+
+    /* Course Elements */
+    .course-image {
+      width: 56px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--gray-200);
+    }
+
+    .course-title {
+      font-weight: 600;
+      color: var(--gray-900);
+      font-size: 14px;
+    }
+
+    .course-description {
+      color: var(--gray-500);
+      font-size: 13px;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    /* Badges */
+    .badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-success {
+      background-color: var(--success);
+      color: white;
+    }
+
+    .badge-warning {
+      background-color: var(--warning);
+      color: white;
+    }
+
+    .badge-secondary {
+      background-color: var(--gray-400);
+      color: white;
+    }
+
+    .badge-gray {
+      background-color: var(--gray-100);
+      color: var(--gray-700);
+      border: 1px solid var(--gray-200);
+    }
+
+    /* Status Section */
+    .status-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .status-section .btn {
+      font-size: 12px;
+      padding: 6px 12px;
+    }
+
+    /* Price */
+    .price-display {
+      font-weight: 600;
+      color: var(--success);
+      font-size: 14px;
+    }
+
+    /* Stats - Remove unused styles */
+    .stats-section,
+    .stat-item,
+    .stat-label,
+    .stat-value {
+      /* Removed - no longer needed */
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .action-buttons .btn {
+      font-size: 12px;
+      padding: 6px 12px;
+    }
+
+    /* Instructor */
+    .instructor-name {
+      font-weight: 500;
+      color: var(--gray-700);
+      font-size: 13px;
+    }
+
+    /* Pagination */
     .pagination .page-link {
-      border-radius: 50%;
+      border: 1px solid var(--gray-300);
+      color: var(--gray-600);
+      font-weight: 500;
+      border-radius: var(--border-radius);
       margin: 0 2px;
-      border: none;
-      color: var(--primary-color);
-      transition: all 0.3s;
+      transition: var(--transition);
+      padding: 8px 12px;
     }
 
     .pagination .page-item.active .page-link {
-      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-      border: none;
+      background-color: var(--primary);
+      border-color: var(--primary);
+      color: white;
     }
 
     .pagination .page-link:hover {
-      background: var(--primary-color);
-      color: white;
-      transform: translateY(-2px);
+      background-color: var(--gray-100);
+      border-color: var(--gray-400);
+      color: var(--gray-700);
     }
 
-    .results-info {
-      color: #6c757d;
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
+    /* Alerts */
+    .alert {
+      border: none;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+      border-left: 4px solid;
+      font-size: 14px;
     }
 
-    .no-results {
+    .alert-success {
+      background-color: rgb(16 185 129 / 0.1);
+      border-left-color: var(--success);
+      color: var(--success);
+    }
+
+    .alert-danger {
+      background-color: rgb(239 68 68 / 0.1);
+      border-left-color: var(--danger);
+      color: var(--danger);
+    }
+
+    /* Empty State */
+    .empty-state {
+      padding: 48px 24px;
       text-align: center;
-      padding: 3rem;
-      color: #6c757d;
+      color: var(--gray-500);
     }
 
-    .no-results i {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      opacity: 0.5;
+    .empty-state i {
+      font-size: 48px;
+      color: var(--gray-300);
+      margin-bottom: 16px;
     }
 
+    .empty-state h5 {
+      color: var(--gray-600);
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    /* Results Info */
+    .results-info {
+      color: var(--gray-600);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    /* Responsive */
     @media (max-width: 768px) {
       .main-container {
-        margin: 0 1rem;
-        padding: 1rem;
+        padding: 12px;
       }
 
       .page-header {
-        padding: 1.5rem;
+        padding: 20px;
       }
 
-      .page-header h1 {
-        font-size: 2rem;
+      .search-section {
+        padding: 16px;
       }
 
-      .d-flex.gap-3 {
-        flex-direction: column;
-        gap: 1rem !important;
+      .table tbody td {
+        padding: 12px 8px;
+        font-size: 13px;
       }
 
-      .pagination {
-        justify-content: center;
+      .course-image {
+        width: 48px;
+        height: 32px;
+      }
+
+      .action-buttons {
+        flex-direction: row;
         flex-wrap: wrap;
       }
+    }
+
+    /* Loading Animation */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.3s ease-out;
     }
   </style>
 </head>
 <body>
-<div >
-  <div class="main-container fade-in">
-    <!-- Page Header -->
-    <div class="page-header">
-      <div class="d-flex justify-content-between align-items-center">
-        <div>
-          <h1><i class="fas fa-graduation-cap me-3"></i>Quản Lý Khóa Học</h1>
-          <p class="subtitle mb-0">Quản lý và tổ chức nội dung giáo dục của bạn</p>
-        </div>
-        <div class="d-flex gap-3">
-          <button class="btn create-btn" onclick="location.href='create-course'">
-            <i class="fas fa-plus me-2"></i>Tạo Khóa Học Mới
-          </button>
-          <button class="btn btn-outline-light" onclick="location.href='manage-categories'">
-            <i class="fas fa-tags me-2"></i>Quản Lý Danh Mục
-          </button>
-        </div>
+<div class="main-container fade-in">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <div class="d-flex align-items-center gap-3">
+        <i class="fas fa-graduation-cap text-primary fs-4"></i>
+        <h2>Quản Lý Khóa Học</h2>
+      </div>
+      <div class="d-flex gap-2">
+        <a href="create-course" class="btn btn-primary">
+          <i class="fas fa-plus me-2"></i>Tạo Khóa Học
+        </a>
       </div>
     </div>
+  </div>
 
-    <!-- Error Message -->
-    <c:if test="${not empty errorMessage}">
-      <div class="alert alert-danger fade-in" role="alert">
-        <i class="fas fa-exclamation-triangle me-2"></i>
-        <c:out value="${errorMessage}" escapeXml="true"/>
-      </div>
-    </c:if>
+  <!-- Success Message -->
+  <c:if test="${not empty successMessage}">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <i class="fas fa-check-circle me-2"></i>
+      <c:out value="${successMessage}" escapeXml="true"/>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </c:if>
 
-    <!-- Search and Filter Box -->
-    <div class="row mb-4">
+  <!-- Error Message -->
+  <c:if test="${not empty errorMessage}">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="fas fa-exclamation-circle me-2"></i>
+      <c:out value="${errorMessage}" escapeXml="true"/>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </c:if>
+
+  <!-- Search and Filter -->
+  <div class="search-section">
+    <div class="row g-3">
       <div class="col-md-8">
-        <div class="input-group">
-          <span class="input-group-text bg-transparent border-0">
-            <i class="fas fa-search text-muted fs-5"></i>
-          </span>
-          <input type="text" id="searchInput" class="form-control form-control-lg shadow-sm"
-                 placeholder="Tìm kiếm khóa học theo tiêu đề..." onkeyup="filterAndPaginate()">
+        <div class="position-relative">
+          <i class="fas fa-search position-absolute" style="left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray-400);"></i>
+          <input type="text" id="searchInput" class="form-control ps-5"
+                 placeholder="Tìm kiếm khóa học..." onkeyup="filterAndPaginate()">
         </div>
       </div>
       <div class="col-md-4">
-        <select id="categoryFilter" class="form-select form-select-lg shadow-sm" onchange="filterAndPaginate()">
+        <select id="categoryFilter" class="form-select" onchange="filterAndPaginate()">
           <option value="">Tất Cả Danh Mục</option>
           <c:if test="${not empty categories}">
             <c:forEach var="category" items="${categories}">
@@ -317,108 +446,153 @@
     </div>
 
     <!-- Results Info -->
-    <div class="results-info">
-      <i class="fas fa-info-circle me-2"></i>
-      <span id="resultsInfo">Hiển thị tất cả khóa học</span>
+    <div class="mt-3">
+        <span id="resultsInfo" class="results-info">
+          <i class="fas fa-info-circle me-1"></i>Hiển thị tất cả khóa học
+        </span>
     </div>
+  </div>
 
-    <!-- Course Table -->
-    <div class="table-responsive fade-in">
-      <table id="courseTable" class="table custom-table shadow-sm rounded bg-white">
-        <thead class="table-header text-center">
+  <!-- Course Table -->
+  <div class="table-container">
+    <div class="table-responsive">
+      <table id="courseTable" class="table">
+        <thead>
         <tr>
-          <th>STT</th>
-          <th>Hình Ảnh</th>
+          <th style="width: 60px;">STT</th>
+          <th style="width: 80px;">Hình Ảnh</th>
           <th>Tiêu Đề</th>
-          <th>Danh Mục</th>
-          <th>Giá</th>
-          <th>Thống Kê</th>
-          <th>Thao Tác</th>
-          <th>Giảng Viên</th>
+          <th style="width: 120px;">Danh Mục</th>
+          <th style="width: 140px;">Trạng Thái</th>
+          <th style="width: 100px;">Giá</th>
+          <th style="width: 100px;">Đánh Giá TB</th>
+          <th style="width: 100px;">Số Người Học</th>
+          <th style="width: 120px;">Thao Tác</th>
+          <th style="width: 140px;">Giảng Viên</th>
         </tr>
         </thead>
         <tbody>
         <c:choose>
           <c:when test="${not empty courses}">
             <c:forEach var="course" items="${courses}" varStatus="status">
-              <tr class="text-center align-middle">
-                <td>${status.index + 1}</td>
+              <tr>
                 <td>
-                  <img src="${pageContext.request.contextPath}/${course.imageURL}" alt="Course image" style="max-width: 80px; max-height: 60px; border-radius: 8px; object-fit: cover; box-shadow: 0 2px 8px rgba(0,0,0,0.07);">
+                  <span class="text-muted fw-medium">${status.index + 1}</span>
                 </td>
-                <td class="text-start fw-semibold text-primary course-title">
-                  <div><c:out value="${course.title}" escapeXml="true"/></div>
-                  <small class="text-muted">
+                <td>
+                  <img src="${pageContext.request.contextPath}/${course.imageURL}"
+                       alt="Course image" class="course-image">
+                </td>
+                <td>
+                  <div class="course-title"><c:out value="${course.title}" escapeXml="true"/></div>
+                  <div class="course-description">
                     <c:choose>
-                      <c:when test="${fn:length(course.description) > 50}">
-                        <c:out value="${fn:substring(course.description, 0, 50)}..." escapeXml="true"/>
+                      <c:when test="${fn:length(course.description) > 60}">
+                        <c:out value="${fn:substring(course.description, 0, 60)}..." escapeXml="true"/>
                       </c:when>
                       <c:otherwise>
                         <c:out value="${course.description}" escapeXml="true"/>
                       </c:otherwise>
                     </c:choose>
-                  </small>
+                  </div>
                 </td>
                 <td>
                   <c:choose>
                     <c:when test="${empty course.categoryName}">
-                      <span class="badge" style="background: linear-gradient(135deg, #718096 0%, #4A5568 100%);">
-                        <i class="fas fa-folder me-1"></i> Chưa Phân Loại
-                      </span>
+                      <span class="badge badge-secondary">Chưa Phân Loại</span>
                     </c:when>
                     <c:otherwise>
-                      <span class="badge category-item" style="background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);">
-                        <i class="fas fa-tag me-1"></i> <c:out value="${course.categoryName}" escapeXml="true"/>
-                      </span>
+                          <span class="badge badge-gray">
+                            <c:out value="${course.categoryName}" escapeXml="true"/>
+                          </span>
                     </c:otherwise>
                   </c:choose>
                 </td>
-                <td><span class="badge bg-success"><c:out value="${course.price}"/>VNĐ</span></td>
                 <td>
-                  <div class="d-flex flex-wrap justify-content-center gap-2">
-                    <span class="badge rounded-pill bg-light text-dark" title="Rating">
-                      <i class="fas fa-star text-warning me-1"></i>
-                      <c:out value="${course.rating != null ? course.rating : '0'}"/>
-                    </span>
-                    <span class="badge rounded-pill bg-light text-dark" title="Feedback count">
-                      <i class="fas fa-comments text-info me-1"></i>
-                      <c:out value="${course.feedbackCount != null ? course.feedbackCount : '0'}"/>
-                    </span>
-                    <span class="badge rounded-pill bg-light text-dark" title="Materials">
-                      <i class="fas fa-book text-success me-1"></i>
-                      <c:out value="${course.materialCount != null ? course.materialCount : '0'}"/>
-                    </span>
-                    <span class="badge rounded-pill bg-light text-dark" title="Quizzes">
-                      <i class="fas fa-question-circle text-primary me-1"></i>
-                      <c:out value="${course.quizCount != null ? course.quizCount : '0'}"/>
-                    </span>
-                    <span class="badge rounded-pill bg-light text-dark" title="Enrolled students">
-                      <i class="fas fa-users text-secondary me-1"></i>
-                      <c:out value="${course.enrollmentCount != null ? course.enrollmentCount : '0'}"/>
-                    </span>
-                  </div>
-                </td>
-                <td>
-                  <div class="d-flex flex-column align-items-center gap-2 flex-wrap">
-                    <a href="update-course?id=${course.id}" class="btn btn-outline-secondary btn-sm w-100" title="Chỉnh sửa khóa học">
-                      <i class="fas fa-edit"></i> Sửa
-                    </a>
+                  <div class="status-section">
+                    <!-- Status Display -->
+                    <span class="badge text-dark">
+                          <c:choose>
+                            <c:when test="${course.status == 'active'}">
+                              <i class="fas fa-check me-1"></i>Hoạt Động
+                            </c:when>
+                            <c:when test="${course.status == 'draft'}">
+                              <i class="fas fa-edit me-1"></i>Nháp
+                            </c:when>
+                            <c:otherwise>
+                              Không xác định
+                            </c:otherwise>
+                          </c:choose>
+                        </span>
 
+                    <!-- Change Status Form -->
+                    <form method="post" action="change-status" style="display: inline;">
+                      <input type="hidden" name="courseId" value="${course.id}">
+                      <c:choose>
+                        <c:when test="${course.status == 'active'}">
+                          <input type="hidden" name="status" value="draft">
+                          <button type="submit" class="btn btn-outline-danger btn-sm">
+                            <i class="fas fa-pause me-1"></i>Tạm Dừng
+                          </button>
+                        </c:when>
+                        <c:when test="${course.status == 'draft'}">
+                          <input type="hidden" name="status" value="active">
+                          <button type="submit" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-play me-1"></i>Kích Hoạt
+                          </button>
+                        </c:when>
+                        <c:otherwise>
+                          <input type="hidden" name="status" value="active">
+                          <button type="submit" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-sync me-1"></i>Cập Nhật
+                          </button>
+                        </c:otherwise>
+                      </c:choose>
+                    </form>
                   </div>
                 </td>
                 <td>
-                  <c:out value="${course.instructorFirstName}"/> <c:out value="${course.instructorLastName}"/>
+                  <span class="price-display"><c:out value="${course.price}"/> VNĐ</span>
+                </td>
+                <td>
+                  <div class="text-center">
+                        <span class="fw-semibold">
+                          <c:out value="${course.rating != null ? course.rating : '0.0'}"/>/5.0
+                        </span>
+                  </div>
+                </td>
+                <td>
+                  <div class="text-center">
+                        <span class="fw-semibold">
+                          <c:out value="${course.enrollmentCount != null ? course.enrollmentCount : '0'}"/> người
+                        </span>
+                  </div>
+                </td>
+                <td>
+                  <div class="action-buttons">
+                    <a href="update-course?id=${course.id}" class="btn btn-outline-secondary btn-sm">
+                      <i class="fas fa-edit me-1"></i>Sửa
+                    </a>
+                    <a href="course-lessons?id=${course.id}" class="btn btn-outline-primary btn-sm">
+                      <i class="fas fa-book-open me-1"></i>Bài học
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="instructor-name">
+                    <c:out value="${course.instructorFirstName}"/> <c:out value="${course.instructorLastName}"/>
+                  </div>
                 </td>
               </tr>
             </c:forEach>
           </c:when>
           <c:otherwise>
             <tr>
-              <td colspan="8" class="text-center py-4">
-                <div class="no-results">
+              <td colspan="9" class="text-center">
+                <div class="empty-state">
                   <i class="fas fa-graduation-cap"></i>
                   <h5>Không có khóa học nào</h5>
-                  <p>Bắt đầu bằng cách tạo khóa học đầu tiên của bạn</p>
+                  <p class="mb-0">Bắt đầu bằng cách tạo khóa học đầu tiên</p>
                 </div>
               </td>
             </tr>
@@ -427,61 +601,44 @@
         </tbody>
       </table>
 
-      <!-- No Results Message (for filtered results) -->
-      <div id="noResults" class="no-results" style="display: none;">
+      <!-- No Results Message -->
+      <div id="noResults" class="empty-state" style="display: none;">
         <i class="fas fa-search"></i>
         <h5>Không tìm thấy khóa học nào</h5>
-        <p>Hãy thử điều chỉnh tiêu chí tìm kiếm hoặc bộ lọc của bạn</p>
+        <p class="mb-0">Thử điều chỉnh từ khóa tìm kiếm</p>
       </div>
     </div>
-
-    <!-- Pagination -->
-    <nav class="mt-4">
-      <ul class="pagination justify-content-center" id="pagination"></ul>
-    </nav>
   </div>
+
+  <!-- Pagination -->
+  <nav class="mt-4">
+    <ul class="pagination justify-content-center" id="pagination"></ul>
+  </nav>
 </div>
 
 <!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+  // Course management class
   class CourseManager {
     constructor() {
-      this.rowsPerPage = 5;
+      this.rowsPerPage = 10;
       this.currentPage = 1;
       this.allRows = [];
       this.filteredRows = [];
-
       this.init();
     }
 
     init() {
-      // Get all table rows
       const table = document.getElementById("courseTable");
       if (table && table.querySelector("tbody")) {
         this.allRows = Array.from(table.querySelectorAll("tbody tr"));
         this.filteredRows = [...this.allRows];
-
-        // Initialize tooltips
-        this.initTooltips();
-
-        // Initial display
         this.displayPage();
         this.setupPagination();
         this.updateResultsInfo();
       }
-    }
-
-    initTooltips() {
-      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
-      tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl, {
-          placement: 'top',
-          trigger: 'hover'
-        });
-      });
     }
 
     filterRows() {
@@ -493,31 +650,24 @@
       const titleFilter = searchInput.value.toLowerCase().trim();
       const categoryFilterValue = categoryFilter.value;
 
-      // Filter rows based on title and category
       this.filteredRows = this.allRows.filter(row => {
-        // Skip if row is invalid or is an empty state row
         if (!row.cells || row.cells.length < 3) return false;
 
-        // --- Title filter ---
         const titleCell = row.querySelector(".course-title");
         if (!titleCell) return false;
         const titleText = (titleCell.textContent || titleCell.innerText).toLowerCase();
-        const titleMatch = titleFilter === '' || titleText.includes(titleFilter);
+        const titleMatch = titleFilter == '' || titleText.includes(titleFilter);
 
-        // --- Category filter ---
-        const categoryCell = row.cells[2];
+        const categoryCell = row.cells[3];
         if (!categoryCell) return false;
         const categoryText = categoryCell.textContent.trim();
-        const categoryMatch =
-                categoryFilterValue === "" ||
+        const categoryMatch = categoryFilterValue == "" ||
                 categoryText.includes(categoryFilterValue) ||
-                (categoryFilterValue === "Uncategorized" && categoryText.includes("Uncategorized"));
+                (categoryFilterValue == "Uncategorized" && categoryText.includes("Uncategorized"));
 
-        // Only include rows that match both filters
         return titleMatch && categoryMatch;
       });
 
-      // Reset to first page after filtering
       this.currentPage = 1;
     }
 
@@ -525,29 +675,20 @@
       const start = (this.currentPage - 1) * this.rowsPerPage;
       const end = start + this.rowsPerPage;
 
-      // Hide all rows first
-      this.allRows.forEach(row => {
-        row.style.display = 'none';
-      });
+      this.allRows.forEach(row => row.style.display = 'none');
 
-      // Show filtered rows for current page
       const rowsToShow = this.filteredRows.slice(start, end);
-      rowsToShow.forEach(row => {
-        row.style.display = '';
-      });
+      rowsToShow.forEach(row => row.style.display = '');
 
-      // Show/hide no results message
       const noResults = document.getElementById('noResults');
       const tableBody = document.querySelector('#courseTable tbody');
 
-      if (noResults && tableBody) {
-        if (this.filteredRows.length === 0 && this.allRows.length > 0) {
-          noResults.style.display = 'block';
-          tableBody.style.display = 'none';
-        } else {
-          noResults.style.display = 'none';
-          tableBody.style.display = '';
-        }
+      if (this.filteredRows.length == 0 && this.allRows.length > 0) {
+        noResults.style.display = 'block';
+        tableBody.style.display = 'none';
+      } else {
+        noResults.style.display = 'none';
+        tableBody.style.display = '';
       }
     }
 
@@ -556,94 +697,70 @@
       if (!pagination) return;
 
       const totalPages = Math.ceil(this.filteredRows.length / this.rowsPerPage);
-
       pagination.innerHTML = "";
 
       if (totalPages <= 1) return;
 
-      // Previous button
-      const prevLi = document.createElement("li");
-      prevLi.className = "page-item" + (this.currentPage == 1 ? ' disabled' : '');
-      const prevLink = document.createElement("a");
-      prevLink.className = "page-link";
-      prevLink.href = "#";
-      prevLink.innerHTML = '<i class="fas fa-chevron-left"></i>';
-      prevLink.onclick = (e) => {
-        e.preventDefault();
-        if (this.currentPage > 1) {
-          this.currentPage--;
-          this.displayPage();
-          this.setupPagination();
-          this.updateResultsInfo();
-        }
-      };
-      prevLi.appendChild(prevLink);
-      pagination.appendChild(prevLi);
+      // Previous
+      if (this.currentPage > 1) {
+        const prevLi = document.createElement("li");
+        prevLi.className = "page-item";
+        const prevLink = document.createElement("a");
+        prevLink.className = "page-link";
+        prevLink.href = "#";
+        prevLink.innerHTML = '<i class="fas fa-chevron-left"></i>';
+        prevLink.onclick = (e) => {
+          e.preventDefault();
+          this.goToPage(this.currentPage - 1);
+        };
+        prevLi.appendChild(prevLink);
+        pagination.appendChild(prevLi);
+      }
 
-      // Page numbers
+      // Pages
       const startPage = Math.max(1, this.currentPage - 2);
       const endPage = Math.min(totalPages, this.currentPage + 2);
 
-      if (startPage > 1) {
-        this.createPageLink(1, pagination);
-        if (startPage > 2) {
-          const ellipsis = document.createElement("li");
-          ellipsis.className = "page-item disabled";
-          ellipsis.innerHTML = '<span class="page-link">...</span>';
-          pagination.appendChild(ellipsis);
-        }
-      }
-
       for (let i = startPage; i <= endPage; i++) {
-        this.createPageLink(i, pagination);
+        const li = document.createElement("li");
+        li.className = "page-item";
+        if (i == this.currentPage) {
+          li.classList.add("active");
+        }
+        const link = document.createElement("a");
+        link.className = "page-link";
+        link.href = "#";
+        link.textContent = i;
+        link.onclick = (e) => {
+          e.preventDefault();
+          this.goToPage(i);
+        };
+        li.appendChild(link);
+        pagination.appendChild(li);
       }
 
-      if (endPage < totalPages) {
-        if (endPage < totalPages - 1) {
-          const ellipsis = document.createElement("li");
-          ellipsis.className = "page-item disabled";
-          ellipsis.innerHTML = '<span class="page-link">...</span>';
-          pagination.appendChild(ellipsis);
-        }
-        this.createPageLink(totalPages, pagination);
+      // Next
+      if (this.currentPage < totalPages) {
+        const nextLi = document.createElement("li");
+        nextLi.className = "page-item";
+        const nextLink = document.createElement("a");
+        nextLink.className = "page-link";
+        nextLink.href = "#";
+        nextLink.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        nextLink.onclick = (e) => {
+          e.preventDefault();
+          this.goToPage(this.currentPage + 1);
+        };
+        nextLi.appendChild(nextLink);
+        pagination.appendChild(nextLi);
       }
-
-      // Next button
-      const nextLi = document.createElement("li");
-      nextLi.className = "page-item" + (this.currentPage == totalPages ? ' disabled' : '');
-      const nextLink = document.createElement("a");
-      nextLink.className = "page-link";
-      nextLink.href = "#";
-      nextLink.innerHTML = '<i class="fas fa-chevron-right"></i>';
-      nextLink.onclick = (e) => {
-        e.preventDefault();
-        if (this.currentPage < totalPages) {
-          this.currentPage++;
-          this.displayPage();
-          this.setupPagination();
-          this.updateResultsInfo();
-        }
-      };
-      nextLi.appendChild(nextLink);
-      pagination.appendChild(nextLi);
     }
 
-    createPageLink(pageNum, pagination) {
-      const li = document.createElement("li");
-      li.className = "page-item" + (pageNum == this.currentPage ? " active" : "");
-      const link = document.createElement("a");
-      link.className = "page-link";
-      link.href = "#";
-      link.innerText = pageNum;
-      link.onclick = (e) => {
-        e.preventDefault();
-        this.currentPage = pageNum;
-        this.displayPage();
-        this.setupPagination();
-        this.updateResultsInfo();
-      };
-      li.appendChild(link);
-      pagination.appendChild(li);
+    goToPage(page) {
+      this.currentPage = page;
+      this.displayPage();
+      this.setupPagination();
+      this.updateResultsInfo();
     }
 
     updateResultsInfo() {
@@ -655,12 +772,10 @@
       const start = (this.currentPage - 1) * this.rowsPerPage + 1;
       const end = Math.min(start + this.rowsPerPage - 1, filteredCount);
 
-      if (filteredCount === 0) {
-        resultsInfo.textContent = 'Không tìm thấy khóa học nào';
-      } else if (filteredCount === totalCourses) {
-        resultsInfo.textContent = `Hiển thị ${start}-${end} của ${totalCourses} khóa học`;
+      if (filteredCount == 0) {
+        resultsInfo.innerHTML = '<i class="fas fa-info-circle me-1"></i>Không tìm thấy khóa học nào';
       } else {
-        resultsInfo.textContent = `Hiển thị ${start}-${end} của ${filteredCount} khóa học đã lọc (tổng cộng ${totalCourses})`;
+        resultsInfo.innerHTML = `<i class="fas fa-info-circle me-1"></i>Hiển thị ${start}-${end} của ${filteredCount} khóa học`;
       }
     }
 
@@ -672,17 +787,37 @@
     }
   }
 
-  // Initialize when DOM is loaded
+  // Initialize
+  let courseManager;
   document.addEventListener('DOMContentLoaded', function() {
-    window.courseManager = new CourseManager();
+    courseManager = new CourseManager();
+
+    // Auto-hide alerts after 5 seconds
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+      setTimeout(() => {
+        if (alert.parentNode) {
+          alert.classList.remove('show');
+          setTimeout(() => {
+            if (alert.parentNode) {
+              alert.remove();
+            }
+          }, 150);
+        }
+      }, 5000);
+    });
   });
 
-  // Global function for inline event handlers
   function filterAndPaginate() {
-    if (window.courseManager) {
-      window.courseManager.filterAndPaginate();
+    if (courseManager) {
+      courseManager.filterAndPaginate();
     }
   }
+
+  // Smooth scrolling
+  document.addEventListener('DOMContentLoaded', function() {
+    document.documentElement.style.scrollBehavior = 'smooth';
+  });
 </script>
 
 </body>
