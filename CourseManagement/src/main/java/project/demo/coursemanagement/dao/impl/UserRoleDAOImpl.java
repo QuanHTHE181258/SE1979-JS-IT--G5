@@ -17,7 +17,25 @@ import java.util.List;
  * Implementation of UserRoleDAO
  */
 public class UserRoleDAOImpl implements UserRoleDAO {
+    @Override
+    public Integer getRoleIdByUserId(Integer userId) {
+        Integer roleId = null;
+        String sql = "SELECT RoleID FROM user_roles WHERE UserID = ?";
 
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                roleId = rs.getInt("RoleID");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return roleId;
+    }
     @Override
     public List<Role> findRolesByUserId(Integer userId) {
         List<Role> roles = new ArrayList<>();

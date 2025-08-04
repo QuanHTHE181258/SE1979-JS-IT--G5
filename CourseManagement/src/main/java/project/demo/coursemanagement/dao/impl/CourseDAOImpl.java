@@ -35,7 +35,7 @@ public class CourseDAOImpl implements CourseDAO {
         FROM Courses c
         LEFT JOIN categories cat ON c.CategoryID = cat.CategoryID
         LEFT JOIN users u ON c.InstructorID = u.UserID
-        ORDER BY c.CreatedAt DESC
+        ORDER BY c.CreatedAt ASC
     """;
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();

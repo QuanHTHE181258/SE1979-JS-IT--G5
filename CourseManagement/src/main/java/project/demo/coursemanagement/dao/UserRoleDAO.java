@@ -21,4 +21,5 @@ public interface UserRoleDAO {
     boolean removeAllRolesFromUser(Integer userId);
 
     boolean hasRole(Integer userId, String roleName);
+    Integer getRoleIdByUserId(Integer userId);
 }

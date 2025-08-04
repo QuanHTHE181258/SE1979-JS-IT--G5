@@ -10,16 +10,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db375aac-b117-402c-8b41-b0bc91d40527" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/ChangeStatusServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/CourseDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/CourseDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/CartServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/controllers/CartServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/UserRoleDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/UserRoleDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/CourseDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/CourseDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dto/CourseStatsDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dto/CourseStatsDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/service/CourseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/UserRoleDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/demo/coursemanagement/dao/impl/UserRoleDAOImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/_admin_sidebar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/_admin_sidebar.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/admin_revenue_analytics.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/admin_revenue_analytics.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/create_teacher.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/create_teacher.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/manage-course/view-all.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/manage-course/view-all.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/learning-page.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/learning-page.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/lesson-detail.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/lesson-detail.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/list-lesson.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/list-lesson.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/quiz/edit-quiz.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/quiz/edit-quiz.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/teaching-courses.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/teaching-courses.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/user_list.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/user_list.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

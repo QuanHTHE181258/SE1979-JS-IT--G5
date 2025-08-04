@@ -544,30 +544,29 @@
                             </div>
                             <div class="section-body">
                                 <c:forEach var="material" items="${materials}" varStatus="status">
-                                    <div class="material-item">
+                                    <div class="material-item d-flex justify-content-between align-items-center">
                                         <div class="flex-grow-1">
                                             <h6 class="mb-2 fw-semibold fs-5">${material.title}</h6>
                                             <small class="text-muted">Learning Material ${status.index + 1} • Additional resources</small>
                                         </div>
-                                        <c:if test="${not empty material.fileURL}">
-                                            <a href="${material.fileURL}" target="_blank" class="material-link">
-                                                <i class="fas fa-download me-2"></i>Download
-                                            </a>
-                                        </c:if>
-                                        <c:if test="${empty material.fileURL}">
-                                            <span class="badge bg-secondary rounded-pill">No file available</span>
-                                        </c:if>
+                                        <!-- Nút download giả, luôn báo "Coming Soon" -->
+                                        <a href="#" class="material-link" onclick="showComingSoon(); return false;">
+                                            <i class="fas fa-download me-2"></i>Download
+                                        </a>
                                     </div>
                                 </c:forEach>
+
                                 <c:if test="${empty materials}">
-                                    <div class="empty-state">
-                                        <i class="fas fa-file-download"></i>
+                                    <div class="empty-state text-center mt-4">
+                                        <i class="fas fa-file-download fa-2x mb-2"></i>
                                         <div class="fw-medium">No materials available for download</div>
                                         <small class="text-muted">All content is included in the lesson above</small>
                                     </div>
                                 </c:if>
                             </div>
                         </div>
+
+
                         <c:choose>
                             <c:when test="${isCompleted}">
                                 <div class="text-end mb-4">
@@ -628,6 +627,11 @@
         </div>
     </div>
 </div>
+<script>
+    function showComingSoon() {
+        alert("Coming Soon");
+    }
+</script>
 
 <!-- FontAwesome for icons -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>

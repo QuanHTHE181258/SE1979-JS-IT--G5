@@ -13,8 +13,8 @@
 </head>
 <body>
 <c:set var="active" value="revenue" scope="request"/>
-<%@ include file="/WEB-INF/views/layout/header.jsp" %>
-<%@ include file="/WEB-INF/views/_admin_sidebar.jsp" %>
+<%@ include file="/WEB-INF/layout/header.jsp" %>
+<%@ include file="_admin_sidebar.jsp" %>
 <!-- Main content -->
 <div style="flex:1; display:flex; flex-direction:column;">
     <!-- Top Navbar -->

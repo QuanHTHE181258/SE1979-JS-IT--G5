@@ -433,7 +433,7 @@
                                 <a href="edit-lesson?id=${lesson.id}" class="btn btn-warning">
                                     <i class="fas fa-edit me-2"></i>Edit
                                 </a>
-                                <button onclick="deleteLesson(${lesson.id})" class="btn btn-danger">
+                                <button onclick="showComingSoon()" class="btn btn-danger">
                                     <i class="fas fa-trash me-2"></i>Delete
                                 </button>
                             </div>
@@ -510,7 +510,7 @@
                                                     <a href="edit-quiz?quizId=${quiz.id}" class="btn btn-warning">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
-                                                    <button onclick="deleteQuiz(${quiz.id})" class="btn btn-danger">
+                                                    <button onclick="showComingSoon()" class="btn btn-danger">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </div>
@@ -559,30 +559,23 @@
                                             <td><strong>${status.index + 1}</strong></td>
                                             <td>${material.title}</td>
                                             <td>
-                                                <c:choose>
-                                                    <c:when test="${not empty material.fileURL}">
-                                                        <a href="${material.fileURL}" target="_blank"
-                                                           class="btn btn-outline-primary btn-sm">
-                                                            <i class="fas fa-download me-1"></i>Download
-                                                        </a>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="text-muted">No file</span>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                                <button class="btn btn-outline-primary btn-sm" onclick="showComingSoon()">
+                                                    <i class="fas fa-download me-1"></i>Download
+                                                </button>
                                             </td>
                                             <td>
                                                 <div class="btn-group btn-group-sm">
                                                     <a href="edit-material?id=${material.id}" class="btn btn-warning">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
-                                                    <button onclick="deleteMaterial(${material.id})" class="btn btn-danger">
+                                                    <button class="btn btn-danger" onclick="showComingSoon()">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </div>
                                             </td>
                                         </tr>
                                     </c:forEach>
+
                                     <c:if test="${empty materials}">
                                         <tr>
                                             <td colspan="4" class="empty-state">
@@ -591,6 +584,7 @@
                                             </td>
                                         </tr>
                                     </c:if>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -630,6 +624,11 @@
         </div>
     </div>
 </div>
+<script>
+    function showComingSoon() {
+        alert("Coming Soon");
+    }
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -650,7 +649,23 @@
             window.location.href = 'edit-material?action=delete&id=' + id;
         }
     }
+    function showComingSoon() {
+        alert("Coming Soon");
+    }
 
+    // Smooth hover effects
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(btn => {
+            btn.addEventListener('mouseenter', function () {
+                this.style.transform = 'translateY(-1px)';
+            });
+
+            btn.addEventListener('mouseleave', function () {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    });
     // Simple smooth scroll for back to top
     document.addEventListener('DOMContentLoaded', function() {
         // Add simple hover effects

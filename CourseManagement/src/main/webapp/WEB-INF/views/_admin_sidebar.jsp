@@ -1,59 +1,60 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:if test="${sessionScope.userRole != '4'}">
-    <nav class="admin-sidebar">
-        <div class="sidebar-brand">
+    <nav class="thanh-quantri">
+        <div class="thanh-logo">
             <i class="fas fa-graduation-cap"></i>
-            <span>Admin Dashboard</span>
+            <span>Bảng điều khiển quản trị</span>
         </div>
 
-        <ul class="nav-list">
-            <li class="nav-item">
-                <a class="nav-link ${param.active == 'dashboard' ? 'active' : ''}"
+        <ul class="danh-sach-menu">
+            <li class="muc-menu">
+                <a class="duong-dan ${param.active == 'dashboard' ? 'dang-chon' : ''}"
                    href="${pageContext.request.contextPath}/admin/dashboard">
                     <i class="fas fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
+                    <span>Trang tổng quan</span>
                 </a>
             </li>
 
-            <li class="nav-section">
-                <span class="nav-section-text">Management</span>
+            <li class="phan-menu">
+                <span class="ten-phan">Quản lý</span>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link ${param.active == 'courses' ? 'active' : ''}"
+            <li class="muc-menu">
+                <a class="duong-dan ${param.active == 'courses' ? 'dang-chon' : ''}"
                    href="${pageContext.request.contextPath}/admin/courses">
                     <i class="fas fa-book"></i>
-                    <span>Courses</span>
+                    <span>Khóa học</span>
                 </a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link ${param.active == 'orders' ? 'active' : ''}"
+            <li class="muc-menu">
+                <a class="duong-dan ${param.active == 'orders' ? 'dang-chon' : ''}"
                    href="${pageContext.request.contextPath}/admin/orders">
                     <i class="fas fa-shopping-cart"></i>
-                    <span>Orders</span>
+                    <span>Đơn hàng</span>
                 </a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link ${param.active == 'users' ? 'active' : ''}"
+            <li class="muc-menu">
+                <a class="duong-dan ${param.active == 'users' ? 'dang-chon' : ''}"
                    href="${pageContext.request.contextPath}/admin/users">
                     <i class="fas fa-users"></i>
-                    <span>Users</span>
+                    <span>Người dùng</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link ${param.active == 'users' ? 'active' : ''}"
+            <li class="muc-menu">
+                <a class="duong-dan ${param.active == 'users' ? 'dang-chon' : ''}"
                    href="${pageContext.request.contextPath}/admin/revenue-analytics">
-                    <i class="fas fa-users"></i>
-                    <span>Revenue</span>
+                    <i class="fas fa-chart-line"></i>
+                    <span>Doanh thu</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link ${param.active == 'users' ? 'active' : ''}"
+            <li class="muc-menu">
+                <a class="duong-dan ${param.active == 'users' ? 'dang-chon' : ''}"
                    href="${pageContext.request.contextPath}/admin/blog/list">
-                    <i class="fas fa-users"></i>
-                    <span>Blogs</span>
+                    <i class="fas fa-blog"></i>
+                    <span>Bài viết</span>
                 </a>
             </li>
         </ul>
@@ -61,134 +62,130 @@
 
     <style>
         :root {
-            --sidebar-width: 280px;
-            --sidebar-bg: #2c3e50;
-            --sidebar-hover: #34495e;
-            --text-color: #ecf0f1;
-            --text-muted: #95a5a6;
-            --accent-color: #3498db;
+            --menu-rong: 280px;
+            --nen-menu: #2c3e50;
+            --mau-hover: #34495e;
+            --mau-chu: #ecf0f1;
+            --chu-mo: #95a5a6;
+            --mau-nhan: #3498db;
         }
 
-        .admin-sidebar {
+        .thanh-quantri {
             position: fixed;
             left: 0;
             top: 70px;
-            width: var(--sidebar-width);
+            width: var(--menu-rong);
             height: calc(100vh - 70px);
-            background: var(--sidebar-bg);
-            color: var(--text-color);
+            background: var(--nen-menu);
+            color: var(--mau-chu);
             overflow-y: auto;
-            transition: all 0.3s ease;
             z-index: 1000;
             box-shadow: 2px 0 10px rgba(0,0,0,0.1);
         }
 
-        .sidebar-brand {
+        .thanh-logo {
             padding: 1.5rem 2rem;
             display: flex;
             align-items: center;
             gap: 1rem;
             font-size: 1.4rem;
             font-weight: 600;
-            color: var(--text-color);
+            color: var(--mau-chu);
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            background: linear-gradient(to right, var(--sidebar-bg), var(--sidebar-hover));
+            background: linear-gradient(to right, var(--nen-menu), var(--mau-hover));
         }
 
-        .sidebar-brand i {
+        .thanh-logo i {
             font-size: 1.8rem;
-            color: var(--accent-color);
+            color: var(--mau-nhan);
         }
 
-        .nav-list {
+        .danh-sach-menu {
             padding: 1.5rem 0;
             list-style: none;
             margin: 0;
         }
 
-        .nav-section {
+        .phan-menu {
             padding: 1.5rem 2rem 0.75rem;
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: var(--text-muted);
+            color: var(--chu-mo);
             font-weight: 600;
         }
 
-        .nav-item {
+        .muc-menu {
             margin: 4px 1rem;
         }
 
-        .nav-link {
+        .duong-dan {
             display: flex;
             align-items: center;
             gap: 1rem;
             padding: 1rem 1.5rem;
-            color: var(--text-color) !important;
+            color: var(--mau-chu) !important;
             text-decoration: none;
             border-radius: 8px;
             transition: all 0.3s ease;
             font-size: 1rem;
         }
 
-        .nav-link i {
+        .duong-dan i {
             width: 24px;
             text-align: center;
             font-size: 1.2rem;
         }
 
-        .nav-link:hover {
-            background: var(--sidebar-hover);
+        .duong-dan:hover {
+            background: var(--mau-hover);
             transform: translateX(4px);
             padding-left: 2rem;
         }
 
-        .nav-link.active {
-            background: var(--accent-color);
+        .duong-dan.dang-chon {
+            background: var(--mau-nhan);
             color: white !important;
             box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
         }
 
-        .nav-link.active:hover {
+        .duong-dan.dang-chon:hover {
             background: #2980b9;
             transform: translateX(4px) scale(1.02);
         }
 
-        /* Scrollbar Styling */
-        .admin-sidebar::-webkit-scrollbar {
+        .thanh-quantri::-webkit-scrollbar {
             width: 6px;
         }
 
-        .admin-sidebar::-webkit-scrollbar-track {
-            background: var(--sidebar-bg);
+        .thanh-quantri::-webkit-scrollbar-track {
+            background: var(--nen-menu);
         }
 
-        .admin-sidebar::-webkit-scrollbar-thumb {
-            background: var(--sidebar-hover);
+        .thanh-quantri::-webkit-scrollbar-thumb {
+            background: var(--mau-hover);
             border-radius: 3px;
         }
 
-        .admin-sidebar::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-color);
+        .thanh-quantri::-webkit-scrollbar-thumb:hover {
+            background: var(--mau-nhan);
         }
 
-        /* Main content adjustment */
-        .main-content {
-            margin-left: var(--sidebar-width);
+        .noi-dung-chinh {
+            margin-left: var(--menu-rong);
             padding: 2rem;
         }
     </style>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add smooth hover effect
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
+        document.addEventListener('DOMContentLoaded', function () {
+            const duongDans = document.querySelectorAll('.duong-dan');
+            duongDans.forEach(link => {
                 link.addEventListener('mouseenter', e => {
                     e.target.style.transform = 'translateX(4px)';
                 });
                 link.addEventListener('mouseleave', e => {
-                    if (!e.target.classList.contains('active')) {
+                    if (!e.target.classList.contains('dang-chon')) {
                         e.target.style.transform = 'translateX(0)';
                     }
                 });

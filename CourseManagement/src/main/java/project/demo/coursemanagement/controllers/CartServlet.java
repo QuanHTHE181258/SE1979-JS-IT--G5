@@ -5,7 +5,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import project.demo.coursemanagement.dao.CartDAO;
+import project.demo.coursemanagement.dao.UserRoleDAO;
 import project.demo.coursemanagement.dao.impl.CartDAOImpl;
+import project.demo.coursemanagement.dao.impl.UserRoleDAOImpl;
 import project.demo.coursemanagement.entities.Cartitem;
 
 import java.io.IOException;
@@ -16,6 +18,7 @@ import java.util.List;
 public class CartServlet extends HttpServlet {
 
     private final CartDAO cartDAO = new CartDAOImpl();
+    private final UserRoleDAO userRoleDAO = new UserRoleDAOImpl();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -102,7 +105,21 @@ public class CartServlet extends HttpServlet {
             switch (action) {
                 case "add" -> {
                     System.out.println("Adding course to cart...");
+
+                    Integer roleId = userRoleDAO.getRoleIdByUserId(userId);
+                    System.out.println("User roleId: " + roleId);
+
+                    if (roleId == null || roleId != 1) { // 1 = Student
+                        session.setAttribute("message", "Chỉ học viên mới được phép thêm khóa học vào giỏ hàng!");
+                        session.setAttribute("messageType", "error");
+                        response.sendRedirect("CartServlet");
+                        return;
+                    }
+
                     String result = cartDAO.addToCart(userId, courseId);
+
+                    // Phần xử lý kết quả thêm giỏ hàng...
+
 
                     // Xử lý thông báo dựa trên kết quả
                     switch (result) {

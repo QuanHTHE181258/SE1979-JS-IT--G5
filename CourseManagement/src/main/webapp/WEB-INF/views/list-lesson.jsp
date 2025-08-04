@@ -404,9 +404,10 @@
                     <tr>
                         <th style="color:#222">#</th>
                         <th style="color:#222">Lesson Title</th>
-                        <th style="color:#222">Type</th>
-                        <th style="color:#222">Created At</th>
-                        <th style="color:#222">Actions</th>
+                        <th style="color:#222">Quizzes</th>
+                        <th style="color:#222">Materials</th>
+                        <th style="color:#222">Status</th>
+                        <th style="color:#222">Action</th>
                     </tr>
                     </thead>
                     <tbody id="lessonsTableBody">
@@ -423,9 +424,6 @@
                             </td>
                             <td>
                                 <span class="badge badge-custom badge-material">${ls.totalMaterials}</span>
-                            </td>
-                            <td>
-                                <span class="badge badge-custom badge-status">${ls.lesson.status}</span>
                             </td>
                             <td>
                                 <div class="preview-container">
@@ -545,7 +543,7 @@
 
         // Functions for actions
         window.deleteLesson = function(lessonId) {
-            if (confirm('Are you sure you want to delete this lesson? This action cannot be undone.')) {
+            if (alert('Are you sure you want to delete this lesson? This action cannot be undone.')) {
                 // Add loading state
                 const deleteBtn = event.target.closest('.btn-delete');
                 deleteBtn.classList.add('loading');

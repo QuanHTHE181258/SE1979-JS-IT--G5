@@ -383,7 +383,7 @@
                             </td>
                             <td>
                                         <span class="badge price-badge">
-                                            <i class="fas fa-dollar-sign me-1"></i>{course.price}VNĐ
+                                            ${course.price}VNĐ
                                         </span>
                             </td>
                             <td>

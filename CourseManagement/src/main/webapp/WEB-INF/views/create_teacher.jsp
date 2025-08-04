@@ -7,9 +7,7 @@
     <title>Tạo giáo viên</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .invalid-feedback {
-            display: block;
-        }
+        .invalid-feedback { display: block; }
         .form-control.is-invalid {
             border-color: #dc3545;
             box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
@@ -41,16 +39,17 @@
                     <div class="col-md-6">
                         <label class="form-label">Username <span class="text-danger">*</span></label>
                         <input type="text" name="username" id="username" class="form-control" required
-                               minlength="3" maxlength="50" pattern="^[a-zA-Z0-9_]+$" />
+                               pattern="^[a-zA-Z0-9_]{3,50}$" />
                         <div class="invalid-feedback">
-                            Username phải có 3-50 ký tự và chỉ chứa chữ cái, số và dấu gạch dưới.
+                            Username phải có 3-50 ký tự, không chứa khoảng trắng, chỉ gồm chữ, số và dấu gạch dưới.
                         </div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Email <span class="text-danger">*</span></label>
-                        <input type="email" name="email" id="email" class="form-control" required />
+                        <input type="email" name="email" id="email" class="form-control" required
+                               pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" />
                         <div class="invalid-feedback">
-                            Vui lòng nhập email hợp lệ.
+                            Email không được chứa khoảng trắng và phải hợp lệ.
                         </div>
                     </div>
                 </div>
@@ -59,17 +58,17 @@
                     <div class="col-md-6">
                         <label class="form-label">Mật khẩu <span class="text-danger">*</span></label>
                         <input type="password" name="password" id="password" class="form-control" required
-                               minlength="6" maxlength="100" />
+                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$" />
                         <div class="invalid-feedback">
-                            Mật khẩu phải có ít nhất 6 ký tự.
+                            Mật khẩu tối thiểu 6 ký tự, chứa chữ hoa, chữ thường, số và ký tự đặc biệt, không chứa khoảng trắng.
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Số điện thoại</label>
-                        <input type="text" name="phone" id="phone" class="form-control"
-                               pattern="^[0-9]{10,11}$" />
+                        <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                        <input type="text" name="phone" id="phone" class="form-control" required
+                               pattern="^0[0-9]{9,10}$" />
                         <div class="invalid-feedback">
-                            Số điện thoại phải có 10-11 chữ số.
+                            Số điện thoại phải bắt đầu bằng 0 và có 10–11 chữ số.
                         </div>
                     </div>
                 </div>
@@ -78,17 +77,17 @@
                     <div class="col-md-6">
                         <label class="form-label">Họ <span class="text-danger">*</span></label>
                         <input type="text" name="firstName" id="firstName" class="form-control" required
-                               minlength="1" maxlength="50" pattern="^[a-zA-ZÀ-ỹ\s]+$" />
+                               pattern="^[a-zA-ZÀ-ỹ\\s]{1,50}$" />
                         <div class="invalid-feedback">
-                            Họ chỉ được chứa chữ cái và khoảng trắng.
+                            Họ chỉ được chứa chữ cái và khoảng trắng, không để trống.
                         </div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Tên <span class="text-danger">*</span></label>
                         <input type="text" name="lastName" id="lastName" class="form-control" required
-                               minlength="1" maxlength="50" pattern="^[a-zA-ZÀ-ỹ\s]+$" />
+                               pattern="^[a-zA-ZÀ-ỹ\\s]{1,50}$" />
                         <div class="invalid-feedback">
-                            Tên chỉ được chứa chữ cái và khoảng trắng.
+                            Tên chỉ được chứa chữ cái và khoảng trắng, không để trống.
                         </div>
                     </div>
                 </div>
@@ -97,7 +96,7 @@
                     <label class="form-label">Ngày sinh <span class="text-danger">*</span></label>
                     <input type="date" name="dateOfBirth" id="dateOfBirth" class="form-control" required />
                     <div class="invalid-feedback">
-                        Vui lòng chọn ngày sinh hợp lệ.
+                        Tuổi phải từ 18 đến 65, không được chọn ngày trong tương lai.
                     </div>
                 </div>
 
@@ -111,32 +110,26 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    (function() {
+    (function () {
         'use strict';
-
-        // Lấy form
         const form = document.getElementById('teacherForm');
-        const inputs = form.querySelectorAll('input[required], input[pattern]');
+        const inputs = form.querySelectorAll('input');
 
-        // Thiết lập ngày tối đa (18 tuổi) và tối thiểu (65 tuổi)
+        // Xử lý ngày sinh
         const today = new Date();
         const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
         const minDate = new Date(today.getFullYear() - 65, today.getMonth(), today.getDate());
-
         const dateInput = document.getElementById('dateOfBirth');
         dateInput.max = maxDate.toISOString().split('T')[0];
         dateInput.min = minDate.toISOString().split('T')[0];
 
-        // Validate ngày sinh
         function validateDateOfBirth(input) {
             const selectedDate = new Date(input.value);
             let age = today.getFullYear() - selectedDate.getFullYear();
             const monthDiff = today.getMonth() - selectedDate.getMonth();
-
             if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < selectedDate.getDate())) {
                 age--;
             }
-
             if (age < 18 || age > 65) {
                 input.setCustomValidity('Tuổi phải từ 18 đến 65');
                 return false;
@@ -146,27 +139,9 @@
             }
         }
 
-        // Validate real-time cho từng input
-        inputs.forEach(function(input) {
-            input.addEventListener('input', function() {
-                validateInput(this);
-            });
-
-            input.addEventListener('blur', function() {
-                validateInput(this);
-            });
-        });
-
-        // Validate ngày sinh
-        dateInput.addEventListener('change', function() {
-            validateDateOfBirth(this);
-            validateInput(this);
-        });
-
-        function validateInput(input) {
-            const isValid = input.checkValidity();
-
-            if (isValid) {
+        function trimAndValidate(input) {
+            input.value = input.value.trim();
+            if (input.pattern && input.value.match(new RegExp(input.pattern))) {
                 input.classList.remove('is-invalid');
                 input.classList.add('is-valid');
             } else {
@@ -175,55 +150,49 @@
             }
         }
 
-        // Validate khi submit form
-        form.addEventListener('submit', function(event) {
-            let isFormValid = true;
-
-            // Kiểm tra tất cả inputs
-            inputs.forEach(function(input) {
-                if (input.id === 'dateOfBirth') {
-                    if (!validateDateOfBirth(input)) {
-                        isFormValid = false;
-                    }
+        inputs.forEach(function (input) {
+            input.addEventListener('blur', function () {
+                if (input.type !== 'date') {
+                    trimAndValidate(input);
+                } else {
+                    validateDateOfBirth(input);
                 }
+            });
+        });
 
+        dateInput.addEventListener('change', function () {
+            validateDateOfBirth(this);
+            this.classList.toggle('is-valid', this.checkValidity());
+            this.classList.toggle('is-invalid', !this.checkValidity());
+        });
+
+        form.addEventListener('submit', function (event) {
+            let isFormValid = true;
+            inputs.forEach(function (input) {
+                input.value = input.value.trim();
+                if (input.type === 'date') {
+                    if (!validateDateOfBirth(input)) isFormValid = false;
+                }
                 if (!input.checkValidity()) {
                     isFormValid = false;
                     input.classList.add('is-invalid');
                     input.classList.remove('is-valid');
                 } else {
-                    input.classList.add('is-valid');
                     input.classList.remove('is-invalid');
+                    input.classList.add('is-valid');
                 }
             });
-
-            // Kiểm tra username unique (có thể gọi AJAX để check)
-            const usernameInput = document.getElementById('username');
-            if (usernameInput.value.length > 0) {
-                // Có thể thêm AJAX call ở đây để kiểm tra username đã tồn tại chưa
-            }
-
-            // Kiểm tra email unique (có thể gọi AJAX để check)
-            const emailInput = document.getElementById('email');
-            if (emailInput.value.length > 0) {
-                // Có thể thêm AJAX call ở đây để kiểm tra email đã tồn tại chưa
-            }
 
             if (!isFormValid) {
                 event.preventDefault();
                 event.stopPropagation();
-
-                // Scroll đến input đầu tiên có lỗi
                 const firstInvalid = form.querySelector(':invalid');
                 if (firstInvalid) {
                     firstInvalid.focus();
                     firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             }
-
-            form.classList.add('was-validated');
         });
-
     })();
 </script>
 </body>

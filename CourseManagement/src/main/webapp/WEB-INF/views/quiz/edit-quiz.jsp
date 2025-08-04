@@ -622,8 +622,16 @@
                                 <button type="submit" class="btn btn-success btn-sm">
                                     <i class="fas fa-save"></i>
                                 </button>
-                                <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="deleteAnswer(${answer.id}, ${fn:length(question.answers)})">
+
+
+                            </form>
+                            <form method="post" action="edit-quiz"
+                                  onsubmit="return confirm('Bạn có chắc chắn muốn xóa câu trả lời này?')"
+                                  style="display: inline;">
+                                <input type="hidden" name="action" value="deleteAnswer" />
+                                <input type="hidden" name="quizId" value="${quiz.id}" />
+                                <input type="hidden" name="answerId" value="${answer.id}" />
+                                <button type="submit" class="btn btn-danger btn-sm">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </form>
